@@ -19,9 +19,10 @@ namespace cobalt {
          * @param block_capacity: The number of blocks in the pool.
          */
         PoolAllocator(const uint block_capacity) : heap() {
-            chunks = (PoolChunk *) heap.alloc(sizeof(PoolChunk));
+            chunks = (PoolChunk *) heap.grab(sizeof(PoolChunk));
             chunks[0] = poolChunkCreate(heap, block_capacity);
             chunk_count = 1;
+            block_count = 0;
         }
         /* Destroys a pool allocator.
          */
@@ -29,35 +30,42 @@ namespace cobalt {
             for (uint i = 0; i < chunk_count; i++) {
                 poolChunkDestroy(heap, &chunks[i]);
             }
-            heap.free(chunks);
+            heap.drop(chunks);
         }
 
         /* Allocates a block of memory from the pool.
          * @return: A pointer to the allocated block.
          */
         T* grab() {
+            block_count++;
             for (uint i = 0; i < chunk_count; i++) {
                 if (chunks[i].block_count < chunks[i].block_capacity) {
                     uint index = chunks[i].free_blocks[chunks[i].block_count++];
-                    return (T *) ((uint8_t *) chunks[i].data + index * sizeof(T));
+                    return (T *) ((char *) chunks[i].data + index * sizeof(T));
                 }
             }
-            PoolChunk *chunk = (PoolChunk *) heap.realloc(chunks, (chunk_count + 1) * sizeof(PoolChunk));
-            chunk[chunk_count] = poolChunkCreate(heap, chunks[0].block_capacity);
-            chunks = chunk;
-            chunk_count++;
-            return (T *) ((uint8_t *) chunks[chunk_count - 1].data + chunks[chunk_count - 1].block_count++ * sizeof(T));
+            chunks = (PoolChunk *) heap.resize(chunks, (chunk_count + 1) * sizeof(PoolChunk));
+            chunks[chunk_count] = poolChunkCreate(heap, chunks[0].block_capacity * pow(2, chunk_count - 1));
+            return (T *) ((char *) chunks[chunk_count].data + chunks[chunk_count++].block_count++ * sizeof(T));
         }
         /* Frees a block of memory from the pool.
          * @param ptr: The pointer to the block to free.
          */
         void drop(T *ptr) {
+            block_count--;
             for (uint i = 0; i < chunk_count; i++) {
-                if (ptr >= (T *) chunks[i].data && ptr < (T *) ((uint8_t *) chunks[i].data + chunks[i].block_capacity * sizeof(T))) {
-                    chunks[i].free_blocks[--chunks[i].block_count] = (uint) ((uint8_t *) ptr - (uint8_t *) chunks[i].data) / sizeof(T);
+                if (ptr >= (T *) chunks[i].data && ptr < (T *) ((char *) chunks[i].data + chunks[i].block_capacity * sizeof(T))) {
+                    chunks[i].free_blocks[--chunks[i].block_count] = (uint) ((char *) ptr - (char *) chunks[i].data) / sizeof(T);
                     return;
                 }
             }
+        }
+
+        /* Returns the number of blocks allocated by the pool.
+         * @return: The number of blocks allocated by the pool.
+         */
+        uint size() {
+            return block_count;
         }
 
         private:
@@ -71,6 +79,7 @@ namespace cobalt {
         HeapAllocator heap;         // The allocator for the chunks.
         PoolChunk *chunks;          // The chunks of memory allocated by the pool.
         uint chunk_count;           // The number of chunks allocated by the pool.
+        uint block_count;           // The number of blocks allocated by the pool.
         
         /* Allocates a block of memory from the pool.
          * @param size: The size of the block to allocate. This parameter is ignored.
@@ -101,8 +110,8 @@ namespace cobalt {
         */
         PoolChunk poolChunkCreate(HeapAllocator heap, const uint block_capacity) {
             struct PoolChunk chunk = {
-                .data = heap.alloc(block_capacity * sizeof(T)),
-                .free_blocks = (uint *) heap.alloc(block_capacity * sizeof(uint)),
+                .data = heap.grab(block_capacity * sizeof(T)),
+                .free_blocks = (uint *) heap.grab(block_capacity * sizeof(uint)),
                 .block_count = 0,
                 .block_capacity = block_capacity
             };
@@ -116,8 +125,8 @@ namespace cobalt {
         * @param chunk: The chunk to destroy.
         */
         void poolChunkDestroy(HeapAllocator heap, PoolChunk *chunk) {
-            heap.free(chunk->data);
-            heap.free(chunk->free_blocks);
+            heap.drop(chunk->data);
+            heap.drop(chunk->free_blocks);
         }
     };
 }

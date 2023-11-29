@@ -6,5 +6,3 @@
 
 #include <cstddef>
 #include <glm/glm.hpp>
-
-#define unsigned char uchar;

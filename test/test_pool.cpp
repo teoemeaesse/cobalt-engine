@@ -15,17 +15,57 @@ void tearDown(void) {
     // clean stuff up here
 }
 
-void test_pool_create() {
+void test_pool_grab() {
     cobalt::PoolAllocator<int> pool(10);
+    int *ptr[10];
+    for (int i = 0; i < 10; i++) {
+        ptr[i] = pool.grab();
+        *ptr[i] = i;
+    }
+    TEST_ASSERT_EQUAL_INT(10, pool.size());
+    for (int i = 0; i < 10; i++) {
+        TEST_ASSERT_EQUAL_INT(i, *ptr[i]);
+    }
+}
 
-    int *a = pool.grab();
-    *a = 0;
+void test_pool_drop() {
+    cobalt::PoolAllocator<int> pool(10);
+    int *ptr[10];
+    for (int i = 0; i < 10; i++) {
+        ptr[i] = pool.grab();
+        *ptr[i] = i;
+    }
+    TEST_ASSERT_EQUAL_INT(10, pool.size());
+    for (int i = 0; i < 10; i++) {
+        TEST_ASSERT_EQUAL_INT(i, *ptr[i]);
+    }
+    for (int i = 0; i < 10; i++) {
+        pool.drop(ptr[i]);
+    }
+    TEST_ASSERT_EQUAL_INT(0, pool.size());
+}
 
-    TEST_ASSERT_EQUAL_INT(0, *a);
+void test_pool_expand() {
+    cobalt::PoolAllocator<int> pool(10);
+    int *ptr[1000];
+    for (int i = 0; i < 1000; i++) {
+        ptr[i] = pool.grab();
+        *ptr[i] = i;
+    }
+    TEST_ASSERT_EQUAL_INT(1000, pool.size());
+    for (int i = 0; i < 1000; i++) {
+        TEST_ASSERT_EQUAL_INT(i, *ptr[i]);
+    }
+    for (int i = 0; i < 1000; i++) {
+        pool.drop(ptr[i]);
+    }
+    TEST_ASSERT_EQUAL_INT(0, pool.size());
 }
 
 int main(void) {
     UNITY_BEGIN();
-    RUN_TEST(test_pool_create);
+    RUN_TEST(test_pool_grab);
+    RUN_TEST(test_pool_drop);
+    RUN_TEST(test_pool_expand);
     return UNITY_END();
 }

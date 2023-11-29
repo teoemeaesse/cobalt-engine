@@ -2,13 +2,16 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Project name
-project(Celestine)
+project(Cobalt)
 
-# Set the C standard
+# Set the C++ standard
 set(CMAKE_CXX_STANDARD 20)
 set(SOURCEDIR src)
 set(LIBDIR lib)
 set(TESTDIR test)
+
+# Set additional flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -DGL_GLEXT_PROTOTYPES")
 
 # Set the build directory
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
@@ -61,7 +64,7 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
         freetype
         unity
     )
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -DGL_GLEXT_PROTOTYPES")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -DGL_GLEXT_PROTOTYPES")
     
     # Run the tests after building
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
@@ -71,6 +74,3 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
         COMMAND ${CMAKE_COMMAND} -E remove $<TARGET_FILE:${TEST_NAME}>
     )
 endforeach()
-
-# Set additional flags
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -DGL_GLEXT_PROTOTYPES")
