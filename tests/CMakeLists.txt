@@ -2,13 +2,13 @@
 cmake_minimum_required(VERSION 3.10)
 
 # Project name
-project(Cobalt)
+project(cobalt-core-tests)
 
 # Set the C++ standard
 set(CMAKE_CXX_STANDARD 20)
-set(SOURCEDIR src)
-set(LIBDIR include)
-set(TESTDIR test)
+set(SOURCEDIR ../cobalt)
+set(INCLUDEDIR ../include)
+set(TESTDIR .)
 
 # Set additional flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -DGL_GLEXT_PROTOTYPES")
@@ -24,25 +24,20 @@ include(CTest)
 
 # Include directories
 include_directories(${SOURCEDIR})
-include_directories(${LIBDIR})
-include_directories(${TESTDIR})
+include_directories(${INCLUDEDIR})
+include_directories(${TESTDIR}/core)
 
-# Recursively collect all .cpp files in the src/ directory and its subdirectories
-file(GLOB_RECURSE SOURCES ${SOURCEDIR}/*.cpp)
-file(GLOB_RECURSE HEADERS ${SOURCEDIR}/*.h)
-file(GLOB_RECURSE TEST_SOURCES ${TESTDIR}/*.cpp)
-file(GLOB_RECURSE ENGINE ${SOURCEDIR}/*.cpp)
+# Recursively collect all .cpp files in the core and test directories
+file(GLOB_RECURSE TEST_SOURCES ${TESTDIR}/core/*.cpp)
+file(GLOB_RECURSE CORE_SOURCES ${SOURCEDIR}/core/*.cpp)
 
 # Include the Unity test framework
-add_library(unity STATIC ${CMAKE_SOURCE_DIR}/include/unity/unity.c)
-
-# Add executable
-# add_executable(cobalt ${SOURCES})
+add_library(unity STATIC ${INCLUDEDIR}/unity/unity.c)
 
 # Create an executable for each test source file
 foreach(TEST_SOURCE ${TEST_SOURCES})
     get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
-    add_executable(${TEST_NAME} ${TEST_SOURCE} ${ENGINE})
+    add_executable(${TEST_NAME} ${TEST_SOURCE} ${CORE_SOURCES})
     set_target_properties(${TEST_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
     target_include_directories(${TEST_NAME} PRIVATE
         ${SOURCEDIR}
@@ -64,7 +59,6 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
         freetype
         unity
     )
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -DGL_GLEXT_PROTOTYPES")
     
     # Run the tests after building
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
