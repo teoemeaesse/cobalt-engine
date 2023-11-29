@@ -1,7 +1,9 @@
 #!/bin/bash
 
+cd build
+
 # Run the cmake command
-cmake .
+cmake ..
 
 # Run the cmake --build command
 cmake --build .

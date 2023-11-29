@@ -7,7 +7,7 @@ project(Cobalt)
 # Set the C++ standard
 set(CMAKE_CXX_STANDARD 20)
 set(SOURCEDIR src)
-set(LIBDIR lib)
+set(LIBDIR include)
 set(TESTDIR test)
 
 # Set additional flags
@@ -16,7 +16,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -DGL_GLEXT_PROTOTYPES")
 # Set the build directory
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
 
 # Enable testing
 enable_testing()
@@ -34,7 +34,7 @@ file(GLOB_RECURSE TEST_SOURCES ${TESTDIR}/*.cpp)
 file(GLOB_RECURSE ENGINE ${SOURCEDIR}/*.cpp)
 
 # Include the Unity test framework
-add_library(unity STATIC lib/unity.c)
+add_library(unity STATIC ${CMAKE_SOURCE_DIR}/include/unity/unity.c)
 
 # Add executable
 # add_executable(cobalt ${SOURCES})

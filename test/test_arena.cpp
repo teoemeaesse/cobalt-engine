@@ -2,10 +2,10 @@
 // Created by tomas on 19-11-2023.
 //
 
-#include "unity.h"
+#include "unity/unity.h"
 
-#include <iostream>
 #include "core/memory/arena.h"
+#include "core/utils/log.h"
 
 
 void setUp(void) {
@@ -17,6 +17,10 @@ void tearDown(void) {
 }
 
 void test_arena_grab() {
+    cobalt::Log::init();
+    CB_CORE_INFO("Testing arena allocator");
+    CB_ERROR("Testing arena allocator error");
+
     cobalt::ArenaAllocator arena(10 * sizeof(int));
     int *ptr[10];
     for (int i = 0; i < 10; i++) {
