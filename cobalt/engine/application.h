@@ -11,7 +11,7 @@ namespace cobalt {
         Application();
         virtual ~Application();
 
-        void run();
+        virtual void run();
     };
 
     Application *createApplication();
