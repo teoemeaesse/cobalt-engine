@@ -1,5 +1,5 @@
 //
-// Created by tomas on 18-11-2023.
+// Created by tomas on 28-11-2023.
 //
 
 #pragma once
@@ -18,11 +18,9 @@ namespace cobalt {
         /* Creates a pool allocator with a given block capacity and block count.
          * @param block_capacity: The number of blocks in the pool.
          */
-        PoolAllocator(const uint block_capacity) : heap() {
+        PoolAllocator(const uint block_capacity) : heap(), chunk_count(1), block_count(0) {
             chunks = (PoolChunk *) heap.grab(sizeof(PoolChunk));
             chunks[0] = poolChunkCreate(heap, block_capacity);
-            chunk_count = 1;
-            block_count = 0;
         }
         /* Destroys a pool allocator.
          */
@@ -45,7 +43,7 @@ namespace cobalt {
                 }
             }
             chunks = (PoolChunk *) heap.resize(chunks, (chunk_count + 1) * sizeof(PoolChunk));
-            chunks[chunk_count] = poolChunkCreate(heap, chunks[0].block_capacity * pow(2, chunk_count - 1));
+            chunks[chunk_count] = poolChunkCreate(heap, PoolAllocator<T>::size());
             return (T *) ((char *) chunks[chunk_count].data + chunks[chunk_count++].block_count++ * sizeof(T));
         }
         /* Frees a block of memory from the pool.
@@ -60,12 +58,11 @@ namespace cobalt {
                 }
             }
         }
-
-        /* Returns the number of blocks allocated by the pool.
-         * @return: The number of blocks allocated by the pool.
+        /* Calculate the allocated size of the pool.
+         * @return: The allocated size of the pool in bytes.
          */
-        uint size() {
-            return block_count;
+        size_t size() {
+            return block_count * sizeof(T);
         }
 
         private:
@@ -103,13 +100,12 @@ namespace cobalt {
         void* realloc(void *ptr, const size_t size) override {
             return nullptr;
         }
-
         /* Creates a pool chunk with a given block capacity.
         * @param block_capacity: The number of blocks in the chunk.
         * @return: The created chunk.
         */
-        PoolChunk poolChunkCreate(HeapAllocator heap, const uint block_capacity) {
-            struct PoolChunk chunk = {
+        PoolChunk poolChunkCreate(HeapAllocator &heap, const uint block_capacity) {
+            PoolChunk chunk = {
                 .data = heap.grab(block_capacity * sizeof(T)),
                 .free_blocks = (uint *) heap.grab(block_capacity * sizeof(uint)),
                 .block_count = 0,
@@ -120,11 +116,10 @@ namespace cobalt {
             }
             return chunk;
         }
-
         /* Destroys a pool chunk.
         * @param chunk: The chunk to destroy.
         */
-        void poolChunkDestroy(HeapAllocator heap, PoolChunk *chunk) {
+        void poolChunkDestroy(HeapAllocator &heap, PoolChunk *chunk) {
             heap.drop(chunk->data);
             heap.drop(chunk->free_blocks);
         }
