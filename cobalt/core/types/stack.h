@@ -67,7 +67,7 @@ namespace cobalt {
         /* Peeks the top element of the stack.
          * @return: The top element of the stack.
          */
-        const T& peek() {
+        const T& peek() const {
             if (element_count == 0) {
                 throw std::runtime_error("Stack is empty");
             }
@@ -79,7 +79,7 @@ namespace cobalt {
         /* Gets the size of the stack.
          * @return: The number of elements in the stack.
          */
-        const uint getSize() {
+        const uint getSize() const {
             return element_count;
         }
     
