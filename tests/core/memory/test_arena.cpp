@@ -23,7 +23,7 @@ void test_arena_grab() {
         ptr[i] = (int *) arena.grab(sizeof(int));
         *ptr[i] = i;
     }
-    TEST_ASSERT_EQUAL_INT(10 * sizeof(int), arena.size());
+    TEST_ASSERT_EQUAL_INT(10 * sizeof(int), arena.getSize());
     for (int i = 0; i < 10; i++) {
         TEST_ASSERT_EQUAL_INT(i, *ptr[i]);
     }
@@ -36,7 +36,7 @@ void test_arena_resize() {
         ptr[i] = (int *) arena.grab(sizeof(int));
         *ptr[i] = i;
     }
-    TEST_ASSERT_EQUAL_INT(10 * sizeof(int), arena.size());
+    TEST_ASSERT_EQUAL_INT(10 * sizeof(int), arena.getSize());
     for (int i = 0; i < 10; i++) {
         TEST_ASSERT_EQUAL_INT(i, *ptr[i]);
     }
@@ -44,7 +44,7 @@ void test_arena_resize() {
         ptr[i] = (int *) arena.resize(ptr[i], sizeof(int) * 2);
         *ptr[i] = i;
     }
-    TEST_ASSERT_EQUAL_INT(30 * sizeof(int), arena.size());
+    TEST_ASSERT_EQUAL_INT(30 * sizeof(int), arena.getSize());
     for (int i = 0; i < 10; i++) {
         TEST_ASSERT_EQUAL_INT(i, *ptr[i]);
     }
@@ -57,7 +57,7 @@ void test_arena_expand() {
         ptr[i] = (int *) arena.grab(sizeof(int));
         *ptr[i] = i;
     }
-    TEST_ASSERT_EQUAL_INT(10 * sizeof(int), arena.size());
+    TEST_ASSERT_EQUAL_INT(10 * sizeof(int), arena.getSize());
     for (int i = 0; i < 10; i++) {
         TEST_ASSERT_EQUAL_INT(i, *ptr[i]);
     }
@@ -65,7 +65,7 @@ void test_arena_expand() {
         ptr[i] = (int *) arena.resize(ptr[i], sizeof(int) * 2);
         *ptr[i] = i;
     }
-    TEST_ASSERT_EQUAL_INT(30 * sizeof(int), arena.size());
+    TEST_ASSERT_EQUAL_INT(30 * sizeof(int), arena.getSize());
     for (int i = 0; i < 10; i++) {
         TEST_ASSERT_EQUAL_INT(i, *ptr[i]);
     }
@@ -73,7 +73,7 @@ void test_arena_expand() {
         ptr[i] = (int *) arena.grab(sizeof(int));
         *ptr[i] = i;
     }
-    TEST_ASSERT_EQUAL_INT(40 * sizeof(int), arena.size());
+    TEST_ASSERT_EQUAL_INT(40 * sizeof(int), arena.getSize());
     for (int i = 0; i < 10; i++) {
         TEST_ASSERT_EQUAL_INT(i, *ptr[i]);
     }

@@ -22,7 +22,7 @@ void test_pool_grab() {
         ptr[i] = pool.grab();
         *ptr[i] = i;
     }
-    TEST_ASSERT_EQUAL_INT(10 * sizeof(int), pool.size());
+    TEST_ASSERT_EQUAL_INT(10 * sizeof(int), pool.getSize());
     for (int i = 0; i < 10; i++) {
         TEST_ASSERT_EQUAL_INT(i, *ptr[i]);
     }
@@ -35,14 +35,14 @@ void test_pool_drop() {
         ptr[i] = pool.grab();
         *ptr[i] = i;
     }
-    TEST_ASSERT_EQUAL_INT(10 * sizeof(int), pool.size());
+    TEST_ASSERT_EQUAL_INT(10 * sizeof(int), pool.getSize());
     for (int i = 0; i < 10; i++) {
         TEST_ASSERT_EQUAL_INT(i, *ptr[i]);
     }
     for (int i = 0; i < 10; i++) {
         pool.drop(ptr[i]);
     }
-    TEST_ASSERT_EQUAL_INT(0 * sizeof(int), pool.size());
+    TEST_ASSERT_EQUAL_INT(0 * sizeof(int), pool.getSize());
 }
 
 void test_pool_expand() {
@@ -52,14 +52,14 @@ void test_pool_expand() {
         ptr[i] = pool.grab();
         *ptr[i] = i;
     }
-    TEST_ASSERT_EQUAL_INT(1000 * sizeof(int), pool.size());
+    TEST_ASSERT_EQUAL_INT(1000 * sizeof(int), pool.getSize());
     for (int i = 0; i < 1000; i++) {
         TEST_ASSERT_EQUAL_INT(i, *ptr[i]);
     }
     for (int i = 0; i < 1000; i++) {
         pool.drop(ptr[i]);
     }
-    TEST_ASSERT_EQUAL_INT(0 * sizeof(int), pool.size());
+    TEST_ASSERT_EQUAL_INT(0 * sizeof(int), pool.getSize());
 }
 
 int main(void) {

@@ -4,7 +4,9 @@
 
 #pragma once
 
-#include "core/type/types.h"
+#include <memory>
+
+#include "core/types/types.h"
 
 
 namespace cobalt {
@@ -20,12 +22,12 @@ namespace cobalt {
         /* Frees a block of memory.
          * @param ptr: The pointer to the block to free.
          */
-        virtual void free(void *ptr) = 0;
+        virtual void free(void* ptr) = 0;
         /* Reallocates a block of memory.
          * @param ptr: The pointer to the block to reallocate.
          * @param size: The new size of the block.
          * @return: A pointer to the reallocated block.
          */
-        virtual void* realloc(void *ptr, const size_t size) = 0;
+        virtual void* realloc(void* ptr, const size_t size) = 0;
     };
 }
