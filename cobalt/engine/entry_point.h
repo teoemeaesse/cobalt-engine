@@ -12,7 +12,7 @@ namespace cobalt {
     extern Application* createApplication();
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     cobalt::Log::init();
     CB_CORE_WARN("Initialized Log!");
     int a = 5;
