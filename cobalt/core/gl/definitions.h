@@ -29,6 +29,11 @@ namespace cobalt {
             UnsignedInt = GL_UNSIGNED_INT       // Unsigned 32-bit integer.
         };
 
+        enum class GLTextureFormat {
+            RGB = GL_RGB,                       // RGB format.
+            RGBA = GL_RGBA                      // RGBA format.
+        };
+
         /* Gets the size of a GLType.
          * @param type: The GLType.
          * @return: The size in bytes of the GLType.
