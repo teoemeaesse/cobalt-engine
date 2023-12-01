@@ -3,7 +3,6 @@
 //
 
 #include "core/gl/shader.h"
-#include "core/exceptions/gl_exception.h"
 #include "core/gl/render_shader.h"
 #include "core/gl/compute_shader.h"
 
