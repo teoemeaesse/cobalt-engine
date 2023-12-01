@@ -16,7 +16,7 @@ void tearDown(void) {
 }
 
 void test_stack_push() {
-    cobalt::Stack<int> stack(7);
+    cobalt::core::Stack<int> stack(7);
     for (int i = 0; i < 1000; i++) {
         stack.push(i);
     }
@@ -30,13 +30,13 @@ struct TestStruct {
 };
 
 void test_stack_emplace() {
-    cobalt::Stack<int> stack(1);
+    cobalt::core::Stack<int> stack(1);
     for (int i = 0; i < 1000; i++) {
         stack.emplace(i);
     }
     TEST_ASSERT_EQUAL_INT(1000, stack.getSize());
 
-    cobalt::Stack<TestStruct> stack2(1);
+    cobalt::core::Stack<TestStruct> stack2(1);
     for (int i = 0; i < 1000; i++) {
         stack2.emplace(i, i + 1, i + 2);
     }
@@ -44,7 +44,7 @@ void test_stack_emplace() {
 }
 
 void test_stack_pop() {
-    cobalt::Stack<int> stack(8);
+    cobalt::core::Stack<int> stack(8);
     for (int i = 0; i < 500; i++) {
         stack.push(i);
     }
@@ -58,7 +58,7 @@ void test_stack_pop() {
     }
     TEST_ASSERT_EQUAL_INT(0, stack.getSize());
 
-    cobalt::Stack<TestStruct> stack2(8);
+    cobalt::core::Stack<TestStruct> stack2(8);
     for (int i = 0; i < 1000; i++) {
         stack2.emplace(i, i + 1, i + 2);
     }
@@ -72,7 +72,7 @@ void test_stack_pop() {
 }
 
 void test_stack_peek() {
-    cobalt::Stack<int> stack(8);
+    cobalt::core::Stack<int> stack(8);
     for (int i = 0; i < 1000; i++) {
         stack.push(i);
     }
@@ -86,7 +86,7 @@ void test_stack_peek() {
 }
 
 void test_stack_stress() {
-    cobalt::Stack<int> stack(8);
+    cobalt::core::Stack<int> stack(8);
     for (int i = 0; i < 10000000; i++) {
         stack.push(i);
     }

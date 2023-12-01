@@ -6,15 +6,17 @@
 
 
 namespace cobalt {
-    Application::Application() {
+    namespace engine {
+        Application::Application() {
 
-    }
+        }
 
-    Application::~Application() {
+        Application::~Application() {
 
-    }
+        }
 
-    void Application::run() {
-        while (true);
+        void Application::run() {
+            while (true);
+        }
     }
 }

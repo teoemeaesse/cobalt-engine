@@ -9,43 +9,45 @@
 
 
 namespace cobalt {
-    /* Vertex buffer object, used to store vertex data.
-     */
-    class VBO {
-        public:
-        /* Creates a vertex buffer object.
-         * @param usage: GL_STATIC_DRAW, GL_DYNAMIC_DRAW, GL_STREAM_DRAW.
-         * @return: VBO.
-         */
-        VBO(const GLUsage usage);
-        /* Destroys the VBO.
-         */
-        ~VBO();
+    namespace core {
+        /* Vertex buffer object, used to store vertex data.
+        */
+        class VBO {
+            public:
+            /* Creates a vertex buffer object.
+            * @param usage: GL_STATIC_DRAW, GL_DYNAMIC_DRAW, GL_STREAM_DRAW.
+            * @return: VBO.
+            */
+            VBO(const GLUsage usage);
+            /* Destroys the VBO.
+            */
+            ~VBO();
 
-        /* Binds the VBO to the current context.
-         */
-        void bind() const;
-        /* Unbinds the VBO from the current context.
-         */
-        void unbind() const;
-        /* Reserves space in the VBO. Bind before calling.
-         * @param size: The number of bytes to reserve.
-         */
-        void reserve(const size_t size) const;
-        /* Loads data into the VBO. Bind before calling.
-         * @param data: The data to load.
-         * @param size: The size of the data to load in bytes.
-         */
-        void load(const void* data, const size_t size) const;
-        /* Loads a subset of data into the VBO. Bind before calling.
-         * @param data: The data to load.
-         * @param size: The size of the data to load in bytes
-         * @param offset: The offset into the data in bytes..
-         */
-        void load(const void* data, const size_t size, const size_t offset) const;
+            /* Binds the VBO to the current context.
+            */
+            void bind() const;
+            /* Unbinds the VBO from the current context.
+            */
+            void unbind() const;
+            /* Reserves space in the VBO. Bind before calling.
+            * @param size: The number of bytes to reserve.
+            */
+            void reserve(const size_t size) const;
+            /* Loads data into the VBO. Bind before calling.
+            * @param data: The data to load.
+            * @param size: The size of the data to load in bytes.
+            */
+            void load(const void* data, const size_t size) const;
+            /* Loads a subset of data into the VBO. Bind before calling.
+            * @param data: The data to load.
+            * @param size: The size of the data to load in bytes
+            * @param offset: The offset into the data in bytes..
+            */
+            void load(const void* data, const size_t size, const size_t offset) const;
 
-        private:
-        GLHandle buffer;        // The opengl buffer handle.
-        const GLUsage usage;    // The usage of the buffer.
-    };
+            private:
+            GLHandle buffer;        // The opengl buffer handle.
+            const GLUsage usage;    // The usage of the buffer.
+        };
+    }
 }

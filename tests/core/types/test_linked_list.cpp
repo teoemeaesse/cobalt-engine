@@ -16,7 +16,7 @@ void tearDown(void) {
 }
 
 void test_ll_push() {
-    cobalt::LinkedList<int> list;
+    cobalt::core::LinkedList<int> list;
     for (int i = 0; i < 100; i++) {
         list.push(i);
     }
@@ -30,7 +30,7 @@ struct TestStruct {
 };
 
 void test_ll_emplace() {
-    cobalt::LinkedList<TestStruct> list;
+    cobalt::core::LinkedList<TestStruct> list;
     for (int i = 0; i < 100; i++) {
         list.emplace(i, i + 1, i + 2);
     }
@@ -38,7 +38,7 @@ void test_ll_emplace() {
 }
 
 void test_ll_pop() {
-    cobalt::LinkedList<int> list;
+    cobalt::core::LinkedList<int> list;
     for (int i = 0; i < 100; i++) {
         list.push(i);
     }
@@ -49,7 +49,7 @@ void test_ll_pop() {
 }
 
 void test_ll_get() {
-    cobalt::LinkedList<int> list;
+    cobalt::core::LinkedList<int> list;
     for (int i = 0; i < 100; i++) {
         list.push(i);
     }
@@ -59,7 +59,7 @@ void test_ll_get() {
 }
 
 void test_ll_remove() {
-    cobalt::LinkedList<int> list;
+    cobalt::core::LinkedList<int> list;
     for (int i = 0; i < 100; i++) {
         list.push(i);
     }
@@ -89,7 +89,7 @@ void test_ll_remove() {
 }
 
 void test_ll_insert_after() {
-    cobalt::LinkedList<int> list;
+    cobalt::core::LinkedList<int> list;
     for (int i = 0; i < 100; i++) {
         list.push(i);
     }

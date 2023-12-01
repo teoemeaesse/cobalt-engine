@@ -6,13 +6,15 @@
 
 
 namespace cobalt {
-    class Application {
-    public:
-        Application();
-        virtual ~Application();
+    namespace engine {
+        class Application {
+            public:
+            Application();
+            virtual ~Application();
 
-        virtual void run();
-    };
+            virtual void run();
+        };
 
-    Application *createApplication();
+        Application *createApplication();
+    }
 }

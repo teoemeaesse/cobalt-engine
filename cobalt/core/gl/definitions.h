@@ -11,13 +11,15 @@
 
 
 namespace cobalt {
-    /* Usage mode of a buffer object.
-     */
-    enum class GLUsage {
-        StaticDraw = GL_STATIC_DRAW,        // Buffer data will be modified once and used many times.
-        DynamicDraw = GL_DYNAMIC_DRAW,      // Buffer data will be modified repeatedly and used many times.
-        StreamDraw = GL_STREAM_DRAW         // Buffer data will be modified once and used a few times.
-    };
+    namespace core {
+        /* Usage mode of a buffer object.
+        */
+        enum class GLUsage {
+            StaticDraw = GL_STATIC_DRAW,        // Buffer data will be modified once and used many times.
+            DynamicDraw = GL_DYNAMIC_DRAW,      // Buffer data will be modified repeatedly and used many times.
+            StreamDraw = GL_STREAM_DRAW         // Buffer data will be modified once and used a few times.
+        };
 
-    typedef unsigned int GLHandle;          // OpenGL object handle.
+        typedef GLuint GLHandle;          // OpenGL object handle.
+    }
 }

@@ -17,7 +17,7 @@ void tearDown(void) {
 }
 
 void test_arena_grab() {
-    cobalt::ArenaAllocator arena(10 * sizeof(int));
+    cobalt::core::ArenaAllocator arena(10 * sizeof(int));
     int *ptr[10];
     for (int i = 0; i < 10; i++) {
         ptr[i] = (int *) arena.grab(sizeof(int));
@@ -30,7 +30,7 @@ void test_arena_grab() {
 }
 
 void test_arena_resize() {
-    cobalt::ArenaAllocator arena(10 * sizeof(int));
+    cobalt::core::ArenaAllocator arena(10 * sizeof(int));
     int *ptr[10];
     for (int i = 0; i < 10; i++) {
         ptr[i] = (int *) arena.grab(sizeof(int));
@@ -51,7 +51,7 @@ void test_arena_resize() {
 }
 
 void test_arena_expand() {
-    cobalt::ArenaAllocator arena(1);
+    cobalt::core::ArenaAllocator arena(1);
     int *ptr[10];
     for (int i = 0; i < 10; i++) {
         ptr[i] = (int *) arena.grab(sizeof(int));

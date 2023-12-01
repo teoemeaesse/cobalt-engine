@@ -9,16 +9,18 @@
 
 
 namespace cobalt {
-    extern Application* createApplication();
+    namespace engine {
+        extern Application* createApplication();
+    }
 }
 
 int main(int argc, char** argv) {
-    cobalt::Log::init();
+    cobalt::core::Log::init();
     CB_CORE_WARN("Initialized Log!");
     int a = 5;
     CB_INFO("Hello! Var={0}", a);
 
-    auto app = cobalt::createApplication();
+    auto app = cobalt::engine::createApplication();
     app->run();
     delete app;
 
