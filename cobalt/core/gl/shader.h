@@ -36,13 +36,111 @@ namespace cobalt {
              */
             const GLuint getUBIndex(const std::string& name) const;
 
-            protected:
-            const GLHandle program;   // The opengl program handle.
+            private:
+            std::unordered_map<std::string, GLuint> uniformLocations;   // The uniform block indices.
 
+            /* Gets the location of a uniform with the given name.
+             * @param name: The name of the uniform.
+             * @return: The location of the uniform.
+             */
+            const GLuint getUniformLocation(const std::string& name);
+
+            protected:
+            const GLHandle program; // The opengl program handle.
+            
             /* Creates a new shader program.
             * @param program: The opengl program handle.
             */
             Shader(const GLHandle program);
+
+            /* Sets a uniform integer array for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param count: The number of elements in the array.
+             * @param value: The value of the array.
+             */
+            void setUniform1iv(const std::string& name, const GLsizei count, const GLint* value);
+            /* Sets a uniform float array for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param count: The number of elements in the array.
+             * @param value: The value of the array.
+             */
+            void setUniform1fv(const std::string& name, const GLsizei count, const GLfloat* value);
+            /* Sets a uniform integer for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param value: The value of the uniform.
+             */
+            void setUniformInt(const std::string& name, const GLint value);
+            /* Sets a uniform float for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param value: The value of the uniform.
+             */
+            void setUniformFloat(const std::string& name, const GLfloat value);
+            /* Sets a uniform vec2 for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param value: The value of the uniform.
+             */
+            void setUniformVec2(const std::string& name, const glm::vec2& value);
+            /* Sets a uniform vec3 for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param value: The value of the uniform.
+             */
+            void setUniformVec3(const std::string& name, const glm::vec3& value);
+            /* Sets a uniform vec4 for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param value: The value of the uniform.
+             */
+            void setUniformVec4(const std::string& name, const glm::vec4& value);
+            /* Sets a uniform vec2 array for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param count: The number of elements in the array.
+             * @param value: The value of the array.
+             */
+            void setUniformVec2v(const std::string& name, const GLsizei count, const glm::vec2* value);
+            /* Sets a uniform vec3 array for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param count: The number of elements in the array.
+             * @param value: The value of the array.
+             */
+            void setUniformVec3v(const std::string& name, const GLsizei count, const glm::vec3* value);
+            /* Sets a uniform vec4 array for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param count: The number of elements in the array.
+             * @param value: The value of the array.
+             */
+            void setUniformVec4v(const std::string& name, const GLsizei count, const glm::vec4* value);
+            /* Sets a uniform mat2 for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param value: The value of the uniform.
+             */
+            void setUniformMat2(const std::string& name, const glm::mat2& value);
+            /* Sets a uniform mat3 for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param value: The value of the uniform.
+             */
+            void setUniformMat3(const std::string& name, const glm::mat3& value);
+            /* Sets a uniform mat4 for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param value: The value of the uniform.
+             */
+            void setUniformMat4(const std::string& name, const glm::mat4& value);
+            /* Sets a uniform mat2 array for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param count: The number of elements in the array.
+             * @param value: The value of the array.
+             */
+            void setUniformMat2v(const std::string& name, const GLsizei count, const glm::mat2* value);
+            /* Sets a uniform mat3 array for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param count: The number of elements in the array.
+             * @param value: The value of the array.
+             */
+            void setUniformMat3v(const std::string& name, const GLsizei count, const glm::mat3* value);
+            /* Sets a uniform mat4 array for the given uniform name.
+             * @param name: The name of the uniform.
+             * @param count: The number of elements in the array.
+             * @param value: The value of the array.
+             */
+            void setUniformMat4v(const std::string& name, const GLsizei count, const glm::mat4* value);
             
             /* Compiles a shader given its source code.
              * @param shader: The shader handle.
@@ -80,7 +178,6 @@ namespace cobalt {
 
             private:
             std::unordered_map<ShaderStep, std::string> sources;        // The shader sources.
-            std::unordered_map<std::string, GLuint> uniformLocations;   // The uniform block indices.
         };
     }
 }

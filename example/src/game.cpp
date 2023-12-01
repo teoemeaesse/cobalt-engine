@@ -5,7 +5,7 @@
 #include "engine/cobalt.h"
 
 
-class Game : public cobalt::Application {
+class Game : public cobalt::engine::Application {
 public:
     Game() {
 
@@ -22,6 +22,6 @@ public:
     }
 };
 
-cobalt::Application *cobalt::createApplication() {
+cobalt::engine::Application *cobalt::engine::createApplication() {
     return new Game();
 }
