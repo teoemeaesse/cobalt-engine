@@ -81,6 +81,11 @@ namespace cobalt {
              */
             static std::shared_ptr<RenderContext>& getInstance();
 
+            /* Gets the GLFW context.
+             * @return: The GLFW context.
+             */
+            static GLFWContext getGLFWContext();
+
             /* Creates a new render context.
              * @param context: The GLFW context.
              * @return: A new render context.

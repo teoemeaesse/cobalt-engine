@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     cobalt::core::RenderContext::init();
 
     auto app = cobalt::engine::createApplication();
-    
+    app->run();
     delete app;
 
     cobalt::core::RenderContext::destroy();

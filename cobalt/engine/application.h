@@ -17,8 +17,9 @@ namespace cobalt {
             public:
             /* Create a new application.
              * @param framerate: The target framerate of the application.
+             * @return: The application.
              */
-            Application(uint framerate = 60);
+            Application(const uint framerate = 60);
             /* Destroy the application.
              */
             virtual ~Application();
@@ -26,15 +27,38 @@ namespace cobalt {
             /* Fixed time step update. Called every frame.
              * Use this for physics and other things that need to be updated at a fixed rate.
              */
-            virtual void fixedTimeStep();
+            virtual void fixedTimeStep() = 0;
             /* Variable time step update. Called as often as possible.
              * Use this for rendering and other things that need to be updated as often as possible.
              * @param delta: The time since the last frame.
              */
-            virtual void variableTimeStep(float delta);
+            virtual void variableTimeStep(const float delta) = 0;
+            
+            /* Run the application.
+             * This function will not return until the application is stopped.
+             */
+            void run();
+            /* Stop the game loop.
+             */
+            void stop();
+
+            /* Get the estimated framerate of the application.
+             * @return: The estimated framerate of the application.
+             */
+            uint getFramerate() const;
+            /* Set the time window in which the estimated framerate is calculated.
+             * @param timeWindow: The time window in which the framerate is calculated, in seconds.
+             */
+            void setFramerateTimeWindow(const uint timeWindow) {
+                framerateTimeWindow = timeWindow;
+            }
 
             private:
-            uint framerate;
+            bool shouldStop;            // Whether the game loop should stop.
+            uint targetFramerate;       // The target framerate of the application.
+            uint estimatedFramerate;    // The estimated framerate of the application. Based on the framerate time window.
+            uint64_t frameCount;        // The number of frames that have been rendered in the framerate time window.
+            uint framerateTimeWindow;   // The time window in which the framerate is calculated, in seconds.
         };
 
         /* Create a new application.

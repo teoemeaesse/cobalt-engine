@@ -31,9 +31,9 @@ namespace cobalt {
             defaultFBO(width, height) {
             glfwWindowHint(GLFW_RESIZABLE, resizable);
             glfwWindowHint(GLFW_DECORATED, decorated);
-            glfwSetWindowSize(glfwGetCurrentContext(), width, height);
-            glfwSetWindowTitle(glfwGetCurrentContext(), title.c_str());
-            glfwSetWindowCloseCallback(glfwGetCurrentContext(), windowCloseCallback);
+            glfwSetWindowSize(RenderContext::getGLFWContext(), width, height);
+            glfwSetWindowTitle(RenderContext::getGLFWContext(), title.c_str());
+            glfwSetWindowCloseCallback(RenderContext::getGLFWContext(), windowCloseCallback);
             GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
             const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
             
@@ -64,15 +64,27 @@ namespace cobalt {
 
         Window::~Window() {
             CB_CORE_INFO("Destroyed window.");
-            glfwSetWindowShouldClose(glfwGetCurrentContext(), GLFW_TRUE);
+            glfwSetWindowShouldClose(RenderContext::getGLFWContext(), GLFW_TRUE);
+        }
+
+        void Window::swapBuffers() const {
+            glfwSwapBuffers(RenderContext::getGLFWContext());
+        }
+
+        void Window::pollEvents() const {
+            glfwPollEvents();
         }
 
         void Window::show() const {
-            glfwShowWindow(glfwGetCurrentContext());
+            glfwShowWindow(RenderContext::getGLFWContext());
         }
 
         void Window::hide() const {
-            glfwHideWindow(glfwGetCurrentContext());
+            glfwHideWindow(RenderContext::getGLFWContext());
+        }
+
+        bool Window::shouldClose() const {
+            return glfwWindowShouldClose(RenderContext::getGLFWContext());
         }
 
         WindowBuilder::WindowBuilder() :

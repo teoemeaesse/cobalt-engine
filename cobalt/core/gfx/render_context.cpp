@@ -94,6 +94,10 @@ namespace cobalt {
             return instance;
         }
 
+        GLFWContext RenderContext::getGLFWContext() {
+            return instance->context;
+        }
+
         RenderContext::RenderContext() :
             context() {
             context = glfwCreateWindow(1, 1, "", nullptr, nullptr);

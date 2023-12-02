@@ -22,17 +22,27 @@ namespace cobalt {
             friend class WindowBuilder;
 
             public:
+            /* Destroys the window.
+             */
+            ~Window();
+
+            /* Swap the front and back buffers of the window.
+             */
+            void swapBuffers() const;
+            /* Polls for events.
+             */
+            void pollEvents() const;
             /* Makes the window visible
              */
             void show() const;
             /* Hides the window.
              */
             void hide() const;
-
-            /* Destroys the window.
+            /* Checks if the window should close.
+             * @return: Whether or not the window should close.
              */
-            ~Window();
-            
+            bool shouldClose() const;
+
             private:
             /* Creates a new window.
              * @param width: The width of the window.
