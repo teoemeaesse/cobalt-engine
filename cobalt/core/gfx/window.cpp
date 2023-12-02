@@ -1,0 +1,119 @@
+//
+// Created by tomas on 02-12-2023.
+//
+
+#include "core/gfx/window.h"
+#include "core/gfx/render_context.h"
+#include "core/exceptions/gfx_exception.h"
+#include "core/utils/log.h"
+
+
+namespace cobalt {
+    namespace core {
+        Window::Window(
+            const uint width,
+            const uint height,
+            const std::string& title,
+            const bool vsync,
+            const WindowMode mode,
+            const bool resizable,
+            const bool decorated
+        ) :
+            width(width),
+            height(height),
+            title(title),
+            vsync(vsync),
+            defaultFBO(width, height) {
+            glfwWindowHint(GLFW_RESIZABLE, resizable);
+            glfwWindowHint(GLFW_DECORATED, decorated);
+            glfwSetWindowSize(glfwGetCurrentContext(), width, height);
+            glfwSetWindowTitle(glfwGetCurrentContext(), title.c_str());
+            GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+            const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
+            
+            switch (mode) {
+                case WindowMode::Windowed:
+                    primaryMonitor = NULL;
+                    CB_CORE_INFO("Running in windowed mode");
+                    break;
+                case WindowMode::Borderless:
+                    primaryMonitor = NULL;
+                    this->width = videoMode->width;
+                    this->height = videoMode->height;
+                    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+                    CB_CORE_INFO("Running in borderless fullscreen mode");
+                    break;
+                case WindowMode::Fullscreen:
+                    this->width = videoMode->width;
+                    this->height = videoMode->height;
+                    CB_CORE_INFO("Running in fullscreen mode");
+                    break;
+                default:
+                    throw GFXException("Invalid window mode.");
+            }
+            RenderContext::setUserPointer(this);
+            glfwSwapInterval(vsync);
+            CB_CORE_INFO("Created window.");
+        }
+
+        Window::~Window() {
+            CB_CORE_INFO("Destroyed window.");
+        }
+
+        void Window::show() const {
+            glfwShowWindow(glfwGetCurrentContext());
+        }
+
+        void Window::hide() const {
+            glfwHideWindow(glfwGetCurrentContext());
+        }
+
+        WindowBuilder::WindowBuilder() :
+            width(800),
+            height(600),
+            title("cobalt window"),
+            vsync(false),
+            mode(WindowMode::Windowed),
+            resizable(true),
+            decorated(true) {}
+
+        WindowBuilder& WindowBuilder::setWidth(const uint width) {
+            this->width = width;
+            return *this;
+        }
+
+        WindowBuilder& WindowBuilder::setHeight(const uint height) {
+            this->height = height;
+            return *this;
+        }
+
+        WindowBuilder& WindowBuilder::setTitle(const std::string& title) {
+            this->title = title;
+            return *this;
+        }
+
+        WindowBuilder& WindowBuilder::setVsync(const bool vsync) {
+            this->vsync = vsync;
+            return *this;
+        }
+
+        WindowBuilder& WindowBuilder::setMode(const WindowMode mode) {
+            this->mode = mode;
+            return *this;
+        }
+
+        WindowBuilder& WindowBuilder::setResizable(const bool resizable) {
+            this->resizable = resizable;
+            return *this;
+        }
+
+        WindowBuilder& WindowBuilder::setDecorated(const bool decorated) {
+            this->decorated = decorated;
+            return *this;
+        }
+
+        Window WindowBuilder::build() const {
+            return Window(width, height, title, vsync, mode, resizable, decorated);
+        }
+    }
+}

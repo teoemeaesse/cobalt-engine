@@ -21,14 +21,14 @@ namespace cobalt {
              * @param format: The internal format of the texture.
              * @return: The created texture.
              */
-            Texture(uint width, uint height, GLTextureFormat format);
+            Texture(const uint width, const uint height, const GLTextureFormat format);
             /* Creates a texture from the given path.
              * The format is the internal format of the texture.
              * @param path: The path to the texture.
              * @param format: The internal format of the texture.
              * @return: The created texture.
              */
-            Texture(Path& path, GLTextureFormat format);
+            Texture(const Path& path, const GLTextureFormat format);
             /* Destroys the texture and frees the memory.
              */
             ~Texture();
@@ -37,22 +37,22 @@ namespace cobalt {
              * @param width: The width of the texture. 0 will use the current width.
              * @param height: The height of the texture. 0 will use the current height.
              */
-            void reserve(uint width, uint height);
+            void reserve(const uint width, const uint height);
             /* Binds the texture to the current opengl rendering context.
              */
-            void bind();
+            void bind() const;
             /* Binds the texture to the given texture unit.
              * @param unit: The texture unit to bind the texture to.
              */
-            void bindToUnit(GLuint unit);
+            void bindToUnit(const GLuint unit) const;
             /* Sets the wrap mode of the texture.
              * @param wrap: The wrap mode.
              */
-            void setWrap(GLTextureWrap wrap);
+            void setWrap(const GLTextureWrap wrap);
             /* Sets the filter mode of the texture.
              * @param filter: The filter mode.
              */
-            void setFilter(GLTextureFilter filter);
+            void setFilter(const GLTextureFilter filter);
 
             /* Returns the GL handle to the texture.
              * @return: The GL handle to the texture.

@@ -7,3 +7,8 @@
 #include "engine/application.h"
 
 #include "engine/entry_point.h"
+
+// Graphics
+
+#include "core/gfx/render_context.h"
+#include "core/gfx/window.h"

@@ -23,22 +23,28 @@ namespace cobalt {
              * @param format: The format of the texture attached to the FBO.
              * @return: A new FBO.
              */
-            FBO(uint width, uint height, GLFramebufferAttachment type, GLTextureFormat format);
+            FBO(const uint width, const uint height, const GLFramebufferAttachment type, const GLTextureFormat format);
+            /* Creates a new default FBO with the given width and height.
+             * This is the FBO that is used by the window and displayed on the screen.
+             * @param width: The width of the FBO.
+             * @param height: The height of the FBO.
+             */
+            FBO(const uint width, const uint height);
             /* Destroys the FBO.
              */
             ~FBO();
 
             /* Binds the FBO.
              */
-            void bind();
+            void bind() const;
             /* Unbinds the FBO.
              */
-            void unbind();
+            void unbind() const;
             /* Resizes the FBO.
              * @param width: The new width of the FBO.
              * @param height: The new height of the FBO.
              */
-            void resize(uint width, uint height);
+            void resize(const uint width, const uint height);
             /* Clears the FBO.
              */
             void clear();
@@ -51,7 +57,7 @@ namespace cobalt {
             /* Returns the texture attached to the FBO.
              * @return: The texture attached to the FBO.
              */
-            inline Texture& getTexture() { return texture; }
+            inline const Texture& getTexture() const { return texture; }
             /* Returns the width of the FBO.
              * @return: The width of the FBO.
              */

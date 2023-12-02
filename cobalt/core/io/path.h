@@ -20,12 +20,12 @@ namespace cobalt {
              * @param path: The string represenation of the path.
              * @return: The path.
              */
-            Path(std::string& path, bool relative);
+            Path(const std::string& path, const bool relative);
             /* Creates a path from the given string.
              * @param path: The string represenation of the path.
              * @return: The path.
              */
-            Path(const char* path, bool relative);
+            Path(const char* path, const bool relative);
             /* Destroys the path.
              */
             ~Path() = default;

@@ -14,7 +14,7 @@
 
 namespace cobalt {
     namespace core {
-        Texture::Texture(uint width, uint height, GLTextureFormat format) : source(""), format(format), width(width), height(height) {
+        Texture::Texture(const uint width, const uint height, const GLTextureFormat format) : source(""), format(format) {
             glGenTextures(1, &texture);
             reserve(width, height);
             setFilter(DEFAULT_TEXTURE_FILTER);
@@ -24,15 +24,13 @@ namespace cobalt {
             glBindTexture(GL_TEXTURE_2D, 0);
         }
 
-        Texture::Texture(Path& path, GLTextureFormat format) : source(path.getFileName()), format(format) {
+        Texture::Texture(const Path& path, const GLTextureFormat format) : source(path.getFileName()), format(format) {
             int width, height, channels;
             stbi_set_flip_vertically_on_load(true);
             data = stbi_load(path.getPath().c_str(), &width, &height, &channels, 0);
             if (!data) {
                 throw GLException("Failed to load texture: " + source);
             }
-            this->width = width;
-            this->height = height;
             glGenTextures(1, &texture);
             reserve(width, height);
             setFilter(DEFAULT_TEXTURE_FILTER);
@@ -44,26 +42,26 @@ namespace cobalt {
 
         Texture::~Texture() {
             glDeleteTextures(1, &texture);
-            if (source.empty()) {
+            if (!source.empty()) {
                 stbi_image_free(data);
             }
         }
 
-        void Texture::reserve(uint width, uint height) {
-            if (width * height == 0) {
-                width = this->width;
-                height = this->height;
+        void Texture::reserve(const uint width, const uint height) {
+            if (width * height != 0) {
+                this->width = width;
+                this->height = height;
             }
             glBindTexture(GL_TEXTURE_2D, texture);
-            glTexImage2D(GL_TEXTURE_2D, 0, (GLint) format, width, height, 0, (GLenum) format, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, (GLint) format, this->width, this->height, 0, (GLenum) format, GL_UNSIGNED_BYTE, nullptr);
             glBindTexture(GL_TEXTURE_2D, 0);
         }
 
-        void Texture::bind() {
+        void Texture::bind() const {
             glBindTexture(GL_TEXTURE_2D, texture);   
         }
 
-        void Texture::bindToUnit(GLuint unit) {
+        void Texture::bindToUnit(GLuint unit) const {
             glBindTextureUnit(GL_TEXTURE0 + unit, texture);
         }
 

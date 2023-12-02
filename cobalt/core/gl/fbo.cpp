@@ -8,7 +8,7 @@
 
 namespace cobalt {
     namespace core {
-        FBO::FBO(uint width, uint height, GLFramebufferAttachment type = GLFramebufferAttachment::Color, GLTextureFormat format = GLTextureFormat::RGBA) : texture(width, height, format), type(type) {
+        FBO::FBO(const uint width, const uint height, const GLFramebufferAttachment type = GLFramebufferAttachment::Color, const GLTextureFormat format = GLTextureFormat::RGBA) : texture(width, height, format), type(type) {
             glGenFramebuffers(1, &buffer);
             glBindFramebuffer(GL_FRAMEBUFFER, buffer);
             texture.bind();
@@ -20,19 +20,27 @@ namespace cobalt {
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
 
-        FBO::~FBO() {
-            glDeleteFramebuffers(1, &buffer);
+        FBO::FBO(const uint width, const uint height) : 
+            buffer(0),
+            texture(width, height, GLTextureFormat::RGBA),
+            type((GLFramebufferAttachment) 0) {
         }
 
-        void FBO::bind() {
+        FBO::~FBO() {
+            if (buffer != 0) {
+                glDeleteFramebuffers(1, &buffer);
+            }
+        }
+
+        void FBO::bind() const {
             glBindFramebuffer(GL_FRAMEBUFFER, buffer);
         }
 
-        void FBO::unbind() {
+        void FBO::unbind() const {
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
 
-        void FBO::resize(uint width, uint height) {
+        void FBO::resize(const uint width, const uint height) {
             texture.reserve(width, height);
         }
 

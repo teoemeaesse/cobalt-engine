@@ -7,7 +7,7 @@
 
 namespace cobalt {
     namespace core {
-        Path::Path(std::string& path, bool relative = true) {
+        Path::Path(const std::string& path, const bool relative = true) {
             if (relative) {
                 fsPath = std::filesystem::current_path().string() + "/" + path;
             } else {
@@ -15,7 +15,7 @@ namespace cobalt {
             }
         }
 
-        Path::Path(const char* path, bool relative = true) {
+        Path::Path(const char* path, const bool relative = true) {
             if (relative) {
                 fsPath = std::filesystem::current_path().string() + "/" + path;
             } else {
