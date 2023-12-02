@@ -38,6 +38,9 @@ namespace cobalt {
              * @param height: The height of the texture. 0 will use the current height.
              */
             void reserve(uint width, uint height);
+            /* Binds the texture to the current opengl rendering context.
+             */
+            void bind();
             /* Binds the texture to the given texture unit.
              * @param unit: The texture unit to bind the texture to.
              */
@@ -50,6 +53,23 @@ namespace cobalt {
              * @param filter: The filter mode.
              */
             void setFilter(GLTextureFilter filter);
+
+            /* Returns the GL handle to the texture.
+             * @return: The GL handle to the texture.
+             */
+            inline GLHandle getGLHandle() const { return texture; }
+            /* Returns the width of the texture.
+             * @return: The width of the texture.
+             */
+            inline uint getWidth() const { return width; }
+            /* Returns the height of the texture.
+             * @return: The height of the texture.
+             */
+            inline uint getHeight() const { return height; }
+            /* Returns the pixel format of the texture.
+             * @return: The pixel format of the texture.
+             */
+            inline GLTextureFormat getFormat() const { return format; }
 
             private:
             GLHandle texture;               // The OpenGL handle to the texture.

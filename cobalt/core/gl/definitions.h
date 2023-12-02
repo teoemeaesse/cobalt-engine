@@ -83,6 +83,12 @@ namespace cobalt {
             }
         }
 
+        enum class GLFramebufferAttachment {
+            Color = GL_COLOR_ATTACHMENT0,       // Color attachment.
+            Depth = GL_DEPTH_ATTACHMENT,        // Depth attachment.
+            Stencil = GL_STENCIL_ATTACHMENT     // Stencil attachment.
+        };
+
         /* Gets the size of a GLType.
          * @param type: The GLType.
          * @return: The size in bytes of the GLType.

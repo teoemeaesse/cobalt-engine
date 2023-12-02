@@ -59,8 +59,12 @@ namespace cobalt {
             glBindTexture(GL_TEXTURE_2D, 0);
         }
 
+        void Texture::bind() {
+            glBindTexture(GL_TEXTURE_2D, texture);   
+        }
+
         void Texture::bindToUnit(GLuint unit) {
-            glActiveTexture(GL_TEXTURE0 + unit);
+            glBindTextureUnit(GL_TEXTURE0 + unit, texture);
         }
 
         void Texture::setWrap(GLTextureWrap wrap) {
