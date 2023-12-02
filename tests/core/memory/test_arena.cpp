@@ -5,7 +5,6 @@
 #include "unity/unity.h"
 
 #include "core/memory/arena.h"
-#include "core/utils/log.h"
 
 
 void setUp(void) {

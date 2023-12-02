@@ -31,8 +31,57 @@ namespace cobalt {
 
         enum class GLTextureFormat {
             RGB = GL_RGB,                       // RGB format.
-            RGBA = GL_RGBA                      // RGBA format.
+            RGBA = GL_RGBA,                     // RGBA format.
+            RGBA8 = GL_RGBA8                    // RGBA format with 8 bits per channel.
         };
+        inline std::string getGLTextureFormatName(GLTextureFormat format) {
+            switch (format) {
+                case GLTextureFormat::RGB:
+                    return "RGB";
+                case GLTextureFormat::RGBA:
+                    return "RGBA";
+                case GLTextureFormat::RGBA8:
+                    return "RGBA8";
+                default:
+                    throw GLException("Invalid GLTextureFormat.");
+            }
+        }
+
+        enum class GLTextureWrap {
+            Repeat = GL_REPEAT,                 // Repeats the texture.
+            MirroredRepeat = GL_MIRRORED_REPEAT,// Repeats the texture mirrored.
+            ClampToEdge = GL_CLAMP_TO_EDGE,     // Clamps the texture to the edge.
+            ClampToBorder = GL_CLAMP_TO_BORDER  // Clamps the texture to the border.
+        };
+        inline std::string getGLTextureWrapName(GLTextureWrap wrap) {
+            switch (wrap) {
+                case GLTextureWrap::Repeat:
+                    return "Repeat";
+                case GLTextureWrap::MirroredRepeat:
+                    return "MirroredRepeat";
+                case GLTextureWrap::ClampToEdge:
+                    return "ClampToEdge";
+                case GLTextureWrap::ClampToBorder:
+                    return "ClampToBorder";
+                default:
+                    throw GLException("Invalid GLTextureWrap.");
+            }
+        }
+
+        enum class GLTextureFilter {
+            Nearest = GL_NEAREST,               // Nearest neighbor filtering.
+            Linear = GL_LINEAR                  // Linear filtering.
+        }; // TODO: mipmap filtering support.
+        inline std::string getGLTextureFilterName(GLTextureFilter filter) {
+            switch (filter) {
+                case GLTextureFilter::Nearest:
+                    return "Nearest";
+                case GLTextureFilter::Linear:
+                    return "Linear";
+                default:
+                    throw GLException("Invalid GLTextureFilter.");
+            }
+        }
 
         /* Gets the size of a GLType.
          * @param type: The GLType.
