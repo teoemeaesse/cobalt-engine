@@ -44,7 +44,9 @@ namespace cobalt {
 
         Texture::~Texture() {
             glDeleteTextures(1, &texture);
-            stbi_image_free(data);
+            if (source.empty()) {
+                stbi_image_free(data);
+            }
         }
 
         void Texture::reserve(uint width, uint height) {
