@@ -10,6 +10,11 @@
 
 namespace cobalt {
     namespace core {
+        static void windowCloseCallback(GLFWwindow* window) {
+            CB_CORE_WARN("Window closed. Shutting down.");
+            exit(EXIT_SUCCESS);
+        }
+
         Window::Window(
             const uint width,
             const uint height,
@@ -28,6 +33,7 @@ namespace cobalt {
             glfwWindowHint(GLFW_DECORATED, decorated);
             glfwSetWindowSize(glfwGetCurrentContext(), width, height);
             glfwSetWindowTitle(glfwGetCurrentContext(), title.c_str());
+            glfwSetWindowCloseCallback(glfwGetCurrentContext(), windowCloseCallback);
             GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
             const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
             
@@ -58,6 +64,7 @@ namespace cobalt {
 
         Window::~Window() {
             CB_CORE_INFO("Destroyed window.");
+            glfwSetWindowShouldClose(glfwGetCurrentContext(), GLFW_TRUE);
         }
 
         void Window::show() const {

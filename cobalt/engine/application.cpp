@@ -3,20 +3,25 @@
 //
 
 #include "engine/application.h"
+#include "core/utils/log.h"
 
 
 namespace cobalt {
     namespace engine {
-        Application::Application() {
-
+        Application::Application(uint framerate) : framerate(framerate) {
+            CB_INFO("Application created");
         }
 
         Application::~Application() {
+            CB_INFO("Application destroyed");
+        }
+
+        void Application::fixedTimeStep() {
 
         }
 
-        void Application::run() {
-            while (true);
+        void Application::variableTimeStep(float delta) {
+
         }
     }
 }

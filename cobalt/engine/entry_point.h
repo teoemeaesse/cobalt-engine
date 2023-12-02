@@ -5,6 +5,7 @@
 #pragma once
 
 #include "core/utils/log.h"
+#include "core/gfx/render_context.h"
 #include "engine/application.h"
 
 
@@ -16,13 +17,13 @@ namespace cobalt {
 
 int main(int argc, char** argv) {
     cobalt::core::Log::init();
-    CB_CORE_WARN("Initialized Log!");
-    int a = 5;
-    CB_INFO("Hello! Var={0}", a);
+    cobalt::core::RenderContext::init();
 
     auto app = cobalt::engine::createApplication();
-    app->run();
+    
     delete app;
+
+    cobalt::core::RenderContext::destroy();
 
     return EXIT_SUCCESS;
 }

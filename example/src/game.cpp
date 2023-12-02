@@ -10,7 +10,6 @@ using namespace cobalt;
 class Game : public engine::Application {
 public:
     Game() {
-        core::RenderContext::init();
         core::Window window = core::WindowBuilder()
             .setTitle("cobalt example")
             .setWidth(1280)
@@ -25,13 +24,12 @@ public:
     }
 
     ~Game() {
-        core::RenderContext::destroy();
     }
 
-    void run() override {
-        // while (true) {
-        //     CB_INFO("Game is running!");
-        // }
+    void fixedTimeStep() override {
+    }
+
+    void variableTimeStep(float delta) override {
     }
 };
 

@@ -10,5 +10,4 @@
 
 // Graphics
 
-#include "core/gfx/render_context.h"
 #include "core/gfx/window.h"
