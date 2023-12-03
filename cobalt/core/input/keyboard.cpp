@@ -5,7 +5,6 @@
 #include <map>
 
 #include "core/input/keyboard.h"
-#include "core/gl/definitions.h"
 
 
 namespace cobalt {

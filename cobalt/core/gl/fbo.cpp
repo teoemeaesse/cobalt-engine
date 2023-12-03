@@ -8,7 +8,11 @@
 
 namespace cobalt {
     namespace core {
-        FBO::FBO(const uint width, const uint height, const GLFramebufferAttachment type = GLFramebufferAttachment::Color, const GLTextureFormat format = GLTextureFormat::RGBA) : texture(width, height, format), type(type) {
+        FBO::FBO(const uint width, const uint height, 
+                 const GLFramebufferAttachment type,
+                 const GLTextureFormat format,
+                 const GLTextureEncoding encoding) : 
+                 texture(width, height, format, encoding), type(type) {
             glGenFramebuffers(1, &buffer);
             glBindFramebuffer(GL_FRAMEBUFFER, buffer);
             texture.bind();
@@ -22,7 +26,7 @@ namespace cobalt {
 
         FBO::FBO(const uint width, const uint height) : 
             buffer(0),
-            texture(width, height, GLTextureFormat::RGBA),
+            texture(width, height),
             type((GLFramebufferAttachment) 0) {
         }
 

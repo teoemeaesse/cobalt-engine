@@ -29,19 +29,55 @@ namespace cobalt {
             UnsignedInt = GL_UNSIGNED_INT       // Unsigned 32-bit integer.
         };
 
+        enum class GLTextureEncoding {
+            R8 = GL_R8,                         // Red channel with 8 bits per channel.
+            RG8 = GL_RG8,                       // Red and green channels with 8 bits per channel.
+            RGB8 = GL_RGB8,                     // Red, green and blue channels with 8 bits per channel.
+            RGBA8 = GL_RGBA8,                   // Red, green, blue and alpha channels with 8 bits per channel.
+            SRGB8 = GL_SRGB8,                   // Red, green and blue channels with 8 bits per channel.
+            SRGBA8 = GL_SRGB8_ALPHA8           // Red, green, blue and alpha channels with 8 bits per channel.
+        };
+        inline std::string getGLTextureEncodingName(GLTextureEncoding format) {
+            switch (format) {
+                case GLTextureEncoding::R8:
+                    return "R8";
+                case GLTextureEncoding::RG8:
+                    return "RG8";
+                case GLTextureEncoding::RGB8:
+                    return "RGB8";
+                case GLTextureEncoding::RGBA8:
+                    return "RGBA8";
+                case GLTextureEncoding::SRGB8:
+                    return "SRGB8";
+                case GLTextureEncoding::SRGBA8:
+                    return "SRGBA8";
+                default:
+                    throw GLException("Invalid GLTextureEncoding");
+            }
+        }
+
         enum class GLTextureFormat {
-            RGB = GL_RGB,                       // RGB format.
-            RGBA = GL_RGBA,                     // RGBA format.
-            RGBA8 = GL_RGBA8                    // RGBA format with 8 bits per channel.
+            RED = GL_RED,                       // Red channel.
+            RG = GL_RG,                         // Red and green channels.
+            RGB = GL_RGB,                       // Red, green and blue channels.
+            RGBA = GL_RGBA,                     // Red, green, blue and alpha channels.
+            DEPTH = GL_DEPTH_COMPONENT,         // Depth component.
+            DEPTH_STENCIL = GL_DEPTH_STENCIL    // Depth and stencil components.
         };
         inline std::string getGLTextureFormatName(GLTextureFormat format) {
             switch (format) {
+                case GLTextureFormat::RED:
+                    return "RED";
+                case GLTextureFormat::RG:
+                    return "RG";
                 case GLTextureFormat::RGB:
                     return "RGB";
                 case GLTextureFormat::RGBA:
                     return "RGBA";
-                case GLTextureFormat::RGBA8:
-                    return "RGBA8";
+                case GLTextureFormat::DEPTH:
+                    return "DEPTH";
+                case GLTextureFormat::DEPTH_STENCIL:
+                    return "DEPTH_STENCIL";
                 default:
                     throw GLException("Invalid GLTextureFormat");
             }

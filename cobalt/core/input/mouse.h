@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "core/gl/definitions.h"
+
 
 namespace cobalt {
     namespace core {

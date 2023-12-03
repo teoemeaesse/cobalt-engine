@@ -14,17 +14,23 @@
 
 namespace cobalt {
     namespace core {
-        Texture::Texture(const uint width, const uint height, const GLTextureFormat format) : source(""), format(format) {
+        Texture::Texture(const uint width, const uint height, 
+                         const GLTextureFormat format, 
+                         const GLTextureEncoding encoding) : 
+                         source(""), format(format), encoding(encoding) {
             glGenTextures(1, &texture);
             reserve(width, height);
             setFilter(DEFAULT_TEXTURE_FILTER);
             setWrap(DEFAULT_TEXTURE_WRAP);
             glBindTexture(GL_TEXTURE_2D, 0);
-            CB_CORE_INFO("Created {0}x{1} px texture with format: {2}", width, height, getGLTextureFormatName(format));
+            CB_CORE_INFO("Created {0}x{1} px texture with encoding: {2}, format: {3}", width, height, getGLTextureEncodingName(encoding), getGLTextureFormatName(format));
             CB_CORE_INFO("Using default filter: {0}, wrap: {1}", getGLTextureFilterName(DEFAULT_TEXTURE_FILTER), getGLTextureWrapName(DEFAULT_TEXTURE_WRAP));
         }
 
-        Texture::Texture(const Path& path, const GLTextureFormat format) : source(path.getFileName()), format(format) {
+        Texture::Texture(const Path& path,
+                         const GLTextureFormat format,
+                         const GLTextureEncoding encoding) : 
+                         source(path.getFileName()), format(format), encoding(encoding) {
             int width, height, channels;
             stbi_set_flip_vertically_on_load(true);
             data = stbi_load(path.getPath().c_str(), &width, &height, &channels, 0);
@@ -36,7 +42,7 @@ namespace cobalt {
             setFilter(DEFAULT_TEXTURE_FILTER);
             setWrap(DEFAULT_TEXTURE_WRAP); 
             glBindTexture(GL_TEXTURE_2D, 0);
-            CB_CORE_INFO("Loaded {0}x{1} px texture from {2} with format: {3}", width, height, path.getFileName(), getGLTextureFormatName(format));
+            CB_CORE_INFO("Loaded {0}x{1} px texture from {2} with encoding: {3}, format: {4}", width, height, path.getFileName(), getGLTextureEncodingName(encoding), getGLTextureFormatName(format));
             CB_CORE_INFO("Using default filter: {0}, wrap: {1}", getGLTextureFilterName(DEFAULT_TEXTURE_FILTER), getGLTextureWrapName(DEFAULT_TEXTURE_WRAP));
         }
 
@@ -53,7 +59,7 @@ namespace cobalt {
                 this->height = height;
             }
             glBindTexture(GL_TEXTURE_2D, texture);
-            glTexImage2D(GL_TEXTURE_2D, 0, (GLint) format, this->width, this->height, 0, (GLenum) format, GL_UNSIGNED_BYTE, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, (GLint) encoding, this->width, this->height, 0, (GLenum) format, GL_UNSIGNED_BYTE, nullptr);
             glBindTexture(GL_TEXTURE_2D, 0);
             CB_CORE_INFO("Reserved {0}x{1} px for texture (GL handle: {2})", this->width, this->height, texture);
         }

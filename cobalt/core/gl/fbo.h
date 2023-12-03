@@ -21,9 +21,13 @@ namespace cobalt {
              * @param height: The height of the FBO.
              * @param type: The type of the texture attached to the FBO.
              * @param format: The format of the texture attached to the FBO.
+             * @param encoding: The encoding of the texture attached to the FBO.
              * @return: A new FBO.
              */
-            FBO(const uint width, const uint height, const GLFramebufferAttachment type, const GLTextureFormat format);
+            FBO(const uint width, const uint height,
+                const GLFramebufferAttachment type,
+                const GLTextureFormat format = GLTextureFormat::RGBA,
+                const GLTextureEncoding encoding = GLTextureEncoding::RGBA8);
             /* Creates a new default FBO with the given width and height.
              * This is the FBO that is used by the window and displayed on the screen.
              * @param width: The width of the FBO.

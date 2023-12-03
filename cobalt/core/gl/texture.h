@@ -18,17 +18,23 @@ namespace cobalt {
              * The format is the internal format of the texture.
              * @param width: The width of the texture.
              * @param height: The height of the texture.
-             * @param format: The internal format of the texture.
+             * @param format: The pixel format of the texture.
+             * @param encoding: The internal format of the texture.
              * @return: The created texture.
              */
-            Texture(const uint width, const uint height, const GLTextureFormat format);
+            Texture(const uint width, const uint height,
+                    const GLTextureFormat format = GLTextureFormat::RGBA,
+                    const GLTextureEncoding encoding = GLTextureEncoding::RGBA8);
             /* Creates a texture from the given path.
              * The format is the internal format of the texture.
              * @param path: The path to the texture.
-             * @param format: The internal format of the texture.
+             * @param format: The pixel format of the texture.
+             * @param encoding: The internal format of the texture.
              * @return: The created texture.
              */
-            Texture(const Path& path, const GLTextureFormat format);
+            Texture(const Path& path,
+                    const GLTextureFormat format = GLTextureFormat::RGBA,
+                    const GLTextureEncoding encoding = GLTextureEncoding::RGBA8);
             /* Destroys the texture and frees the memory.
              */
             ~Texture();
@@ -66,17 +72,18 @@ namespace cobalt {
              * @return: The height of the texture.
              */
             inline uint getHeight() const { return height; }
-            /* Returns the pixel format of the texture.
-             * @return: The pixel format of the texture.
+            /* Returns the pixel encoding of the texture.
+             * @return: The pixel encoding of the texture.
              */
-            inline GLTextureFormat getFormat() const { return format; }
+            inline GLTextureEncoding getEncoding() const { return encoding; }
 
             private:
-            GLHandle texture;               // The OpenGL handle to the texture.
-            const std::string source;       // The source of the texture.
-            const GLTextureFormat format;   // The internal format of the texture.
-            uint width, height;             // The width and height of the texture.
-            uchar *data;                    // The raw data of the texture.
+            GLHandle texture;                   // The OpenGL handle to the texture.
+            const std::string source;           // The source of the texture.
+            const GLTextureFormat format;       // The pixel format of the texture.
+            const GLTextureEncoding encoding;   // The internal format of the texture.
+            uint width, height;                 // The width and height of the texture.
+            uchar *data;                        // The raw data of the texture.
         };
     }
 }

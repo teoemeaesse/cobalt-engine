@@ -2,10 +2,8 @@
 // Created by tomas on 03-12-2023.
 //
 
-#include "core/gl/definitions.h"
-#include "core/exceptions/input_exception.h"
-
 #include "core/input/mouse.h"
+#include "core/exceptions/input_exception.h"
 
 
 namespace cobalt {
