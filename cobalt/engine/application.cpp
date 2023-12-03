@@ -18,6 +18,7 @@ namespace cobalt {
             CB_INFO("Destroyed application");
         }
 
+        extern bool shutdownInterrupt;
         void Application::run() {
             CB_INFO("Starting up game loop");
             
@@ -25,7 +26,7 @@ namespace cobalt {
                         acc = 0, frametime = 0, counter = 0;
             uint frames = 0;
             struct timespec start, end;
-            while(!shouldStop) {
+            while(!shouldStop && !shutdownInterrupt) {
                 clock_gettime(CLOCK_MONOTONIC_RAW, &start);
 
                 while(acc >= delta) {

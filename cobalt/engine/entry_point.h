@@ -12,18 +12,7 @@
 namespace cobalt {
     namespace engine {
         extern Application* createApplication();
+
+        void handleCtrlC(int s);
     }
-}
-
-int main(int argc, char** argv) {
-    cobalt::core::Log::init();
-    cobalt::core::RenderContext::init();
-
-    auto app = cobalt::engine::createApplication();
-    app->run();
-    delete app;
-
-    cobalt::core::RenderContext::destroy();
-
-    return EXIT_SUCCESS;
 }
