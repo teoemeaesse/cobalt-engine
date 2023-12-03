@@ -13,10 +13,10 @@ namespace cobalt {
 
         void RenderContext::init() {
             if (!glfwInit()) {
-                throw GFXException("Failed to initialize GLFW.");
+                throw GFXException("Failed to initialize GLFW");
             }
             if (instance) {
-                throw GFXException("Render context already initialized.");
+                throw GFXException("Render context already initialized");
             }
             instance = std::make_shared<RenderContext>();
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -26,12 +26,12 @@ namespace cobalt {
             glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_BLEND);
-            CB_CORE_INFO("Initialized render context.");
+            CB_CORE_INFO("Initialized render context");
         }
         
         void RenderContext::init(GLFWContext context) {
             if (instance) {
-                throw GFXException("Render context already initialized.");
+                throw GFXException("Render context already initialized");
             }
             instance = std::make_shared<RenderContext>(context);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -41,6 +41,15 @@ namespace cobalt {
 
         void RenderContext::destroy() {
             glfwTerminate();
+        }
+
+        void RenderContext::recreate() {
+            glfwDestroyWindow(instance->context);
+            instance->context = glfwCreateWindow(1, 1, "", nullptr, nullptr);
+            if (!instance->context) {
+                throw GFXException("Failed to recreate render context");
+            }
+            glfwMakeContextCurrent(instance->context);
         }
 
         void RenderContext::setKeyCallback(GLFWkeyfun callback) {
@@ -89,7 +98,7 @@ namespace cobalt {
 
         std::shared_ptr<RenderContext>& RenderContext::getInstance() {
             if (!instance) {
-                throw GFXException("Render context not initialized.");
+                throw GFXException("Render context not initialized");
             }
             return instance;
         }
@@ -102,7 +111,7 @@ namespace cobalt {
             context() {
             context = glfwCreateWindow(1, 1, "", nullptr, nullptr);
             if (!context) {
-                throw GFXException("Failed to create render context.");
+                throw GFXException("Failed to create render context");
             }
             glfwMakeContextCurrent(context);
         }
@@ -110,7 +119,7 @@ namespace cobalt {
         RenderContext::RenderContext(GLFWContext context) :
             context(context) {
             if (!context) {
-                throw GFXException("Failed to create render context.");
+                throw GFXException("Failed to create render context");
             }
             glfwMakeContextCurrent(context);
         }

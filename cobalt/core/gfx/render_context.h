@@ -33,6 +33,11 @@ namespace cobalt {
             /* Destroys the render context.
              */
             static void destroy();
+            /* Recreates the render context. Call this to apply changes to window hints.
+             * This has the side effect of resetting any windows' dimensions to 1x1 and 
+             * title to an empty string. Make sure to set these again after calling this.
+             */
+            static void recreate();
 
             /* Sets the key callback.
              * @param callback: The key callback.

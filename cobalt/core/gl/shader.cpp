@@ -22,7 +22,7 @@ namespace cobalt {
         const GLuint Shader::getUBIndex(const std::string& name) const {
             GLuint index = glGetUniformBlockIndex(program, name.c_str());
             if (index == GL_INVALID_INDEX) {
-                throw GLException("Uniform block " + name + " not found in shader.");
+                throw GLException("Uniform block " + name + " not found in shader");
             }
             return index;
         }
@@ -33,7 +33,7 @@ namespace cobalt {
             } catch (std::out_of_range& e) {
                 GLuint location = glGetUniformLocation(program, name.c_str());
                 if (location == GL_INVALID_INDEX) {
-                    throw GLException("Uniform " + name + " not found in shader.");
+                    throw GLException("Uniform " + name + " not found in shader");
                 }
                 uniformLocations.insert(std::make_pair(name, location));
                 return location;
@@ -146,7 +146,7 @@ namespace cobalt {
                 std::string vertexSource = sources.at(ShaderStep::Vertex);
                 std::string fragmentSource = sources.at(ShaderStep::Fragment);
             } catch (std::out_of_range& e) {
-                throw GLException("A render shader must have at least a vertex and a fragment shader source.");
+                throw GLException("A render shader must have at least a vertex and a fragment shader source");
             }
             try {
                 std::string geometrySource = sources.at(ShaderStep::Geometry);
@@ -162,7 +162,7 @@ namespace cobalt {
                 return ComputeShader(computeSource);
             }
             catch (std::out_of_range& e) {
-                throw GLException("A compute shader must have a compute shader source.");
+                throw GLException("A compute shader must have a compute shader source");
             }
         }
     }

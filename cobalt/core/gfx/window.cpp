@@ -11,8 +11,8 @@
 namespace cobalt {
     namespace core {
         static void windowCloseCallback(GLFWwindow* window) {
-            CB_WARN("Window closed.");
-            CB_WARN("Shutting down.");
+            CB_WARN("Window closed");
+            CB_WARN("Shutting down");
         }
 
         Window::Window(
@@ -28,18 +28,15 @@ namespace cobalt {
             height(height),
             title(title),
             vsync(vsync),
-            defaultFBO(width, height) {
+            defaultFBO(0, 0) {
             glfwWindowHint(GLFW_RESIZABLE, resizable);
-            glfwWindowHint(GLFW_DECORATED, decorated);
-            glfwSetWindowSize(RenderContext::getGLFWContext(), width, height);
-            glfwSetWindowTitle(RenderContext::getGLFWContext(), title.c_str());
             glfwSetWindowCloseCallback(RenderContext::getGLFWContext(), windowCloseCallback);
             GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
             const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
-            
             switch (mode) {
                 case WindowMode::Windowed:
                     primaryMonitor = NULL;
+                    glfwWindowHint(GLFW_DECORATED, decorated);
                     CB_CORE_INFO("Running in windowed mode");
                     break;
                 case WindowMode::Borderless:
@@ -52,18 +49,23 @@ namespace cobalt {
                 case WindowMode::Fullscreen:
                     this->width = videoMode->width;
                     this->height = videoMode->height;
+                    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
                     CB_CORE_INFO("Running in fullscreen mode");
                     break;
                 default:
-                    throw GFXException("Invalid window mode.");
+                    throw GFXException("Invalid window mode");
             }
             RenderContext::setUserPointer(this);
+            RenderContext::recreate();
             glfwSwapInterval(vsync);
-            CB_CORE_INFO("Created window.");
+            glfwSetWindowSize(RenderContext::getGLFWContext(), this->width, this->height);
+            glfwSetWindowTitle(RenderContext::getGLFWContext(), title.c_str());
+            defaultFBO.resize(this->width, this->height);
+            CB_CORE_INFO("Created window");
         }
 
         Window::~Window() {
-            CB_CORE_INFO("Destroyed window.");
+            CB_CORE_INFO("Destroyed window");
             glfwSetWindowShouldClose(RenderContext::getGLFWContext(), GLFW_TRUE);
         }
 

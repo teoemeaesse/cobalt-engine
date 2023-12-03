@@ -12,9 +12,9 @@ namespace cobalt {
         bool shutdownInterrupt = false;
 
         void handleCtrlC(int s) {
-            CB_WARN("Caught signal {0}.", s);
+            CB_WARN("Caught signal {0}", s);
             if (s == SIGINT) {
-                CB_WARN("Shutting down.");
+                CB_WARN("Shutting down");
                 cobalt::engine::shutdownInterrupt = true;
             }
         }

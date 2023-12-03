@@ -43,7 +43,7 @@ namespace cobalt {
                 case GLTextureFormat::RGBA8:
                     return "RGBA8";
                 default:
-                    throw GLException("Invalid GLTextureFormat.");
+                    throw GLException("Invalid GLTextureFormat");
             }
         }
 
@@ -64,7 +64,7 @@ namespace cobalt {
                 case GLTextureWrap::ClampToBorder:
                     return "ClampToBorder";
                 default:
-                    throw GLException("Invalid GLTextureWrap.");
+                    throw GLException("Invalid GLTextureWrap");
             }
         }
 
@@ -79,7 +79,7 @@ namespace cobalt {
                 case GLTextureFilter::Linear:
                     return "Linear";
                 default:
-                    throw GLException("Invalid GLTextureFilter.");
+                    throw GLException("Invalid GLTextureFilter");
             }
         }
 
@@ -104,7 +104,7 @@ namespace cobalt {
                 case GLType::UnsignedInt:
                     return sizeof(GLuint);
                 default:
-                    throw GLException("Invalid GLType.");
+                    throw GLException("Invalid GLType");
             }
         }
 

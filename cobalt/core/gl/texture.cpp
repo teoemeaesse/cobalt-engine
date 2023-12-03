@@ -19,9 +19,9 @@ namespace cobalt {
             reserve(width, height);
             setFilter(DEFAULT_TEXTURE_FILTER);
             setWrap(DEFAULT_TEXTURE_WRAP);
+            glBindTexture(GL_TEXTURE_2D, 0);
             CB_CORE_INFO("Created {0}x{1} px texture with format: {2}", width, height, getGLTextureFormatName(format));
             CB_CORE_INFO("Using default filter: {0}, wrap: {1}", getGLTextureFilterName(DEFAULT_TEXTURE_FILTER), getGLTextureWrapName(DEFAULT_TEXTURE_WRAP));
-            glBindTexture(GL_TEXTURE_2D, 0);
         }
 
         Texture::Texture(const Path& path, const GLTextureFormat format) : source(path.getFileName()), format(format) {
@@ -35,9 +35,9 @@ namespace cobalt {
             reserve(width, height);
             setFilter(DEFAULT_TEXTURE_FILTER);
             setWrap(DEFAULT_TEXTURE_WRAP); 
+            glBindTexture(GL_TEXTURE_2D, 0);
             CB_CORE_INFO("Loaded {0}x{1} px texture from {2} with format: {3}", width, height, path.getFileName(), getGLTextureFormatName(format));
             CB_CORE_INFO("Using default filter: {0}, wrap: {1}", getGLTextureFilterName(DEFAULT_TEXTURE_FILTER), getGLTextureWrapName(DEFAULT_TEXTURE_WRAP));
-            glBindTexture(GL_TEXTURE_2D, 0);
         }
 
         Texture::~Texture() {
@@ -55,6 +55,7 @@ namespace cobalt {
             glBindTexture(GL_TEXTURE_2D, texture);
             glTexImage2D(GL_TEXTURE_2D, 0, (GLint) format, this->width, this->height, 0, (GLenum) format, GL_UNSIGNED_BYTE, nullptr);
             glBindTexture(GL_TEXTURE_2D, 0);
+            CB_CORE_INFO("Reserved {0}x{1} px for texture (GL handle: {2})", this->width, this->height, texture);
         }
 
         void Texture::bind() const {

@@ -42,6 +42,7 @@ namespace cobalt {
 
         void FBO::resize(const uint width, const uint height) {
             texture.reserve(width, height);
+            CB_CORE_INFO("Resized FBO to {2}x{3} px (GL handle: {0} - Tex GL handle: {1})", buffer, texture.getGLHandle(), width, height);
         }
 
         void FBO::clear() {
