@@ -27,9 +27,6 @@ include_directories(${EXAMPLEDIR}/src)
 file(GLOB_RECURSE EXAMPLE_SOURCES ${EXAMPLEDIR}/src/*.cpp)
 file(GLOB_RECURSE CB_SOURCES ${SOURCEDIR}/*.cpp)
 
-# Include the Unity test framework
-add_library(unity STATIC ${INCLUDEDIR}/unity/unity.c)
-
 # Create an executable for the example
 add_executable(example-app ${EXAMPLE_SOURCES} ${CB_SOURCES})
 
