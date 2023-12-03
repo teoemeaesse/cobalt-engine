@@ -5,12 +5,20 @@
 #include <time.h>
 
 #include "core/utils/log.h"
+#include "core/gfx/render_context.h"
 #include "engine/application.h"
 
 
 namespace cobalt {
     namespace engine {
-        Application::Application(const uint framerate) : targetFramerate(framerate), estimatedFramerate(0), shouldStop(false), frameCount(0), framerateTimeWindow(1) {
+        Application::Application(const uint framerate) :
+            targetFramerate(framerate),
+            estimatedFramerate(0),
+            shouldStop(false),
+            frameCount(0),
+            framerateTimeWindow(1),
+            inputManager(1.0f) {
+            core::RenderContext::setUserPointer(&inputManager);
             CB_INFO("Created application");
         }
 
@@ -59,6 +67,10 @@ namespace cobalt {
 
         uint Application::getFramerate() const {
             return frameCount / framerateTimeWindow;
+        }
+
+        core::InputManager& Application::getInputManager() {
+            return inputManager;
         }
     }
 }

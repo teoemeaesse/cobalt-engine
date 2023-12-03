@@ -5,6 +5,7 @@
 #pragma once
 
 #include "core/containers/types.h"
+#include "core/input/input_manager.h"
 
 
 namespace cobalt {
@@ -46,6 +47,10 @@ namespace cobalt {
              * @return: The estimated framerate of the application.
              */
             uint getFramerate() const;
+            /* Get the input manager.
+             * @return: The input manager.
+             */
+            core::InputManager& getInputManager();
             /* Set the time window in which the estimated framerate is calculated.
              * @param timeWindow: The time window in which the framerate is calculated, in seconds.
              */
@@ -54,11 +59,13 @@ namespace cobalt {
             }
 
             private:
-            bool shouldStop;            // Whether the game loop should stop.
-            uint targetFramerate;       // The target framerate of the application.
-            uint estimatedFramerate;    // The estimated framerate of the application. Based on the framerate time window.
-            uint64_t frameCount;        // The number of frames that have been rendered in the framerate time window.
-            uint framerateTimeWindow;   // The time window in which the framerate is calculated, in seconds.
+            bool shouldStop;                    // Whether the game loop should stop.
+            uint targetFramerate;               // The target framerate of the application.
+            uint estimatedFramerate;            // The estimated framerate of the application. Based on the framerate time window.
+            uint64_t frameCount;                // The number of frames that have been rendered in the framerate time window.
+            uint framerateTimeWindow;           // The time window in which the framerate is calculated, in seconds.
+        
+            core::InputManager inputManager;    // The input manager.
         };
 
         /* Create a new application.

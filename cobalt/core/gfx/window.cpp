@@ -55,7 +55,6 @@ namespace cobalt {
                 default:
                     throw GFXException("Invalid window mode");
             }
-            RenderContext::setUserPointer(this);
             RenderContext::recreate();
             glfwSwapInterval(vsync);
             glfwSetWindowSize(RenderContext::getGLFWContext(), this->width, this->height);
