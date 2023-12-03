@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "core/types/types.h"
-#include "core/types/linked_list.h"
+#include "core/containers/types.h"
+#include "core/containers/linked_list.h"
 #include "core/gl/definitions.h"
 #include "core/gl/vbo.h"
 

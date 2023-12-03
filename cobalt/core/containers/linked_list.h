@@ -5,6 +5,7 @@
 #pragma once
 
 #include "core/memory/pool.h"
+#include "core/exceptions/container_exception.h"
 
 
 namespace cobalt {
@@ -64,16 +65,16 @@ namespace cobalt {
             */
             void remove(const uint index) {
                 if (index < 0 || index >= size) {
-                    throw std::runtime_error("Index out of bounds");
+                    throw ContainerException("Index out of bounds");
                 }
 
                 Node *node = head;
-                Node *prev = NULL;
+                Node *prev = nullptr;
                 for (int i = 0; i < index; i++) {
                     prev = node;
                     node = node->next;
                 }
-                if (prev == NULL) head = node->next;
+                if (prev == nullptr) head = node->next;
                 else prev->next = node->next;
                 if (node == tail)
                     tail = prev;
@@ -87,7 +88,7 @@ namespace cobalt {
             */
             void insertAfter(const uint index, const T& data) {
                 if (index >= size) {
-                    throw std::runtime_error("Index out of bounds");
+                    throw ContainerException("Index out of bounds");
                 }
                 Node* node = head;
                 for (uint i = 0; i < index; i++) {
@@ -106,7 +107,7 @@ namespace cobalt {
             */
             T get(const uint index) const {
                 if (index >= size) {
-                    throw std::runtime_error("Index out of bounds");
+                    throw ContainerException("Index out of bounds");
                 }
                 Node* node = head;
                 for (uint i = 0; i < index; i++) {

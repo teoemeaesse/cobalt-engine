@@ -5,6 +5,7 @@
 #pragma once
 
 #include "core/memory/heap.h"
+#include "core/exceptions/container_exception.h"
 
 
 namespace cobalt {
@@ -57,7 +58,7 @@ namespace cobalt {
             */
             T pop() {
                 if (element_count == 0) {
-                    throw std::runtime_error("Stack is empty");
+                    throw ContainerException("Stack is empty");
                 }
                 element_count--;
                 if (blocks[block_count - 1].block_size == 0) {
@@ -70,7 +71,7 @@ namespace cobalt {
             */
             const T& peek() const {
                 if (element_count == 0) {
-                    throw std::runtime_error("Stack is empty");
+                    throw ContainerException("Stack is empty");
                 }
                 if (blocks[block_count - 1].block_size == 0) {
                     return blocks[block_count - 2].data[blocks[block_count - 2].block_size - 1];

@@ -13,7 +13,7 @@ class Game : public engine::Application {
             .setTitle("cobalt example")
             .setWidth(1280)
             .setHeight(720)
-            .setVsync(false)
+            .setVsync(true)
             .setMode(core::WindowMode::Windowed)
             .setResizable(false)
             .setDecorated(true)
@@ -34,8 +34,8 @@ class Game : public engine::Application {
         if (window.shouldClose()) {
             stop();
         }
-        window.swapBuffers();
         window.pollEvents();
+        window.swapBuffers();
     }
 
     private:
