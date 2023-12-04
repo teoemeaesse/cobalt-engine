@@ -6,10 +6,17 @@
 #include "core/gfx/render_context.h"
 
 
+
+#include "core/utils/log.h"
+
+
+
+
 namespace cobalt {
     namespace core {
         static void onKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
             InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
+            CB_CORE_ERROR("Key: {0}, scancode: {1}, action: {2}, mods: {3}", key, scancode, action, mods);
             inputManager->getKeyboard().onKeyPress(key, action);
         }
 
@@ -47,6 +54,7 @@ namespace cobalt {
         }
 
         InputManager::InputManager(const float mouseSensitivity) : keyboard(), mouse(mouseSensitivity) {
+            RenderContext::setKeyCallback(onKeyCallback);
         }
     }
 }

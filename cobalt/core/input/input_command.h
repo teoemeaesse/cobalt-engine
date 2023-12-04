@@ -20,6 +20,10 @@ namespace cobalt {
          */
         class InputCommand {
             public:
+            /* Create a new input command.
+             * @return: The new input command.
+             */
+            InputCommand() = default;
             /* Destroy the input command.
              */
             virtual ~InputCommand() = default;
@@ -45,13 +49,6 @@ namespace cobalt {
             /* Destroy the concrete input command.
              */
             virtual ~ConcreteInputCommand() = default;
-
-            /* Execute the command.
-             * @param input: The input value of the bound input.
-             */
-            void execute(InputValue input) const override {
-                target->execute(input);
-            }
 
             /* Get the receiver of the command.
              * @return: The receiver of the command.

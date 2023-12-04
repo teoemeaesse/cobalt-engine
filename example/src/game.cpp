@@ -3,9 +3,17 @@
 //
 
 #include "engine/cobalt.h"
-
+#include "engine/application.h"
 
 using namespace cobalt;
+
+class Quit : public core::ConcreteInputCommand<engine::Application> {
+    public:
+    Quit(engine::Application* target) : core::ConcreteInputCommand<engine::Application>(target) {}
+    void execute(core::InputValue value) const override {
+        CB_WARN("Quitting!");
+    }
+};
 
 class Game : public engine::Application {
     public:
@@ -19,6 +27,7 @@ class Game : public engine::Application {
             .setDecorated(true)
             .build()) {
         window.show();
+        getInputManager().getKeyboard().bind(core::KeyID::A, std::make_shared<Quit>(this));
     }
 
     ~Game() override {
@@ -26,8 +35,7 @@ class Game : public engine::Application {
     }
 
     void fixedTimeStep() override {
-        CB_INFO("Framerate: {0}", getFramerate());
-        CB_INFO("Fixed time step");
+        CB_INFO("Fps: {0}", getFramerate());
     }
 
     void variableTimeStep(float delta) override {
@@ -35,6 +43,10 @@ class Game : public engine::Application {
             stop();
         }
         window.pollEvents();
+
+        getInputManager().pollEvents();
+        getInputManager().clearEvents();
+
         window.swapBuffers();
     }
 

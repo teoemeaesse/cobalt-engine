@@ -15,8 +15,11 @@ namespace cobalt {
         template <typename T>
         class PeripheralInput {
             static_assert(std::is_enum<T>::value, "T must be an enum class");
-
+            
             public:
+            bool operator==(const PeripheralInput<T>& other) const {
+                return id == other.id;
+            }
             /* Create a new peripheral input.
              * @return: The new peripheral input.
              */
@@ -71,10 +74,8 @@ namespace cobalt {
             }
 
             protected:
-            Queue<std::shared_ptr<const InputCommand>> events;                                    // The events to execute.
-            
-            private:
-            std::unordered_map<PeripheralInput<T>, std::shared_ptr<InputCommand>> bindings;  // The bindings for the peripheral.
+            Queue<std::shared_ptr<const InputCommand>> events;                              // The events to execute.
+            std::unordered_map<PeripheralInput<T>, std::shared_ptr<InputCommand>> bindings; // The bindings for the peripheral.
         };
     }
 }

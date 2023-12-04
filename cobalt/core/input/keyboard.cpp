@@ -56,12 +56,22 @@ namespace cobalt {
         }
 
         void Keyboard::pollEvents() {
-            // TODO: add to queue
+            for (size_t i = 0; i < static_cast<size_t>(KeyID::COUNT); i++) {
+                KeyState &state = keyStates[i];
+                if (state.down) {
+                    if (state.polled) {
+                        events.enqueue(bindings[glfwToCobalt(i)]);
+                        state.polled = false;
+                    }
+                } else {
+                    state.polled = true;
+                }
+            }
         }
 
         void Keyboard::clearEvents() {
             while (!events.isEmpty()) {
-                events.dequeue()->execute({ false, false, 0.0f }); // TODO: use actual values from the state
+                events.dequeue()->execute({ false, false, 0.0f });
             }
         }
 
