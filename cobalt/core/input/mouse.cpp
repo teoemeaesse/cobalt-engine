@@ -44,6 +44,16 @@ namespace cobalt {
             }
         }
 
+        void Mouse::pollEvents() {
+            // TODO: add to queue
+        }
+
+        void Mouse::clearEvents() {
+            while (!events.isEmpty()) {
+                events.dequeue()->execute({ false, false, 0.0f }); // TODO: use actual values from the state
+            }
+        }
+
         ButtonState& Mouse::getButton(const ButtonID button) {
             return buttonStates[static_cast<size_t>(button)];
         }

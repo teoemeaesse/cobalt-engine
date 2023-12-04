@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <unordered_map>
-
 #include "core/gl/definitions.h"
 #include "core/input/peripheral.h"
 

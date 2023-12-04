@@ -14,7 +14,13 @@ namespace cobalt {
     namespace core {
         template <typename T>
         class PeripheralInput {
+            static_assert(std::is_enum<T>::value, "T must be an enum class");
+
             public:
+            /* Create a new peripheral input.
+             * @return: The new peripheral input.
+             */
+            PeripheralInput() = default;
             /* Create a new peripheral input.
              * @param id: The id of the peripheral input.
              * @return: The new peripheral input.
@@ -44,7 +50,7 @@ namespace cobalt {
             /* Create a new peripheral.
              * @return: The new peripheral.
              */
-            Peripheral() : events(16) {}
+            Peripheral() : events(16), bindings() {}
             /* Destroy the peripheral.
              */
             virtual ~Peripheral() = default;
@@ -60,15 +66,24 @@ namespace cobalt {
              * @param input: The input to bind the command to.
              * @param command: The command to bind.
              */
-            void bind(const PeripheralInput<T> input, InputCommand command) {
-                bindings[input] = command;
+            void bind(const PeripheralInput<T> input, std::shared_ptr<InputCommand> command) {
+                bindings[input] = std::move(command);
             }
 
             protected:
-            Queue<InputCommand&> events;                                    // The events to execute.
+            Queue<std::shared_ptr<const InputCommand>> events;                                    // The events to execute.
             
             private:
-            std::unordered_map<PeripheralInput<T>, InputCommand> bindings;  // The bindings for the peripheral.
+            std::unordered_map<PeripheralInput<T>, std::shared_ptr<InputCommand>> bindings;  // The bindings for the peripheral.
         };
     }
+}
+
+namespace std {
+    template <typename T>
+    struct hash<cobalt::core::PeripheralInput<T>> {
+        std::size_t operator()(const cobalt::core::PeripheralInput<T>& input) const {
+            return std::hash<T>()(input.getId());
+        }
+    };
 }

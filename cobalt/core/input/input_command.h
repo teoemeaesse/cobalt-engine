@@ -27,7 +27,7 @@ namespace cobalt {
             /* Execute the command.
              ^ @param input: The input value of the bound input.
              */
-            virtual void execute(InputValue input) = 0;
+            virtual void execute(InputValue input) const = 0;
         };
 
         /* Concrete input command. Executes a function on a receiver.
@@ -49,7 +49,7 @@ namespace cobalt {
             /* Execute the command.
              * @param input: The input value of the bound input.
              */
-            void execute(InputValue input) override {
+            void execute(InputValue input) const override {
                 target->execute(input);
             }
 
