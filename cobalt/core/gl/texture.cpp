@@ -54,10 +54,8 @@ namespace cobalt {
         }
 
         void Texture::reserve(const uint width, const uint height) {
-            if (width * height != 0) {
-                this->width = width;
-                this->height = height;
-            }
+            this->width = width;
+            this->height = height;
             glBindTexture(GL_TEXTURE_2D, texture);
             glTexImage2D(GL_TEXTURE_2D, 0, (GLint) encoding, this->width, this->height, 0, (GLenum) format, GL_UNSIGNED_BYTE, nullptr);
             glBindTexture(GL_TEXTURE_2D, 0);

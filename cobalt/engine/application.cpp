@@ -19,6 +19,28 @@ namespace cobalt {
             framerateTimeWindow(1),
             inputManager(1.0f) {
             core::RenderContext::setUserPointer(&inputManager);
+            core::RenderContext::setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
+                core::InputManager* inputManager = static_cast<core::InputManager*>(core::RenderContext::getUserPointer());
+                CB_CORE_TRACE("Key: {0}, scancode: {1}, action: {2}, mods: {3}", key, scancode, action, mods);
+                inputManager->getKeyboard().onKeyPress(key, action);
+            });
+            core::RenderContext::setCursorPosCallback([](GLFWwindow* window, double xpos, double ypos) {
+                core::InputManager* inputManager = static_cast<core::InputManager*>(core::RenderContext::getUserPointer());
+                inputManager->getMouse().onMove((float) xpos, (float) ypos);
+            });
+            core::RenderContext::setMouseButtonCallback([](GLFWwindow* window, int button, int action, int mods) {
+                core::InputManager* inputManager = static_cast<core::InputManager*>(core::RenderContext::getUserPointer());
+                inputManager->getMouse().onButtonPress(button, action);
+            });
+            core::RenderContext::setScrollCallback([](GLFWwindow* window, double xoffset, double yoffset) {
+                core::InputManager* inputManager = static_cast<core::InputManager*>(core::RenderContext::getUserPointer());
+                inputManager->getMouse().onScroll((float) xoffset, (float) yoffset);
+            });
+            core::RenderContext::setErrorCallback([](int error, const char* description) {
+                CB_CORE_ERROR("GLFW error {0}: {1}", error, description);
+            });
+            
+
             CB_INFO("Created application");
         }
 

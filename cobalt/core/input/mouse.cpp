@@ -19,7 +19,10 @@ namespace cobalt {
             return polled;
         }
 
-        Mouse::Mouse(const float sensitivity) : sensitivity(sensitivity) {
+        Mouse::Mouse(const float sensitivity) : sensitivity(sensitivity), x(0.0f), y(0.0f), dx(0.0f), dy(0.0f), dsx(0.0f), dsy(0.0f) {
+            for (size_t i = 0; i < static_cast<size_t>(ButtonID::COUNT); i++) {
+                buttonStates[i] = ButtonState();
+            }
         }
 
         void Mouse::onMove(const float x, const float y) {
