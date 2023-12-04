@@ -9,27 +9,27 @@
 
 namespace cobalt {
     namespace core {
-        const static std::map<int, Key> GLFW_TO_CB = {
-            { GLFW_KEY_A, Key::A }, { GLFW_KEY_B, Key::B }, { GLFW_KEY_C, Key::C }, { GLFW_KEY_D, Key::D }, { GLFW_KEY_E, Key::E }, { GLFW_KEY_F, Key::F }, { GLFW_KEY_G, Key::G }, { GLFW_KEY_H, Key::H }, { GLFW_KEY_I, Key::I }, { GLFW_KEY_J, Key::J }, { GLFW_KEY_K, Key::K }, { GLFW_KEY_L, Key::L }, { GLFW_KEY_M, Key::M }, { GLFW_KEY_N, Key::N }, { GLFW_KEY_O, Key::O }, { GLFW_KEY_P, Key::P }, { GLFW_KEY_Q, Key::Q }, { GLFW_KEY_R, Key::R }, { GLFW_KEY_S, Key::S }, { GLFW_KEY_T, Key::T }, { GLFW_KEY_U, Key::U }, { GLFW_KEY_V, Key::V }, { GLFW_KEY_W, Key::W }, { GLFW_KEY_X, Key::X }, { GLFW_KEY_Y, Key::Y }, { GLFW_KEY_Z, Key::Z }, 
-            { GLFW_KEY_0, Key::N0 }, { GLFW_KEY_1, Key::N1 }, { GLFW_KEY_2, Key::N2 }, { GLFW_KEY_3, Key::N3 }, { GLFW_KEY_4, Key::N4 }, { GLFW_KEY_5, Key::N5 }, { GLFW_KEY_6, Key::N6 }, { GLFW_KEY_7, Key::N7 }, { GLFW_KEY_8, Key::N8 }, { GLFW_KEY_9, Key::N9 }, 
-            { GLFW_KEY_F1, Key::F1 }, { GLFW_KEY_F2, Key::F2 }, { GLFW_KEY_F3, Key::F3 }, { GLFW_KEY_F4, Key::F4 }, { GLFW_KEY_F5, Key::F5 }, { GLFW_KEY_F6, Key::F6 }, { GLFW_KEY_F7, Key::F7 }, { GLFW_KEY_F8, Key::F8 }, { GLFW_KEY_F9, Key::F9 }, { GLFW_KEY_F10, Key::F10 }, { GLFW_KEY_F11, Key::F11 }, { GLFW_KEY_F12, Key::F12 }, { GLFW_KEY_F13, Key::F13 }, { GLFW_KEY_F14, Key::F14 }, { GLFW_KEY_F15, Key::F15 }, { GLFW_KEY_F16, Key::F16 }, { GLFW_KEY_F17, Key::F17 }, { GLFW_KEY_F18, Key::F18 }, { GLFW_KEY_F19, Key::F19 }, { GLFW_KEY_F20, Key::F20 }, { GLFW_KEY_F21, Key::F21 }, { GLFW_KEY_F22, Key::F22 }, { GLFW_KEY_F23, Key::F23 }, { GLFW_KEY_F24, Key::F24 }, { GLFW_KEY_F25, Key::F25 },
-            { GLFW_KEY_LEFT_SHIFT, Key::LSHIFT },
-            { GLFW_KEY_RIGHT_SHIFT, Key::RSHIFT },
-            { GLFW_KEY_LEFT_CONTROL, Key::LCTRL },
-            { GLFW_KEY_RIGHT_CONTROL, Key::RCTRL },
-            { GLFW_KEY_LEFT_ALT, Key::LALT },
-            { GLFW_KEY_RIGHT_ALT, Key::RALT },
-            { GLFW_KEY_SPACE, Key::SPACE },
-            { GLFW_KEY_ENTER, Key::ENTER },
-            { GLFW_KEY_ESCAPE, Key::ESCAPE },
-            { GLFW_KEY_TAB, Key::TAB },
-            { GLFW_KEY_BACKSPACE, Key::BACKSPACE },
-            { GLFW_KEY_INSERT, Key::INSERT },
-            { GLFW_KEY_DELETE, Key::DELETE },
-            { GLFW_KEY_RIGHT, Key::RIGHT },
-            { GLFW_KEY_LEFT, Key::LEFT },
-            { GLFW_KEY_DOWN, Key::DOWN },
-            { GLFW_KEY_UP, Key::UP }
+        const static std::map<int, KeyID> GLFW_TO_CB = {
+            { GLFW_KEY_A, KeyID::A }, { GLFW_KEY_B, KeyID::B }, { GLFW_KEY_C, KeyID::C }, { GLFW_KEY_D, KeyID::D }, { GLFW_KEY_E, KeyID::E }, { GLFW_KEY_F, KeyID::F }, { GLFW_KEY_G, KeyID::G }, { GLFW_KEY_H, KeyID::H }, { GLFW_KEY_I, KeyID::I }, { GLFW_KEY_J, KeyID::J }, { GLFW_KEY_K, KeyID::K }, { GLFW_KEY_L, KeyID::L }, { GLFW_KEY_M, KeyID::M }, { GLFW_KEY_N, KeyID::N }, { GLFW_KEY_O, KeyID::O }, { GLFW_KEY_P, KeyID::P }, { GLFW_KEY_Q, KeyID::Q }, { GLFW_KEY_R, KeyID::R }, { GLFW_KEY_S, KeyID::S }, { GLFW_KEY_T, KeyID::T }, { GLFW_KEY_U, KeyID::U }, { GLFW_KEY_V, KeyID::V }, { GLFW_KEY_W, KeyID::W }, { GLFW_KEY_X, KeyID::X }, { GLFW_KEY_Y, KeyID::Y }, { GLFW_KEY_Z, KeyID::Z }, 
+            { GLFW_KEY_0, KeyID::N0 }, { GLFW_KEY_1, KeyID::N1 }, { GLFW_KEY_2, KeyID::N2 }, { GLFW_KEY_3, KeyID::N3 }, { GLFW_KEY_4, KeyID::N4 }, { GLFW_KEY_5, KeyID::N5 }, { GLFW_KEY_6, KeyID::N6 }, { GLFW_KEY_7, KeyID::N7 }, { GLFW_KEY_8, KeyID::N8 }, { GLFW_KEY_9, KeyID::N9 }, 
+            { GLFW_KEY_F1, KeyID::F1 }, { GLFW_KEY_F2, KeyID::F2 }, { GLFW_KEY_F3, KeyID::F3 }, { GLFW_KEY_F4, KeyID::F4 }, { GLFW_KEY_F5, KeyID::F5 }, { GLFW_KEY_F6, KeyID::F6 }, { GLFW_KEY_F7, KeyID::F7 }, { GLFW_KEY_F8, KeyID::F8 }, { GLFW_KEY_F9, KeyID::F9 }, { GLFW_KEY_F10, KeyID::F10 }, { GLFW_KEY_F11, KeyID::F11 }, { GLFW_KEY_F12, KeyID::F12 }, { GLFW_KEY_F13, KeyID::F13 }, { GLFW_KEY_F14, KeyID::F14 }, { GLFW_KEY_F15, KeyID::F15 }, { GLFW_KEY_F16, KeyID::F16 }, { GLFW_KEY_F17, KeyID::F17 }, { GLFW_KEY_F18, KeyID::F18 }, { GLFW_KEY_F19, KeyID::F19 }, { GLFW_KEY_F20, KeyID::F20 }, { GLFW_KEY_F21, KeyID::F21 }, { GLFW_KEY_F22, KeyID::F22 }, { GLFW_KEY_F23, KeyID::F23 }, { GLFW_KEY_F24, KeyID::F24 }, { GLFW_KEY_F25, KeyID::F25 },
+            { GLFW_KEY_LEFT_SHIFT, KeyID::LSHIFT },
+            { GLFW_KEY_RIGHT_SHIFT, KeyID::RSHIFT },
+            { GLFW_KEY_LEFT_CONTROL, KeyID::LCTRL },
+            { GLFW_KEY_RIGHT_CONTROL, KeyID::RCTRL },
+            { GLFW_KEY_LEFT_ALT, KeyID::LALT },
+            { GLFW_KEY_RIGHT_ALT, KeyID::RALT },
+            { GLFW_KEY_SPACE, KeyID::SPACE },
+            { GLFW_KEY_ENTER, KeyID::ENTER },
+            { GLFW_KEY_ESCAPE, KeyID::ESCAPE },
+            { GLFW_KEY_TAB, KeyID::TAB },
+            { GLFW_KEY_BACKSPACE, KeyID::BACKSPACE },
+            { GLFW_KEY_INSERT, KeyID::INSERT },
+            { GLFW_KEY_DELETE, KeyID::DELETE },
+            { GLFW_KEY_RIGHT, KeyID::RIGHT },
+            { GLFW_KEY_LEFT, KeyID::LEFT },
+            { GLFW_KEY_DOWN, KeyID::DOWN },
+            { GLFW_KEY_UP, KeyID::UP }
         };
 
         bool KeyState::isDown() const {
@@ -43,7 +43,7 @@ namespace cobalt {
         KeyState::KeyState() : down(false), polled(true) {
         }
 
-        void Keyboard::onKeyPressed(const int key, const int action) {
+        void Keyboard::onKeyPress(const int key, const int action) {
             auto it = GLFW_TO_CB.find(key);
             if (it != GLFW_TO_CB.end()) {
                 KeyState &state = keyStates[static_cast<size_t>(it->second)];
@@ -51,7 +51,17 @@ namespace cobalt {
             }
         }
 
-        KeyState& Keyboard::getKey(const Key key) {
+        void Keyboard::pollEvents() {
+            // TODO: add to queue
+        }
+
+        void Keyboard::clearEvents() {
+            while (!events.isEmpty()) {
+                events.dequeue().execute({ false, false, 0.0f }); // TODO: use actual values from the state
+            }
+        }
+
+        KeyState& Keyboard::getKey(const KeyID key) {
             return keyStates[static_cast<size_t>(key)];
         }
     }

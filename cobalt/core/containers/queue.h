@@ -71,6 +71,10 @@ namespace cobalt {
                 return size;
             }
 
+            const bool isEmpty() const {
+                return size == 0;
+            }
+
             private:
             struct Node {
                 T data;         // The data of the node.

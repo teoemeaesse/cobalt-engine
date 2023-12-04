@@ -4,12 +4,15 @@
 
 #pragma once
 
+#include <unordered_map>
+
 #include "core/gl/definitions.h"
+#include "core/input/peripheral.h"
 
 
 namespace cobalt {
     namespace core {
-        enum class Key {
+        enum class KeyID {
             A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
             N0, N1, N2, N3, N4, N5, N6, N7, N8, N9,
             F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
@@ -46,7 +49,7 @@ namespace cobalt {
             ~KeyState() = default;
         };
 
-        class Keyboard {
+        class Keyboard : public Peripheral<KeyID> {
             public:
             /* Create a new keyboard.
              * @return: The new keyboard.
@@ -60,16 +63,22 @@ namespace cobalt {
              * @param key: The key that was pressed.
              * @param action: The action that was performed.
              */
-            void onKeyPressed(const int key, const int action);
+            void onKeyPress(const int key, const int action);
+            /* Poll the keyboard for events.
+             */
+            void pollEvents() override;
+            /* Clear all events from the keyboard.
+             */
+            void clearEvents() override;
 
             /* Get the state of a key.
              * @param key: The key to get the state of.
              * @return: The state of the key.
              */
-            KeyState& getKey(const Key key);
+            KeyState& getKey(const KeyID key);
 
             private:
-            KeyState keyStates[static_cast<size_t>(Key::COUNT)];    // The states of all the keys.
+            KeyState keyStates[static_cast<size_t>(KeyID::COUNT)];    // The states of all the keys.
         };
     }
 }

@@ -8,9 +8,42 @@
 
 namespace cobalt {
     namespace core {
-        static void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+        static void onKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
             InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
-            // TODO
+            inputManager->getKeyboard().onKeyPress(key, action);
+        }
+
+        static void onMouseMoveCallback(GLFWwindow* window, double xpos, double ypos) {
+            InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
+            inputManager->getMouse().onMove((float) xpos, (float) ypos);
+        }
+
+        static void onMouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+            InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
+            inputManager->getMouse().onButtonPress(button, action);
+        }
+
+        static void onMouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+            InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
+            inputManager->getMouse().onScroll((float) xoffset, (float) yoffset);
+        }
+
+        void InputManager::pollEvents() {
+            keyboard.pollEvents();
+            mouse.pollEvents();
+        }
+
+        void InputManager::clearEvents() {
+            keyboard.clearEvents();
+            mouse.clearEvents();
+        }
+
+        Keyboard& InputManager::getKeyboard() {
+            return keyboard;
+        }
+
+        Mouse& InputManager::getMouse() {
+            return mouse;
         }
 
         InputManager::InputManager(const float mouseSensitivity) : keyboard(), mouse(mouseSensitivity) {

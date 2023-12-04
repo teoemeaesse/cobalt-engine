@@ -19,9 +19,7 @@ namespace cobalt {
             return polled;
         }
 
-        Mouse::Mouse(const float sensitivity) : 
-        x(0), y(0), dx(0), dy(0), dsx(0), dsy(0),
-        sensitivity(sensitivity) {
+        Mouse::Mouse(const float sensitivity) : sensitivity(sensitivity) {
         }
 
         void Mouse::onMove(const float x, const float y) {
@@ -38,15 +36,15 @@ namespace cobalt {
 
         void Mouse::onButtonPress(const int button, const int action) {
             if (button == GLFW_MOUSE_BUTTON_LEFT) {
-                buttonStates[static_cast<size_t>(Button::LEFT)].down = action == GLFW_PRESS;
+                buttonStates[static_cast<size_t>(ButtonID::LEFT)].down = action == GLFW_PRESS;
             } else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
-                buttonStates[static_cast<size_t>(Button::RIGHT)].down = action == GLFW_PRESS;
+                buttonStates[static_cast<size_t>(ButtonID::RIGHT)].down = action == GLFW_PRESS;
             } else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
-                buttonStates[static_cast<size_t>(Button::MIDDLE)].down = action == GLFW_PRESS;
+                buttonStates[static_cast<size_t>(ButtonID::MIDDLE)].down = action == GLFW_PRESS;
             }
         }
 
-        ButtonState& Mouse::getButton(const Button button) {
+        ButtonState& Mouse::getButton(const ButtonID button) {
             return buttonStates[static_cast<size_t>(button)];
         }
 

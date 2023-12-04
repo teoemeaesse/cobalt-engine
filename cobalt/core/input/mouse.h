@@ -5,11 +5,12 @@
 #pragma once
 
 #include "core/gl/definitions.h"
+#include "core/input/peripheral.h"
 
 
 namespace cobalt {
     namespace core {
-        enum class Button {
+        enum class ButtonID {
             LEFT, RIGHT, MIDDLE, COUNT
         };
 
@@ -39,7 +40,7 @@ namespace cobalt {
             ~ButtonState() = default;
         };
 
-        class Mouse {
+        class Mouse : public Peripheral<ButtonID> {
             public:
             /* Create a new mouse with the given sensitivity.
              * @param sensitivity: The mouse sensitivity.
@@ -69,12 +70,18 @@ namespace cobalt {
              */
             void onButtonPress(const int button, const int action);
 
+            /* Poll the keyboard for events.
+             */
+            void pollEvents() override;
+            /* Clear all events from the keyboard.
+             */
+            void clearEvents() override;
+
             /* Get the state of a button.
              * @param button: The button to get the state of.
              * @return: The state of the button.
              */
-            ButtonState& getButton(const Button button);
-
+            ButtonState& getButton(const ButtonID button);
             /* Get the current x position. Relative to the top left corner of the window's content area.
              * @return: The current x position.
              */
@@ -114,7 +121,7 @@ namespace cobalt {
             float dsx, dsy;     // Delta scroll - difference between the current and last polled scroll.
             float sensitivity;  // Mouse sensitivity.
 
-            ButtonState buttonStates[static_cast<size_t>(Button::COUNT)];
+            ButtonState buttonStates[static_cast<size_t>(ButtonID::COUNT)];
         };
     }
 }

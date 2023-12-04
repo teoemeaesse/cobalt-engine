@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "core/input/input_command.h"
 #include "core/input/keyboard.h"
 #include "core/input/mouse.h"
 #include "core/containers/queue.h"
@@ -11,19 +12,6 @@
 
 namespace cobalt {
     namespace core {
-        class InputEvent {
-            public:
-            enum class Type {
-                KEYBOARD,
-                MOUSE
-            };
-
-            InputEvent(const Type type) : type(type) {}
-            virtual ~InputEvent() = default;
-
-            const Type type;
-        };
-
         /* The input manager. Handles all input from peripherals such as the keyboard and mouse.
          * It then dispatches events to the appropriate listeners.
          */
@@ -38,15 +26,25 @@ namespace cobalt {
              */
             ~InputManager() = default;
 
-            /* Polls the input manager for the next event.
-             * @return: The next event or nullptr if there are no events
+            /* Poll all events from the peripherals.
              */
-            InputEvent* poll();
-            
+            void pollEvents();
+            /* Clear all events from the peripherals.
+             */
+            void clearEvents();
+
+            /* Get the keyboard.
+             * @return: The keyboard.
+             */
+            Keyboard& getKeyboard();
+            /* Get the mouse.
+             * @return: The mouse.
+             */
+            Mouse& getMouse();
+
             private:
             Keyboard keyboard;          // The keyboard.
             Mouse mouse;                // The mouse.
-            Queue<InputEvent*> events;  // The events queue.
         };
     }
 }
