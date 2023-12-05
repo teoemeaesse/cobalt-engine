@@ -72,10 +72,6 @@ namespace cobalt {
             glfwSwapBuffers(RenderContext::getGLFWContext());
         }
 
-        void Window::pollEvents() const {
-            glfwPollEvents();
-        }
-
         void Window::show() const {
             glfwShowWindow(RenderContext::getGLFWContext());
         }

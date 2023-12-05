@@ -44,7 +44,6 @@ class Game : public engine::Application {
             stop();
         }
         window.clear();
-        window.pollEvents();
 
         getInputManager().pollEvents();
         getInputManager().clearEvents();

@@ -15,6 +15,7 @@
 namespace cobalt {
     namespace core {
         void InputManager::pollEvents() {
+            glfwPollEvents();
             keyboard.pollEvents();
             mouse.pollEvents();
         }
