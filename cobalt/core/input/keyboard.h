@@ -52,7 +52,7 @@ namespace cobalt {
             /* Create a new keyboard.
              * @return: The new keyboard.
              */
-            Keyboard() = default;
+            Keyboard();
             /* Destroy the keyboard.
              */
             ~Keyboard() = default;

@@ -49,10 +49,15 @@ namespace cobalt {
         KeyState::KeyState() : down(false), polled(true) {
         }
 
+        Keyboard::Keyboard() : Peripheral() {
+            for (size_t i = 0; i < static_cast<size_t>(KeyID::COUNT); i++) {
+                keyStates[i] = KeyState();
+            }
+        }
+
         void Keyboard::onKeyPress(const int key, const int action) {
             KeyID id = glfwToCobalt(key);
-            KeyState &state = keyStates[static_cast<size_t>(id)];
-            state.down = action != GLFW_RELEASE;
+            keyStates[static_cast<size_t>(id)].down = action != GLFW_RELEASE;
         }
 
         void Keyboard::pollEvents() {

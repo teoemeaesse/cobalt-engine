@@ -47,6 +47,7 @@ namespace cobalt {
         }
 
         void RenderContext::recreate() {
+            void* pointer = instance->getUserPointer();
             if (instance) {
                 glfwDestroyWindow(instance->context);
             }
@@ -55,6 +56,7 @@ namespace cobalt {
                 throw GFXException("Failed to recreate render context");
             }
             glfwMakeContextCurrent(instance->context);
+            setUserPointer(pointer);
         }
 
         void RenderContext::setKeyCallback(GLFWkeyfun callback) {

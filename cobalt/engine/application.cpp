@@ -18,6 +18,7 @@ namespace cobalt {
             frameCount(0),
             framerateTimeWindow(1),
             inputManager(1.0f) {
+            
             core::RenderContext::setUserPointer(&inputManager);
             // core::RenderContext::setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
             //     core::InputManager* inputManager = static_cast<core::InputManager*>(core::RenderContext::getUserPointer());

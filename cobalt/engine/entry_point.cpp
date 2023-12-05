@@ -28,6 +28,11 @@ int main(int argc, char** argv) {
 
     // Create the application.
     auto app = cobalt::engine::createApplication();
+    cobalt::core::RenderContext::setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
+        cobalt::core::InputManager* inputManager = static_cast<cobalt::core::InputManager*>(cobalt::core::RenderContext::getUserPointer());
+        CB_CORE_TRACE("Key: {0}, scancode: {1}, action: {2}, mods: {3}", key, scancode, action, mods);
+        inputManager->getKeyboard().onKeyPress(key, action);
+    });
     
     // Handle interrupts.
     struct sigaction sigIntHandler;

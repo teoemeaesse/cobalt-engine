@@ -9,7 +9,9 @@ using namespace cobalt;
 
 class Quit : public core::ConcreteInputCommand<engine::Application> {
     public:
-    Quit(engine::Application* target) : core::ConcreteInputCommand<engine::Application>(target) {}
+    Quit(engine::Application* target) : core::ConcreteInputCommand<engine::Application>(target) {
+        target->getInputManager().getKeyboard().bind(core::KeyID::A, std::make_shared<Quit>(target));
+    }
     void execute(core::InputValue value) const override {
         CB_WARN("Quitting!");
     }
@@ -28,7 +30,6 @@ class Game : public engine::Application {
             .build()) {
         window.show();
         window.setClearColor(COLOR_BLUE);
-        //getInputManager().getKeyboard().bind(core::KeyID::A, std::make_shared<Quit>(this));
     }
 
     ~Game() override {
