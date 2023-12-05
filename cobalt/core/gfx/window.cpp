@@ -85,6 +85,10 @@ namespace cobalt {
                 InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
                 inputManager->getMouse().onScroll((float) xoffset, (float) yoffset);
             });
+            RenderContext::setResizeCallback([](GLFWwindow* window, int width, int height) {
+                Window* w = static_cast<Window*>(glfwGetWindowUserPointer(window));
+                w->onResize(width, height);
+            });
             CB_CORE_INFO("Created window");
         }
 
@@ -121,6 +125,11 @@ namespace cobalt {
 
         void Window::setClearColor(const Color& color) {
             defaultFBO.setClearColor(color);
+        }
+        void Window::onResize(const uint width, const uint height) {
+            this->width = width;
+            this->height = height;
+            defaultFBO.resize(width, height);
         }
 
         WindowBuilder::WindowBuilder() :

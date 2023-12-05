@@ -55,6 +55,10 @@ namespace cobalt {
              * @param callback: The mouse button callback.
              */
             static void setMouseButtonCallback(GLFWmousebuttonfun callback);
+            /* Sets the window resize callback.
+             * @param callback: The window resize callback.
+             */
+            static void setResizeCallback(GLFWwindowsizefun callback);
             /* Sets the GLFW error callback.
              * @param callback: The error callback.
              */

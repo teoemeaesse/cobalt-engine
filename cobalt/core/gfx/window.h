@@ -51,6 +51,11 @@ namespace cobalt {
              * @param color: The color to clear the screen to.
              */
             void setClearColor(const Color& color);
+            /* Called when the window is resized.
+             * @param width: The new width of the window.
+             * @param height: The new height of the window.
+             */
+            void onResize(const uint width, const uint height);
 
             private:
             /* Creates a new window.
@@ -95,11 +100,6 @@ namespace cobalt {
              * @return: A new window builder.
              */
             WindowBuilder();
-            /* Creates a new window builder from an existing window.
-             * @param window: The window to create the builder from.
-             * @return: A new window builder.
-             */
-            WindowBuilder(const Window&);
             /* Destroys the window builder.
              */
             ~WindowBuilder() = default;

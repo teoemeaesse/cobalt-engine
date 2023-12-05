@@ -74,6 +74,10 @@ namespace cobalt {
             glfwSetMouseButtonCallback(instance->context, callback);
         }
 
+        void RenderContext::setResizeCallback(GLFWwindowsizefun callback) {
+            glfwSetWindowSizeCallback(instance->context, callback);
+        }
+
         void RenderContext::setErrorCallback(GLFWerrorfun callback) {
             glfwSetErrorCallback(callback);
         }
