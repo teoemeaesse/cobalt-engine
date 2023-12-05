@@ -31,22 +31,6 @@ int main(int argc, char** argv) {
 
     // Create the application.
     auto app = cobalt::engine::createApplication();
-    cobalt::core::RenderContext::setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
-        cobalt::core::InputManager* inputManager = static_cast<cobalt::core::InputManager*>(cobalt::core::RenderContext::getUserPointer());
-        inputManager->getKeyboard().onKeyPress(key, action);
-    });
-    cobalt::core::RenderContext::setCursorPosCallback([](GLFWwindow* window, double xpos, double ypos) {
-        cobalt::core::InputManager* inputManager = static_cast<cobalt::core::InputManager*>(cobalt::core::RenderContext::getUserPointer());
-        inputManager->getMouse().onMove((float) xpos, (float) ypos);
-    });
-    cobalt::core::RenderContext::setMouseButtonCallback([](GLFWwindow* window, int button, int action, int mods) {
-        cobalt::core::InputManager* inputManager = static_cast<cobalt::core::InputManager*>(cobalt::core::RenderContext::getUserPointer());
-        inputManager->getMouse().onButtonPress(button, action);
-    });
-    cobalt::core::RenderContext::setScrollCallback([](GLFWwindow* window, double xoffset, double yoffset) {
-        cobalt::core::InputManager* inputManager = static_cast<cobalt::core::InputManager*>(cobalt::core::RenderContext::getUserPointer());
-        inputManager->getMouse().onScroll((float) xoffset, (float) yoffset);
-    });
 
     // Handle interrupts.
     struct sigaction sigIntHandler;

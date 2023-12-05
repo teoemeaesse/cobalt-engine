@@ -6,6 +6,7 @@
 #include "core/gfx/render_context.h"
 #include "core/exceptions/gfx_exception.h"
 #include "core/utils/log.h"
+#include "core/input/input_manager.h"
 
 
 namespace cobalt {
@@ -28,7 +29,14 @@ namespace cobalt {
             height(height),
             title(title),
             vsync(vsync),
+            mode(mode),
+            resizable(resizable),
+            decorated(decorated),
             defaultFBO(0, 0) {
+            init();
+        }
+
+        void Window::init() {
             glfwWindowHint(GLFW_RESIZABLE, resizable);
             glfwSetWindowCloseCallback(RenderContext::getGLFWContext(), windowCloseCallback);
             GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
@@ -60,6 +68,23 @@ namespace cobalt {
             glfwSetWindowSize(RenderContext::getGLFWContext(), this->width, this->height);
             glfwSetWindowTitle(RenderContext::getGLFWContext(), title.c_str());
             defaultFBO.resize(this->width, this->height);
+
+            RenderContext::setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
+                InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
+                inputManager->getKeyboard().onKeyPress(key, action);
+            });
+            RenderContext::setCursorPosCallback([](GLFWwindow* window, double xpos, double ypos) {
+                InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
+                inputManager->getMouse().onMove((float) xpos, (float) ypos);
+            });
+            RenderContext::setMouseButtonCallback([](GLFWwindow* window, int button, int action, int mods) {
+                InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
+                inputManager->getMouse().onButtonPress(button, action);
+            });
+            RenderContext::setScrollCallback([](GLFWwindow* window, double xoffset, double yoffset) {
+                InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
+                inputManager->getMouse().onScroll((float) xoffset, (float) yoffset);
+            });
             CB_CORE_INFO("Created window");
         }
 
@@ -70,6 +95,12 @@ namespace cobalt {
 
         void Window::swapBuffers() const {
             glfwSwapBuffers(RenderContext::getGLFWContext());
+        }
+        
+        void Window::switchMode(const WindowMode mode) {
+            this->mode = mode;
+            init();
+            show();
         }
 
         void Window::show() const {

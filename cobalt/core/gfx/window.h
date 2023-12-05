@@ -30,9 +30,10 @@ namespace cobalt {
             /* Swap the front and back buffers of the window.
              */
             void swapBuffers() const;
-            /* Polls for events.
+            /* Switches the mode of the window.
+             * @param mode: The new mode of the window.
              */
-            void pollEvents() const;
+            void switchMode(const WindowMode mode);
             /* Makes the window visible
              */
             void show() const;
@@ -46,7 +47,6 @@ namespace cobalt {
              * @return: Whether or not the window should close.
              */
             bool shouldClose() const;
-
             /* Sets the clear color of the window.
              * @param color: The color to clear the screen to.
              */
@@ -77,6 +77,14 @@ namespace cobalt {
             std::string title;      // The title of the window.
             FBO defaultFBO;         // The default framebuffer object of the window.
             bool vsync;             // Whether or not the window is using vsync.
+            bool resizable;         // Whether or not the window is resizable.
+            bool decorated;         // Whether or not the window is decorated.
+            WindowMode mode;        // The mode of the window.
+        
+            /* Initializes the window.
+             * Called on construction and after changing window hints.
+             */
+            void init();
         };
 
         /* Builder for windows.
@@ -87,6 +95,11 @@ namespace cobalt {
              * @return: A new window builder.
              */
             WindowBuilder();
+            /* Creates a new window builder from an existing window.
+             * @param window: The window to create the builder from.
+             * @return: A new window builder.
+             */
+            WindowBuilder(const Window&);
             /* Destroys the window builder.
              */
             ~WindowBuilder() = default;

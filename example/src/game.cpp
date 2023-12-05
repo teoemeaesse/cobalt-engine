@@ -17,6 +17,39 @@ class Quit : public core::ConcreteInputCommand<engine::Application> {
     }
 };
 
+class Fullscreen : public core::ConcreteInputCommand<core::Window> {
+    public:
+    Fullscreen(core::Window* target) : core::ConcreteInputCommand<core::Window>(target) {
+    }
+    void execute() const override {
+        if (!getInput().active) {
+            getTarget()->switchMode(core::WindowMode::Fullscreen);
+        }
+    }
+};
+
+class Borderless : public core::ConcreteInputCommand<core::Window> {
+    public:
+    Borderless(core::Window* target) : core::ConcreteInputCommand<core::Window>(target) {
+    }
+    void execute() const override {
+        if (!getInput().active) {
+            getTarget()->switchMode(core::WindowMode::Borderless);
+        }
+    }
+};
+
+class Windowed : public core::ConcreteInputCommand<core::Window> {
+    public:
+    Windowed(core::Window* target) : core::ConcreteInputCommand<core::Window>(target) {
+    }
+    void execute() const override {
+        if (!getInput().active) {
+            getTarget()->switchMode(core::WindowMode::Windowed);
+        }
+    }
+};
+
 class Game : public engine::Application {
     public:
     Game() : engine::Application(1), window(core::WindowBuilder()
@@ -29,8 +62,11 @@ class Game : public engine::Application {
             .setDecorated(true)
             .build()) {
         window.show();
-        window.setClearColor(COLOR_BLUE);
+        window.setClearColor(COLOR(0.2f, 0.2f, 0.2f, 1.0f));
         getInputManager().getKeyboard().bind(core::KeyboardInputID::ESCAPE, std::make_unique<Quit>(this));
+        getInputManager().getKeyboard().bind(core::KeyboardInputID::F9, std::make_unique<Windowed>(&window));
+        getInputManager().getKeyboard().bind(core::KeyboardInputID::F10, std::make_unique<Borderless>(&window));
+        getInputManager().getKeyboard().bind(core::KeyboardInputID::F11, std::make_unique<Fullscreen>(&window));
     }
 
     ~Game() override {
