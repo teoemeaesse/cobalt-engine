@@ -7,35 +7,35 @@
 
 namespace cobalt {
     namespace core {
-        const static std::unordered_map<int, KeyID> GLFW_TO_CB = {
-            { GLFW_KEY_A, KeyID::A }, { GLFW_KEY_B, KeyID::B }, { GLFW_KEY_C, KeyID::C }, { GLFW_KEY_D, KeyID::D }, { GLFW_KEY_E, KeyID::E }, { GLFW_KEY_F, KeyID::F }, { GLFW_KEY_G, KeyID::G }, { GLFW_KEY_H, KeyID::H }, { GLFW_KEY_I, KeyID::I }, { GLFW_KEY_J, KeyID::J }, { GLFW_KEY_K, KeyID::K }, { GLFW_KEY_L, KeyID::L }, { GLFW_KEY_M, KeyID::M }, { GLFW_KEY_N, KeyID::N }, { GLFW_KEY_O, KeyID::O }, { GLFW_KEY_P, KeyID::P }, { GLFW_KEY_Q, KeyID::Q }, { GLFW_KEY_R, KeyID::R }, { GLFW_KEY_S, KeyID::S }, { GLFW_KEY_T, KeyID::T }, { GLFW_KEY_U, KeyID::U }, { GLFW_KEY_V, KeyID::V }, { GLFW_KEY_W, KeyID::W }, { GLFW_KEY_X, KeyID::X }, { GLFW_KEY_Y, KeyID::Y }, { GLFW_KEY_Z, KeyID::Z }, 
-            { GLFW_KEY_0, KeyID::N0 }, { GLFW_KEY_1, KeyID::N1 }, { GLFW_KEY_2, KeyID::N2 }, { GLFW_KEY_3, KeyID::N3 }, { GLFW_KEY_4, KeyID::N4 }, { GLFW_KEY_5, KeyID::N5 }, { GLFW_KEY_6, KeyID::N6 }, { GLFW_KEY_7, KeyID::N7 }, { GLFW_KEY_8, KeyID::N8 }, { GLFW_KEY_9, KeyID::N9 }, 
-            { GLFW_KEY_F1, KeyID::F1 }, { GLFW_KEY_F2, KeyID::F2 }, { GLFW_KEY_F3, KeyID::F3 }, { GLFW_KEY_F4, KeyID::F4 }, { GLFW_KEY_F5, KeyID::F5 }, { GLFW_KEY_F6, KeyID::F6 }, { GLFW_KEY_F7, KeyID::F7 }, { GLFW_KEY_F8, KeyID::F8 }, { GLFW_KEY_F9, KeyID::F9 }, { GLFW_KEY_F10, KeyID::F10 }, { GLFW_KEY_F11, KeyID::F11 }, { GLFW_KEY_F12, KeyID::F12 }, { GLFW_KEY_F13, KeyID::F13 }, { GLFW_KEY_F14, KeyID::F14 }, { GLFW_KEY_F15, KeyID::F15 }, { GLFW_KEY_F16, KeyID::F16 }, { GLFW_KEY_F17, KeyID::F17 }, { GLFW_KEY_F18, KeyID::F18 }, { GLFW_KEY_F19, KeyID::F19 }, { GLFW_KEY_F20, KeyID::F20 }, { GLFW_KEY_F21, KeyID::F21 }, { GLFW_KEY_F22, KeyID::F22 }, { GLFW_KEY_F23, KeyID::F23 }, { GLFW_KEY_F24, KeyID::F24 }, { GLFW_KEY_F25, KeyID::F25 },
-            { GLFW_KEY_LEFT_SHIFT, KeyID::LSHIFT },
-            { GLFW_KEY_RIGHT_SHIFT, KeyID::RSHIFT },
-            { GLFW_KEY_LEFT_CONTROL, KeyID::LCTRL },
-            { GLFW_KEY_RIGHT_CONTROL, KeyID::RCTRL },
-            { GLFW_KEY_LEFT_ALT, KeyID::LALT },
-            { GLFW_KEY_RIGHT_ALT, KeyID::RALT },
-            { GLFW_KEY_SPACE, KeyID::SPACE },
-            { GLFW_KEY_ENTER, KeyID::ENTER },
-            { GLFW_KEY_ESCAPE, KeyID::ESCAPE },
-            { GLFW_KEY_TAB, KeyID::TAB },
-            { GLFW_KEY_BACKSPACE, KeyID::BACKSPACE },
-            { GLFW_KEY_INSERT, KeyID::INSERT },
-            { GLFW_KEY_DELETE, KeyID::DELETE },
-            { GLFW_KEY_RIGHT, KeyID::RIGHT },
-            { GLFW_KEY_LEFT, KeyID::LEFT },
-            { GLFW_KEY_DOWN, KeyID::DOWN },
-            { GLFW_KEY_UP, KeyID::UP }
+        const static std::unordered_map<int, KeyboardInputID> GLFW_TO_CB = {
+            { GLFW_KEY_A, KeyboardInputID::A }, { GLFW_KEY_B, KeyboardInputID::B }, { GLFW_KEY_C, KeyboardInputID::C }, { GLFW_KEY_D, KeyboardInputID::D }, { GLFW_KEY_E, KeyboardInputID::E }, { GLFW_KEY_F, KeyboardInputID::F }, { GLFW_KEY_G, KeyboardInputID::G }, { GLFW_KEY_H, KeyboardInputID::H }, { GLFW_KEY_I, KeyboardInputID::I }, { GLFW_KEY_J, KeyboardInputID::J }, { GLFW_KEY_K, KeyboardInputID::K }, { GLFW_KEY_L, KeyboardInputID::L }, { GLFW_KEY_M, KeyboardInputID::M }, { GLFW_KEY_N, KeyboardInputID::N }, { GLFW_KEY_O, KeyboardInputID::O }, { GLFW_KEY_P, KeyboardInputID::P }, { GLFW_KEY_Q, KeyboardInputID::Q }, { GLFW_KEY_R, KeyboardInputID::R }, { GLFW_KEY_S, KeyboardInputID::S }, { GLFW_KEY_T, KeyboardInputID::T }, { GLFW_KEY_U, KeyboardInputID::U }, { GLFW_KEY_V, KeyboardInputID::V }, { GLFW_KEY_W, KeyboardInputID::W }, { GLFW_KEY_X, KeyboardInputID::X }, { GLFW_KEY_Y, KeyboardInputID::Y }, { GLFW_KEY_Z, KeyboardInputID::Z }, 
+            { GLFW_KEY_0, KeyboardInputID::N0 }, { GLFW_KEY_1, KeyboardInputID::N1 }, { GLFW_KEY_2, KeyboardInputID::N2 }, { GLFW_KEY_3, KeyboardInputID::N3 }, { GLFW_KEY_4, KeyboardInputID::N4 }, { GLFW_KEY_5, KeyboardInputID::N5 }, { GLFW_KEY_6, KeyboardInputID::N6 }, { GLFW_KEY_7, KeyboardInputID::N7 }, { GLFW_KEY_8, KeyboardInputID::N8 }, { GLFW_KEY_9, KeyboardInputID::N9 }, 
+            { GLFW_KEY_F1, KeyboardInputID::F1 }, { GLFW_KEY_F2, KeyboardInputID::F2 }, { GLFW_KEY_F3, KeyboardInputID::F3 }, { GLFW_KEY_F4, KeyboardInputID::F4 }, { GLFW_KEY_F5, KeyboardInputID::F5 }, { GLFW_KEY_F6, KeyboardInputID::F6 }, { GLFW_KEY_F7, KeyboardInputID::F7 }, { GLFW_KEY_F8, KeyboardInputID::F8 }, { GLFW_KEY_F9, KeyboardInputID::F9 }, { GLFW_KEY_F10, KeyboardInputID::F10 }, { GLFW_KEY_F11, KeyboardInputID::F11 }, { GLFW_KEY_F12, KeyboardInputID::F12 }, { GLFW_KEY_F13, KeyboardInputID::F13 }, { GLFW_KEY_F14, KeyboardInputID::F14 }, { GLFW_KEY_F15, KeyboardInputID::F15 }, { GLFW_KEY_F16, KeyboardInputID::F16 }, { GLFW_KEY_F17, KeyboardInputID::F17 }, { GLFW_KEY_F18, KeyboardInputID::F18 }, { GLFW_KEY_F19, KeyboardInputID::F19 }, { GLFW_KEY_F20, KeyboardInputID::F20 }, { GLFW_KEY_F21, KeyboardInputID::F21 }, { GLFW_KEY_F22, KeyboardInputID::F22 }, { GLFW_KEY_F23, KeyboardInputID::F23 }, { GLFW_KEY_F24, KeyboardInputID::F24 }, { GLFW_KEY_F25, KeyboardInputID::F25 },
+            { GLFW_KEY_LEFT_SHIFT, KeyboardInputID::LSHIFT },
+            { GLFW_KEY_RIGHT_SHIFT, KeyboardInputID::RSHIFT },
+            { GLFW_KEY_LEFT_CONTROL, KeyboardInputID::LCTRL },
+            { GLFW_KEY_RIGHT_CONTROL, KeyboardInputID::RCTRL },
+            { GLFW_KEY_LEFT_ALT, KeyboardInputID::LALT },
+            { GLFW_KEY_RIGHT_ALT, KeyboardInputID::RALT },
+            { GLFW_KEY_SPACE, KeyboardInputID::SPACE },
+            { GLFW_KEY_ENTER, KeyboardInputID::ENTER },
+            { GLFW_KEY_ESCAPE, KeyboardInputID::ESCAPE },
+            { GLFW_KEY_TAB, KeyboardInputID::TAB },
+            { GLFW_KEY_BACKSPACE, KeyboardInputID::BACKSPACE },
+            { GLFW_KEY_INSERT, KeyboardInputID::INSERT },
+            { GLFW_KEY_DELETE, KeyboardInputID::DELETE },
+            { GLFW_KEY_RIGHT, KeyboardInputID::RIGHT },
+            { GLFW_KEY_LEFT, KeyboardInputID::LEFT },
+            { GLFW_KEY_DOWN, KeyboardInputID::DOWN },
+            { GLFW_KEY_UP, KeyboardInputID::UP }
         };
 
-        const static KeyID glfwToCobalt(const int key) {
+        const static KeyboardInputID glfwToCobalt(const int key) {
             auto it = GLFW_TO_CB.find(key);
             if (it != GLFW_TO_CB.end()) {
                 return it->second;
             }
-            return KeyID::COUNT;
+            return KeyboardInputID::COUNT;
         }
 
         bool KeyState::isDown() const {
@@ -46,44 +46,48 @@ namespace cobalt {
             return polled;
         }
 
-        KeyState::KeyState() : down(false), polled(true) {
+        KeyState::KeyState() : down(false), polled(false) {
         }
 
         Keyboard::Keyboard() : Peripheral() {
-            for (size_t i = 0; i < static_cast<size_t>(KeyID::COUNT); i++) {
+            for (size_t i = 0; i < static_cast<size_t>(KeyboardInputID::COUNT); i++) {
                 keyStates[i] = KeyState();
             }
         }
 
         void Keyboard::onKeyPress(const int key, const int action) {
-            KeyID id = glfwToCobalt(key);
+            KeyboardInputID id = glfwToCobalt(key);
             keyStates[static_cast<size_t>(id)].down = action != GLFW_RELEASE;
         }
 
         void Keyboard::pollEvents() {
-            for (size_t i = 0; i < static_cast<size_t>(KeyID::COUNT); i++) {
+            for (size_t i = 0; i < static_cast<size_t>(KeyboardInputID::COUNT); i++) {
                 KeyState &state = keyStates[i];
                 if (state.down) {
-                    if (state.polled) {
-                        auto it = bindings.find(static_cast<KeyID>(i));
-                        if (it != bindings.end()) {
-                            events.enqueue(it->second.get());
-                            state.polled = false;
-                        }
+                    auto it = bindings.find(static_cast<KeyboardInputID>(i));
+                    if (it != bindings.end()) {
+                        events.enqueue(it->second.get()->withInput({state.down, state.polled, 1.0f}));
                     }
-                } else {
-                    state.polled = true;
+                    if (!state.polled) {
+                        state.polled = true;
+                    }
+                } else if (state.polled) {
+                    state.polled = false;
+                    auto it = bindings.find(static_cast<KeyboardInputID>(i));
+                    if (it != bindings.end()) {
+                        events.enqueue(it->second.get()->withInput({state.down, state.polled, 1.0f}));
+                    }
                 }
             }
         }
 
         void Keyboard::clearEvents() {
             while (!events.isEmpty()) {
-                events.dequeue()->execute({ false, false, 0.0f });
+                events.dequeue()->execute();
             }
         }
 
-        KeyState& Keyboard::getKey(const KeyID key) {
+        KeyState& Keyboard::getKey(const KeyboardInputID key) {
             return keyStates[static_cast<size_t>(key)];
         }
     }

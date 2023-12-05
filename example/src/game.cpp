@@ -5,14 +5,15 @@
 #include "engine/cobalt.h"
 #include "engine/application.h"
 
+
 using namespace cobalt;
 
 class Quit : public core::ConcreteInputCommand<engine::Application> {
     public:
     Quit(engine::Application* target) : core::ConcreteInputCommand<engine::Application>(target) {
     }
-    void execute(core::InputValue value) const override {
-        CB_WARN("Quitting!");
+    void execute() const override {
+        getTarget()->stop();
     }
 };
 
@@ -22,14 +23,14 @@ class Game : public engine::Application {
             .setTitle("cobalt example")
             .setWidth(1280)
             .setHeight(720)
-            .setVsync(true)
+            .setVsync(false)
             .setMode(core::WindowMode::Windowed)
-            .setResizable(false)
+            .setResizable(true)
             .setDecorated(true)
             .build()) {
         window.show();
         window.setClearColor(COLOR_BLUE);
-        getInputManager().getKeyboard().bind(core::KeyID::B, std::make_unique<Quit>(this));
+        getInputManager().getKeyboard().bind(core::KeyboardInputID::ESCAPE, std::make_unique<Quit>(this));
     }
 
     ~Game() override {

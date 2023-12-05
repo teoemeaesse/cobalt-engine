@@ -40,10 +40,9 @@ namespace cobalt {
         }
 
         void RenderContext::destroy() {
-            if (instance) {
-                glfwDestroyWindow(instance->context);
-            }
             glfwTerminate();
+            instance.reset();
+            instance = nullptr;
         }
 
         void RenderContext::recreate() {
@@ -111,6 +110,9 @@ namespace cobalt {
         }
 
         GLFWContext RenderContext::getGLFWContext() {
+            if (!instance) {
+                throw GFXException("Render context not initialized");
+            }
             return instance->context;
         }
 

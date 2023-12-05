@@ -10,8 +10,13 @@
 
 namespace cobalt {
     namespace core {
-        enum class ButtonID {
-            LEFT, RIGHT, MIDDLE, COUNT
+        enum class MouseInputID {
+            LEFT, RIGHT, MIDDLE,
+            LEFT_X, RIGHT_X, MIDDLE_X,
+            LEFT_Y, RIGHT_Y, MIDDLE_Y,
+            AXIS_X, AXIS_Y,
+            SCROLL_X, SCROLL_Y,
+            COUNT
         };
 
         class ButtonState {
@@ -40,7 +45,7 @@ namespace cobalt {
             ~ButtonState() = default;
         };
 
-        class Mouse : public Peripheral<ButtonID> {
+        class Mouse : public Peripheral<MouseInputID> {
             public:
             /* Create a new mouse with the given sensitivity.
              * @param sensitivity: The mouse sensitivity.
@@ -81,7 +86,7 @@ namespace cobalt {
              * @param button: The button to get the state of.
              * @return: The state of the button.
              */
-            ButtonState& getButton(const ButtonID button);
+            ButtonState& getButton(const MouseInputID button);
             /* Get the current x position. Relative to the top left corner of the window's content area.
              * @return: The current x position.
              */
@@ -121,7 +126,13 @@ namespace cobalt {
             float dsx, dsy;     // Delta scroll - difference between the current and last polled scroll.
             float sensitivity;  // Mouse sensitivity.
 
-            ButtonState buttonStates[static_cast<size_t>(ButtonID::COUNT)];
+            ButtonState buttonStates[3];    // States of the mouse buttons.
+        
+            /* Queue an event.
+             * @param id: The id of the event.
+             * @param value: The value of the event.
+             */
+            void queueEvent(const MouseInputID id, const InputValue value);
         };
     }
 }

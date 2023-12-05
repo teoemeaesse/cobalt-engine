@@ -29,9 +29,26 @@ namespace cobalt {
             virtual ~InputCommand() = default;
 
             /* Execute the command.
-             ^ @param input: The input value of the bound input.
              */
-            virtual void execute(InputValue input) const = 0;
+            virtual void execute() const = 0;
+            
+            /* Set the input value of the bound input.
+             * @param input: The input value of the bound input.
+             * @return: This input command.
+             */
+            const InputCommand* withInput(InputValue input) {
+                this->input = input;
+                return this;
+            }
+            /* Get the input value of the bound input.
+             * @return: The input value of the bound input.
+             */
+            InputValue getInput() const {
+                return input;
+            }
+
+            private:
+            InputValue input;   // The input value of the bound input.
         };
 
         /* Concrete input command. Executes a function on a receiver.

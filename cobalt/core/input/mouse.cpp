@@ -8,7 +8,7 @@
 
 namespace cobalt {
     namespace core {
-        ButtonState::ButtonState() : down(false), polled(true) {
+        ButtonState::ButtonState() : down(false), polled(false) {
         }
 
         bool ButtonState::isDown() const {
@@ -19,8 +19,8 @@ namespace cobalt {
             return polled;
         }
 
-        Mouse::Mouse(const float sensitivity) : sensitivity(sensitivity), x(0.0f), y(0.0f), dx(0.0f), dy(0.0f), dsx(0.0f), dsy(0.0f) {
-            for (size_t i = 0; i < static_cast<size_t>(ButtonID::COUNT); i++) {
+        Mouse::Mouse(const float sensitivity) : Peripheral(), sensitivity(sensitivity), x(0.0f), y(0.0f), dx(0.0f), dy(0.0f), dsx(0.0f), dsy(0.0f) {
+            for (size_t i = 0; i < static_cast<size_t>(MouseInputID::COUNT); i++) {
                 buttonStates[i] = ButtonState();
             }
         }
@@ -39,25 +39,74 @@ namespace cobalt {
 
         void Mouse::onButtonPress(const int button, const int action) {
             if (button == GLFW_MOUSE_BUTTON_LEFT) {
-                buttonStates[static_cast<size_t>(ButtonID::LEFT)].down = action == GLFW_PRESS;
+                buttonStates[static_cast<size_t>(MouseInputID::LEFT)].down = action == GLFW_PRESS;
             } else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
-                buttonStates[static_cast<size_t>(ButtonID::RIGHT)].down = action == GLFW_PRESS;
+                buttonStates[static_cast<size_t>(MouseInputID::RIGHT)].down = action == GLFW_PRESS;
             } else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
-                buttonStates[static_cast<size_t>(ButtonID::MIDDLE)].down = action == GLFW_PRESS;
+                buttonStates[static_cast<size_t>(MouseInputID::MIDDLE)].down = action == GLFW_PRESS;
+            }
+        }
+
+        void Mouse::queueEvent(const MouseInputID id, const InputValue value) {
+            auto it = bindings.find(id);
+            if (it != bindings.end()) {
+                events.enqueue(it->second.get()->withInput(value));
             }
         }
 
         void Mouse::pollEvents() {
-            // TODO: add to queue
+            // Buttons
+            for (size_t i = 0; i < 3; i++) {
+                ButtonState &state = buttonStates[i];
+                if (state.down) {
+                    queueEvent(static_cast<MouseInputID>(i), {state.down, state.polled, 1.0f});
+                    if (!state.polled) {
+                        state.polled = true;
+                    }
+                } else if (state.polled) {
+                    state.polled = false;
+                    queueEvent(static_cast<MouseInputID>(i), {state.down, state.polled, 1.0f});
+                }
+            }
+
+            // Axes
+            if (dx != 0.0f) {
+                queueEvent(MouseInputID::AXIS_X, { true, false, dx});
+                for (size_t i = 0; i < 3; i++) {
+                    if(buttonStates[i].down) {
+                        queueEvent(static_cast<MouseInputID>(i + 3), { true, false, dx});
+                    }
+                }
+                dx = 0.0f;
+            }
+            if (dy != 0.0f) {
+                queueEvent(MouseInputID::AXIS_Y, { true, false, dy});
+                for (size_t i = 0; i < 3; i++) {
+                    if(buttonStates[i].down) {
+                        queueEvent(static_cast<MouseInputID>(i + 6), { true, false, dy});
+                    }
+                }
+                dy = 0.0f;
+            }
+
+            // Scroll
+            if (dsx != 0.0f) {
+                queueEvent(MouseInputID::SCROLL_X, { true, false, dsx});
+                dsx = 0.0f;
+            }
+            if (dsy != 0.0f) {
+                queueEvent(MouseInputID::SCROLL_Y, { true, false, dsy});
+                dsy = 0.0f;
+            }
         }
 
         void Mouse::clearEvents() {
             while (!events.isEmpty()) {
-                events.dequeue()->execute({ false, false, 0.0f }); // TODO: use actual values from the state
+                events.dequeue()->execute(); // TODO: use actual values from the state
             }
         }
 
-        ButtonState& Mouse::getButton(const ButtonID button) {
+        ButtonState& Mouse::getButton(const MouseInputID button) {
             return buttonStates[static_cast<size_t>(button)];
         }
 

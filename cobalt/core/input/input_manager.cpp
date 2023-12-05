@@ -6,23 +6,17 @@
 #include "core/gfx/render_context.h"
 
 
-
-#include "core/utils/log.h"
-
-
-
-
 namespace cobalt {
     namespace core {
         void InputManager::pollEvents() {
             glfwPollEvents();
             keyboard.pollEvents();
-            //mouse.pollEvents();
+            mouse.pollEvents();
         }
 
         void InputManager::clearEvents() {
             keyboard.clearEvents();
-            //mouse.clearEvents();
+            mouse.clearEvents();
         }
 
         Keyboard& InputManager::getKeyboard() {
