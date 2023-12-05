@@ -65,8 +65,11 @@ namespace cobalt {
                 KeyState &state = keyStates[i];
                 if (state.down) {
                     if (state.polled) {
-                        events.enqueue(bindings[glfwToCobalt(i)]);
-                        state.polled = false;
+                        auto it = bindings.find(static_cast<KeyID>(i));
+                        if (it != bindings.end()) {
+                            events.enqueue(it->second.get());
+                            state.polled = false;
+                        }
                     }
                 } else {
                     state.polled = true;

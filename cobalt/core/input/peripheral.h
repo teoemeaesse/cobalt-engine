@@ -56,7 +56,11 @@ namespace cobalt {
             Peripheral() : events(16), bindings() {}
             /* Destroy the peripheral.
              */
-            virtual ~Peripheral() = default;
+            ~Peripheral() {
+                for (auto& binding : bindings) {
+                    binding.second.reset();
+                }
+            }
 
             /* Poll the peripheral for events.
              */
@@ -69,13 +73,13 @@ namespace cobalt {
              * @param input: The input to bind the command to.
              * @param command: The command to bind.
              */
-            void bind(const PeripheralInput<T> input, std::shared_ptr<InputCommand> command) {
+            void bind(const PeripheralInput<T> input, std::unique_ptr<InputCommand> command) {
                 bindings[input] = std::move(command);
             }
 
             protected:
-            Queue<std::shared_ptr<const InputCommand>> events;                              // The events to execute.
-            std::unordered_map<PeripheralInput<T>, std::shared_ptr<InputCommand>> bindings; // The bindings for the peripheral.
+            Queue<const InputCommand*> events;                              // The events to execute.
+            std::unordered_map<PeripheralInput<T>, std::unique_ptr<InputCommand>> bindings; // The bindings for the peripheral.
         };
     }
 }

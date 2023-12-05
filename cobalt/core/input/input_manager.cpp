@@ -17,12 +17,12 @@ namespace cobalt {
         void InputManager::pollEvents() {
             glfwPollEvents();
             keyboard.pollEvents();
-            mouse.pollEvents();
+            //mouse.pollEvents();
         }
 
         void InputManager::clearEvents() {
             keyboard.clearEvents();
-            mouse.clearEvents();
+            //mouse.clearEvents();
         }
 
         Keyboard& InputManager::getKeyboard() {
