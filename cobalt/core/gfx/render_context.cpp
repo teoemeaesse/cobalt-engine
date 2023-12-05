@@ -40,11 +40,16 @@ namespace cobalt {
         }
 
         void RenderContext::destroy() {
+            if (instance) {
+                glfwDestroyWindow(instance->context);
+            }
             glfwTerminate();
         }
 
         void RenderContext::recreate() {
-            glfwDestroyWindow(instance->context);
+            if (instance) {
+                glfwDestroyWindow(instance->context);
+            }
             instance->context = glfwCreateWindow(1, 1, "", nullptr, nullptr);
             if (!instance->context) {
                 throw GFXException("Failed to recreate render context");

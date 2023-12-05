@@ -6,6 +6,7 @@
 
 #include "core/containers/types.h"
 #include "core/gl/fbo.h"
+#include "core/gfx/color.h"
 
 
 namespace cobalt {
@@ -38,10 +39,18 @@ namespace cobalt {
             /* Hides the window.
              */
             void hide() const;
+            /* Clears the screen to the default color.
+             */
+            void clear();
             /* Checks if the window should close.
              * @return: Whether or not the window should close.
              */
             bool shouldClose() const;
+
+            /* Sets the clear color of the window.
+             * @param color: The color to clear the screen to.
+             */
+            void setClearColor(const Color& color);
 
             private:
             /* Creates a new window.

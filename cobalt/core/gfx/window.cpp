@@ -84,8 +84,16 @@ namespace cobalt {
             glfwHideWindow(RenderContext::getGLFWContext());
         }
 
+        void Window::clear() {
+            defaultFBO.clear();
+        }
+
         bool Window::shouldClose() const {
             return glfwWindowShouldClose(RenderContext::getGLFWContext());
+        }
+
+        void Window::setClearColor(const Color& color) {
+            defaultFBO.setClearColor(color);
         }
 
         WindowBuilder::WindowBuilder() :

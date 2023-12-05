@@ -27,7 +27,8 @@ class Game : public engine::Application {
             .setDecorated(true)
             .build()) {
         window.show();
-        getInputManager().getKeyboard().bind(core::KeyID::A, std::make_shared<Quit>(this));
+        window.setClearColor(COLOR_BLUE);
+        //getInputManager().getKeyboard().bind(core::KeyID::A, std::make_shared<Quit>(this));
     }
 
     ~Game() override {
@@ -42,6 +43,7 @@ class Game : public engine::Application {
         if (window.shouldClose()) {
             stop();
         }
+        window.clear();
         window.pollEvents();
 
         getInputManager().pollEvents();

@@ -52,6 +52,7 @@ namespace cobalt {
         void FBO::clear() {
             glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
             switch (type) {
+                case (GLFramebufferAttachment) 0:
                 case GLFramebufferAttachment::Color:
                     glClear(GL_COLOR_BUFFER_BIT);
                     break;
