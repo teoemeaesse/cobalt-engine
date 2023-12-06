@@ -20,28 +20,32 @@ namespace cobalt {
                 core::Shader shader;    // The shader.
             };
 
-            /* Creates a shader library from a directory containing shader files.
+            /* Creates an empty shader library.
+             */
+            ShaderLibrary();
+            /* Destroys the shader library and all shaders it contains.
+             */
+            ~ShaderLibrary() = default;
+
+            /* Loads all shaders from the given directory.
              * This directory should contain a file called "shaders.json" which
              * contains a list of internal shader names and their corresponding
              * vertex/fragment/geometry or compute shader source files.
              * @param shadersDirectory: The directory containing the shader files.
              */
-            ShaderLibrary(core::Path& shadersDirectory);
-            /* Destroys the shader library and all shaders it contains.
-             */
-            ~ShaderLibrary() = default;
+            void loadShaders(const core::Path& shadersDirectory);
 
             /* Returns the shader ID of the shader with the given name.
              * If the shader does not exist, returns 0.
              * @param name: The name of the shader.
              */
-            ShaderID getShaderID(const std::string& name);
+            const ShaderID getShaderID(const std::string& name);
 
             /* Returns the shader with the given ID.
              * If the shader does not exist, returns a null shader.
              * @param id: The ID of the shader.
              */
-            core::Shader& getShader(ShaderID id);
+            const core::Shader& getShader(const ShaderID id);
 
             private:
             core::Vector<ShaderEntry> shaders;  // The shaders in the library.

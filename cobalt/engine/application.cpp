@@ -72,5 +72,9 @@ namespace cobalt {
         core::InputManager& Application::getInputManager() {
             return inputManager;
         }
+
+        void Application::setFramerateTimeWindow(const uint timeWindow) {
+            framerateTimeWindow = timeWindow;
+        }
     }
 }

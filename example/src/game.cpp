@@ -60,13 +60,16 @@ class Game : public engine::Application {
             .setMode(core::WindowMode::Windowed)
             .setResizable(true)
             .setDecorated(true)
-            .build()) {
+            .build()),
+            shaderLibrary() {
         window.show();
         window.setClearColor(COLOR(0.2f, 0.2f, 0.2f, 1.0f));
         getInputManager().getKeyboard().bind(core::KeyboardInputID::ESCAPE, std::make_unique<Quit>(this));
         getInputManager().getKeyboard().bind(core::KeyboardInputID::F9, std::make_unique<Windowed>(&window));
         getInputManager().getKeyboard().bind(core::KeyboardInputID::F10, std::make_unique<Borderless>(&window));
         getInputManager().getKeyboard().bind(core::KeyboardInputID::F11, std::make_unique<Fullscreen>(&window));
+
+        shaderLibrary.loadShaders(cobalt::core::Path("example/assets/shaders/", true));
     }
 
     ~Game() override {
@@ -91,6 +94,7 @@ class Game : public engine::Application {
 
     private:
     core::Window window;
+    engine::ShaderLibrary shaderLibrary;
 };
 
 engine::Application *engine::createApplication() {

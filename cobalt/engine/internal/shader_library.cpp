@@ -8,12 +8,13 @@
 
 #include "core/gl/render_shader.h"
 #include "core/gl/compute_shader.h"
+#include "core/utils/log.h"
 #include "engine/internal/shader_library.h"
 
 
 namespace cobalt {
     namespace engine {
-        static core::RenderShader parseRenderShader(nlohmann::json& shaderJson, core::Path& shadersDirectory) {
+        static core::RenderShader parseRenderShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
             core::Path vertexShaderPath = shadersDirectory + shaderJson["vertex"].get<std::string>();
             core::Path fragmentShaderPath = shadersDirectory + shaderJson["fragment"].get<std::string>();
@@ -32,7 +33,7 @@ namespace cobalt {
             return builder.buildRenderShader();
         }
 
-        static core::ComputeShader parseComputeShader(nlohmann::json& shaderJson, core::Path& shadersDirectory) {
+        static core::ComputeShader parseComputeShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
             core::Path computeShaderPath = shadersDirectory + shaderJson["compute"].get<std::string>();
             std::string computeShaderSource;
@@ -41,28 +42,36 @@ namespace cobalt {
             return builder.buildComputeShader();
         }
 
-        ShaderLibrary::ShaderLibrary(core::Path& shadersDirectory)
-            : shaders(8) {
+        ShaderLibrary::ShaderLibrary()
+            : shaders(8) {}
+
+        void ShaderLibrary::loadShaders(const core::Path& shadersDirectory) {
             core::Path shadersJsonPath = shadersDirectory;
             shadersJsonPath += "shaders.json";
             if (!shadersJsonPath.exists()) {
+                CB_WARN("No shaders.json file found in shaders directory: {}", shadersDirectory.getPath());
                 return;
             }
             std::ifstream shadersJsonFile(shadersJsonPath.getPath());
-            nlohmann::json shadersJson;
-            shadersJsonFile >> shadersJson;
-            for (auto& shaderJson : shadersJson) {
+            nlohmann::json shadersJson = nlohmann::json::parse(shadersJsonFile);
+            CB_INFO("Loading shaders from: {}", shadersJsonPath.getPath());
+            CB_INFO("Found {} shaders", shadersJson.size());
+            for (auto it = shadersJson.begin(); it != shadersJson.end(); ++it) {
                 core::Path shaderPath = shadersDirectory;
+                std::string shaderName = it.key();
+                nlohmann::json shaderJson = it.value();
                 if (shaderJson["type"].get<std::string>() == "render") {
-                    shaders.push({shaderJson.get<std::string>(), parseRenderShader(shaderJson, shadersDirectory)});
+                    CB_INFO("Loading render shader: {}", shaderName);
+                    shaders.push({shaderName, parseRenderShader(shaderJson, shadersDirectory)});
                 }
                 else if (shaderJson["type"].get<std::string>() == "compute") {
-                    shaders.push({shaderJson.get<std::string>(), parseComputeShader(shaderJson, shadersDirectory)});
+                    CB_INFO("Loading compute shader: {}", shaderName);
+                    shaders.push({shaderName, parseComputeShader(shaderJson, shadersDirectory)});
                 }
             }
         }
 
-        ShaderID ShaderLibrary::getShaderID(const std::string& name) {
+        const ShaderID ShaderLibrary::getShaderID(const std::string& name) {
             for (core::uint64 i = 0; i < shaders.getSize(); i++) {
                 if (shaders[i].name == name) {
                     return i + 1;
@@ -71,7 +80,7 @@ namespace cobalt {
             return 0;
         }
 
-        core::Shader& ShaderLibrary::getShader(ShaderID id) {
+        const core::Shader& ShaderLibrary::getShader(const ShaderID id) {
             return shaders[id - 1].shader;
         }
     }

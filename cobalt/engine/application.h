@@ -54,9 +54,7 @@ namespace cobalt {
             /* Set the time window in which the estimated framerate is calculated.
              * @param timeWindow: The time window in which the framerate is calculated, in seconds.
              */
-            void setFramerateTimeWindow(const uint timeWindow) {
-                framerateTimeWindow = timeWindow;
-            }
+            void setFramerateTimeWindow(const uint timeWindow);
 
             private:
             bool shouldStop;                    // Whether the game loop should stop.

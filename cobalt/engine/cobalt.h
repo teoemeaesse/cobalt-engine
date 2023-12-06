@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "engine/entry_point.h"
 
 // Graphics
 
@@ -16,3 +15,8 @@
 #include "core/memory/heap.h"
 #include "core/memory/pool.h"
 #include "core/memory/arena.h"
+
+// Engine
+
+#include "engine/entry_point.h"
+#include "engine/internal/shader_library.h"
