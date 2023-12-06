@@ -18,11 +18,11 @@ namespace cobalt {
             core::ShaderBuilder builder;
             core::Path vertexShaderPath = shadersDirectory + shaderJson["vertex"].get<std::string>();
             core::Path fragmentShaderPath = shadersDirectory + shaderJson["fragment"].get<std::string>();
-            CB_INFO("Loading vertex shader: {}", vertexShaderPath.getPath());
+            CB_INFO("From vertex source: {}", vertexShaderPath.getFileName());
             std::ifstream vertexFile(vertexShaderPath.getPath());
             std::stringstream vertexStream;
             vertexStream << vertexFile.rdbuf();
-            CB_INFO("Loading fragment shader: {}", fragmentShaderPath.getPath());
+            CB_INFO("From fragment source: {}", fragmentShaderPath.getFileName());
             std::ifstream fragmentFile(fragmentShaderPath.getPath());
             std::stringstream fragmentStream;
             fragmentStream << fragmentFile.rdbuf();
@@ -30,7 +30,7 @@ namespace cobalt {
             builder.addShaderStep(core::ShaderStep::Fragment, fragmentStream.str());
             if (shaderJson.contains("geometry")) {
                 core::Path geometryShaderPath = shadersDirectory + shaderJson["geometry"].get<std::string>();
-                CB_INFO("Loading geometry shader: {}", geometryShaderPath.getPath());
+                CB_INFO("From geometry source: {}", geometryShaderPath.getFileName());
                 std::ifstream geometryFile(geometryShaderPath.getPath());
                 std::stringstream geometryStream;
                 geometryStream << geometryFile.rdbuf();
@@ -42,7 +42,7 @@ namespace cobalt {
         static core::ComputeShader parseComputeShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
             core::Path computeShaderPath = shadersDirectory + shaderJson["compute"].get<std::string>();
-            CB_INFO("Loading compute shader: {}", computeShaderPath.getPath());
+            CB_INFO("From source: {}", computeShaderPath.getFileName());
             std::ifstream computeFile(computeShaderPath.getPath());
             std::stringstream computeStream;
             computeStream << computeFile.rdbuf();
@@ -62,7 +62,7 @@ namespace cobalt {
             }
             std::ifstream shadersJsonFile(shadersJsonPath.getPath());
             nlohmann::json shadersJson = nlohmann::json::parse(shadersJsonFile);
-            CB_INFO("Loading shaders from: {}", shadersJsonPath.getPath());
+            CB_INFO("Loading shaders from: {}", shadersDirectory.getPath());
             CB_INFO("Found {} shaders", shadersJson.size());
             for (auto it = shadersJson.begin(); it != shadersJson.end(); ++it) {
                 core::Path shaderPath = shadersDirectory;
