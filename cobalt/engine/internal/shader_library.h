@@ -4,17 +4,22 @@
 
 #pragma once
 
+#include "core/containers/vector.h"
 #include "core/io/path.h"
-#include "core/utils/types.h"
 #include "core/gl/shader.h"
 
 
 namespace cobalt {
     namespace engine {
-        using ShaderID = core::int64;
+        using ShaderID = core::uint64;
 
         class ShaderLibrary {
             public:
+            struct ShaderEntry {
+                std::string name;       // The name of the shader.
+                core::Shader shader;    // The shader.
+            };
+
             /* Creates a shader library from a directory containing shader files.
              * This directory should contain a file called "shaders.json" which
              * contains a list of internal shader names and their corresponding
@@ -24,7 +29,7 @@ namespace cobalt {
             ShaderLibrary(core::Path& shadersDirectory);
             /* Destroys the shader library and all shaders it contains.
              */
-            ~ShaderLibrary();
+            ~ShaderLibrary() = default;
 
             /* Returns the shader ID of the shader with the given name.
              * If the shader does not exist, returns 0.
@@ -37,6 +42,9 @@ namespace cobalt {
              * @param id: The ID of the shader.
              */
             core::Shader& getShader(ShaderID id);
+
+            private:
+            core::Vector<ShaderEntry> shaders;  // The shaders in the library.
         };
     }
 }

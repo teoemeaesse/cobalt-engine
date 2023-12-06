@@ -160,7 +160,6 @@ namespace cobalt {
         */
         class ShaderBuilder {
             public:
-
             /* Adds a shader step to the shader.
             * @param step: The type of shader step to add.
             * @param source: The source code of the shader.

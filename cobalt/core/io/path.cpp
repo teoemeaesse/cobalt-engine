@@ -59,5 +59,20 @@ namespace cobalt {
             std::string path = fsPath.string() + "/" + other.fsPath.string();
             return Path(path, false);
         }
+
+        Path Path::operator+(const std::string& other) const {
+            std::string path = fsPath.string() + "/" + other;
+            return Path(path, false);
+        }
+
+        Path& Path::operator+=(const Path& other) {
+            fsPath += "/" + other.fsPath.string();
+            return *this;
+        }
+
+        Path& Path::operator+=(const std::string& other) {
+            fsPath += "/" + other;
+            return *this;
+        }
     }
 }

@@ -70,6 +70,24 @@ namespace cobalt {
              * @return: The concatenated path.
              */
             Path operator+(const Path& other) const;
+            /* Overloads the + operator to concatenate a path and a string.
+             * e.g. Path("foo") + "bar" = Path("foo/bar")
+             * @param other: The other path to concatenate.
+             * @return: The concatenated path.
+             */
+            Path operator+(const std::string& other) const;
+            /* Overloads the += operator to concatenate two paths.
+             * e.g. Path("foo") += Path("bar") -> Path("foo/bar")
+             * @param other: The other path to concatenate.
+             * @return: The concatenated path.
+             */
+            Path& operator+=(const Path& other);
+            /* Overloads the += operator to concatenate a path and a string.
+             * e.g. Path("foo") += "bar" -> Path("foo/bar")
+             * @param other: The other path to concatenate.
+             * @return: The concatenated path.
+             */
+            Path& operator+=(const std::string& other);
 
             private:
             std::filesystem::path fsPath;   // The path.
