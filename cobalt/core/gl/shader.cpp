@@ -2,9 +2,10 @@
 // Created by tomas on 30-11-2023.
 //
 
-#include "core/gl/shader.h"
 #include "core/gl/render_shader.h"
 #include "core/gl/compute_shader.h"
+
+#include "core/utils/log.h"
 
 
 namespace cobalt {
@@ -143,8 +144,8 @@ namespace cobalt {
             std::string vertexSource;
             std::string fragmentSource;
             try {
-                std::string vertexSource = sources.at(ShaderStep::Vertex);
-                std::string fragmentSource = sources.at(ShaderStep::Fragment);
+                vertexSource = sources.at(ShaderStep::Vertex);
+                fragmentSource = sources.at(ShaderStep::Fragment);
             } catch (std::out_of_range& e) {
                 throw GLException("A render shader must have at least a vertex and a fragment shader source");
             }
