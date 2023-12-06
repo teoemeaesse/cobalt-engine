@@ -1,0 +1,10 @@
+{
+    "mountain" : {
+        "type" : "png",
+        "src" : "mountain.png"
+    },
+    "cloud" : {
+        "type" : "png",
+        "src" : "cloud.png"
+    }
+}

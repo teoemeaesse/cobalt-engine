@@ -20,3 +20,4 @@
 
 #include "engine/entry_point.h"
 #include "engine/internal/shader_library.h"
+#include "engine/internal/texture_library.h"

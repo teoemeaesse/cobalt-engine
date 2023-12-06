@@ -21,6 +21,7 @@ namespace cobalt {
             };
 
             /* Creates an empty shader library.
+             * @return: The shader library.
              */
             ShaderLibrary();
             /* Destroys the shader library and all shaders it contains.

@@ -6,10 +6,10 @@
 
 #include "json/json.hpp"
 
+#include "engine/internal/shader_library.h"
 #include "core/gl/render_shader.h"
 #include "core/gl/compute_shader.h"
 #include "core/utils/log.h"
-#include "engine/internal/shader_library.h"
 
 
 namespace cobalt {
@@ -65,7 +65,6 @@ namespace cobalt {
             CB_INFO("Loading shaders from: {}", shadersDirectory.getPath());
             CB_INFO("Found {} shaders", shadersJson.size());
             for (auto it = shadersJson.begin(); it != shadersJson.end(); ++it) {
-                core::Path shaderPath = shadersDirectory;
                 std::string shaderName = it.key();
                 nlohmann::json shaderJson = it.value();
                 if (shaderJson["type"].get<std::string>() == "render") {
