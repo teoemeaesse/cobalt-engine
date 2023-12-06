@@ -80,7 +80,7 @@ namespace cobalt {
 
             uint width, height;     // The width and height of the window.
             std::string title;      // The title of the window.
-            FBO defaultFBO;         // The default framebuffer object of the window.
+            DefaultFBO defaultFBO;  // The default framebuffer object of the window.
             bool vsync;             // Whether or not the window is using vsync.
             bool resizable;         // Whether or not the window is resizable.
             bool decorated;         // Whether or not the window is decorated.

@@ -120,9 +120,13 @@ namespace cobalt {
         }
 
         enum class GLFramebufferAttachment {
-            Color = GL_COLOR_ATTACHMENT0,       // Color attachment.
-            Depth = GL_DEPTH_ATTACHMENT,        // Depth attachment.
-            Stencil = GL_STENCIL_ATTACHMENT     // Stencil attachment.
+            Color = 1 << 1,                                 // Color attachment.
+            Depth = 1 << 2,                                 // Depth attachment.
+            Stencil = 1 << 3,                               // Stencil attachment.
+            ColorDepth = Color | Depth,                     // Color and depth attachments.
+            ColorStencil = Color | Stencil,                 // Color and stencil attachments.
+            DepthStencil = Depth | Stencil,                 // Depth and stencil attachments.
+            ColorDepthStencil = Color | Depth | Stencil     // Color, depth and stencil attachments.
         };
 
         /* Gets the size of a GLType.

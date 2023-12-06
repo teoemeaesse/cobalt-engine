@@ -32,7 +32,7 @@ namespace cobalt {
             mode(mode),
             resizable(resizable),
             decorated(decorated),
-            defaultFBO(0, 0) {
+            defaultFBO(GLFramebufferAttachment::ColorDepth) {
             init();
         }
 

@@ -15,67 +15,104 @@ namespace cobalt {
          */
         class FBO {
             public:
-            /* Creates a new FBO with the given width and height.
-             * The FBO will have a texture attached to it.
-             * @param width: The width of the FBO.
-             * @param height: The height of the FBO.
-             * @param type: The type of the texture attached to the FBO.
-             * @param format: The format of the texture attached to the FBO.
-             * @param encoding: The encoding of the texture attached to the FBO.
-             * @return: A new FBO.
-             */
-            FBO(const uint width, const uint height,
-                const GLFramebufferAttachment type,
-                const GLTextureFormat format = GLTextureFormat::RGBA,
-                const GLTextureEncoding encoding = GLTextureEncoding::RGBA8);
-            /* Creates a new default FBO with the given width and height.
-             * This is the FBO that is used by the window and displayed on the screen.
-             * @param width: The width of the FBO.
-             * @param height: The height of the FBO.
-             */
-            FBO(const uint width, const uint height);
             /* Destroys the FBO.
              */
-            ~FBO();
+            ~FBO() = default;
 
-            /* Binds the FBO.
-             */
-            void bind() const;
-            /* Unbinds the FBO.
-             */
-            void unbind() const;
             /* Resizes the FBO.
              * @param width: The new width of the FBO.
              * @param height: The new height of the FBO.
              */
-            void resize(const uint width, const uint height);
-            /* Clears the FBO.
+            virtual void resize(const uint width, const uint height) = 0;
+            /* Binds the FBO.
              */
-            void clear();
+            virtual void bind() const = 0;
+            /* Clears the FBO.
+             * Must be called after binding the FBO.
+             */
+            void clear() const;
 
             /* Sets the color to clear the FBO with.
              * @param color: The color to clear the FBO with.
              */
-            inline void setClearColor(const Color& color) { clearColor = color; }
+            void setClearColor(const Color& color);
+
+            protected:
+            Color clearColor;                   // The color to clear the FBO with.
+            const GLFramebufferAttachment type; // The type of the texture attached to the FBO.
+            
+            /* Creates a new FBO with the given width and height.
+             * The FBO will have a texture attached to it.
+             * @param type: The type of the texture attached to the FBO.
+             * @return: A new FBO.
+             */
+            FBO(const GLFramebufferAttachment type);
+        };
+
+        class DefaultFBO : public FBO {
+            public:
+            /* Creates a new default FBO.
+             * @param type: The type of the texture attached to the FBO.
+             * @return: A new default FBO.
+             */
+            DefaultFBO(const GLFramebufferAttachment type = GLFramebufferAttachment::Color);
+            /* Destroys the FBO.
+             */
+            ~DefaultFBO() = default;
+            
+            /* Resizes the FBO.
+             * @param width: The new width of the FBO.
+             * @param height: The new height of the FBO.
+             */
+            void resize(const uint width, const uint height) override;
+            /* Binds the FBO.
+             */
+            void bind() const override;
+        };
+
+        class TargetFBO : public FBO {
+            public:
+            /* Creates a new FBO with the given width and height.
+             * The FBO will have a texture attached to it.
+             * @param width: The width of the FBO.
+             * @param height: The height of the FBO.
+             * @param format: The format of the texture attached to the FBO.
+             * @param encoding: The encoding of the texture attached to the FBO.
+             * @return: A new FBO.
+             */
+            TargetFBO(const uint width, const uint height,
+                      const GLFramebufferAttachment type = GLFramebufferAttachment::Color,
+                      const GLTextureFormat format = GLTextureFormat::RGBA,
+                      const GLTextureEncoding encoding = GLTextureEncoding::RGBA8);
+            /* Destroys the FBO.
+            */
+            ~TargetFBO();
+
+            /* Resizes the FBO.
+             * @param width: The new width of the FBO.
+             * @param height: The new height of the FBO.
+             */
+            void resize(const uint width, const uint height) override;
+            /* Binds the FBO.
+             */
+            void bind() const override;
 
             /* Returns the texture attached to the FBO.
              * @return: The texture attached to the FBO.
              */
-            inline const Texture& getTexture() const { return texture; }
+            const Texture& getTexture() const;
             /* Returns the width of the FBO.
              * @return: The width of the FBO.
              */
-            inline uint getWidth() const { return texture.getWidth(); }
+            const uint getWidth() const;
             /* Returns the height of the FBO.
              * @return: The height of the FBO.
              */
-            inline uint getHeight() const { return texture.getHeight(); }
+            const uint getHeight() const;
 
             private:
-            GLHandle buffer;                    // The FBO handle.
-            Texture texture;                    // The texture attached to the FBO.
-            Color clearColor;                   // The color to clear the FBO with.
-            const GLFramebufferAttachment type; // The type of the texture attached to the FBO.
+            GLHandle buffer;    // The FBO handle.
+            Texture texture;    // The texture attached to the FBO.
         };
     }
 }
