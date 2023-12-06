@@ -147,7 +147,5 @@ namespace cobalt {
                     throw GLException("Invalid GLType");
             }
         }
-
-        typedef GLuint GLHandle;          // OpenGL object handle.
     }
 }

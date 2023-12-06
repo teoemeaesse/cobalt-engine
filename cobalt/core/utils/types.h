@@ -8,10 +8,13 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <unordered_map>
+#include <GLFW/glfw3.h>
 
 
 namespace cobalt {
     namespace core {
-        typedef unsigned char uchar;
+        using uchar = unsigned char;
+        using int64 = int64_t;
+        using GLHandle = GLuint;
     }
 }
