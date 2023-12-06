@@ -7,6 +7,5 @@
 
 namespace cobalt {
     namespace engine {
-    
     }
 }
