@@ -54,12 +54,13 @@ class Game : public engine::Application {
     public:
     Game() : engine::Application(1), window(core::WindowBuilder()
             .setTitle("cobalt example")
-            .setWidth(1280)
-            .setHeight(720)
+            .setWidth(600)
+            .setHeight(600)
             .setVsync(false)
             .setMode(core::WindowMode::Windowed)
             .setResizable(true)
             .setDecorated(true)
+            .setLockAspectRatio(true)
             .build()) {
         window.show();
         window.setClearColor(COLOR(0.2f, 0.2f, 0.2f, 1.0f));

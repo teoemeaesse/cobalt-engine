@@ -66,6 +66,7 @@ namespace cobalt {
              * @param mode: The mode of the window.
              * @param resizable: Whether or not the window should be resizable.
              * @param decorated: Whether or not the window should be decorated.
+             * @param lockAspectRatio: Whether or not the aspect ratio of the window should be locked.
              * @return: A new window.
              */
             Window(
@@ -75,16 +76,19 @@ namespace cobalt {
                 const bool vsync,
                 const WindowMode mode,
                 const bool resizable,
-                const bool decorated
+                const bool decorated,
+                const bool lockAspectRatio
             );
 
-            uint width, height;     // The width and height of the window.
-            std::string title;      // The title of the window.
-            DefaultFBO defaultFBO;  // The default framebuffer object of the window.
-            bool vsync;             // Whether or not the window is using vsync.
-            bool resizable;         // Whether or not the window is resizable.
-            bool decorated;         // Whether or not the window is decorated.
-            WindowMode mode;        // The mode of the window.
+            uint width, height;         // The width and height of the window.
+            std::string title;          // The title of the window.
+            DefaultFBO defaultFBO;      // The default framebuffer object of the window.
+            bool vsync;                 // Whether or not the window is using vsync.
+            bool resizable;             // Whether or not the window is resizable.
+            bool decorated;             // Whether or not the window is decorated.
+            bool lockAspectRatio;       // Whether or not the aspect ratio of the window is locked.
+            const float aspectRatio;    // The aspect ratio of the window.
+            WindowMode mode;            // The mode of the window.
         
             /* Initializes the window.
              * Called on construction and after changing window hints.
@@ -139,6 +143,11 @@ namespace cobalt {
              * @return: The window builder.
              */
             WindowBuilder& setDecorated(const bool decorated);
+            /* Locks the aspect ratio of the window.
+             * @param lockAspectRatio: The aspect ratio of the window.
+             * @return: The window builder.
+             */
+            WindowBuilder& setLockAspectRatio(const bool lockAspectRatio);
 
             /* Builds the window.
              * @return: The window.
@@ -152,6 +161,7 @@ namespace cobalt {
             WindowMode mode;
             bool resizable;
             bool decorated;
+            bool lockAspectRatio;
         };
     }
 }

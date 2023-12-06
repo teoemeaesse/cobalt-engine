@@ -23,7 +23,8 @@ namespace cobalt {
             const bool vsync,
             const WindowMode mode,
             const bool resizable,
-            const bool decorated
+            const bool decorated,
+            const bool lockAspectRatio
         ) :
             width(width),
             height(height),
@@ -32,6 +33,8 @@ namespace cobalt {
             mode(mode),
             resizable(resizable),
             decorated(decorated),
+            lockAspectRatio(lockAspectRatio),
+            aspectRatio((float) width / (float) height),
             defaultFBO(GLFramebufferAttachment::ColorDepth) {
             init();
         }
@@ -65,8 +68,14 @@ namespace cobalt {
             }
             RenderContext::recreate();
             glfwSwapInterval(vsync);
-            glfwSetWindowSize(RenderContext::getGLFWContext(), this->width, this->height);
             glfwSetWindowTitle(RenderContext::getGLFWContext(), title.c_str());
+            if (lockAspectRatio) {
+                if (mode == WindowMode::Windowed) {
+                    this->width = (uint) (this->height * aspectRatio);
+                }
+                glfwSetWindowAspectRatio(RenderContext::getGLFWContext(), this->width, this->height);
+            }
+            glfwSetWindowSize(RenderContext::getGLFWContext(), this->width, this->height);
             defaultFBO.resize(this->width, this->height);
 
             RenderContext::setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -139,7 +148,8 @@ namespace cobalt {
             vsync(false),
             mode(WindowMode::Windowed),
             resizable(true),
-            decorated(true) {}
+            decorated(true),
+            lockAspectRatio(false) {}
 
         WindowBuilder& WindowBuilder::setWidth(const uint width) {
             this->width = width;
@@ -176,8 +186,13 @@ namespace cobalt {
             return *this;
         }
 
+        WindowBuilder& WindowBuilder::setLockAspectRatio(const bool lockAspectRatio) {
+            this->lockAspectRatio = lockAspectRatio;
+            return *this;
+        }
+
         Window WindowBuilder::build() const {
-            return Window(width, height, title, vsync, mode, resizable, decorated);
+            return Window(width, height, title, vsync, mode, resizable, decorated, lockAspectRatio);
         }
     }
 }
