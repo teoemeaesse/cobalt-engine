@@ -69,8 +69,8 @@ class Game : public engine::Application {
         getInputManager().getKeyboard().bind(core::KeyboardInputID::F10, std::make_unique<Borderless>(&window));
         getInputManager().getKeyboard().bind(core::KeyboardInputID::F11, std::make_unique<Fullscreen>(&window));
 
-        shaderLibrary.loadShaders(cobalt::core::Path("example/assets/shaders/", true));
-        textureLibrary.loadTextures(cobalt::core::Path("example/assets/textures/", true));
+        getShaderLibrary().loadShaders(cobalt::core::Path("example/assets/shaders/", true));
+        getTextureLibrary().loadTextures(cobalt::core::Path("example/assets/textures/", true));
     }
 
     ~Game() override {
@@ -95,8 +95,6 @@ class Game : public engine::Application {
 
     private:
     core::Window window;
-    engine::ShaderLibrary shaderLibrary;
-    engine::TextureLibrary textureLibrary;
 };
 
 engine::Application *engine::createApplication() {
