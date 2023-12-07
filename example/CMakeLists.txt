@@ -33,9 +33,11 @@ add_executable(example-app ${EXAMPLE_SOURCES} ${CB_SOURCES})
 # Set the output directory
 set_target_properties(example-app PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
 
+# Find the Freetype library
+find_package(Freetype REQUIRED)
+
 target_include_directories(example-app PRIVATE
     ${SOURCEDIR}
-    /usr/local/include/freetype2
 )
 target_link_libraries(example-app PRIVATE
     GL
@@ -50,5 +52,5 @@ target_link_libraries(example-app PRIVATE
     m
     Xinerama
     Xcursor
-    freetype
+    ${FREETYPE_LIBRARIES}
 )

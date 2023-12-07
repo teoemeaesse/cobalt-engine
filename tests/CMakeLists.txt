@@ -34,6 +34,9 @@ file(GLOB_RECURSE CORE_SOURCES ${SOURCEDIR}/core/*.cpp)
 # Include the Unity test framework
 add_library(unity STATIC ${INCLUDEDIR}/unity/unity.c)
 
+# Find the Freetype library
+find_package(Freetype REQUIRED)
+
 # Create an executable for each test source file
 foreach(TEST_SOURCE ${TEST_SOURCES})
     get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
@@ -41,7 +44,6 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
     set_target_properties(${TEST_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
     target_include_directories(${TEST_NAME} PRIVATE
         ${SOURCEDIR}
-        /usr/local/include/freetype2
     )
     target_link_libraries(${TEST_NAME} PRIVATE
         GL
@@ -56,8 +58,7 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
         m
         Xinerama
         Xcursor
-        freetype
-        unity
+        ${FREETYPE_LIBRARIES}
     )
     
     # Run the tests after building

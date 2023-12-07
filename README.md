@@ -23,4 +23,4 @@ Currently only compatible with **Linux** distributions. There are future plans f
 **cobalt** is divided into two main parts:
 - [**core**](https://github.com/teoemeaesse/cobalt-engine/tree/main/cobalt/core) - Core engine library functionality, heavily dependent on GLFW for graphics.
 - [**engine**](https://github.com/teoemeaesse/cobalt-engine/tree/main/cobalt/engine) - **cobalt** engine code, composed from independent modules that use the [**core**](https://github.com/teoemeaesse/cobalt-engine/tree/main/cobalt/core) library.
-- **editor** (future) - A game level editor is planned for after the base engine development is done.
+- [**editor**](https://github.com/teoemeaesse/cobalt-engine/tree/main/cobalt/editor) A game level editor is in development.

@@ -32,8 +32,11 @@ set_target_properties(cobalt PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OU
 
 target_include_directories(cobalt PRIVATE
     ${SOURCEDIR}
-    /usr/local/include/freetype2
 )
+
+# Find freetype package
+find_package(Freetype REQUIRED)
+
 target_link_libraries(cobalt PRIVATE
     GL
     GLU
@@ -47,5 +50,5 @@ target_link_libraries(cobalt PRIVATE
     m
     Xinerama
     Xcursor
-    freetype
+    ${FREETYPE_LIBRARIES}
 )
