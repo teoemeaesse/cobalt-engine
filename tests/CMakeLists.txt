@@ -58,6 +58,7 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
         m
         Xinerama
         Xcursor
+        unity
         ${FREETYPE_LIBRARIES}
     )
     
