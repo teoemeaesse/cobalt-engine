@@ -27,6 +27,19 @@ namespace cobalt {
 
         class Configuration {
             public:
+            /* Create a configuration from a file.
+             * @param path: The path to the file.
+             * @return: The configuration.
+             */
+            explicit Configuration(const core::Path& path);
+            /* Create an empty configuration.
+             * @return: The configuration.
+             */
+            Configuration() = default;
+            /* Destroy the configuration.
+             */
+            ~Configuration() = default;
+
             /* Set a value in the configuration.
              * @param key: The key to set the value for.
              * @param value: The value to set.
@@ -64,9 +77,17 @@ namespace cobalt {
              * @param path: The path to write the configuration to.
              */
             void serialize(const core::Path& path) const;
+            /* Merge another configuration into this one.
+             * Overrides values in this configuration with values from the other configuration.
+             * @param other: The other configuration.
+             */
+            void merge(const Configuration& other);
+            /* Log the configuration to the console.
+             */
+            void log() const;
 
             private:
-            std::unordered_map<std::string, const std::any> entries;
+            std::unordered_map<std::string, std::any> entries;
 
             /* Check if a type is supported.
              * @param T: The type to check.
@@ -82,7 +103,8 @@ namespace cobalt {
                               std::is_same<T, unsigned long>::value ||
                               std::is_same<T, unsigned long long>::value ||
                               std::is_same<T, bool>::value ||
-                              std::is_same<T, std::string>::value,
+                              std::is_same<T, std::string>::value ||
+                              std::is_same<T, std::any>::value,
                               "Unsupported type");
             }
         };

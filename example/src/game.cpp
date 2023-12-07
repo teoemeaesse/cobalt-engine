@@ -71,6 +71,8 @@ class Game : public engine::Application {
 
         getShaderLibrary().loadShaders(cobalt::core::Path("example/assets/shaders/", true));
         getTextureLibrary().loadTextures(cobalt::core::Path("example/assets/textures/", true));
+
+        engine::Configuration configuration (core::Path("example/assets/config.json", true));
     }
 
     ~Game() override {

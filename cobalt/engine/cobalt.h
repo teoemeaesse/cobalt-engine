@@ -19,3 +19,4 @@
 // Engine
 
 #include "engine/entry_point.h"
+#include "engine/internal/configuration.h"
