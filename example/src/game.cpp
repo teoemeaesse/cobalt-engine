@@ -52,22 +52,13 @@ class Windowed : public core::ConcreteInputCommand<core::Window> {
 
 class Game : public engine::Application {
     public:
-    Game() : engine::Application(1), window(core::WindowBuilder()
-            .setTitle("cobalt example")
-            .setWidth(600)
-            .setHeight(600)
-            .setVsync(false)
-            .setMode(core::WindowMode::Windowed)
-            .setResizable(true)
-            .setDecorated(true)
-            .setLockAspectRatio(true)
-            .build()) {
-        window.show();
-        window.setClearColor(COLOR(0.2f, 0.2f, 0.2f, 1.0f));
+    Game() : engine::Application(1) {
+        getWindow().show();
+        getWindow().setClearColor(COLOR(0.2f, 0.2f, 0.2f, 1.0f));
         getInputManager().getKeyboard().bind(core::KeyboardInputID::ESCAPE, std::make_unique<Quit>(this));
-        getInputManager().getKeyboard().bind(core::KeyboardInputID::F9, std::make_unique<Windowed>(&window));
-        getInputManager().getKeyboard().bind(core::KeyboardInputID::F10, std::make_unique<Borderless>(&window));
-        getInputManager().getKeyboard().bind(core::KeyboardInputID::F11, std::make_unique<Fullscreen>(&window));
+        getInputManager().getKeyboard().bind(core::KeyboardInputID::F9, std::make_unique<Windowed>(&getWindow()));
+        getInputManager().getKeyboard().bind(core::KeyboardInputID::F10, std::make_unique<Borderless>(&getWindow()));
+        getInputManager().getKeyboard().bind(core::KeyboardInputID::F11, std::make_unique<Fullscreen>(&getWindow()));
 
         getShaderLibrary().loadShaders(cobalt::core::Path("example/assets/shaders/", true));
         getTextureLibrary().loadTextures(cobalt::core::Path("example/assets/textures/", true));
@@ -84,19 +75,16 @@ class Game : public engine::Application {
     }
 
     void variableTimeStep(float delta) override {
-        if (window.shouldClose()) {
+        if (getWindow().shouldClose()) {
             stop();
         }
-        window.clear();
+        getWindow().clear();
 
         getInputManager().pollEvents();
         getInputManager().clearEvents();
 
-        window.swapBuffers();
+        getWindow().swapBuffers();
     }
-
-    private:
-    core::Window window;
 };
 
 engine::Application *engine::createApplication() {

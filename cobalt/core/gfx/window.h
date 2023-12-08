@@ -57,6 +57,37 @@ namespace cobalt {
              */
             void onResize(const uint width, const uint height);
 
+            /* Gets the width of the window.
+             * @return: The width of the window.
+             */
+            const uint getWidth() const;
+            /* Gets the height of the window.
+             * @return: The height of the window.
+             */
+            const uint getHeight() const;
+            /* Gets whether or not the window is using vsync.
+             * @return: Whether or not the window is using vsync.
+             */
+            const bool isVsync() const;
+            /* Gets the mode of the window.
+             * @return: The mode of the window.
+             */
+            const WindowMode getMode() const;
+
+            /* Sets the dimensions of the window.
+             * @param width: The new width of the window.
+             * @param height: The new height of the window.
+             */
+            void setDimensions(const uint width, const uint height);
+            /* Sets whether or not the window is using vsync.
+             * @param vsync: Whether or not the window is using vsync.
+             */
+            void setVsync(const bool vsync);
+            /* Sets the mode of the window.
+             * @param mode: The new mode of the window.
+             */
+            void setMode(const WindowMode mode);
+
             private:
             /* Creates a new window.
              * @param width: The width of the window.

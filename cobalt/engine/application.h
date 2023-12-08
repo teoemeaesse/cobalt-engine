@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "core/gfx/window.h"
 #include "core/utils/types.h"
 #include "core/input/input_manager.h"
 #include "engine/internal/shader_library.h"
@@ -20,6 +21,7 @@ namespace cobalt {
             public:
             /* Create a new application.
              * @param framerate: The target framerate of the application.
+             * @param window: The window to use for the application.
              * @return: The application.
              */
             Application(const uint framerate = 60);
@@ -49,6 +51,10 @@ namespace cobalt {
              * @return: The estimated framerate of the application.
              */
             uint getFramerate() const;
+            /* Get the window.
+             * @return: The window.
+             */
+            core::Window& getWindow();
             /* Get the input manager.
              * @return: The input manager.
              */
@@ -73,6 +79,7 @@ namespace cobalt {
             uint64_t frameCount;                // The number of frames that have been rendered in the framerate time window.
             uint framerateTimeWindow;           // The time window in which the framerate is calculated, in seconds.
         
+            core::Window window;                // The window.
             core::InputManager inputManager;    // The input manager.
             ShaderLibrary shaderLibrary;        // The shader library.
             TextureLibrary textureLibrary;      // The texture library.

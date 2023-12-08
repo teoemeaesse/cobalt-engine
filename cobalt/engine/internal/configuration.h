@@ -54,7 +54,7 @@ namespace cobalt {
              * @return: The value.
              */
             template <typename T>
-            const T get(const std::string& key) const {
+            const T get(std::string& key) const {
                 checkType<T>();
                 auto it = entries.find(key);
                 if (it != entries.end()) {
@@ -66,6 +66,15 @@ namespace cobalt {
                 } else {
                     throw ConfigurationException(key, typeid(T).name());
                 }
+            }
+            /* Get a value from the configuration.
+             * @param key: The key to get the value for.
+             * @return: The value.
+             */
+            template <typename T>
+            const T get(const char *key) const {
+                std::string keyString(key);
+                return get<T>(keyString);
             }
             /* Check if the configuration has a value for a key.
              * @param key: The key to check.

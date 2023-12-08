@@ -4,9 +4,9 @@
 
 #include <time.h>
 
+#include "engine/application.h"
 #include "core/utils/log.h"
 #include "core/gfx/render_context.h"
-#include "engine/application.h"
 
 
 namespace cobalt {
@@ -17,8 +17,15 @@ namespace cobalt {
             shouldStop(false),
             frameCount(0),
             framerateTimeWindow(1),
-            inputManager(1.0f) {
-            core::RenderContext::setUserPointer(&inputManager);
+            inputManager(1.0f),
+            window(core::WindowBuilder()
+                .setTitle("Cobalt")
+                .setWidth(1280)
+                .setHeight(720)
+                .setVsync(true)
+                .build()
+            ) {
+            core::RenderContext::setUserPointer(this);
             CB_INFO("Created application");
         }
 
@@ -28,6 +35,26 @@ namespace cobalt {
 
         extern bool shutdownInterrupt;
         void Application::run() {
+            core::RenderContext::setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
+                core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
+                inputManager.getKeyboard().onKeyPress(key, action);
+            });
+            core::RenderContext::setCursorPosCallback([](GLFWwindow* window, double xpos, double ypos) {
+                core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
+                inputManager.getMouse().onMove((float) xpos, (float) ypos);
+            });
+            core::RenderContext::setMouseButtonCallback([](GLFWwindow* window, int button, int action, int mods) {
+                core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
+                inputManager.getMouse().onButtonPress(button, action);
+            });
+            core::RenderContext::setScrollCallback([](GLFWwindow* window, double xoffset, double yoffset) {
+                core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
+                inputManager.getMouse().onScroll((float) xoffset, (float) yoffset);
+            });
+            core::RenderContext::setResizeCallback([](GLFWwindow* window, int width, int height) {
+                core::Window& w = static_cast<Application*>(core::RenderContext::getUserPointer())->getWindow();
+                w.onResize(width, height);
+            });
             CB_INFO("Starting up game loop");
             
             uint64_t delta = 1000000 / targetFramerate,
@@ -67,6 +94,10 @@ namespace cobalt {
 
         uint Application::getFramerate() const {
             return frameCount / framerateTimeWindow;
+        }
+
+        core::Window& Application::getWindow() {
+            return window;
         }
 
         core::InputManager& Application::getInputManager() {

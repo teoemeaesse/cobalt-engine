@@ -77,27 +77,6 @@ namespace cobalt {
             }
             glfwSetWindowSize(RenderContext::getGLFWContext(), this->width, this->height);
             defaultFBO.resize(this->width, this->height);
-
-            RenderContext::setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
-                InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
-                inputManager->getKeyboard().onKeyPress(key, action);
-            });
-            RenderContext::setCursorPosCallback([](GLFWwindow* window, double xpos, double ypos) {
-                InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
-                inputManager->getMouse().onMove((float) xpos, (float) ypos);
-            });
-            RenderContext::setMouseButtonCallback([](GLFWwindow* window, int button, int action, int mods) {
-                InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
-                inputManager->getMouse().onButtonPress(button, action);
-            });
-            RenderContext::setScrollCallback([](GLFWwindow* window, double xoffset, double yoffset) {
-                InputManager* inputManager = static_cast<InputManager*>(RenderContext::getUserPointer());
-                inputManager->getMouse().onScroll((float) xoffset, (float) yoffset);
-            });
-            RenderContext::setResizeCallback([](GLFWwindow* window, int width, int height) {
-                Window* w = static_cast<Window*>(glfwGetWindowUserPointer(window));
-                w->onResize(width, height);
-            });
             CB_CORE_INFO("Created window");
         }
 
@@ -135,10 +114,41 @@ namespace cobalt {
         void Window::setClearColor(const Color& color) {
             defaultFBO.setClearColor(color);
         }
+        
         void Window::onResize(const uint width, const uint height) {
             this->width = width;
             this->height = height;
             defaultFBO.resize(width, height);
+        }
+
+        const uint Window::getWidth() const {
+            return width;
+        }
+
+        const uint Window::getHeight() const {
+            return height;
+        }
+
+        const bool Window::isVsync() const {
+            return vsync;
+        }
+
+        const WindowMode Window::getMode() const {
+            return mode;
+        }
+
+        void Window::setDimensions(const uint width, const uint height) {
+            this->width = width;
+            this->height = height;
+            glfwSetWindowSize(RenderContext::getGLFWContext(), width, height);
+            defaultFBO.resize(width, height);
+        }
+        void Window::setVsync(const bool vsync) {
+            this->vsync = vsync;
+            glfwSwapInterval(vsync);
+        }
+        void Window::setMode(const WindowMode mode) {
+            switchMode(mode);
         }
 
         WindowBuilder::WindowBuilder() :

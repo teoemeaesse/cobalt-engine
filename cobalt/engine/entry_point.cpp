@@ -50,8 +50,8 @@ int main(int argc, char** argv) {
         CB_ERROR("GFX exception: {0}", e.what());
     } catch (const cobalt::core::ContainerException& e) {
         CB_ERROR("Container exception: {0}", e.what());
-    } catch (...) {
-        CB_ERROR("Unknown exception");
+    } catch (const std::exception& e) {
+        CB_ERROR("Unknown exception: {0}", e.what());
     }
 
     // Cleanup.

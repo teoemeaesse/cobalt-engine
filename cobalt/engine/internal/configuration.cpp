@@ -80,7 +80,7 @@ namespace cobalt {
         }
 
         void Configuration::merge(const Configuration& other) {
-            for (const auto& entry : other.entries) {
+            for (auto& entry : other.entries) {
                 if (has(entry.first)) {
                     if (entry.second.type() != entries.at(entry.first).type()) {
                         throw ConfigurationException(entry.first, "unknown");
