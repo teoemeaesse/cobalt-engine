@@ -36,23 +36,6 @@ namespace cobalt {
              */
             const GLuint getUBIndex(const std::string& name) const;
 
-            private:
-            std::unordered_map<std::string, GLuint> uniformLocations;   // The uniform block indices.
-
-            /* Gets the location of a uniform with the given name.
-             * @param name: The name of the uniform.
-             * @return: The location of the uniform.
-             */
-            const GLuint getUniformLocation(const std::string& name);
-
-            protected:
-            const GLHandle program; // The opengl program handle.
-            
-            /* Creates a new shader program.
-            * @param program: The opengl program handle.
-            */
-            Shader(const GLHandle program);
-
             /* Sets a uniform integer array for the given uniform name.
              * @param name: The name of the uniform.
              * @param count: The number of elements in the array.
@@ -142,6 +125,24 @@ namespace cobalt {
              */
             void setUniformMat4v(const std::string& name, const GLsizei count, const glm::mat4* value);
             
+
+            private:
+            std::unordered_map<std::string, GLuint> uniformLocations;   // The uniform block indices.
+
+            /* Gets the location of a uniform with the given name.
+             * @param name: The name of the uniform.
+             * @return: The location of the uniform.
+             */
+            const GLuint getUniformLocation(const std::string& name);
+
+            protected:
+            const GLHandle program; // The opengl program handle.
+            
+            /* Creates a new shader program.
+            * @param program: The opengl program handle.
+            */
+            Shader(const GLHandle program);
+
             /* Compiles a shader given its source code.
              * @param shader: The shader handle.
              * @param source: The source code of the shader.

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "core/utils/types.h"
+#include "core/gl/shader.h"
 
 
 namespace cobalt {
