@@ -7,6 +7,7 @@
 #include "json/json.hpp"
 
 #include "engine/internal/shader_library.h"
+#include "core/io/file.h"
 #include "core/gl/render_shader.h"
 #include "core/gl/compute_shader.h"
 #include "core/utils/log.h"
@@ -16,37 +17,29 @@ namespace cobalt {
     namespace engine {
         static core::RenderShader parseRenderShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
-            core::Path vertexShaderPath = shadersDirectory + shaderJson["vertex"].get<std::string>();
-            core::Path fragmentShaderPath = shadersDirectory + shaderJson["fragment"].get<std::string>();
-            CB_INFO("From vertex source: {}", vertexShaderPath.getFileName());
-            std::ifstream vertexFile(vertexShaderPath.getPath());
-            std::stringstream vertexStream;
-            vertexStream << vertexFile.rdbuf();
-            CB_INFO("From fragment source: {}", fragmentShaderPath.getFileName());
-            std::ifstream fragmentFile(fragmentShaderPath.getPath());
-            std::stringstream fragmentStream;
-            fragmentStream << fragmentFile.rdbuf();
-            builder.addShaderStep(core::ShaderStep::Vertex, vertexStream.str());
-            builder.addShaderStep(core::ShaderStep::Fragment, fragmentStream.str());
+            std::string vertexName = shaderJson["vertex"].get<std::string>();
+            std::string fragmentName = shaderJson["fragment"].get<std::string>();
+            core::File vertexFile(shadersDirectory + vertexName);
+            core::File fragmentFile(shadersDirectory + fragmentName);
+            CB_INFO("From vertex source: {}", vertexName);
+            CB_INFO("From fragment source: {}", fragmentName);
+            builder.addShaderStep(core::ShaderStep::Vertex, vertexFile.read());
+            builder.addShaderStep(core::ShaderStep::Fragment, fragmentFile.read());
             if (shaderJson.contains("geometry")) {
-                core::Path geometryShaderPath = shadersDirectory + shaderJson["geometry"].get<std::string>();
-                CB_INFO("From geometry source: {}", geometryShaderPath.getFileName());
-                std::ifstream geometryFile(geometryShaderPath.getPath());
-                std::stringstream geometryStream;
-                geometryStream << geometryFile.rdbuf();
-                builder.addShaderStep(core::ShaderStep::Geometry, geometryStream.str());
+                std::string geometryName = shaderJson["geometry"].get<std::string>();
+                core::File geometryFile(shadersDirectory + geometryName);
+                CB_INFO("From geometry source: {}", geometryName);
+                builder.addShaderStep(core::ShaderStep::Geometry, geometryFile.read());
             }
             return builder.buildRenderShader();
         }
 
         static core::ComputeShader parseComputeShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
-            core::Path computeShaderPath = shadersDirectory + shaderJson["compute"].get<std::string>();
-            CB_INFO("From source: {}", computeShaderPath.getFileName());
-            std::ifstream computeFile(computeShaderPath.getPath());
-            std::stringstream computeStream;
-            computeStream << computeFile.rdbuf();
-            builder.addShaderStep(core::ShaderStep::Compute, computeStream.str());
+            std::string computeName = shaderJson["compute"].get<std::string>();
+            core::File computeFile(shadersDirectory + computeName);
+            CB_INFO("From source: {}", computeName);
+            builder.addShaderStep(core::ShaderStep::Compute, computeFile.read());
             return builder.buildComputeShader();
         }
 
