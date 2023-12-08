@@ -15,14 +15,14 @@ namespace cobalt {
     namespace engine {
         class ConfigurationException : public std::exception {
         public:
-            ConfigurationException(const std::string& key, const std::string& typeName) : key(key), typeName(typeName) {}
+            ConfigurationException(const std::string& key, const std::string& typeName) {
+                message = std::string("Failed to cast value of key '" + key + "' to type '" + typeName + "'");
+            }
             const char* what() const noexcept override {
-                std::string message = "Failed to cast value of key '" + key + "' to type '" + typeName + "'";
                 return message.c_str();
             }
         private:
-            std::string key;        // The key that was attempted to be casted.
-            std::string typeName;   // The type that was attempted to be casted to.
+            std::string message;
         };
 
         class Configuration {

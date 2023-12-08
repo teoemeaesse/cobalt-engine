@@ -17,9 +17,9 @@ namespace cobalt {
             {
                 getWindow().setClearColor(COLOR(0.2f, 0.2f, 0.2f, 1.0f));
                 try {
-                getWindow().setDimensions(configuration.get<int>("width"), configuration.get<int>("height"));
-                getWindow().setVsync(configuration.get<bool>("vsync"));
-                getWindow().setMode(static_cast<core::WindowMode>(configuration.get<int>("mode")));
+                    getWindow().setDimensions(configuration.get<int>("width"), configuration.get<int>("height"));
+                    getWindow().setVsync(configuration.get<bool>("vsync"));
+                    getWindow().setMode(static_cast<core::WindowMode>(configuration.get<int>("mode")));
                 } catch (const engine::ConfigurationException& e) {
                     CB_WARN("Failed to load Cobalt configuration: {}", e.what());
                 }

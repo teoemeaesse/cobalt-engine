@@ -1,6 +1,6 @@
 {
-    "height": 623,
+    "height": 720,
     "mode": 0,
-    "vsync": false,
-    "width": 1422
+    "vsync": true,
+    "width": 1280
 }
