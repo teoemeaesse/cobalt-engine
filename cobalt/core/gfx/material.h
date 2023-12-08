@@ -33,6 +33,10 @@ namespace cobalt {
              */
             const Uniform getUniform(const int colorSlot, const int normalSlot, const int specularSlot) const;
 
+            /* Binds the material.
+             */
+            void bind() const;
+
             protected:
             const Shader shader;        // Shader program.
             const Texture colorMap;     // Color map.

@@ -14,6 +14,8 @@
 
 namespace cobalt {
     namespace core {
+        using GLHandle = GLuint;    // OpenGL handle type.
+
         /* Usage mode of a buffer object.
         */
         enum class GLUsage {
@@ -127,6 +129,16 @@ namespace cobalt {
             ColorStencil = Color | Stencil,                 // Color and stencil attachments.
             DepthStencil = Depth | Stencil,                 // Depth and stencil attachments.
             ColorDepthStencil = Color | Depth | Stencil     // Color, depth and stencil attachments.
+        };
+
+        enum class GLPrimitive {
+            Points = GL_POINTS,                 // Points.
+            Lines = GL_LINES,                   // Lines.
+            LineLoop = GL_LINE_LOOP,            // Line loop.
+            LineStrip = GL_LINE_STRIP,          // Line strip.
+            Triangles = GL_TRIANGLES,           // Triangles.
+            TriangleStrip = GL_TRIANGLE_STRIP,  // Triangle strip.
+            TriangleFan = GL_TRIANGLE_FAN       // Triangle fan.
         };
 
         /* Gets the size of a GLType.

@@ -32,11 +32,17 @@ namespace cobalt {
             /* Fills the IBO with quad indices.
             * @param count: The number of quads to render.
             */
-            void quads(const uint count) const;
+            void quads(const uint count);
+
+            /* Get the number of indices.
+             * @return: The number of indices.
+             */
+            const uint getCount() const;
 
             private:
             GLHandle buffer;        // The opengl buffer handle.
             const GLUsage usage;    // The usage of the buffer.
+            uint indexCount;        // The number of indices.
         };
     }
 }

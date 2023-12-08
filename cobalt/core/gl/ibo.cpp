@@ -7,7 +7,7 @@
 
 namespace cobalt {
     namespace core {
-        IBO::IBO(const GLUsage usage) : usage(usage) {
+        IBO::IBO(const GLUsage usage) : usage(usage), indexCount(0) {
             glGenBuffers(1, &buffer);
         }
 
@@ -23,7 +23,7 @@ namespace cobalt {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }
 
-        void IBO::quads(const uint count) const {
+        void IBO::quads(const uint count) {
             bind();
             uint pattern[6] = {0, 1, 2, 2, 3, 0};
             uint indices[count * 6];
@@ -31,6 +31,11 @@ namespace cobalt {
                 indices[i] = pattern[i % 6] + (i / 6) * 4;
             }
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * 6 * sizeof(uint), indices, (GLenum) usage);
+            this->indexCount = count * 6;
+        }
+
+        const uint IBO::getCount() const {
+            return this->indexCount;
         }
     }
 }
