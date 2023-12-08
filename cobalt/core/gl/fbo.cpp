@@ -32,14 +32,29 @@ namespace cobalt {
         }
 
         DefaultFBO::DefaultFBO(const GLFramebufferAttachment type)
-            : FBO(type) {}
+            : FBO(type) {
+            int width, height;
+            glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+            this->width = (uint) width;
+            this->height = (uint) height;
+        }
 
         void DefaultFBO::resize(const uint width, const uint height) {
             glViewport(0, 0, width, height);
+            this->width = width;
+            this->height = height;
         }
 
         void DefaultFBO::bind() const {
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }
+
+        const uint DefaultFBO::getWidth() const {
+            return width;
+        }
+
+        const uint DefaultFBO::getHeight() const {
+            return height;
         }
 
         TargetFBO::TargetFBO(const uint width, const uint height, 

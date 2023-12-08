@@ -37,6 +37,15 @@ namespace cobalt {
              */
             void setClearColor(const Color& color);
 
+            /* Returns the width of the FBO.
+             * @return: The width of the FBO.
+             */
+            virtual const uint getWidth() const = 0;
+            /* Returns the height of the FBO.
+             * @return: The height of the FBO.
+             */
+            virtual const uint getHeight() const = 0;
+
             protected:
             Color clearColor;                   // The color to clear the FBO with.
             const GLFramebufferAttachment type; // The type of the texture attached to the FBO.
@@ -68,6 +77,19 @@ namespace cobalt {
             /* Binds the FBO.
              */
             void bind() const override;
+
+            /* Returns the width of the FBO.
+             * @return: The width of the FBO.
+             */
+            const uint getWidth() const override;
+            /* Returns the height of the FBO.
+             * @return: The height of the FBO.
+             */
+            const uint getHeight() const override;
+
+            private:
+            uint width;     // The width of the FBO.
+            uint height;    // The height of the FBO.
         };
 
         class TargetFBO : public FBO {
@@ -104,11 +126,11 @@ namespace cobalt {
             /* Returns the width of the FBO.
              * @return: The width of the FBO.
              */
-            const uint getWidth() const;
+            const uint getWidth() const override;
             /* Returns the height of the FBO.
              * @return: The height of the FBO.
              */
-            const uint getHeight() const;
+            const uint getHeight() const override;
 
             private:
             GLHandle buffer;    // The FBO handle.

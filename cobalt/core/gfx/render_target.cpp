@@ -7,7 +7,7 @@
 
 namespace cobalt {
     namespace core {
-        RenderTarget::RenderTarget(const TargetFBO* fbo, const Camera* camera)
+        RenderTarget::RenderTarget(const FBO* fbo, const Camera* camera)
             : fbo(fbo),
               camera(camera) {}
 
@@ -22,8 +22,8 @@ namespace cobalt {
             shader.setUniformInt("u_targetHeight", fbo->getHeight());
         }
 
-        const Texture& RenderTarget::getTexture() const {
-            return fbo->getTexture();
+        const GLHandle RenderTarget::getGLHandle() const {
+            return dynamic_cast<const DefaultFBO*>(fbo) ? 0 : dynamic_cast<const TargetFBO*>(fbo)->getTexture().getGLHandle();
         }
     }
 }

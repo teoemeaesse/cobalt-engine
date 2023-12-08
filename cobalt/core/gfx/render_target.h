@@ -17,7 +17,7 @@ namespace cobalt {
              * @param camera: The camera to render with.
              * @return: The render target.
              */
-            RenderTarget(const TargetFBO* fbo, const Camera* camera);
+            RenderTarget(const FBO* fbo, const Camera* camera);
             /* Destroy the render target.
              */
             ~RenderTarget() = default;
@@ -31,13 +31,13 @@ namespace cobalt {
              */
             void sendUniforms(Shader& shader) const;
 
-            /* Get the rendered texture.
-             * @return: The texture.
+            /* Get the rendered texture handle.
+             * @return: The texture handle. This is 0 if the default frame buffer is used.
              */
-            const Texture& getTexture() const;
+            const GLHandle getGLHandle() const;
 
             private:
-            const TargetFBO* fbo;   // Frame buffer object.
+            const FBO* fbo;         // Frame buffer object.
             const Camera* camera;   // Camera.
         };
     }
