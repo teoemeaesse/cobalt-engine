@@ -63,6 +63,14 @@ namespace cobalt {
              */
             GLPrimitive getPrimitive() const;
 
+            /* Create a rectangle-shaped mesh.
+             * @param width: The width.
+             * @param height: The height.
+             * @param material: The material.
+             * @return: The rectangle mesh.
+             */
+            static Mesh createRectangle(const uint width, const uint height, const Material& material);
+
             private:
             VAO vao;                    // Vertex array object.
             IBO ibo;                    // Index buffer object.

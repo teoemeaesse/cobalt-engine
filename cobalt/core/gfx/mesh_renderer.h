@@ -5,6 +5,7 @@
 #pragma once
 
 #include "core/gfx/mesh.h"
+#include "core/gfx/render_target.h"
 
 
 namespace cobalt {
@@ -12,16 +13,21 @@ namespace cobalt {
         class MeshRenderer {
             public:
             /* Create a mesh renderer.
+             * @param target: The render target.
              * @return: The renderer.
              */
-            MeshRenderer() = default;
+            MeshRenderer(RenderTarget& target);
             /* Destroy the renderer.
              */
             ~MeshRenderer() = default;
 
-            /* Render call. 
+            /* Render call.
+             * @param mesh: The mesh to render.
              */
             void render(Mesh& mesh) const;
+
+            private:
+            RenderTarget& target;   // Render target.
         };
     }
 }

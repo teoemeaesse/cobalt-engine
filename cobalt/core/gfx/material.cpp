@@ -22,5 +22,14 @@ namespace cobalt {
             specularMap.bindToUnit(specularSlot);
             return {colorSlot, normalSlot, specularSlot, shininess};
         }
+
+        void Material::bind() const {
+            // TODO: set material uniforms.
+        }
+
+        Shader& Material::use() {
+            shader.use();
+            return shader;
+        }
     }
 }

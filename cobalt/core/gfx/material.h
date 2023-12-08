@@ -37,8 +37,13 @@ namespace cobalt {
              */
             void bind() const;
 
+            /* Use this material. Returns the bound shader.
+             * @return: The shader.
+             */
+            Shader& use();
+
             protected:
-            const Shader shader;        // Shader program.
+            Shader shader;              // Shader program.
             const Texture colorMap;     // Color map.
             const Texture normalMap;    // Normal map.
             const Texture specularMap;  // Specular map.

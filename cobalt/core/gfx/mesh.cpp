@@ -60,5 +60,26 @@ namespace cobalt {
         GLPrimitive Mesh::getPrimitive() const {
             return this->primitive;
         }
+
+        Mesh Mesh::createRectangle(const uint width, const uint height, const Material& material) {
+            const float w = width / 2.0f;
+            const float h = height / 2.0f;
+
+            const float vertices[] = {
+                -w, -h, 0.0f, 0.0f, 0.0f,
+                 w, -h, 0.0f, 1.0f, 0.0f,
+                 w,  h, 0.0f, 1.0f, 1.0f,
+                -w,  h, 0.0f, 0.0f, 1.0f
+            };
+
+            VBO vbo(GLUsage::StaticDraw);
+            vbo.load(vertices, sizeof(vertices));
+
+            VAOLayout layout;
+            layout.push(GLType::Float, 3, false);   // Position.
+            layout.push(GLType::Float, 2, false);   // Texture coordinates.
+
+            return Mesh(VAO(vbo, layout), IBO::fromQuads(GLUsage::StaticDraw, 1), material);
+        }
     }
 }
