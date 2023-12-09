@@ -120,6 +120,18 @@ namespace cobalt {
             return instance->context;
         }
 
+        uint RenderContext::queryMaxFragTextureUnits() {
+            int max;
+            glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &max);
+            return max;
+        }
+
+        uint RenderContext::queryMaxTotalTextureUnits() {
+            int max;
+            glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max);
+            return max;
+        }
+
         RenderContext::RenderContext() :
             context() {
             context = glfwCreateWindow(1, 1, "", nullptr, nullptr);

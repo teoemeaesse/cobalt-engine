@@ -37,10 +37,10 @@ namespace cobalt {
              */
             void bind() const;
 
-            /* Use this material. Returns the bound shader.
+            /* Get the shader for this material.
              * @return: The shader.
              */
-            Shader& use();
+            Shader& getShader();
 
             protected:
             Shader shader;              // Shader program.

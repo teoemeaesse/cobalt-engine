@@ -8,9 +8,14 @@
 
 namespace cobalt {
     namespace core {
-        RenderTarget::RenderTarget(const FBO* fbo, const Camera* camera)
+        RenderTarget::RenderTarget(const FBO* fbo, const Camera* camera, const std::string& name)
             : fbo(fbo),
-              camera(camera) {}
+              camera(camera),
+              name(name) {
+            if (name == "view" || name == "model" || name == "projection") {
+                throw GFXException("Cannot use reserved name for render target");
+            }
+        }
 
         void RenderTarget::bind() const {
             fbo->bind();
@@ -29,6 +34,16 @@ namespace cobalt {
                 throw GFXException("Cannot get texture from default fbo");
             }
             return texture->getTexture();
+        }
+
+        const std::string& RenderTarget::getName() const {
+            return name;
+        }
+
+        void RenderTarget::operator=(const RenderTarget& target) {
+            fbo = target.fbo;
+            camera = target.camera;
+            name = target.name;
         }
     }
 }

@@ -27,8 +27,7 @@ namespace cobalt {
             // TODO: set material uniforms.
         }
 
-        Shader& Material::use() {
-            shader.use();
+        Shader& Material::getShader() {
             return shader;
         }
     }

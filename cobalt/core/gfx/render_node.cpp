@@ -13,10 +13,16 @@ namespace cobalt {
                 CB_CORE_WARN("Render node has no targets");
             }
 
+            for (uint i = 0; i < sources.getSize(); i++) {
+                renderer->bindTexture("source_" + sources[i].getName(), sources[i].getTexture());
+            }
+
             for (uint i = 0; i < targets.getSize(); i++) {
                 renderer->setTarget(targets[i]);
                 renderer->render(mesh);
             }
+
+            renderer->clearTextureUnits();
         }
     }
 }

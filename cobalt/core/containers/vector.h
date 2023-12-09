@@ -91,40 +91,6 @@ namespace cobalt {
                 }
                 size++;
             }
-            /* Pushes an element to the end of the vector.
-             * @param element: The element to push.
-             */
-            void push(T& element) {
-                if (gaps.getSize() > 0) {
-                    uint64 index = gaps.pop();
-                    indices[index] = size;
-                    new((T*)((char*) data + index * sizeof(T))) T(element);
-                } else {
-                    if (size == capacity) {
-                        resize(capacity * 2);
-                    }
-                    indices[size] = size;
-                    new((T*)((char*) data + size * sizeof(T))) T(element);
-                }
-                size++;
-            }
-            /* Pushes an element to the end of the vector.
-             * @param element: The element to push.
-             */
-            void push(T&& element) {
-                if (gaps.getSize() > 0) {
-                    uint64 index = gaps.pop();
-                    indices[index] = size;
-                    new((T*)((char*) data + index * sizeof(T))) T(std::move(element));
-                } else {
-                    if (size == capacity) {
-                        resize(capacity * 2);
-                    }
-                    indices[size] = size;
-                    new((T*)((char*) data + size * sizeof(T))) T(std::move(element));
-                }
-                size++;
-            }
             /* Emplaces an element to the end of the vector.
              * @param args: The arguments for the element constructor.
              */
@@ -166,13 +132,21 @@ namespace cobalt {
                 return size;
             }
 
+            /* Clears the vector.
+             */
+            void clear() {
+                while (getSize() != 0) {
+                    remove(0);
+                }
+            }
+
             private:
-            HeapAllocator heap;     // The heap allocator used to allocate the vector.
-            void* data;             // The data of the vector.
-            uint64* indices;          // Maps each index to its corresponding block.
-            uint64 capacity;          // The capacity of the vector.
-            uint64 size;              // The size of the vector.
-            Stack<uint64> gaps;       // The gaps in the vector.
+            HeapAllocator heap; // The heap allocator used to allocate the vector.
+            void* data;         // The data of the vector.
+            uint64* indices;    // Maps each index to its corresponding block.
+            uint64 capacity;    // The capacity of the vector.
+            uint64 size;        // The size of the vector.
+            Stack<uint64> gaps; // The gaps in the vector.
 
             /* Resizes the vector to the given capacity.
              * @param newCapacity: The new capacity of the vector.

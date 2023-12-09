@@ -95,6 +95,21 @@ namespace cobalt {
              */
             static GLFWContext getGLFWContext();
 
+            
+            // -- OpenGL queries --
+
+            /* Query the maximum number of textures that can be accessed
+             * by the fragment shader.
+             * @return: The maximum number of bound textures.
+             */
+            static uint queryMaxFragTextureUnits();
+
+            /* Query the maximum number of total bound textures.
+             * @return: The maximum number of bound textures.
+             */
+            static uint queryMaxTotalTextureUnits();
+            
+
             /* Creates a new render context.
              * @param context: The GLFW context.
              * @return: A new render context.

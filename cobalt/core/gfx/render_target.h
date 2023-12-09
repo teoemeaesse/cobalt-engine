@@ -15,9 +15,10 @@ namespace cobalt {
             /* Create a render target.
              * @param fbo: Frame buffer object to render to.
              * @param camera: The camera to render with.
+             * @param name: The name of the render target.
              * @return: The render target.
              */
-            RenderTarget(const FBO* fbo, const Camera* camera);
+            RenderTarget(const FBO* fbo, const Camera* camera, const std::string& name);
             /* Destroy the render target.
              */
             ~RenderTarget() = default;
@@ -36,9 +37,21 @@ namespace cobalt {
              */
             const Texture& getTexture() const;
 
+            /* Get the name of the render target.
+             * @return: The name.
+             */
+            const std::string& getName() const;
+            
+            /* Assign operator override.
+             * @param target: The render target to assign.
+             */
+            void operator=(const RenderTarget&);
+
             private:
             const FBO* fbo;         // Frame buffer object.
             const Camera* camera;   // Camera.
+            std::string name;       // Name of the render target. This is used to send uniforms for a 
+                                    // render node that has a render target as a source.
         };
     }
 }
