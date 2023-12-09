@@ -5,6 +5,7 @@
 #include "engine/cobalt.h"
 #include "editor/persistency/configuration.h"
 #include "editor/input/bindings.h"
+#include "core/gfx/render_node.h"
 
 
 

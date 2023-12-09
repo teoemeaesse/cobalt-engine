@@ -16,5 +16,9 @@ namespace cobalt {
             mesh.getIBO().bind();
             glDrawElements((GLenum) mesh.getPrimitive(), mesh.getIBO().getCount(), GL_UNSIGNED_INT, nullptr);
         }
+
+        void MeshRenderer::setTarget(RenderTarget& target) {
+            this->target = target;
+        }
     }
 }

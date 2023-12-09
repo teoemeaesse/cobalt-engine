@@ -3,6 +3,7 @@
 //
 
 #include "core/gfx/render_target.h"
+#include "core/exceptions/gfx_exception.h"
 
 
 namespace cobalt {
@@ -22,8 +23,12 @@ namespace cobalt {
             shader.setUniformInt("u_targetHeight", fbo->getHeight());
         }
 
-        const GLHandle RenderTarget::getGLHandle() const {
-            return dynamic_cast<const DefaultFBO*>(fbo) ? 0 : dynamic_cast<const TargetFBO*>(fbo)->getTexture().getGLHandle();
+        const Texture& RenderTarget::getTexture() const {
+            auto texture = dynamic_cast<const TargetFBO*>(fbo);
+            if (!texture) {
+                throw GFXException("Cannot get texture from default fbo");
+            }
+            return texture->getTexture();
         }
     }
 }

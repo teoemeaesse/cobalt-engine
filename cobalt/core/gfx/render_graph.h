@@ -7,7 +7,7 @@
 
 namespace cobalt {
     namespace core {
-        class Pipeline {
+        class RenderGraph {
             
         };
     }

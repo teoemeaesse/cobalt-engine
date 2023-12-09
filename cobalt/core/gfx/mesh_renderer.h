@@ -26,6 +26,11 @@ namespace cobalt {
              */
             void render(Mesh& mesh) const;
 
+            /* Set the render target.
+             * @param target: The render target.
+             */
+            void setTarget(RenderTarget& target);
+
             private:
             RenderTarget& target;   // Render target.
         };

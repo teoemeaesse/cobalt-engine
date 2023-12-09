@@ -31,10 +31,10 @@ namespace cobalt {
              */
             void sendUniforms(Shader& shader) const;
 
-            /* Get the rendered texture handle.
-             * @return: The texture handle. This is 0 if the default frame buffer is used.
+            /* Get the rendered texture. This will throw an exception if the fbo is the default fbo.
+             * @return: The texture.
              */
-            const GLHandle getGLHandle() const;
+            const Texture& getTexture() const;
 
             private:
             const FBO* fbo;         // Frame buffer object.
