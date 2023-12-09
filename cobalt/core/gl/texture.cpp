@@ -47,6 +47,7 @@ namespace cobalt {
         }
 
         Texture::~Texture() {
+            CB_CORE_WARN("Destroyed texture (GL handle: {0})", texture);
             glDeleteTextures(1, &texture);
             if (!source.empty()) {
                 stbi_image_free(data);

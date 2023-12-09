@@ -8,7 +8,7 @@
 // Graphics
 
 #include "core/gfx/window.h"
-#include "core/gfx/mesh_renderer.h"
+#include "core/gfx/render_graph.h"
 
 // Memory
 

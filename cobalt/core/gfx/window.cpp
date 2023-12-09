@@ -129,6 +129,10 @@ namespace cobalt {
             return height;
         }
 
+        const DefaultFBO& Window::getDefaultFBO() const {
+            return defaultFBO;
+        }
+
         const bool Window::isVsync() const {
             return vsync;
         }

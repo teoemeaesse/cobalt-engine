@@ -91,6 +91,23 @@ namespace cobalt {
                 }
                 size++;
             }
+            /* Pushes an element to the end of the vector.
+             * @param element: The element to push.
+             */
+            void push(T&& element) {
+                if (gaps.getSize() > 0) {
+                    uint64 index = gaps.pop();
+                    indices[index] = size;
+                    new((T*)((char*) data + index * sizeof(T))) T(std::move(element));
+                } else {
+                    if (size == capacity) {
+                        resize(capacity * 2);
+                    }
+                    indices[size] = size;
+                    new((T*)((char*) data + size * sizeof(T))) T(std::move(element));
+                }
+                size++;
+            }
             /* Emplaces an element to the end of the vector.
              * @param args: The arguments for the element constructor.
              */

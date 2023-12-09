@@ -18,9 +18,16 @@ namespace cobalt {
                 const int colorSlot;    // Color slot.
                 const int normalSlot;   // Normal slot.
                 const int specularSlot; // Specular slot.
-                const float shininess;  // Shininess.
             };
 
+            /* Creates a new material.
+             * @param shader: The shader program.
+             * @param colorMap: The color map.
+             * @param normalMap: The normal map.
+             * @param specularMap: The specular map.
+             * @return: The material.
+             */
+            Material(Shader& shader, const Texture& colorMap, const Texture& normalMap, const Texture& specularMap);
             /* Destroys the material.
              */
             ~Material() = default;
@@ -43,21 +50,10 @@ namespace cobalt {
             Shader& getShader();
 
             protected:
-            Shader shader;              // Shader program.
-            const Texture colorMap;     // Color map.
-            const Texture normalMap;    // Normal map.
-            const Texture specularMap;  // Specular map.
-            const float shininess;      // Shininess.
-
-            /* Creates a new material.
-             * @param shader: The shader program.
-             * @param colorMap: The color map.
-             * @param normalMap: The normal map.
-             * @param specularMap: The specular map.
-             * @param shininess: The shininess.
-             * @return: The material.
-             */
-            Material(const Shader shader, const Texture colorMap, const Texture normalMap, const Texture specularMap, const float shininess);
+            Shader& shader;             // Shader program.
+            const Texture& colorMap;    // Color map.
+            const Texture& normalMap;   // Normal map.
+            const Texture& specularMap; // Specular map.
         };
     }
 }

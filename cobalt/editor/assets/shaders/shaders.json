@@ -1,0 +1,7 @@
+{
+    "test_shader" : {
+        "type" : "render",
+        "vertex" : "test.vert",
+        "fragment" : "test.frag"
+    }
+}

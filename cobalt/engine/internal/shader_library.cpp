@@ -80,7 +80,7 @@ namespace cobalt {
             return 0;
         }
 
-        const core::Shader& ShaderLibrary::getShader(const ShaderID id) {
+        core::Shader& ShaderLibrary::getShader(const ShaderID id) {
             return shaders[id - 1].shader;
         }
     }

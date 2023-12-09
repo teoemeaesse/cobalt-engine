@@ -65,6 +65,10 @@ namespace cobalt {
              * @return: The height of the window.
              */
             const uint getHeight() const;
+            /* Gets the default framebuffer object of the window.
+             * @return: The default framebuffer object of the window.
+             */
+            const DefaultFBO& getDefaultFBO() const;
             /* Gets whether or not the window is using vsync.
              * @return: Whether or not the window is using vsync.
              */

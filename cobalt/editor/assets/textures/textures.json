@@ -1,0 +1,6 @@
+{
+    "test_texture" : {
+        "type" : "png",
+        "src" : "mountain.png"
+    }
+}

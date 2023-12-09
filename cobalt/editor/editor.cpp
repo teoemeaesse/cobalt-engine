@@ -8,7 +8,6 @@
 #include "core/gfx/render_node.h"
 
 
-
 namespace cobalt {
     namespace editor {
         class Editor : public engine::Application {
@@ -26,6 +25,16 @@ namespace cobalt {
                 }
                 getWindow().show();
                 bindInput();
+
+                getTextureLibrary().loadTextures(core::Path("cobalt/editor/assets/textures/", true));
+                getShaderLibrary().loadShaders(core::Path("cobalt/editor/assets/shaders/", true));
+
+                engine::TextureID testTextureID = getTextureLibrary().getTextureID("test_texture");
+                const core::Texture& testTexture = getTextureLibrary().getTexture(testTextureID);
+                engine::ShaderID testShaderID = getShaderLibrary().getShaderID("test_shader");
+                core::Shader& testShader = getShaderLibrary().getShader(testShaderID);
+                std::unique_ptr<core::Mesh> testMesh = std::make_unique<core::Mesh>(core::Mesh::createRectangle(10, 5, core::Material(testShader, testTexture, testTexture, testTexture)));
+                scene.addMesh(std::move(testMesh));
             }
 
             ~Editor() override {
@@ -50,6 +59,8 @@ namespace cobalt {
                 getInputManager().clearEvents();
 
                 getWindow().swapBuffers();
+
+                renderGraph.render(scene);
             }
 
             void bindInput() {
@@ -61,6 +72,8 @@ namespace cobalt {
 
             private:
             CobaltConfiguration configuration;
+            core::Scene scene;
+            core::RenderGraph renderGraph;
         };
     }
 }

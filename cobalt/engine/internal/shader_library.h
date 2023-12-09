@@ -46,7 +46,7 @@ namespace cobalt {
              * If the shader does not exist, returns a null shader.
              * @param id: The ID of the shader.
              */
-            const core::Shader& getShader(const ShaderID id);
+            core::Shader& getShader(const ShaderID id);
 
             private:
             core::Vector<ShaderEntry> shaders;  // The shaders in the library.
