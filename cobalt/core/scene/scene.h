@@ -26,6 +26,11 @@ namespace cobalt {
              */
             const uint addMesh(std::unique_ptr<Mesh> mesh);
 
+            /* Gets the meshes in the scene.
+             * @return: The meshes in the scene.
+             */
+            const Vector<std::unique_ptr<Mesh>>& getMeshes() const;
+
             private:
             Vector<std::unique_ptr<Mesh>> meshes;   // All the meshes in the scene.
                                                     // This is a massive oversimplification.

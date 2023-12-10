@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "core/gfx/mesh_renderer.h"
+#include "core/gfx/renderer.h"
 #include "core/gfx/render_target.h"
 #include "core/containers/vector.h"
 
@@ -23,7 +23,7 @@ namespace cobalt {
              * @return: The render node.
              */
             template<typename... Targets>
-            RenderNode(MeshRenderer* renderer, Targets... targets)
+            RenderNode(Renderer& renderer, Targets... targets)
                 : renderer(renderer),
                   sources(1),
                   targets(sizeof...(targets))
@@ -37,22 +37,30 @@ namespace cobalt {
 
             /* Render to the targets, binding the sources
              * to the adequate texture units.
-             * @param mesh: The mesh to render.
+             * Each render node should override this method
+             * and call the protected render method.
              */
-            void render(Mesh& mesh);
+            virtual void render() = 0;
 
             /* Add a source to the render node. It will be bound
              * to the next available texture unit.
              * @param source: The source to add.
              */
-            void addSource(RenderTarget& source) {
-                sources.push(source);
-            }
+            void addSource(RenderTarget& source);
 
             private:
-            MeshRenderer* renderer;         // The renderer to use.
+            Renderer& renderer;             // The renderer to use.
             Vector<RenderTarget> sources;   // The list of sources.
             Vector<RenderTarget> targets;   // The list of targets.
+            
+            protected:
+            /* Render to the targets, binding the sources
+             * to the adequate texture units.
+             * Each render node should decide how to call
+             * this method.
+             * @param mesh: The mesh to render.
+             */
+            void render(Mesh& mesh);
         };
     }
 }

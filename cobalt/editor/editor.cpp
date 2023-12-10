@@ -2,8 +2,7 @@
 // Created by tomas on 07-12-2023.
 //
 
-#include "engine/cobalt.h"
-#include "editor/persistency/configuration.h"
+#include "editor/persistency/cobalt_configuration.h"
 #include "editor/input/bindings.h"
 #include "core/gfx/render_node.h"
 
@@ -15,14 +14,8 @@ namespace cobalt {
             Editor() : engine::Application(1),
                        configuration(CobaltConfiguration())
             {
+                configuration.configureWindow(getWindow());
                 getWindow().setClearColor(COLOR(0.2f, 0.2f, 0.2f, 1.0f));
-                try {
-                    getWindow().setDimensions(configuration.get<int>("width"), configuration.get<int>("height"));
-                    getWindow().setVsync(configuration.get<bool>("vsync"));
-                    getWindow().setMode(static_cast<core::WindowMode>(configuration.get<int>("mode")));
-                } catch (const engine::ConfigurationException& e) {
-                    CB_WARN("Failed to load Cobalt configuration: {}", e.what());
-                }
                 getWindow().show();
                 bindInput();
 

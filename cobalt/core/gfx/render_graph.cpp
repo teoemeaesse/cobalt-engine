@@ -10,8 +10,8 @@ namespace cobalt {
     namespace core {
         RenderGraph::RenderGraph() : nodes(1) {
         }
-        const uint RenderGraph::addNode(const RenderNode& node) {
-            nodes.push(node);
+        const uint RenderGraph::addNode(std::unique_ptr<RenderNode> node) {
+            nodes.push(std::move(node));
             return nodes.getSize() - 1;
         }
 

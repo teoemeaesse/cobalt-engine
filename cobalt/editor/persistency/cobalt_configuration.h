@@ -28,6 +28,11 @@ namespace cobalt {
              * @return: A new window.
              */
             core::Window createWindow() const;
+
+            /* Configure a window from the configuration.
+             * @param window: The window to configure.
+             */
+            void configureWindow(core::Window& window) const;
         };
     }
 }

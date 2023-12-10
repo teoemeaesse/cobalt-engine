@@ -11,16 +11,16 @@
 
 namespace cobalt {
     namespace core {
-        class MeshRenderer {
+        class Renderer {
             public:
-            /* Create a mesh renderer.
+            /* Create a renderer.
              * @param target: The render target.
              * @return: The renderer.
              */
-            MeshRenderer(RenderTarget& target);
+            Renderer(RenderTarget& target);
             /* Destroy the renderer.
              */
-            ~MeshRenderer() = default;
+            ~Renderer() = default;
 
             /* Render call.
              * @param mesh: The mesh to render.
@@ -51,8 +51,8 @@ namespace cobalt {
             void clearTextureUnits();
 
             private:
-            RenderTarget target;                    // Render target.
-            Vector<std::string> textureUnits;       // List of bound textures.
+            RenderTarget target;                // Render target.
+            Vector<std::string> textureUnits;   // List of bound textures.
         };
     }
 }

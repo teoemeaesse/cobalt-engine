@@ -14,5 +14,9 @@ namespace cobalt {
             meshes.push(std::move(mesh));
             return meshes.getSize() - 1;
         }
+
+        const Vector<std::unique_ptr<Mesh>>& Scene::getMeshes() const {
+            return meshes;
+        }
     }
 }
