@@ -60,8 +60,8 @@ class Game : public engine::Application {
         getInputManager().getKeyboard().bind(core::KeyboardInputID::F10, std::make_unique<Borderless>(&getWindow()));
         getInputManager().getKeyboard().bind(core::KeyboardInputID::F11, std::make_unique<Fullscreen>(&getWindow()));
 
-        getShaderLibrary().loadShaders(cobalt::core::Path("example/assets/shaders/", true));
-        getTextureLibrary().loadTextures(cobalt::core::Path("example/assets/textures/", true));
+        CB_SHADER_LIBRARY.loadShaders(cobalt::core::Path("example/assets/shaders/", true));
+        CB_TEXTURE_LIBRARY.loadTextures(cobalt::core::Path("example/assets/textures/", true));
 
         engine::Configuration configuration (core::Path("example/assets/config.json", true));
     }

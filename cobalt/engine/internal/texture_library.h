@@ -48,8 +48,20 @@ namespace cobalt {
              */
             const core::Texture& getTexture(const TextureID id);
 
+            /* Initializes the singleton instance of the texture library.
+             */
+            static void init();
+            /* Returns the singleton instance of the texture library.
+             * @return: The texture library.
+             */
+            static TextureLibrary& getTextureLibrary();
+
             private:
             core::Vector<TextureEntry> textures;  // The textures in the library.
+
+            static std::unique_ptr<TextureLibrary> instance;  // The singleton instance of the texture library.
         };
     }
 }
+
+#define CB_TEXTURE_LIBRARY ::cobalt::engine::TextureLibrary::getTextureLibrary()

@@ -7,8 +7,6 @@
 #include "core/gfx/window.h"
 #include "core/utils/types.h"
 #include "core/input/input_manager.h"
-#include "engine/internal/shader_library.h"
-#include "engine/internal/texture_library.h"
 
 
 namespace cobalt {
@@ -59,14 +57,6 @@ namespace cobalt {
              * @return: The input manager.
              */
             core::InputManager& getInputManager();
-            /* Get the shader library.
-             * @return: The shader library.
-             */
-            ShaderLibrary& getShaderLibrary();
-            /* Get the texture library.
-             * @return: The texture library.
-             */
-            TextureLibrary& getTextureLibrary();
             /* Set the time window in which the estimated framerate is calculated.
              * @param timeWindow: The time window in which the framerate is calculated, in seconds.
              */
@@ -81,8 +71,6 @@ namespace cobalt {
         
             core::Window window;                // The window.
             core::InputManager inputManager;    // The input manager.
-            ShaderLibrary shaderLibrary;        // The shader library.
-            TextureLibrary textureLibrary;      // The texture library.
         };
 
         /* Create a new application.

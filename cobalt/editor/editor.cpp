@@ -19,13 +19,13 @@ namespace cobalt {
                 getWindow().show();
                 bindInput();
 
-                getTextureLibrary().loadTextures(core::Path("cobalt/editor/assets/textures", true));
-                getShaderLibrary().loadShaders(core::Path("cobalt/editor/assets/shaders", true));
+                CB_TEXTURE_LIBRARY.loadTextures(core::Path("cobalt/editor/assets/textures", true));
+                CB_SHADER_LIBRARY.loadShaders(core::Path("cobalt/editor/assets/shaders", true));
 
-                engine::TextureID testTextureID = getTextureLibrary().getTextureID("test_texture");
-                const core::Texture& testTexture = getTextureLibrary().getTexture(testTextureID);
-                engine::ShaderID testShaderID = getShaderLibrary().getShaderID("test_shader");
-                core::Shader& testShader = getShaderLibrary().getShader(testShaderID);
+                engine::TextureID testTextureID = CB_TEXTURE_LIBRARY.getTextureID("test_texture");
+                const core::Texture& testTexture = CB_TEXTURE_LIBRARY.getTexture(testTextureID);
+                engine::ShaderID testShaderID = CB_SHADER_LIBRARY.getShaderID("test_shader");
+                core::Shader& testShader = CB_SHADER_LIBRARY.getShader(testShaderID);
                 std::unique_ptr<core::Mesh> testMesh = std::make_unique<core::Mesh>(core::Mesh::createRectangle(10, 5, core::Material(testShader, testTexture, testTexture, testTexture)));
                 scene.addMesh(std::move(testMesh));
             }
@@ -53,7 +53,7 @@ namespace cobalt {
 
                 getWindow().swapBuffers();
 
-                renderGraph.render(scene);
+                renderGraph.execute();
             }
 
             void bindInput() {

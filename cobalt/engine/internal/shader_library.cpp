@@ -15,6 +15,8 @@
 
 namespace cobalt {
     namespace engine {
+        std::unique_ptr<ShaderLibrary> ShaderLibrary::instance;
+
         static std::unique_ptr<core::RenderShader> parseRenderShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
             std::string vertexName = shaderJson["vertex"].get<std::string>();
@@ -82,6 +84,14 @@ namespace cobalt {
 
         core::Shader& ShaderLibrary::getShader(const ShaderID id) {
             return *shaders[id - 1].shader;
+        }
+        
+        void ShaderLibrary::init() {
+            instance = std::make_unique<ShaderLibrary>();
+        }
+
+        ShaderLibrary& ShaderLibrary::getShaderLibrary() {
+            return *instance;
         }
     }
 }

@@ -8,16 +8,17 @@
 
 namespace cobalt {
     namespace core {
-        RenderGraph::RenderGraph() : nodes(1) {
+        RenderGraph::RenderGraph() : nodes(2) {
         }
+
         const uint RenderGraph::addNode(std::unique_ptr<RenderNode> node) {
             nodes.push(std::move(node));
             return nodes.getSize() - 1;
         }
 
-        void RenderGraph::render(const Scene& scene) {
+        void RenderGraph::execute() {
             for (uint i = 0; i < nodes.getSize(); i++) {
-                CB_CORE_TRACE("Rendering node {0}", i);
+                nodes[i]->render();
             }
         }
     }

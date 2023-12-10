@@ -4,10 +4,10 @@
 
 #include <signal.h>
 
-#include "engine/entry_point.h"
 #include "core/exceptions/container_exception.h"
 #include "core/exceptions/gfx_exception.h"
 #include "core/exceptions/input_exception.h"
+#include "engine/entry_point.h"
 
 
 namespace cobalt {
@@ -28,6 +28,8 @@ int main(int argc, char** argv) {
     // Initialize the engine.
     cobalt::core::Log::init();
     cobalt::core::RenderContext::init();
+    cobalt::engine::TextureLibrary::init();
+    cobalt::engine::ShaderLibrary::init();
 
     // Create the application.
     auto app = cobalt::engine::createApplication();

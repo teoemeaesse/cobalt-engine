@@ -104,14 +104,6 @@ namespace cobalt {
             return inputManager;
         }
 
-        ShaderLibrary& Application::getShaderLibrary() {
-            return shaderLibrary;
-        }
-
-        TextureLibrary& Application::getTextureLibrary() {
-            return textureLibrary;
-        }
-
         void Application::setFramerateTimeWindow(const uint timeWindow) {
             framerateTimeWindow = timeWindow;
         }

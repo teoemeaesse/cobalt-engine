@@ -12,6 +12,8 @@
 
 namespace cobalt {
     namespace engine {
+        std::unique_ptr<TextureLibrary> TextureLibrary::instance;
+
         TextureLibrary::TextureLibrary() :
             textures(8) {
             textures.push({"null", std::move(std::make_unique<core::Texture>(1, 1))});
@@ -53,6 +55,14 @@ namespace cobalt {
                 return *textures[0].texture;
             }
             return *textures[id - 1].texture;
+        }
+
+        void TextureLibrary::init() {
+            instance = std::make_unique<TextureLibrary>();
+        }
+
+        TextureLibrary& TextureLibrary::getTextureLibrary() {
+            return *instance;
         }
     }
 }

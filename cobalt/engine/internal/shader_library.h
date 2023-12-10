@@ -48,8 +48,20 @@ namespace cobalt {
              */
             core::Shader& getShader(const ShaderID id);
 
+            /* Initializes the singleton instance of the shader library.
+             */
+            static void init();
+            /* Returns the singleton instance of the shader library.
+             * @return: The shader library.
+             */
+            static ShaderLibrary& getShaderLibrary();
+
             private:
             core::Vector<ShaderEntry> shaders;  // The shaders in the library.
+
+            static std::unique_ptr<ShaderLibrary> instance; // The singleton instance of the shader library.
         };
     }
 }
+
+#define CB_SHADER_LIBRARY ::cobalt::engine::ShaderLibrary::getShaderLibrary()
