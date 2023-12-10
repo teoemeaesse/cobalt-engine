@@ -16,8 +16,8 @@ namespace cobalt {
         class ShaderLibrary {
             public:
             struct ShaderEntry {
-                std::string name;       // The name of the shader.
-                core::Shader shader;    // The shader.
+                std::string name;                       // The name of the shader.
+                std::unique_ptr<core::Shader> shader;   // The shader.
             };
 
             /* Creates an empty shader library.

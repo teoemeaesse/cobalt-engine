@@ -12,9 +12,7 @@ namespace cobalt {
         /* A shader program that can be used to render.
          */
         class RenderShader : public Shader {
-            friend class ShaderBuilder;
-
-            private:
+            public:
             /* Creates a new render shader.
              * @param vertexSource: The source code of the vertex shader.
              * @param fragmentSource: The source code of the fragment shader.

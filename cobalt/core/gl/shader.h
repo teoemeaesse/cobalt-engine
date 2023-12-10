@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include "core/utils/types.h"
 #include "core/gl/definitions.h"
 
@@ -170,11 +172,11 @@ namespace cobalt {
             /* Builds a render shader.
              * @return: The render shader.
              */
-            RenderShader buildRenderShader() const;
+            std::unique_ptr<RenderShader> buildRenderShader() const;
             /* Builds a compute shader.
              * @return: The compute shader.
              */
-            ComputeShader buildComputeShader() const;
+            std::unique_ptr<ComputeShader> buildComputeShader() const;
 
             private:
             std::unordered_map<ShaderStep, std::string> sources;        // The shader sources.

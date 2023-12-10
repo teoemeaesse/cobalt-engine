@@ -138,7 +138,7 @@ namespace cobalt {
             return *this;
         }
 
-        RenderShader ShaderBuilder::buildRenderShader() const {
+        std::unique_ptr<RenderShader> ShaderBuilder::buildRenderShader() const {
             std::string vertexSource;
             std::string fragmentSource;
             try {
@@ -149,16 +149,16 @@ namespace cobalt {
             }
             try {
                 std::string geometrySource = sources.at(ShaderStep::Geometry);
-                return RenderShader(vertexSource, fragmentSource, geometrySource);
+                return std::make_unique<RenderShader>(vertexSource, fragmentSource, geometrySource);
             } catch (std::out_of_range& e) {
-                return RenderShader(vertexSource, fragmentSource);
+                return std::make_unique<RenderShader>(vertexSource, fragmentSource);
             }
         }
 
-        ComputeShader ShaderBuilder::buildComputeShader() const {
+        std::unique_ptr<ComputeShader> ShaderBuilder::buildComputeShader() const {
             try {
                 std::string computeSource = sources.at(ShaderStep::Compute);
-                return ComputeShader(computeSource);
+                return std::make_unique<ComputeShader>(computeSource);
             }
             catch (std::out_of_range& e) {
                 throw GLException("A compute shader must have a compute shader source");

@@ -15,7 +15,7 @@
 
 namespace cobalt {
     namespace engine {
-        static core::RenderShader parseRenderShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
+        static std::unique_ptr<core::RenderShader> parseRenderShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
             std::string vertexName = shaderJson["vertex"].get<std::string>();
             std::string fragmentName = shaderJson["fragment"].get<std::string>();
@@ -34,7 +34,7 @@ namespace cobalt {
             return builder.buildRenderShader();
         }
 
-        static core::ComputeShader parseComputeShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
+        static std::unique_ptr<core::ComputeShader> parseComputeShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
             std::string computeName = shaderJson["compute"].get<std::string>();
             core::File computeFile(shadersDirectory + computeName);
@@ -62,11 +62,11 @@ namespace cobalt {
                 nlohmann::json shaderJson = it.value();
                 if (shaderJson["type"].get<std::string>() == "render") {
                     CB_INFO("Loading render shader: {}", shaderName);
-                    shaders.push({shaderName, parseRenderShader(shaderJson, shadersDirectory)});
+                    shaders.push({shaderName, std::move(parseRenderShader(shaderJson, shadersDirectory))});
                 }
                 else if (shaderJson["type"].get<std::string>() == "compute") {
                     CB_INFO("Loading compute shader: {}", shaderName);
-                    shaders.push({shaderName, parseComputeShader(shaderJson, shadersDirectory)});
+                    shaders.push({shaderName, std::move(parseComputeShader(shaderJson, shadersDirectory))});
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace cobalt {
         }
 
         core::Shader& ShaderLibrary::getShader(const ShaderID id) {
-            return shaders[id - 1].shader;
+            return *shaders[id - 1].shader;
         }
     }
 }
