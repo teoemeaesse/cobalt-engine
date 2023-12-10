@@ -10,6 +10,8 @@
 
 namespace cobalt {
     namespace core {
+        /* Scene node. Renders a full scene.
+         */
         class SceneNode : public RenderNode {
             public:
             /* Create a scene node with a scene.
@@ -18,7 +20,7 @@ namespace cobalt {
              * @return: The scene node.
              */
             template <typename... Targets>
-            SceneNode(Scene& scene, Targets... targets) : RenderNode(renderer, targets...),
+            SceneNode(Scene& scene, Targets&... targets) : RenderNode(renderer, targets...),
                 scene(scene)
             {}
             /* Destroy the scene node.

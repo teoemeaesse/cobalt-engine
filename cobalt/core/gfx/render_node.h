@@ -23,7 +23,7 @@ namespace cobalt {
              * @return: The render node.
              */
             template<typename... Targets>
-            RenderNode(Renderer& renderer, Targets... targets)
+            RenderNode(Renderer& renderer, Targets&... targets)
                 : renderer(renderer),
                   sources(1),
                   targets(sizeof...(targets))
