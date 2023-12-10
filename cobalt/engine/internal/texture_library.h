@@ -16,8 +16,8 @@ namespace cobalt {
         class TextureLibrary {
             public:
             struct TextureEntry {
-                std::string name;       // The name of the texture.
-                core::Texture texture;  // The texture.
+                std::string name;                       // The name of the texture.
+                std::unique_ptr<core::Texture> texture; // The texture.
             };
 
             /* Creates an empty texture library.

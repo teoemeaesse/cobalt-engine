@@ -32,7 +32,7 @@ namespace cobalt {
                 core::Path texturePath = texturesDirectory + textureJson["src"].get<std::string>();
                 CB_INFO("Loading texture: {}", textureName);
                 CB_INFO("From source: {}", texturePath.getFileName());
-                textures.push({textureName, core::Texture(texturePath)});
+                textures.push({textureName, std::move(std::make_unique<core::Texture>(texturePath))});
             }
         }
 
@@ -46,7 +46,7 @@ namespace cobalt {
         }
 
         const core::Texture& TextureLibrary::getTexture(const TextureID id) {
-            return textures[id - 1].texture;
+            return *textures[id - 1].texture;
         }
     }
 }
