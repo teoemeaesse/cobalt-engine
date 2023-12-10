@@ -12,8 +12,10 @@
 
 namespace cobalt {
     namespace engine {
-        TextureLibrary::TextureLibrary()
-            : textures(8) {}
+        TextureLibrary::TextureLibrary() :
+            textures(8) {
+            textures.push({"null", std::move(std::make_unique<core::Texture>(1, 1))});
+        }
         
         void TextureLibrary::loadTextures(const core::Path& texturesDirectory) {
             core::Path texturesJsonPath = texturesDirectory;
@@ -46,6 +48,10 @@ namespace cobalt {
         }
 
         const core::Texture& TextureLibrary::getTexture(const TextureID id) {
+            if (id == 0) {
+                CB_WARN("Texture ID 0 is reserved for null textures");
+                return *textures[0].texture;
+            }
             return *textures[id - 1].texture;
         }
     }

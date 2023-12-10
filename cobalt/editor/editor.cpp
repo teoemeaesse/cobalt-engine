@@ -26,8 +26,8 @@ namespace cobalt {
                 getWindow().show();
                 bindInput();
 
-                getTextureLibrary().loadTextures(core::Path("cobalt/editor/assets/textures/", true));
-                getShaderLibrary().loadShaders(core::Path("cobalt/editor/assets/shaders/", true));
+                getTextureLibrary().loadTextures(core::Path("cobalt/editor/assets/textures", true));
+                getShaderLibrary().loadShaders(core::Path("cobalt/editor/assets/shaders", true));
 
                 engine::TextureID testTextureID = getTextureLibrary().getTextureID("test_texture");
                 const core::Texture& testTexture = getTextureLibrary().getTexture(testTextureID);
