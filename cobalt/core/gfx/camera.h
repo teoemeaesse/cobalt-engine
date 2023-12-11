@@ -116,7 +116,15 @@ namespace cobalt {
              * @param near: The near clipping plane.
              * @param far: The far clipping plane.
              */
-            OrthographicCamera(const glm::vec3 position, const glm::vec2 direction, const float angularSpeed, const float left, const float right, const float bottom, const float top, const float near, const float far);
+            OrthographicCamera(const glm::vec3 position,
+                               const glm::vec2 direction,
+                               const float angularSpeed,
+                               const float left,
+                               const float right,
+                               const float bottom,
+                               const float top,
+                               const float near,
+                               const float far);
             /* Destroys the camera.
              */
             ~OrthographicCamera() = default;
@@ -125,6 +133,14 @@ namespace cobalt {
              * @return The projection matrix of the camera.
              */
             const glm::mat4x4 getProjectionMatrix() const override;
+
+            /* Resizes the camera.
+             * @param left: The left clipping plane.
+             * @param right: The right clipping plane.
+             * @param bottom: The bottom clipping plane.
+             * @param top: The top clipping plane.
+             */
+            void resize(const float left, const float right, const float bottom, const float top);
 
             private:
             float left, right;      // The left and right clipping planes.

@@ -23,7 +23,7 @@ namespace cobalt {
              * @return: The render node.
              */
             template<typename... Targets>
-            RenderNode(Renderer& renderer, Targets&... targets)
+            RenderNode(Renderer& renderer, Targets*... targets)
                 : renderer(renderer),
                   sources(1),
                   targets(sizeof...(targets))
@@ -46,12 +46,12 @@ namespace cobalt {
              * to the next available texture unit.
              * @param source: The source to add.
              */
-            void addSource(RenderTarget& source);
+            void addSource(RenderTarget* source);
 
             private:
             Renderer& renderer;             // The renderer to use.
-            Vector<RenderTarget> sources;   // The list of sources.
-            Vector<RenderTarget> targets;   // The list of targets.
+            Vector<RenderTarget*> sources;  // The list of sources.
+            Vector<RenderTarget*> targets;  // The list of targets.
             
             protected:
             /* Render to the targets, binding the sources

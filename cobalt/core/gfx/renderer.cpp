@@ -10,18 +10,21 @@
 
 namespace cobalt {
     namespace core {
-        Renderer::Renderer(RenderTarget& target) :
-            target(target),
+        Renderer::Renderer() :
+            target(nullptr),
             textureUnits(1) {}
 
         void Renderer::render(Mesh& mesh) const {
+            if (target == nullptr) {
+                throw GFXException("No render target set");
+            }
             mesh.getVAO().bind();
             mesh.getIBO().bind();
             Shader& shader = mesh.getMaterial().getShader();
             shader.use();
-            target.bind();
+            target->bind();
             try {
-                target.sendUniforms(shader);
+                target->sendUniforms(shader);
                 for (uint i = 0; i < textureUnits.getSize(); i++) {
                     shader.setUniformInt("u_" + textureUnits[i], i);
                 }
@@ -32,7 +35,7 @@ namespace cobalt {
             glDrawElements((GLenum) mesh.getPrimitive(), mesh.getIBO().getCount(), GL_UNSIGNED_INT, nullptr);
         }
 
-        void Renderer::setTarget(RenderTarget& target) {
+        void Renderer::setTarget(RenderTarget* target) {
             this->target = target;
         }
 

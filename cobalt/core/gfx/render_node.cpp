@@ -14,18 +14,18 @@ namespace cobalt {
             }
 
             for (uint i = 0; i < sources.getSize(); i++) {
-                renderer.bindTexture("source_" + sources[i].getName(), sources[i].getTexture());
+                renderer.bindTexture("source_" + sources[i]->getName(), sources[i]->getTexture());
             }
 
             for (uint i = 0; i < targets.getSize(); i++) {
-                renderer.setTarget(targets[i]);
+                //renderer.setTarget(targets[i]);
                 renderer.render(mesh);
             }
 
             renderer.clearTextureUnits();
         }
 
-        void RenderNode::addSource(RenderTarget& source) {
+        void RenderNode::addSource(RenderTarget* source) {
             sources.push(source);
         }
     }

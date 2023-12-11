@@ -8,10 +8,10 @@
 
 
 namespace cobalt {
-    namespace core {
+    namespace engine {
         /* Applies a color filter to the final image.
          */
-        class FilterNode : public RenderNode {
+        class FilterNode : public core::RenderNode {
             public:
             /* Create a filter node.
              * @param renderer: The renderer to use.
@@ -20,7 +20,7 @@ namespace cobalt {
              * @param filter: The material to use for the filter quad.
              * @return: The filter node.
              */
-            FilterNode(Renderer& renderer, RenderTarget& defaultTarget, Material& filter);
+            FilterNode(core::Renderer& renderer, core::RenderTarget* defaultTarget, core::Material& filter);
             /* Destroy the filter node.
              */
             ~FilterNode() = default;
@@ -30,7 +30,7 @@ namespace cobalt {
             void render() override;
 
             private:
-            Material& filter;   // The material to use for the filter quad.
+            core::Material& filter; // The material to use for the filter quad.
         };
     }
 }

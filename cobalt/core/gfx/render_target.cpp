@@ -8,7 +8,7 @@
 
 namespace cobalt {
     namespace core {
-        RenderTarget::RenderTarget(const FBO* fbo, const Camera* camera, const std::string& name)
+        RenderTarget::RenderTarget(const FBO& fbo, const Camera& camera, const std::string& name)
             : fbo(fbo),
               camera(camera),
               name(name) {
@@ -18,32 +18,22 @@ namespace cobalt {
         }
 
         void RenderTarget::bind() const {
-            fbo->bind();
+            fbo.bind();
         }
 
         void RenderTarget::sendUniforms(Shader& shader) const {
-            shader.setUniformMat4("u_view", camera->getViewMatrix());
-            shader.setUniformMat4("u_projection", camera->getProjectionMatrix());
-            shader.setUniformInt("u_targetWidth", fbo->getWidth());
-            shader.setUniformInt("u_targetHeight", fbo->getHeight());
+            shader.setUniformMat4("u_view", camera.getViewMatrix());
+            shader.setUniformMat4("u_projection", camera.getProjectionMatrix());
+            shader.setUniformInt("u_targetWidth", fbo.getWidth());
+            shader.setUniformInt("u_targetHeight", fbo.getHeight());
         }
 
         const Texture& RenderTarget::getTexture() const {
-            auto texture = dynamic_cast<const TargetFBO*>(fbo);
-            if (!texture) {
-                throw GFXException("Cannot get texture from default fbo");
-            }
-            return texture->getTexture();
+            return dynamic_cast<const TargetFBO&>(fbo).getTexture();
         }
 
         const std::string& RenderTarget::getName() const {
             return name;
-        }
-
-        void RenderTarget::operator=(const RenderTarget& target) {
-            fbo = target.fbo;
-            camera = target.camera;
-            name = target.name;
         }
     }
 }

@@ -79,5 +79,12 @@ namespace cobalt {
                 (left + right) / (left - right), (bottom + top) / (bottom - top), (near + far) / (near - far), 1.0f
             };
         }
+
+        void OrthographicCamera::resize(const float left, const float right, const float bottom, const float top) {
+            this->left = left;
+            this->right = right;
+            this->bottom = bottom;
+            this->top = top;
+        }
     }
 }

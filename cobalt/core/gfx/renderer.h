@@ -14,10 +14,9 @@ namespace cobalt {
         class Renderer {
             public:
             /* Create a renderer.
-             * @param target: The render target.
              * @return: The renderer.
              */
-            Renderer(RenderTarget& target);
+            Renderer();
             /* Destroy the renderer.
              */
             ~Renderer() = default;
@@ -30,7 +29,7 @@ namespace cobalt {
             /* Set the render target.
              * @param target: The render target.
              */
-            void setTarget(RenderTarget& target);
+            void setTarget(RenderTarget* target);
 
             /* Get the bound texture unit of a given named texture.
              * @param name: The name of the texture.
@@ -51,7 +50,7 @@ namespace cobalt {
             void clearTextureUnits();
 
             private:
-            RenderTarget target;                // Render target.
+            RenderTarget* target;               // Render target.
             Vector<std::string> textureUnits;   // List of bound textures.
         };
     }

@@ -9,10 +9,10 @@
 
 
 namespace cobalt {
-    namespace core {
+    namespace engine {
         /* Scene node. Renders a full scene.
          */
-        class SceneNode : public RenderNode {
+        class SceneNode : public core::RenderNode {
             public:
             /* Create a scene node with a scene.
              * @param scene: The scene to render.
@@ -20,7 +20,7 @@ namespace cobalt {
              * @return: The scene node.
              */
             template <typename... Targets>
-            SceneNode(Scene& scene, Targets&... targets) : RenderNode(renderer, targets...),
+            SceneNode(core::Scene& scene, Targets*... targets) : RenderNode(renderer, targets...),
                 scene(scene)
             {}
             /* Destroy the scene node.
@@ -32,7 +32,7 @@ namespace cobalt {
             void render() override;
 
             private:
-            Scene& scene;   // The scene to render.
+            core::Scene& scene;   // The scene to render.
         };
     }
 }

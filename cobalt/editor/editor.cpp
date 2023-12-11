@@ -12,7 +12,13 @@ namespace cobalt {
         class Editor : public engine::Application {
             public:
             Editor() : engine::Application(1),
-                       configuration(CobaltConfiguration())
+                       configuration(CobaltConfiguration()),
+                       outputCamera(glm::vec3(0.0, 0.0, 1.0),
+                         glm::vec2(0.0, 0.0),
+                         0.0f,
+                         0.0f, 1000.0f,
+                         0.0f, 1000.0f,
+                         0.0f, 1000.0f)
             {
                 configuration.configureWindow(getWindow());
                 getWindow().setClearColor(COLOR(0.2f, 0.2f, 0.2f, 1.0f));
@@ -28,6 +34,8 @@ namespace cobalt {
                 core::Shader& testShader = CB_SHADER_LIBRARY.getShader(testShaderID);
                 std::unique_ptr<core::Mesh> testMesh = std::make_unique<core::Mesh>(core::Mesh::createRectangle(10, 5, core::Material(testShader, testTexture, testTexture, testTexture)));
                 scene.addMesh(std::move(testMesh));
+
+                defaultTarget = new core::RenderTarget(getWindow().getDefaultFBO(), outputCamera, "default");
             }
 
             ~Editor() override {
@@ -50,10 +58,14 @@ namespace cobalt {
 
                 getInputManager().pollEvents();
                 getInputManager().clearEvents();
+                outputCamera.resize(0, 0, getWindow().getWidth(), getWindow().getHeight());
+
+                renderer.setTarget(defaultTarget);
+                renderer.render(*scene.getMeshes()[0]);
 
                 getWindow().swapBuffers();
 
-                renderGraph.execute();
+                //renderGraph.execute();
             }
 
             void bindInput() {
@@ -67,6 +79,10 @@ namespace cobalt {
             CobaltConfiguration configuration;
             core::Scene scene;
             core::RenderGraph renderGraph;
+            
+            core::Renderer renderer;
+            core::RenderTarget* defaultTarget;
+            core::OrthographicCamera outputCamera;
         };
     }
 }
