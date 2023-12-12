@@ -3,7 +3,7 @@
 //
 
 #include "core/gl/ibo.h"
-#include "core/utils/log.h"
+
 
 namespace cobalt {
     namespace core {
@@ -14,14 +14,12 @@ namespace cobalt {
         IBO::~IBO() {
             if (buffer != 0) {
                 glDeleteBuffers(1, &buffer);
-                CB_WARN("IBO deleted");
             }
         }
 
         IBO::IBO(IBO&& other) noexcept : usage(other.usage), indexCount(other.indexCount) {
             this->buffer = other.buffer;
             other.buffer = 0;
-            CB_WARN("IBO moved");
         }
 
         IBO& IBO::operator=(IBO&& other) noexcept {
@@ -30,7 +28,6 @@ namespace cobalt {
                 this->indexCount = other.indexCount;
                 this->buffer = other.buffer;
                 other.buffer = 0;
-                CB_WARN("IBO moved");
             }
             return *this;
         }

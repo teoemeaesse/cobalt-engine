@@ -26,7 +26,7 @@ namespace cobalt {
                  const GLPrimitive& primitive = GLPrimitive::Triangles);
             /* Destroy the mesh.
              */
-            ~Mesh();
+            ~Mesh() = default;
             /* Copy constructor.
              * @param other: The other mesh.
              */

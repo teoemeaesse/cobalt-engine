@@ -3,7 +3,7 @@
 //
 
 #include "core/gfx/mesh.h"
-#include "core/utils/log.h"
+
 
 namespace cobalt {
     namespace core {
@@ -15,11 +15,6 @@ namespace cobalt {
           worldTranslate(0.0f),
           worldRotate(0.0f),
           worldScale(1.0f) {
-            CB_CORE_WARN("Mesh created");
-        }
-
-        Mesh::~Mesh() {
-            CB_CORE_WARN("Mesh destroyed");
         }
 
         Mesh::Mesh(Mesh&& other) noexcept 
@@ -30,7 +25,6 @@ namespace cobalt {
           worldTranslate(other.worldTranslate),
           worldRotate(other.worldRotate),
           worldScale(other.worldScale) {
-            CB_CORE_WARN("Mesh moved");
         }
 
         Mesh& Mesh::operator=(Mesh&& other) noexcept {

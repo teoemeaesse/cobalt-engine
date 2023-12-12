@@ -30,7 +30,7 @@ namespace cobalt {
             Material(Shader& shader, const Texture& colorMap, const Texture& normalMap, const Texture& specularMap);
             /* Destroys the material.
              */
-            ~Material();
+            ~Material() = default;
             /* Copy constructor.
              * @param other: The other material.
              * @return: The copied material.

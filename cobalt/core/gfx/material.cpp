@@ -3,7 +3,6 @@
 //
 
 #include "core/gfx/material.h"
-#include "core/utils/log.h"
 
 
 namespace cobalt {
@@ -17,11 +16,6 @@ namespace cobalt {
             colorMap(colorMap),
             normalMap(normalMap),
             specularMap(specularMap) {
-            CB_CORE_WARN("Material created");
-        }
-
-        Material::~Material() {
-            CB_CORE_WARN("Material destroyed");
         }
 
         Material::Material(const Material& other) :
@@ -29,7 +23,6 @@ namespace cobalt {
             colorMap(other.colorMap),
             normalMap(other.normalMap),
             specularMap(other.specularMap) {
-            CB_CORE_WARN("Material copied");
         }
 
         Material::Material(Material&& other) noexcept :
@@ -37,7 +30,6 @@ namespace cobalt {
             colorMap(other.colorMap),
             normalMap(other.normalMap),
             specularMap(other.specularMap) {
-            CB_CORE_WARN("Material moved");
         }
 
         const Material::Uniform Material::getUniform(const int colorSlot, const int normalSlot, const int specularSlot) const {
