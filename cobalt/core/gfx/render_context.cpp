@@ -78,6 +78,10 @@ namespace cobalt {
             glfwSetWindowSizeCallback(instance->context, callback);
         }
 
+        void RenderContext::setDebugCallback(GLDEBUGPROC callback) {
+            glDebugMessageCallback(callback, nullptr);
+        }
+
         void RenderContext::setErrorCallback(GLFWerrorfun callback) {
             glfwSetErrorCallback(callback);
         }

@@ -3,7 +3,7 @@
 //
 
 #include "core/gfx/camera.h"
-#include "camera.h"
+#include "core/utils/log.h"
 
 
 namespace cobalt {
@@ -27,9 +27,10 @@ namespace cobalt {
             };
         }
 
-        void Camera::rotateHorizontal(const float amount)
-        {
+        void Camera::rotateHorizontal(const float amount) {
+            CB_CORE_INFO("Rotating camera horizontally by {0}", amount);
             direction.x += amount;
+            CB_CORE_INFO("New direction: {0}, {1}", direction.x, direction.y);
         }
 
         void Camera::rotateVertical(const float amount) {

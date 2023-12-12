@@ -55,6 +55,20 @@ namespace cobalt {
                 core::Window& w = static_cast<Application*>(core::RenderContext::getUserPointer())->getWindow();
                 w.onResize(width, height);
             });
+            core::RenderContext::setDebugCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+                switch (severity) {
+                    case GL_DEBUG_SEVERITY_HIGH:
+                    case GL_DEBUG_SEVERITY_MEDIUM:
+                        CB_CORE_ERROR(message);
+                        break;
+                    case GL_DEBUG_SEVERITY_LOW:
+                        CB_CORE_WARN(message);
+                        break;
+                    case GL_DEBUG_SEVERITY_NOTIFICATION:
+                        CB_CORE_INFO(message);
+                        break;
+                }
+            });
             CB_INFO("Starting up game loop");
             
             uint64_t delta = 1000000 / targetFramerate,

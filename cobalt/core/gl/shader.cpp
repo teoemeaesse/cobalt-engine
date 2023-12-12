@@ -4,6 +4,7 @@
 
 #include "core/gl/render_shader.h"
 #include "core/gl/compute_shader.h"
+#include "core/utils/log.h"
 
 
 namespace cobalt {
@@ -27,12 +28,13 @@ namespace cobalt {
         }
         
         const GLuint Shader::getUniformLocation(const std::string& name) {
+            GLint linkStatus;
             try {
                 return uniformLocations.at(name);
             } catch (std::out_of_range& e) {
                 GLuint location = glGetUniformLocation(program, name.c_str());
                 if (location == GL_INVALID_INDEX) {
-                //    throw GLException("Uniform " + name + " not found in shader");
+                    throw GLException("Uniform " + name + " not found in shader");
                 }
                 uniformLocations.insert(std::make_pair(name, location));
                 return location;

@@ -21,7 +21,7 @@ namespace cobalt {
              * @return: The mesh.
              */
             Mesh(const VAO& vao,
-                 const IBO& ibo,
+                 IBO&& ibo,
                  const Material& material,
                  const GLPrimitive& primitive = GLPrimitive::Triangles);
             /* Destroy the mesh.

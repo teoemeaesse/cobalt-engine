@@ -23,6 +23,26 @@ namespace cobalt {
             /* Destroys the IBO.
              */
             ~IBO();
+            /* Copy constructor.
+             * @param other: The IBO to copy.
+             * @return: IBO.
+             */
+            IBO(const IBO&);
+            /* Move constructor.
+             * @param ibo: The IBO to move.
+             * @return: IBO.
+             */
+            IBO(IBO&&) noexcept;
+            /* Copy assignment operator.
+             * @param other: The IBO to copy.
+             * @return: IBO.
+             */
+            IBO& operator=(const IBO&);
+            /* Move assignment operator.
+             * @param other: The IBO to move.
+             * @return: IBO.
+             */
+            IBO& operator=(IBO&&) noexcept;
 
             /* Binds the IBO to the current context.
              */
@@ -43,8 +63,8 @@ namespace cobalt {
 
             private:
             GLHandle buffer;        // The opengl buffer handle.
-            const GLUsage usage;    // The usage of the buffer.
-            const uint indexCount;  // The number of indices.
+            GLUsage usage;          // The usage of the buffer.
+            uint indexCount;        // The number of indices.
         };
     }
 }

@@ -3,18 +3,19 @@
 //
 
 #include "core/gfx/mesh.h"
-
+#include "core/utils/log.h"
 
 namespace cobalt {
     namespace core {
-        Mesh::Mesh(const VAO& vao, const IBO& ibo, const Material& material, const GLPrimitive& primitive)
+        Mesh::Mesh(const VAO& vao, IBO&& ibo, const Material& material, const GLPrimitive& primitive)
         : vao(vao),
-          ibo(ibo),
+          ibo(std::move(ibo)),
           material(material),
           primitive(primitive),
           worldTranslate(0.0f),
           worldRotate(0.0f),
           worldScale(1.0f) {
+            CB_CORE_WARN("Mesh created");
         }
 
         void Mesh::translate(const glm::vec3& translation) {
@@ -73,13 +74,13 @@ namespace cobalt {
             };
 
             VBO vbo(GLUsage::StaticDraw);
-            vbo.load(vertices, sizeof(vertices));
+            vbo.bind();
+            vbo.load(vertices, sizeof(float) * 20);
 
             VAOLayout layout;
             layout.push(GLType::Float, 3, false);   // Position.
             layout.push(GLType::Float, 2, false);   // Texture coordinates.
-
-            return Mesh(VAO(vbo, layout), IBO::fromQuads(GLUsage::StaticDraw, 1), material);
+            return Mesh(VAO(vbo, layout), std::move(IBO::fromQuads(GLUsage::StaticDraw, 1)), material);
         }
     }
 }
