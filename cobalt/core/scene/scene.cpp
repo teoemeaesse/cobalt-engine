@@ -10,12 +10,12 @@ namespace cobalt {
         Scene::Scene() : meshes(1) {
         }
 
-        const uint Scene::addMesh(std::unique_ptr<Mesh> mesh) {
+        const uint Scene::addMesh(Mesh&& mesh) {
             meshes.push(std::move(mesh));
             return meshes.getSize() - 1;
         }
 
-        const Vector<std::unique_ptr<Mesh>>& Scene::getMeshes() const {
+        Vector<Mesh>& Scene::getMeshes() {
             return meshes;
         }
     }

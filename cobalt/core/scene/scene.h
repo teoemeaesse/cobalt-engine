@@ -24,17 +24,17 @@ namespace cobalt {
              * @param mesh: The mesh to add.
              * @return: The index of the mesh in the scene.
              */
-            const uint addMesh(std::unique_ptr<Mesh> mesh);
+            const uint addMesh(Mesh&& mesh);
 
             /* Gets the meshes in the scene.
              * @return: The meshes in the scene.
              */
-            const Vector<std::unique_ptr<Mesh>>& getMeshes() const;
+            Vector<Mesh>& getMeshes();
 
             private:
-            Vector<std::unique_ptr<Mesh>> meshes;   // All the meshes in the scene.
-                                                    // This is a massive oversimplification.
-                                                    // TODO: Add a proper scene graph.
+            Vector<Mesh> meshes;    // All the meshes in the scene.
+                                    // This is a massive oversimplification.
+                                    // TODO: Add a proper scene graph.
         };
     }
 }

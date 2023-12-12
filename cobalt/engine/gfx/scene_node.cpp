@@ -10,7 +10,7 @@ namespace cobalt {
         void SceneNode::render() {
             auto& meshes = scene.getMeshes();
             for (uint i = 0; i < meshes.getSize(); i++) {
-                core::RenderNode::render(*scene.getMeshes()[i]);
+                core::RenderNode::render(meshes[i]);
             }
         }
     }

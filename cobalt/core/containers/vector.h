@@ -44,6 +44,9 @@ namespace cobalt {
             /* Destroys the vector.
              */
             ~Vector() {
+                for (uint64 i = 0; i < size; i++) {
+                    ((T*)((char*) data + indices[i] * sizeof(T)))->~T();
+                }
                 heap.drop(data);
                 heap.drop(indices);
             }
