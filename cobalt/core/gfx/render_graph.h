@@ -26,14 +26,14 @@ namespace cobalt {
              * @param node: The node to add.
              * @return: The index of the node in the graph.
              */
-            const uint addNode(std::unique_ptr<RenderNode> node);
+            const uint addNode(RenderNode&& node);
             
             /* Executes the render graph.
              */
             void execute();
             
             private:
-            Vector<std::unique_ptr<RenderNode>> nodes;   // All the nodes in the graph, in topological order.
+            Vector<RenderNode> nodes;   // All the nodes in the graph, in topological order.
         };
     }
 }

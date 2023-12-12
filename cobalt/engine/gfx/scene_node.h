@@ -20,7 +20,7 @@ namespace cobalt {
              * @return: The scene node.
              */
             template <typename... Targets>
-            SceneNode(core::Scene& scene, Targets*... targets) : RenderNode(renderer, targets...),
+            SceneNode(core::Scene& scene, Targets&&... targets) : RenderNode(renderer, targets...),
                 scene(scene)
             {}
             /* Destroy the scene node.

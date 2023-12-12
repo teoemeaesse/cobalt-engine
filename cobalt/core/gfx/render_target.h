@@ -22,6 +22,26 @@ namespace cobalt {
             /* Destroy the render target.
              */
             ~RenderTarget() = default;
+            /* Copy constructor.
+             * @param other: The other render target.
+             * @return: The render target.
+             */
+            RenderTarget(const RenderTarget&) = delete;
+            /* Move constructor.
+             * @param other: The other render target.
+             * @return: The render target.
+             */
+            RenderTarget(RenderTarget&&);
+            /* Copy assignment.
+             * @param other: The other render target.
+             * @return: The render target.
+             */
+            RenderTarget& operator=(const RenderTarget&) = delete;
+            /* Move assignment.
+             * @param other: The other render target.
+             * @return: The render target.
+             */
+            RenderTarget& operator=(RenderTarget&&) = delete;
 
             /* Bind the render target.
              */

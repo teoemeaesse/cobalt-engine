@@ -21,3 +21,4 @@
 
 #include "engine/entry_point.h"
 #include "engine/internal/configuration.h"
+#include "engine/gfx/default_graph.h"

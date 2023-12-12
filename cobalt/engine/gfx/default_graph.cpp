@@ -9,14 +9,15 @@
 
 namespace cobalt {
     namespace engine {
-        DefaultGraph::DefaultGraph(core::Scene& scene, core::FBO& defaultFBO) : core::RenderGraph(),
-            outputCamera(glm::vec3(0.0, 0.0, 1.0),
-                         glm::vec2(0.0, 0.0),
-                         0.0f,
-                         0.0f, defaultFBO.getWidth(),
-                         0.0f, defaultFBO.getHeight(),
-                         0.0f, 1000.0f) {
+        DefaultGraph::DefaultGraph(core::Scene& scene, const core::FBO& defaultFBO) : core::RenderGraph(),
+            outputCamera(glm::vec3(0.0, 0.0, 10.0),
+                         glm::vec2(-1.57079633f, 0.0f),
+                         0.1f,
+                         -(float) defaultFBO.getWidth() / 2, (float) defaultFBO.getWidth() / 2,
+                         -(float) defaultFBO.getHeight() / 2, (float) defaultFBO.getHeight() / 2,
+                         1.0f, 1000.0f) {
             core::RenderTarget renderTarget(defaultFBO, outputCamera, "output");
+            addNode(std::move(SceneNode(scene, std::move(renderTarget))));
         }
     }
 }

@@ -4,7 +4,6 @@
 
 #include "editor/persistency/cobalt_configuration.h"
 #include "editor/input/bindings.h"
-#include "core/gfx/render_node.h"
 
 
 namespace cobalt {
@@ -13,12 +12,7 @@ namespace cobalt {
             public:
             Editor() : engine::Application(1),
                        configuration(CobaltConfiguration()),
-                       outputCamera(glm::vec3(0.0, 0.0, 10.0),
-                         glm::vec2(-1.57079633f, 0.0f),
-                         0.1f,
-                         -(float) getWindow().getWidth() / 2, (float) getWindow().getWidth() / 2,
-                         -(float) getWindow().getHeight() / 2, (float) getWindow().getHeight() / 2,
-                         1.0f, 1000.0f)
+                       renderGraph(scene, getWindow().getDefaultFBO())
             {
                 configuration.configureWindow(getWindow());
                 getWindow().setClearColor(COLOR(0.2f, 0.2f, 0.2f, 1.0f));
@@ -36,8 +30,6 @@ namespace cobalt {
                 core::Material* material = new core::Material(CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("test_shader")), CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")), CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")), CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")));
                 core::Mesh mesh = core::Mesh::createRectangle(100, 100, material);
                 scene.addMesh(std::move(mesh));
-
-                defaultTarget = new core::RenderTarget(getWindow().getDefaultFBO(), outputCamera, "default");
             }
 
             ~Editor() override {
@@ -60,17 +52,15 @@ namespace cobalt {
 
                 getInputManager().pollEvents();
                 getInputManager().clearEvents();
-                outputCamera.resize(-(float) getWindow().getWidth() / 2, (float) getWindow().getWidth() / 2,
-                                    -(float) getWindow().getHeight() / 2, (float) getWindow().getHeight() / 2);
+                //outputCamera.resize(-(float) getWindow().getWidth() / 2, (float) getWindow().getWidth() / 2,
+                //                    -(float) getWindow().getHeight() / 2, (float) getWindow().getHeight() / 2);
 
 
-                renderer.setTarget(defaultTarget);
-                renderer.render(scene.getMeshes()[0]);
                 scene.getMeshes()[0].rotate(glm::vec3(0.0f, 0.01f, 0.0f));
 
                 getWindow().swapBuffers();
 
-                //renderGraph.execute();
+                renderGraph.execute();
             }
 
             void bindInput() {
@@ -83,11 +73,7 @@ namespace cobalt {
             private:
             CobaltConfiguration configuration;
             core::Scene scene;
-            core::RenderGraph renderGraph;
-            
-            core::Renderer renderer;
-            core::RenderTarget* defaultTarget;
-            core::OrthographicCamera outputCamera;
+            engine::DefaultGraph renderGraph;
         };
     }
 }

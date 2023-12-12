@@ -23,13 +23,12 @@ namespace cobalt {
              * @return: The render node.
              */
             template<typename... Targets>
-            RenderNode(Renderer& renderer, Targets*... targets)
+            RenderNode(Renderer& renderer, Targets&&... targets)
                 : renderer(renderer),
                   sources(1),
                   targets(sizeof...(targets))
             {
-                uint i = 0;
-                ((this->targets[i++] = targets), ...);
+                ((this->targets.push(std::move(targets))), ...);
             }
             /* Destroy the render node.
              */
@@ -40,20 +39,21 @@ namespace cobalt {
              * Each render node should override this method
              * and call the protected render method.
              */
-            virtual void render() = 0;
+            virtual void render();
 
             /* Add a source to the render node. It will be bound
              * to the next available texture unit.
              * @param source: The source to add.
              */
-            void addSource(RenderTarget* source);
+            void addSource(RenderTarget&& source);
 
             private:
-            Renderer& renderer;             // The renderer to use.
-            Vector<RenderTarget*> sources;  // The list of sources.
-            Vector<RenderTarget*> targets;  // The list of targets.
+            Vector<RenderTarget> sources;   // The list of sources.
+            Vector<RenderTarget> targets;   // The list of targets.
             
             protected:
+            Renderer& renderer;             // The renderer to use.
+            
             /* Render to the targets, binding the sources
              * to the adequate texture units.
              * Each render node should decide how to call

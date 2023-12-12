@@ -20,7 +20,7 @@ namespace cobalt {
              * @param filter: The material to use for the filter quad.
              * @return: The filter node.
              */
-            FilterNode(core::Renderer& renderer, core::RenderTarget* defaultTarget, core::Material* filter);
+            FilterNode(core::Renderer& renderer, core::RenderTarget&& defaultTarget, core::Material* filter);
             /* Destroy the filter node.
              */
             ~FilterNode() = default;

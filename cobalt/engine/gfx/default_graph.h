@@ -16,7 +16,7 @@ namespace cobalt {
              * @param defaultFBO: The default FBO to render the final image to.
              * @return: A default render graph.
              */
-            DefaultGraph(core::Scene& scene, core::FBO& defaultFBO);
+            DefaultGraph(core::Scene& scene, const core::FBO& defaultFBO);
             /* Destroys the default render graph.
              */
             ~DefaultGraph() = default;
