@@ -23,6 +23,42 @@ namespace cobalt {
                 .setWidth(1280)
                 .setHeight(720)
                 .setVsync(true)
+                .setCallbackSetter([]() {
+                    core::RenderContext::setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
+                        core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
+                        inputManager.getKeyboard().onKeyPress(key, action);
+                    });
+                    core::RenderContext::setCursorPosCallback([](GLFWwindow* window, double xpos, double ypos) {
+                        core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
+                        inputManager.getMouse().onMove((float) xpos, (float) ypos);
+                    });
+                    core::RenderContext::setMouseButtonCallback([](GLFWwindow* window, int button, int action, int mods) {
+                        core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
+                        inputManager.getMouse().onButtonPress(button, action);
+                    });
+                    core::RenderContext::setScrollCallback([](GLFWwindow* window, double xoffset, double yoffset) {
+                        core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
+                        inputManager.getMouse().onScroll((float) xoffset, (float) yoffset);
+                    });
+                    core::RenderContext::setResizeCallback([](GLFWwindow* window, int width, int height) {
+                        core::Window& w = static_cast<Application*>(core::RenderContext::getUserPointer())->getWindow();
+                        w.onResize(width, height);
+                    });
+                    core::RenderContext::setDebugCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+                        switch (severity) {
+                            case GL_DEBUG_SEVERITY_HIGH:
+                            case GL_DEBUG_SEVERITY_MEDIUM:
+                                CB_CORE_ERROR(message);
+                                break;
+                            case GL_DEBUG_SEVERITY_LOW:
+                                CB_CORE_WARN(message);
+                                break;
+                            case GL_DEBUG_SEVERITY_NOTIFICATION:
+                                CB_CORE_INFO(message);
+                                break;
+                        }
+                    });
+                })
                 .build()
             ) {
             core::RenderContext::setUserPointer(this);
@@ -35,40 +71,6 @@ namespace cobalt {
 
         extern bool shutdownInterrupt;
         void Application::run() {
-            core::RenderContext::setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
-                core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
-                inputManager.getKeyboard().onKeyPress(key, action);
-            });
-            core::RenderContext::setCursorPosCallback([](GLFWwindow* window, double xpos, double ypos) {
-                core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
-                inputManager.getMouse().onMove((float) xpos, (float) ypos);
-            });
-            core::RenderContext::setMouseButtonCallback([](GLFWwindow* window, int button, int action, int mods) {
-                core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
-                inputManager.getMouse().onButtonPress(button, action);
-            });
-            core::RenderContext::setScrollCallback([](GLFWwindow* window, double xoffset, double yoffset) {
-                core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
-                inputManager.getMouse().onScroll((float) xoffset, (float) yoffset);
-            });
-            core::RenderContext::setResizeCallback([](GLFWwindow* window, int width, int height) {
-                core::Window& w = static_cast<Application*>(core::RenderContext::getUserPointer())->getWindow();
-                w.onResize(width, height);
-            });
-            core::RenderContext::setDebugCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
-                switch (severity) {
-                    case GL_DEBUG_SEVERITY_HIGH:
-                    case GL_DEBUG_SEVERITY_MEDIUM:
-                        CB_CORE_ERROR(message);
-                        break;
-                    case GL_DEBUG_SEVERITY_LOW:
-                        CB_CORE_WARN(message);
-                        break;
-                    case GL_DEBUG_SEVERITY_NOTIFICATION:
-                        CB_CORE_INFO(message);
-                        break;
-                }
-            });
             CB_INFO("Starting up game loop");
             
             uint64_t delta = 1000000 / targetFramerate,

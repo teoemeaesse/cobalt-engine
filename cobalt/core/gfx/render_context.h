@@ -38,6 +38,11 @@ namespace cobalt {
              * title to an empty string. Make sure to set these again after calling this.
              */
             static void recreate();
+            /* Recreates the render context, given a GLFW context.
+             * Use when sharing resources between threads, or when the underlying OpenGL context is still valid.
+             * @param oldContext: The old GLFW context.
+             */
+            static void recreateFromContext(GLFWContext oldContext);
 
             /* Sets the key callback.
              * @param callback: The key callback.

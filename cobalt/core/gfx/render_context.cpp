@@ -46,16 +46,39 @@ namespace cobalt {
         }
 
         void RenderContext::recreate() {
-            void* pointer = instance->getUserPointer();
-            if (instance) {
+            void* pointer = nullptr;
+            if (instance && instance->context) {
+                pointer = instance->getUserPointer();
                 glfwDestroyWindow(instance->context);
+                instance->context = nullptr;
             }
             instance->context = glfwCreateWindow(1, 1, "", nullptr, nullptr);
             if (!instance->context) {
                 throw GFXException("Failed to recreate render context");
             }
             glfwMakeContextCurrent(instance->context);
-            setUserPointer(pointer);
+            if (pointer) {
+                setUserPointer(pointer);
+            }
+        }
+        
+        void RenderContext::recreateFromContext(GLFWContext oldContext) {
+            void* pointer = nullptr;
+            if (instance && instance->context) {
+                pointer = instance->getUserPointer();
+                GLFWwindow* newContext = glfwCreateWindow(1, 1, "", nullptr, oldContext);
+                if (!newContext) {
+                    throw GFXException("Failed to recreate render context from GLFW context");
+                }
+                glfwMakeContextCurrent(newContext);
+                glfwDestroyWindow(oldContext);
+                instance->context = newContext;
+                if (pointer) {
+                    setUserPointer(pointer);
+                }
+            } else {
+                throw GFXException("No existing render context to recreate from");
+            }
         }
 
         void RenderContext::setKeyCallback(GLFWkeyfun callback) {

@@ -23,6 +23,8 @@ namespace cobalt {
             friend class WindowBuilder;
 
             public:
+            typedef void (*CallbackSetter)();
+
             /* Destroys the window.
              */
             ~Window();
@@ -102,6 +104,7 @@ namespace cobalt {
              * @param resizable: Whether or not the window should be resizable.
              * @param decorated: Whether or not the window should be decorated.
              * @param lockAspectRatio: Whether or not the aspect ratio of the window should be locked.
+             * @param callbackSetter: The function to set the callbacks of the window.
              * @return: A new window.
              */
             Window(
@@ -112,7 +115,8 @@ namespace cobalt {
                 const WindowMode mode,
                 const bool resizable,
                 const bool decorated,
-                const bool lockAspectRatio
+                const bool lockAspectRatio,
+                const CallbackSetter callbackSetter
             );
 
             uint width, height;         // The width and height of the window.
@@ -124,6 +128,9 @@ namespace cobalt {
             bool lockAspectRatio;       // Whether or not the aspect ratio of the window is locked.
             const float aspectRatio;    // The aspect ratio of the window.
             WindowMode mode;            // The mode of the window.
+
+            const CallbackSetter callbackSetter;    // The function to set the callbacks of the window.
+                                                    // It is important to have this for when the window is recreated.
         
             /* Initializes the window.
              * Called on construction and after changing window hints.
@@ -183,6 +190,11 @@ namespace cobalt {
              * @return: The window builder.
              */
             WindowBuilder& setLockAspectRatio(const bool lockAspectRatio);
+            /* Sets the callbacks setter (sorry) of the window.
+             * @param callbackSetter: The function to set the callbacks of the window.
+             * @return: The window builder.
+             */
+            WindowBuilder& setCallbackSetter(Window::CallbackSetter callbackSetter);
 
             /* Builds the window.
              * @return: The window.
@@ -197,6 +209,7 @@ namespace cobalt {
             bool resizable;
             bool decorated;
             bool lockAspectRatio;
+            Window::CallbackSetter callbackSetter;
         };
     }
 }

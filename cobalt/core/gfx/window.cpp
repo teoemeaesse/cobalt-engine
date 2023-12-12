@@ -24,7 +24,8 @@ namespace cobalt {
             const WindowMode mode,
             const bool resizable,
             const bool decorated,
-            const bool lockAspectRatio
+            const bool lockAspectRatio,
+            const CallbackSetter callbackSetter
         ) :
             width(width),
             height(height),
@@ -35,7 +36,8 @@ namespace cobalt {
             decorated(decorated),
             lockAspectRatio(lockAspectRatio),
             aspectRatio((float) width / (float) height),
-            defaultFBO(GLFramebufferAttachment::ColorDepth) {
+            defaultFBO(GLFramebufferAttachment::ColorDepth),
+            callbackSetter(callbackSetter) {
             init();
         }
 
@@ -66,7 +68,7 @@ namespace cobalt {
                 default:
                     throw GFXException("Invalid window mode");
             }
-            RenderContext::recreate();
+            RenderContext::recreateFromContext(RenderContext::getGLFWContext());
             glfwSwapInterval(vsync);
             glfwSetWindowTitle(RenderContext::getGLFWContext(), title.c_str());
             if (lockAspectRatio) {
@@ -77,6 +79,9 @@ namespace cobalt {
             }
             glfwSetWindowSize(RenderContext::getGLFWContext(), this->width, this->height);
             defaultFBO.resize(this->width, this->height);
+            if (callbackSetter != nullptr) {
+                callbackSetter();
+            }
             CB_CORE_INFO("Created window");
         }
 
@@ -163,7 +168,8 @@ namespace cobalt {
             mode(WindowMode::Windowed),
             resizable(true),
             decorated(true),
-            lockAspectRatio(false) {}
+            lockAspectRatio(false),
+            callbackSetter(nullptr) {}
 
         WindowBuilder& WindowBuilder::setWidth(const uint width) {
             this->width = width;
@@ -205,8 +211,13 @@ namespace cobalt {
             return *this;
         }
 
+        WindowBuilder& WindowBuilder::setCallbackSetter(Window::CallbackSetter callbackSetter) {
+            this->callbackSetter = callbackSetter;
+            return *this;
+        }
+
         Window WindowBuilder::build() const {
-            return Window(width, height, title, vsync, mode, resizable, decorated, lockAspectRatio);
+            return Window(width, height, title, vsync, mode, resizable, decorated, lockAspectRatio, callbackSetter);
         }
     }
 }

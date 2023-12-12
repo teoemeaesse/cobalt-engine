@@ -23,7 +23,7 @@ namespace cobalt {
             setFilter(DEFAULT_TEXTURE_FILTER);
             setWrap(DEFAULT_TEXTURE_WRAP);
             glBindTexture(GL_TEXTURE_2D, 0);
-            CB_CORE_INFO("Created {0}x{1} px texture with encoding: {2}, format: {3}", width, height, getGLTextureEncodingName(encoding), getGLTextureFormatName(format));
+            CB_CORE_INFO("Created {0}x{1} px texture (GL: {2}) with encoding: {3}, format: {4}", width, height, texture, getGLTextureEncodingName(encoding), getGLTextureFormatName(format));
             CB_CORE_INFO("Using default filter: {0}, wrap: {1}", getGLTextureFilterName(DEFAULT_TEXTURE_FILTER), getGLTextureWrapName(DEFAULT_TEXTURE_WRAP));
         }
 
@@ -42,13 +42,12 @@ namespace cobalt {
             setFilter(DEFAULT_TEXTURE_FILTER);
             setWrap(DEFAULT_TEXTURE_WRAP); 
             glBindTexture(GL_TEXTURE_2D, 0);
-            CB_CORE_INFO("Loaded {0}x{1} px texture from {2} with encoding: {3}, format: {4}", width, height, path.getFileName(), getGLTextureEncodingName(encoding), getGLTextureFormatName(format));
+            CB_CORE_INFO("Loaded {0}x{1} px texture (GL: {2}) from {3} with encoding: {4}, format: {4}", width, height, texture, path.getFileName(), getGLTextureEncodingName(encoding), getGLTextureFormatName(format));
             CB_CORE_INFO("Using default filter: {0}, wrap: {1}", getGLTextureFilterName(DEFAULT_TEXTURE_FILTER), getGLTextureWrapName(DEFAULT_TEXTURE_WRAP));
         }
 
         Texture::~Texture() {
             if (texture != 0) {
-                CB_CORE_WARN("Destroyed texture (GL handle: {0})", texture);
                 glDeleteTextures(1, &texture);
                 if (!source.empty()) {
                     stbi_image_free(data);
@@ -65,7 +64,6 @@ namespace cobalt {
             source = std::move(other.source);
             data = other.data;
             other.texture = 0;
-            CB_CORE_WARN("Moved texture (GL handle: {0})", texture);
         }
 
         Texture& Texture::operator=(Texture&& other) noexcept {
@@ -77,7 +75,6 @@ namespace cobalt {
             source = std::move(other.source);
             data = other.data;
             other.texture = 0;
-            CB_CORE_WARN("Moved texture (GL handle: {0})", texture);
             return *this;
         }
 
