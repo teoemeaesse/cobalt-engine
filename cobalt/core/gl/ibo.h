@@ -27,7 +27,7 @@ namespace cobalt {
              * @param other: The IBO to copy.
              * @return: IBO.
              */
-            IBO(const IBO&);
+            IBO(const IBO&) = delete;
             /* Move constructor.
              * @param ibo: The IBO to move.
              * @return: IBO.
@@ -37,7 +37,7 @@ namespace cobalt {
              * @param other: The IBO to copy.
              * @return: IBO.
              */
-            IBO& operator=(const IBO&);
+            IBO& operator=(const IBO&) = delete;
             /* Move assignment operator.
              * @param other: The IBO to move.
              * @return: IBO.

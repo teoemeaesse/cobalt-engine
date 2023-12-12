@@ -21,7 +21,20 @@ namespace cobalt {
         }
 
         VAO::~VAO() {
-            glDeleteVertexArrays(1, &buffer);
+            if (buffer != 0) {
+                glDeleteVertexArrays(1, &buffer);
+            }
+        }
+
+        VAO::VAO(VAO&& other) noexcept {
+            buffer = other.buffer;
+            other.buffer = 0;
+        }
+
+        VAO& VAO::operator=(VAO&& other) noexcept {
+            buffer = other.buffer;
+            other.buffer = 0;
+            return *this;
         }
 
         void VAO::bind() const {

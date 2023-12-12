@@ -20,7 +20,7 @@ namespace cobalt {
              * @param primitives: Primitive type.
              * @return: The mesh.
              */
-            Mesh(const VAO& vao,
+            Mesh(VAO&& vao,
                  IBO&& ibo,
                  const Material& material,
                  const GLPrimitive& primitive = GLPrimitive::Triangles);

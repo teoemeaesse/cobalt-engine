@@ -7,8 +7,8 @@
 
 namespace cobalt {
     namespace core {
-        Mesh::Mesh(const VAO& vao, IBO&& ibo, const Material& material, const GLPrimitive& primitive)
-        : vao(vao),
+        Mesh::Mesh(VAO&& vao, IBO&& ibo, const Material& material, const GLPrimitive& primitive)
+        : vao(std::move(vao)),
           ibo(std::move(ibo)),
           material(material),
           primitive(primitive),

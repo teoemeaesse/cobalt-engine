@@ -22,6 +22,26 @@ namespace cobalt {
             /* Destroys the VBO.
             */
             ~VBO();
+            /* Copy constructor.
+             * @param other: The VBO to copy.
+             * @return: VBO.
+             */
+            VBO(const VBO&);
+            /* Move constructor.
+             * @param vbo: The VBO to move.
+             * @return: VBO.
+             */
+            VBO(VBO&&) noexcept;
+            /* Copy assignment operator.
+             * @param other: The VBO to copy.
+             * @return: The copied VBO.
+             */
+            VBO& operator=(const VBO&);
+            /* Move assignment operator.
+             * @param other: The VBO to move.
+             * @return: The moved VBO.
+             */
+            VBO& operator=(VBO&&) noexcept;
 
             /* Binds the VBO to the current context.
             */
@@ -47,7 +67,7 @@ namespace cobalt {
 
             private:
             GLHandle buffer;        // The opengl buffer handle.
-            const GLUsage usage;    // The usage of the buffer.
+            GLUsage usage;          // The usage of the buffer.
         };
     }
 }

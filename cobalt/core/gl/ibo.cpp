@@ -18,37 +18,10 @@ namespace cobalt {
             }
         }
 
-        IBO::IBO(const IBO& other) : usage(other.usage), indexCount(other.indexCount) {
-            glGenBuffers(1, &buffer);
-            glBindBuffer(GL_COPY_READ_BUFFER, other.buffer);
-            glBindBuffer(GL_COPY_WRITE_BUFFER, buffer);
-            GLint size;
-            glGetBufferParameteriv(GL_COPY_READ_BUFFER, GL_BUFFER_SIZE, &size);
-            glBufferData(GL_COPY_WRITE_BUFFER, size, nullptr, (GLenum) usage);
-            glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, 0, 0, size);
-            CB_WARN("IBO copied");
-        }
-
         IBO::IBO(IBO&& other) noexcept : usage(other.usage), indexCount(other.indexCount) {
             this->buffer = other.buffer;
             other.buffer = 0;
             CB_WARN("IBO moved");
-        }
-
-        IBO& IBO::operator=(const IBO& other) {
-            if (this != &other) {
-                this->usage = other.usage;
-                this->indexCount = other.indexCount;
-                glGenBuffers(1, &buffer);
-                glBindBuffer(GL_COPY_READ_BUFFER, other.buffer);
-                glBindBuffer(GL_COPY_WRITE_BUFFER, buffer);
-                GLint size;
-                glGetBufferParameteriv(GL_COPY_READ_BUFFER, GL_BUFFER_SIZE, &size);
-                glBufferData(GL_COPY_WRITE_BUFFER, size, nullptr, (GLenum) usage);
-                glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, 0, 0, size);
-                CB_WARN("IBO copied");
-            }
-            return *this;
         }
 
         IBO& IBO::operator=(IBO&& other) noexcept {

@@ -64,6 +64,26 @@ namespace cobalt {
             /* Destroys the VAO.
              */
             ~VAO();
+            /* Copy constructor.
+             * @param other: The VAO to copy.
+             * @return: A VAO.
+             */
+            VAO(const VAO& other) = delete;
+            /* Move constructor.
+             * @param other: The VAO to move.
+             * @return: A VAO.
+             */
+            VAO(VAO&& other) noexcept;
+            /* Copy assignment operator.
+             * @param other: The VAO to copy.
+             * @return: The copied VAO.
+             */
+            VAO& operator=(const VAO& other) = delete;
+            /* Move assignment operator.
+             * @param other: The VAO to move.
+             * @return: The moved VAO.
+             */
+            VAO& operator=(VAO&& other) noexcept;
 
             /* Binds the VAO to the current opengl context.
              */

@@ -12,7 +12,23 @@ namespace cobalt {
         }
 
         VBO::~VBO() {
-            glDeleteBuffers(1, &buffer);
+            if (buffer != 0) {
+                glDeleteBuffers(1, &buffer);
+            }
+        }
+
+        VBO::VBO(VBO&& other) noexcept : usage(other.usage) {
+            this->buffer = other.buffer;
+            other.buffer = 0;
+        }
+
+        VBO& VBO::operator=(VBO&& other) noexcept {
+            if (this != &other) {
+                this->usage = other.usage;
+                this->buffer = other.buffer;
+                other.buffer = 0;
+            }
+            return *this;
         }
 
         void VBO::bind() const {
