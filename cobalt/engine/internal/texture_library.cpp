@@ -16,7 +16,7 @@ namespace cobalt {
 
         TextureLibrary::TextureLibrary() :
             textures(8) {
-            textures.push({"null", std::move(std::make_unique<core::Texture>(1, 1))});
+            textures.push({"null", std::move(core::Texture(1, 1))});
         }
         
         void TextureLibrary::loadTextures(const core::Path& texturesDirectory) {
@@ -36,7 +36,7 @@ namespace cobalt {
                 core::Path texturePath = texturesDirectory + textureJson["src"].get<std::string>();
                 CB_INFO("Loading texture: {}", textureName);
                 CB_INFO("From source: {}", texturePath.getFileName());
-                textures.push({textureName, std::move(std::make_unique<core::Texture>(texturePath))});
+                textures.push({textureName, std::move(core::Texture(texturePath))});
             }
         }
 
@@ -52,9 +52,9 @@ namespace cobalt {
         const core::Texture& TextureLibrary::getTexture(const TextureID id) {
             if (id == 0) {
                 CB_WARN("Texture ID 0 is reserved for null textures");
-                return *textures[0].texture;
+                return textures[0].texture;
             }
-            return *textures[id - 1].texture;
+            return textures[id - 1].texture;
         }
 
         void TextureLibrary::init() {

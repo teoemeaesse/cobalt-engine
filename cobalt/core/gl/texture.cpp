@@ -65,6 +65,7 @@ namespace cobalt {
             source = std::move(other.source);
             data = other.data;
             other.texture = 0;
+            CB_CORE_WARN("Moved texture (GL handle: {0})", texture);
         }
 
         Texture& Texture::operator=(Texture&& other) noexcept {
@@ -76,6 +77,7 @@ namespace cobalt {
             source = std::move(other.source);
             data = other.data;
             other.texture = 0;
+            CB_CORE_WARN("Moved texture (GL handle: {0})", texture);
             return *this;
         }
 

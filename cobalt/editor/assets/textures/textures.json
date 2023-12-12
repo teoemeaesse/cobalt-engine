@@ -2,5 +2,9 @@
     "test_texture" : {
         "type" : "png",
         "src" : "mountain.png"
+    },
+    "test_texture2" : {
+        "type" : "png",
+        "src" : "mountain.png"
     }
 }
