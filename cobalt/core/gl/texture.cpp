@@ -47,11 +47,36 @@ namespace cobalt {
         }
 
         Texture::~Texture() {
-            CB_CORE_WARN("Destroyed texture (GL handle: {0})", texture);
-            glDeleteTextures(1, &texture);
-            if (!source.empty()) {
-                stbi_image_free(data);
+            if (texture != 0) {
+                CB_CORE_WARN("Destroyed texture (GL handle: {0})", texture);
+                glDeleteTextures(1, &texture);
+                if (!source.empty()) {
+                    stbi_image_free(data);
+                }
             }
+        }
+
+        Texture::Texture(Texture&& other) noexcept {
+            texture = other.texture;
+            width = other.width;
+            height = other.height;
+            format = other.format;
+            encoding = other.encoding;
+            source = std::move(other.source);
+            data = other.data;
+            other.texture = 0;
+        }
+
+        Texture& Texture::operator=(Texture&& other) noexcept {
+            texture = other.texture;
+            width = other.width;
+            height = other.height;
+            format = other.format;
+            encoding = other.encoding;
+            source = std::move(other.source);
+            data = other.data;
+            other.texture = 0;
+            return *this;
         }
 
         void Texture::reserve(const uint width, const uint height) {

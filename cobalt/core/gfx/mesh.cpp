@@ -7,7 +7,7 @@
 
 namespace cobalt {
     namespace core {
-        Mesh::Mesh(VAO&& vao, IBO&& ibo, const Material& material, const GLPrimitive& primitive)
+        Mesh::Mesh(VAO&& vao, IBO&& ibo, Material* material, const GLPrimitive& primitive)
         : vao(std::move(vao)),
           ibo(std::move(ibo)),
           material(material),
@@ -16,6 +16,32 @@ namespace cobalt {
           worldRotate(0.0f),
           worldScale(1.0f) {
             CB_CORE_WARN("Mesh created");
+        }
+
+        Mesh::~Mesh() {
+            CB_CORE_WARN("Mesh destroyed");
+        }
+
+        Mesh::Mesh(Mesh&& other) noexcept 
+        : vao(std::move(other.vao)),
+          ibo(std::move(other.ibo)),
+          material(std::move(other.material)),
+          primitive(other.primitive),
+          worldTranslate(other.worldTranslate),
+          worldRotate(other.worldRotate),
+          worldScale(other.worldScale) {
+            CB_CORE_WARN("Mesh moved");
+        }
+
+        Mesh& Mesh::operator=(Mesh&& other) noexcept {
+            this->vao = std::move(other.vao);
+            this->ibo = std::move(other.ibo);
+            this->material = std::move(other.material);
+            this->primitive = other.primitive;
+            this->worldTranslate = other.worldTranslate;
+            this->worldRotate = other.worldRotate;
+            this->worldScale = other.worldScale;
+            return *this;
         }
 
         void Mesh::translate(const glm::vec3& translation) {
@@ -55,14 +81,14 @@ namespace cobalt {
         }
 
         Material& Mesh::getMaterial() {
-            return this->material;
+            return *this->material;
         }
 
         GLPrimitive Mesh::getPrimitive() const {
             return this->primitive;
         }
 
-        Mesh Mesh::createRectangle(const uint width, const uint height, const Material& material) {
+        Mesh Mesh::createRectangle(const uint width, const uint height, Material* material) {
             const float w = width / 2.0f;
             const float h = height / 2.0f;
 
@@ -80,7 +106,7 @@ namespace cobalt {
             VAOLayout layout;
             layout.push(GLType::Float, 3, false);   // Position.
             layout.push(GLType::Float, 2, false);   // Texture coordinates.
-            return Mesh(VAO(vbo, layout), std::move(IBO::fromQuads(GLUsage::StaticDraw, 1)), material);
+            return Mesh(std::move(VAO(vbo, layout)), std::move(IBO::fromQuads(GLUsage::StaticDraw, 1)), material);
         }
     }
 }

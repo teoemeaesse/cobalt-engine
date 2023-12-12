@@ -38,6 +38,26 @@ namespace cobalt {
             /* Destroys the texture and frees the memory.
              */
             ~Texture();
+            /* Copy constructor.
+             * @param other: The other texture.
+             * @return: The copied texture.
+             */
+            Texture(const Texture& other) = delete;
+            /* Move constructor.
+             * @param other: The other texture.
+             * @return: The moved texture.
+             */
+            Texture(Texture&& other) noexcept;
+            /* Copy assignment operator.
+             * @param other: The other texture.
+             * @return: The copied texture.
+             */
+            Texture& operator=(const Texture& other) = delete;
+            /* Move assignment operator.
+             * @param other: The other texture.
+             * @return: The moved texture.
+             */
+            Texture& operator=(Texture&& other) noexcept;
 
             /* Reserves the memory for the texture.
              * @param width: The width of the texture. 0 will use the current width.
@@ -79,9 +99,9 @@ namespace cobalt {
 
             private:
             GLHandle texture;                   // The OpenGL handle to the texture.
-            const std::string source;           // The source of the texture.
-            const GLTextureFormat format;       // The pixel format of the texture.
-            const GLTextureEncoding encoding;   // The internal format of the texture.
+            std::string source;                 // The source of the texture.
+            GLTextureFormat format;             // The pixel format of the texture.
+            GLTextureEncoding encoding;         // The internal format of the texture.
             uint width, height;                 // The width and height of the texture.
             uchar *data;                        // The raw data of the texture.
         };

@@ -30,7 +30,27 @@ namespace cobalt {
             Material(Shader& shader, const Texture& colorMap, const Texture& normalMap, const Texture& specularMap);
             /* Destroys the material.
              */
-            ~Material() = default;
+            ~Material();
+            /* Copy constructor.
+             * @param other: The other material.
+             * @return: The copied material.
+             */
+            Material(const Material& other);
+            /* Move constructor.
+             * @param other: The other material.
+             * @return: The moved material.
+             */
+            Material(Material&& other) noexcept;
+            /* Copy assignment operator.
+             * @param other: The other material.
+             * @return: The copied material.
+             */
+            Material& operator=(const Material& other) = delete;
+            /* Move assignment operator.
+             * @param other: The other material.
+             * @return: The moved material.
+             */
+            Material& operator=(Material&& other) noexcept = delete;
 
             /* Returns the uniform for this material.
              * @param colorSlot: The color slot.

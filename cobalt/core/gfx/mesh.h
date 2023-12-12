@@ -22,11 +22,29 @@ namespace cobalt {
              */
             Mesh(VAO&& vao,
                  IBO&& ibo,
-                 const Material& material,
+                 Material* material,
                  const GLPrimitive& primitive = GLPrimitive::Triangles);
             /* Destroy the mesh.
              */
-            ~Mesh() = default;
+            ~Mesh();
+            /* Copy constructor.
+             * @param other: The other mesh.
+             */
+            Mesh(const Mesh& other) = delete;
+            /* Move constructor.
+             * @param other: The other mesh.
+             */
+            Mesh(Mesh&& other) noexcept;
+            /* Copy assignment operator.
+             * @param other: The other mesh.
+             * @return: The mesh.
+             */
+            Mesh& operator=(const Mesh& other) = delete;
+            /* Move assignment operator.
+             * @param other: The other mesh.
+             * @return: The mesh.
+             */
+            Mesh& operator=(Mesh&& other) noexcept;
 
             /* Offset the mesh world position by a translation vector.
              * @param translation: Translation vector.
@@ -69,12 +87,12 @@ namespace cobalt {
              * @param material: The material.
              * @return: The rectangle mesh.
              */
-            static Mesh createRectangle(const uint width, const uint height, const Material& material);
+            static Mesh createRectangle(const uint width, const uint height, Material* material);
 
             private:
             VAO vao;                    // Vertex array object.
             IBO ibo;                    // Index buffer object.
-            Material material;          // Material.
+            Material* material;         // Material.
             GLPrimitive primitive;      // Primitive type.
             glm::vec3 worldTranslate;   // World position.
             glm::vec3 worldRotate;      // World rotation (radians).

@@ -35,7 +35,8 @@ namespace cobalt {
                 //std::unique_ptr<core::Mesh> testMesh = std::make_unique<core::Mesh>(core::Mesh::createRectangle(1000, 1000, core::Material(testShader, testTexture, testTexture, testTexture)));
                 //scene.addMesh(std::move(testMesh));
                 
-                std::unique_ptr<core::Mesh> mesh = std::make_unique<core::Mesh>(core::Mesh::createRectangle(1000, 1000, core::Material(testShader, testTexture, testTexture, testTexture)));
+                core::Material material(testShader, testTexture, testTexture, testTexture);
+                std::unique_ptr<core::Mesh> mesh = std::make_unique<core::Mesh>(core::Mesh::createRectangle(1000, 1000, &material));
 
                 defaultTarget = new core::RenderTarget(getWindow().getDefaultFBO(), outputCamera, "default");
             }
