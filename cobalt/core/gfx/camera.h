@@ -75,7 +75,7 @@ namespace cobalt {
             /* Creates a new perspective camera.
              * @param position: The position of the camera in world space.
              * @param direction: The direction the camera is facing (radians).
-             * @param fov: The field of view of the camera.
+             * @param fov: The field of view of the camera (radians).
              * @param angularSpeed: The angular speed of the camera.
              * @param near: The near clipping plane.
              * @param far: The far clipping plane.

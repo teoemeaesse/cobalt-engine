@@ -22,7 +22,7 @@ namespace cobalt {
             mesh.getIBO().bind();
             Shader& shader = mesh.getMaterial().getShader();
             shader.use();
-            //target->bind();
+            target->bind();
             try {
                 target->sendUniforms(shader);
                 shader.setUniformMat4("u_model", mesh.getModelMatrix());

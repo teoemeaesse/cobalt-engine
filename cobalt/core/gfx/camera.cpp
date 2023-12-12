@@ -3,7 +3,6 @@
 //
 
 #include "core/gfx/camera.h"
-#include "core/utils/log.h"
 
 
 namespace cobalt {
@@ -28,9 +27,7 @@ namespace cobalt {
         }
 
         void Camera::rotateHorizontal(const float amount) {
-            CB_CORE_INFO("Rotating camera horizontally by {0}", amount);
             direction.x += amount;
-            CB_CORE_INFO("New direction: {0}, {1}", direction.x, direction.y);
         }
 
         void Camera::rotateVertical(const float amount) {
@@ -50,7 +47,7 @@ namespace cobalt {
         }
 
         PerspectiveCamera::PerspectiveCamera(glm::vec3 position, glm::vec2 direction, const float fov, const float angularSpeed, const float near, const float far, const float aspectRatio)
-            : Camera(position, direction, angularSpeed, near, far), aspectRatio(aspectRatio)
+            : Camera(position, direction, angularSpeed, near, far), fov(fov), aspectRatio(aspectRatio)
         {}
 
         void PerspectiveCamera::zoom(const float amount) {
