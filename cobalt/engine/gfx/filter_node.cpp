@@ -11,8 +11,12 @@ namespace cobalt {
             filter(filter)
         {}
 
-        void FilterNode::render() { // TODO: Fix these width and height values.
-            core::Mesh filterMesh = core::Mesh::createRectangle(100, 100, filter);
+        void FilterNode::render() {
+            core::Mesh filterMesh = core::Mesh::createRectangle(
+                1000,
+                1000,
+                filter
+            );
             RenderNode::render(filterMesh);
         }
     }

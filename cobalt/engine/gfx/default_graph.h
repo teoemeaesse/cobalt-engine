@@ -16,14 +16,27 @@ namespace cobalt {
              * @param defaultFBO: The default FBO to render the final image to.
              * @return: A default render graph.
              */
-            DefaultGraph(core::Scene& scene, const core::FBO& defaultFBO);
+            DefaultGraph(core::Scene& scene, core::DefaultFBO& defaultFBO);
             /* Destroys the default render graph.
              */
             ~DefaultGraph() = default;
 
+            /* Initializes the render graph.
+             */
+            void init();
+
+            /* Resizes the render graph output viewport.
+             * @param width: The new width of the render graph.
+             * @param height: The new height of the render graph.
+             */
+            void resize(const float width, const float height);
+
             private:
             core::OrthographicCamera outputCamera;  // The camera used to render the final image.
             core::Renderer renderer;                // The renderer used to render the scene.
+            core::DefaultFBO& defaultFBO;           // The default FBO to render the final image to.
+            core::TargetFBO sceneFBO;               // The FBO to render the scene to.
+            core::Scene& scene;                     // The scene to render.
         };
     }
 }

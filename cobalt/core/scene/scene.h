@@ -6,6 +6,7 @@
 
 #include "core/containers/vector.h"
 #include "core/gfx/mesh.h"
+#include "core/gfx/camera.h"
 
 
 namespace cobalt {
@@ -31,10 +32,17 @@ namespace cobalt {
              */
             Vector<Mesh>& getMeshes();
 
+            /* Gets the camera used to render the scene.
+             * @return: The camera used to render the scene.
+             */
+            PerspectiveCamera& getCamera();
+
             private:
             Vector<Mesh> meshes;    // All the meshes in the scene.
                                     // This is a massive oversimplification.
                                     // TODO: Add a proper scene graph.
+            
+            PerspectiveCamera camera;   // The camera used to render the scene.
         };
     }
 }

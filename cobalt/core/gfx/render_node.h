@@ -68,11 +68,18 @@ namespace cobalt {
              */
             void addSource(RenderTarget&& source);
 
-            private:
+            /* Get the sources.
+             * @return: The sources.
+             */
+            Vector<RenderTarget>& getSources();
+            /* Get the targets.
+             * @return: The targets.
+             */
+            Vector<RenderTarget>& getTargets();
+
+            protected:
             Vector<RenderTarget> sources;   // The list of sources.
             Vector<RenderTarget> targets;   // The list of targets.
-            
-            protected:
             Renderer& renderer;             // The renderer to use.
             
             /* Render to the targets, binding the sources

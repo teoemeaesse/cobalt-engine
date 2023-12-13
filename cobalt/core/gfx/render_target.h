@@ -56,7 +56,10 @@ namespace cobalt {
              * @return: The texture.
              */
             const Texture& getTexture() const;
-
+            /* Get the FBO.
+             * @return: The FBO.
+             */
+            const FBO& getFBO() const;
             /* Get the name of the render target.
              * @return: The name.
              */

@@ -70,7 +70,7 @@ namespace cobalt {
             /* Gets the default framebuffer object of the window.
              * @return: The default framebuffer object of the window.
              */
-            const DefaultFBO& getDefaultFBO() const;
+            DefaultFBO& getDefaultFBO();
             /* Gets whether or not the window is using vsync.
              * @return: Whether or not the window is using vsync.
              */

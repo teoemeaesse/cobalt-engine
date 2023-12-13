@@ -1,7 +1,12 @@
 {
-    "test_shader" : {
+    "scene_shader" : {
         "type" : "render",
-        "vertex" : "test.vert",
-        "fragment" : "test.frag"
+        "vertex" : "scene.vert",
+        "fragment" : "scene.frag"
+    },
+    "filter_shader" : {
+        "type" : "render",
+        "vertex" : "filter.vert",
+        "fragment" : "filter.frag"
     }
 }

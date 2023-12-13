@@ -5,20 +5,43 @@
 #include "engine/gfx/default_graph.h"
 #include "engine/gfx/scene_node.h"
 #include "engine/gfx/filter_node.h"
+#include "engine/internal/shader_library.h"
+#include "engine/internal/texture_library.h"
 
 
 namespace cobalt {
     namespace engine {
-        DefaultGraph::DefaultGraph(core::Scene& scene, const core::FBO& defaultFBO) : core::RenderGraph(),
+        DefaultGraph::DefaultGraph(core::Scene& scene, core::DefaultFBO& defaultFBO) : core::RenderGraph(),
             outputCamera(glm::vec3(0.0, 0.0, 10.0),
                          glm::vec2(-1.57079633f, 0.0f),
                          0.1f,
                          -(float) defaultFBO.getWidth() / 2, (float) defaultFBO.getWidth() / 2,
                          -(float) defaultFBO.getHeight() / 2, (float) defaultFBO.getHeight() / 2,
                          1.0f, 1000.0f),
-            renderer(core::Renderer()) {
-            core::RenderTarget renderTarget(defaultFBO, outputCamera, "output");
-            addNode(std::move(std::make_unique<SceneNode>(std::move(SceneNode(scene, renderer, std::move(renderTarget))))));
+            renderer(core::Renderer()),
+            defaultFBO(defaultFBO),
+            sceneFBO(core::TargetFBO(defaultFBO.getWidth(), defaultFBO.getHeight())),
+            scene(scene) {
+        }
+
+        void DefaultGraph::init() {
+            core::Material* filter = new core::Material(
+                CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("filter_shader")),
+                CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")),
+                CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")),
+                CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture"))
+            );
+            Scope<SceneNode> sceneNode = std::make_unique<SceneNode>(SceneNode(scene, renderer, core::RenderTarget(sceneFBO, scene.getCamera(), "scene")));
+            Scope<FilterNode> filterNode = std::make_unique<FilterNode>(FilterNode(renderer, core::RenderTarget(defaultFBO, outputCamera, "output"), filter));
+            filterNode->addSource(core::RenderTarget(sceneFBO, scene.getCamera(), "scene"));
+
+            addNode(std::move(sceneNode));
+            addNode(std::move(filterNode));
+        }
+
+        void DefaultGraph::resize(const float width, const float height) {
+            outputCamera.resize(-width / 2, width / 2, -height / 2, height / 2);
+            sceneFBO.resize(width, height);
         }
     }
 }

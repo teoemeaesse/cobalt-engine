@@ -134,7 +134,7 @@ namespace cobalt {
             return height;
         }
 
-        const DefaultFBO& Window::getDefaultFBO() const {
+        DefaultFBO& Window::getDefaultFBO() {
             return defaultFBO;
         }
 

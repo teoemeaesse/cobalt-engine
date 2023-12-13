@@ -117,6 +117,17 @@ namespace cobalt {
              * @param index: The index of the element.
              * @return: The element at the given index.
              */
+            T* raw(uint64 index) {
+                if (index >= size || size == 0 || index < 0) {
+                    throw ContainerException("Index out of bounds");
+                }
+                return (T*)((char*) data + indices[index] * sizeof(T));
+            }
+
+            /* Returns the element at the given index.
+             * @param index: The index of the element.
+             * @return: The element at the given index.
+             */
             T& operator[](uint64 index) {
                 if (index >= size || size == 0 || index < 0) {
                     throw ContainerException("Index out of bounds");

@@ -4,6 +4,7 @@
 
 #include "core/gfx/render_target.h"
 #include "core/exceptions/gfx_exception.h"
+#include "core/utils/log.h"
 
 
 namespace cobalt {
@@ -42,6 +43,10 @@ namespace cobalt {
 
         const Texture& RenderTarget::getTexture() const {
             return dynamic_cast<const TargetFBO&>(fbo).getTexture();
+        }
+
+        const FBO& RenderTarget::getFBO() const {
+            return fbo;
         }
 
         const std::string& RenderTarget::getName() const {

@@ -22,14 +22,15 @@ namespace cobalt {
                 CB_TEXTURE_LIBRARY.loadTextures(core::Path("cobalt/editor/assets/textures", true));
                 CB_SHADER_LIBRARY.loadShaders(core::Path("cobalt/editor/assets/shaders", true));
 
-                engine::TextureID testTextureID = CB_TEXTURE_LIBRARY.getTextureID("test_texture");
-                const core::Texture& testTexture = CB_TEXTURE_LIBRARY.getTexture(testTextureID);
-                engine::ShaderID testShaderID = CB_SHADER_LIBRARY.getShaderID("test_shader");
+                const core::Texture& testTexture = CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture"));
+                engine::ShaderID testShaderID = CB_SHADER_LIBRARY.getShaderID("scene_shader");
                 core::Shader& testShader = CB_SHADER_LIBRARY.getShader(testShaderID);
                 
-                core::Material* material = new core::Material(CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("test_shader")), CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")), CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")), CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")));
-                core::Mesh mesh = core::Mesh::createRectangle(100, 100, material);
+                core::Material* material = new core::Material(testShader, testTexture, testTexture, testTexture);
+                core::Mesh mesh = core::Mesh::createRectangle(10, 10, material);
                 scene.addMesh(std::move(mesh));
+
+                renderGraph.init();
             }
 
             ~Editor() override {
@@ -52,11 +53,9 @@ namespace cobalt {
 
                 getInputManager().pollEvents();
                 getInputManager().clearEvents();
-                //outputCamera.resize(-(float) getWindow().getWidth() / 2, (float) getWindow().getWidth() / 2,
-                //                    -(float) getWindow().getHeight() / 2, (float) getWindow().getHeight() / 2);
-
 
                 scene.getMeshes()[0].rotate(glm::vec3(0.0f, 0.01f, 0.0f));
+                renderGraph.resize(getWindow().getWidth(), getWindow().getHeight());
                 renderGraph.execute();
 
                 getWindow().swapBuffers();

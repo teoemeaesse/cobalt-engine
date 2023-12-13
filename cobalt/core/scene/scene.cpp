@@ -7,8 +7,14 @@
 
 namespace cobalt {
     namespace core {
-        Scene::Scene() : meshes(1) {
-        }
+        Scene::Scene() :
+            meshes(8),
+            camera(glm::vec3(0.0, 0.0, 10.0),
+                   glm::vec2(-1.57079633f, 0.0f),
+                   -1.57079633f, 1.0f,
+                   1.0f, 1000.0f,
+                   16.0f / 9.0f)
+        {}
 
         const uint Scene::addMesh(Mesh&& mesh) {
             meshes.push(std::move(mesh));
@@ -17,6 +23,10 @@ namespace cobalt {
 
         Vector<Mesh>& Scene::getMeshes() {
             return meshes;
+        }
+
+        PerspectiveCamera& Scene::getCamera() {
+            return camera;
         }
     }
 }

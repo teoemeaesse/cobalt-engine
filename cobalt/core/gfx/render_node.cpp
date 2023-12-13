@@ -4,6 +4,7 @@
 
 #include "core/gfx/render_node.h"
 #include "core/utils/log.h"
+#include "engine/internal/texture_library.h"
 
 
 namespace cobalt {
@@ -24,20 +25,26 @@ namespace cobalt {
             if (targets.getSize() == 0) {
                 CB_CORE_WARN("Render node has no targets");
             }
-
             for (uint i = 0; i < sources.getSize(); i++) {
-                renderer.bindTexture("source_" + sources[i].getName(), sources[i].getTexture());
+                uint binding = renderer.bindTexture("source_" + sources[i].getName(), sources[i].getTexture());
             }
-
             for (uint i = 0; i < targets.getSize(); i++) {
                 renderer.render(mesh, targets[i]);
             }
-
             renderer.clearTextureUnits();
         }
 
         void RenderNode::addSource(RenderTarget&& source) {
             sources.push(std::move(source));
         }
+
+        Vector<RenderTarget>& RenderNode::getSources() {
+            return sources;
+        }
+
+        Vector<RenderTarget>& RenderNode::getTargets() {
+            return targets;
+        }
+
     }
 }

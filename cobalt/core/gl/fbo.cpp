@@ -78,7 +78,6 @@ namespace cobalt {
                 throw GLException("Failed to create FBO");
             }
             CB_CORE_INFO("Created a {0}x{1} px FBO", width, height);
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
 
         TargetFBO::~TargetFBO() {

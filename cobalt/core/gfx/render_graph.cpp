@@ -17,6 +17,11 @@ namespace cobalt {
 
         void RenderGraph::execute() {
             for (uint i = 0; i < nodes.getSize(); i++) {
+                for (uint j = 0; j < nodes[i]->getTargets().getSize(); j++) {
+                    nodes[i]->getTargets()[j].getFBO().clear();
+                }
+            }
+            for (uint i = 0; i < nodes.getSize(); i++) {
                 nodes[i]->render();
             }
         }
