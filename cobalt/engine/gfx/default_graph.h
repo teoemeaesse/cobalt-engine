@@ -23,6 +23,7 @@ namespace cobalt {
 
             private:
             core::OrthographicCamera outputCamera;  // The camera used to render the final image.
+            core::Renderer renderer;                // The renderer used to render the scene.
         };
     }
 }

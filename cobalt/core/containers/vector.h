@@ -44,12 +44,32 @@ namespace cobalt {
             /* Destroys the vector.
              */
             ~Vector() {
+                if (data == nullptr) {
+                    return;
+                }
                 for (uint64 i = 0; i < size; i++) {
                     ((T*)((char*) data + indices[i] * sizeof(T)))->~T();
                 }
                 heap.drop(data);
                 heap.drop(indices);
             }
+            /* Move constructor.
+             * @param other: The vector to move.
+             * @return: The created vector.
+             */
+            Vector(Vector<T>&& other)
+                : heap(other.heap),
+                  data(other.data),
+                  indices(other.indices),
+                  capacity(other.capacity),
+                  size(other.size),
+                  gaps(std::move(other.gaps))
+                {
+                    other.data = nullptr;
+                    other.indices = nullptr;
+                    other.capacity = 0;
+                    other.size = 0;
+                }
 
             /* Copies the contents of another vector into this vector.
              * @param other: The vector to copy.
@@ -75,6 +95,14 @@ namespace cobalt {
              */
             const T& operator[](uint64 index) const {
                 return *(T*)((char*) data + indices[index] * sizeof(T));
+            }
+
+            /* Returns the raw memory pointer of the element at the given index.
+             * @param index: The index of the element.
+             * @return: The memory pointer
+             */
+            T* raw(uint64 index) {
+                return (T*)((char*) data + indices[index] * sizeof(T));
             }
 
             /* Pushes an element to the end of the vector.

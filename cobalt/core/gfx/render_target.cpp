@@ -17,10 +17,10 @@ namespace cobalt {
             }
         }
 
-        RenderTarget::RenderTarget(RenderTarget&& other)
-            : fbo(std::move(other.fbo)),
-              camera(other.camera),
-              name(std::move(other.name)) {
+        RenderTarget::RenderTarget(RenderTarget&& other) : 
+            fbo(std::move(other.fbo)),
+            camera(std::move(other.camera)),
+            name(std::move(other.name)) {
         }
 
         void RenderTarget::bind() const {

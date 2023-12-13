@@ -23,13 +23,9 @@ namespace cobalt {
 
             /* Render call.
              * @param mesh: The mesh to render.
+             * @param target: The render target to render to.
              */
-            void render(Mesh& mesh) const;
-
-            /* Set the render target.
-             * @param target: The render target.
-             */
-            void setTarget(RenderTarget* target);
+            void render(Mesh& mesh, RenderTarget& target) const;
 
             /* Get the bound texture unit of a given named texture.
              * @param name: The name of the texture.
@@ -50,7 +46,6 @@ namespace cobalt {
             void clearTextureUnits();
 
             private:
-            RenderTarget* target;               // Render target.
             Vector<std::string> textureUnits;   // List of bound textures.
         };
     }

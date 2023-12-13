@@ -13,11 +13,12 @@ namespace cobalt {
             outputCamera(glm::vec3(0.0, 0.0, 10.0),
                          glm::vec2(-1.57079633f, 0.0f),
                          0.1f,
-                         -(float) defaultFBO.getWidth() / 2, (float) defaultFBO.getWidth() / 2,
-                         -(float) defaultFBO.getHeight() / 2, (float) defaultFBO.getHeight() / 2,
-                         1.0f, 1000.0f) {
+                         -(float) 1000 / 2, (float) 1000 / 2,
+                         -(float) 1000 / 2, (float) 1000 / 2,
+                         1.0f, 1000.0f),
+            renderer(core::Renderer()) {
             core::RenderTarget renderTarget(defaultFBO, outputCamera, "output");
-            addNode(std::move(SceneNode(scene, std::move(renderTarget))));
+            addNode(std::move(std::make_unique<SceneNode>(std::move(SceneNode(scene, renderer, std::move(renderTarget))))));
         }
     }
 }

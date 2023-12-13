@@ -8,6 +8,18 @@
 
 namespace cobalt {
     namespace core {
+        RenderNode::RenderNode(const RenderNode& other) : 
+            renderer(other.renderer),
+            sources(other.sources),
+            targets(other.targets) {
+        }
+
+        RenderNode::RenderNode(RenderNode&& other) noexcept : 
+            renderer(other.renderer),
+            sources(std::move(other.sources)),
+            targets(std::move(other.targets)) {
+        }
+
         void RenderNode::render(Mesh& mesh) {
             if (targets.getSize() == 0) {
                 CB_CORE_WARN("Render node has no targets");
@@ -18,15 +30,10 @@ namespace cobalt {
             }
 
             for (uint i = 0; i < targets.getSize(); i++) {
-                renderer.setTarget(&targets[i]);
-                renderer.render(mesh);
+                renderer.render(mesh, targets[i]);
             }
 
             renderer.clearTextureUnits();
-        }
-
-        void RenderNode::render() {
-            CB_CORE_WARN("Render node has no render method");
         }
 
         void RenderNode::addSource(RenderTarget&& source) {

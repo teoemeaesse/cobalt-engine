@@ -7,6 +7,7 @@
 #include "core/gfx/renderer.h"
 #include "core/gfx/render_target.h"
 #include "core/containers/vector.h"
+#include "core/utils/log.h"
 
 
 namespace cobalt {
@@ -33,13 +34,33 @@ namespace cobalt {
             /* Destroy the render node.
              */
             ~RenderNode() = default;
+            /* Copy constructor.
+             * @param other: The other render node.
+             * @return: The render node.
+             */
+            RenderNode(const RenderNode&);
+            /* Move constructor.
+             * @param other: The other render node.
+             * @return: The render node.
+             */
+            RenderNode(RenderNode&&) noexcept;
+            /* Copy assignment.
+             * @param other: The other render node.
+             * @return: The render node.
+             */
+            RenderNode& operator=(const RenderNode&) = delete;
+            /* Move assignment.
+             * @param other: The other render node.
+             * @return: The render node.
+             */
+            RenderNode& operator=(RenderNode&&) = delete;
 
             /* Render to the targets, binding the sources
              * to the adequate texture units.
              * Each render node should override this method
              * and call the protected render method.
              */
-            virtual void render();
+            virtual void render() = 0;
 
             /* Add a source to the render node. It will be bound
              * to the next available texture unit.

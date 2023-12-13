@@ -14,25 +14,108 @@ namespace cobalt {
         class Stack {
             public:
             /* Creates a stack enough to hold initial_capacity elements.
-            * @param initial_capacity: The initial capacity of the stack.
-            * @return: A stack with the initial capacity.
-            */
+             * @param initial_capacity: The initial capacity of the stack.
+             * @return: A stack with the initial capacity.
+             */
             Stack(const uint initial_capacity = 16) : heap(), element_count(0), block_count(1) {
                 blocks = (StackBlock*) heap.grab(sizeof(StackBlock));
                 blocks[0] = stackBlockCreate(initial_capacity);
             }
             /* Destroys the stack
-            */
+             */
             ~Stack() {
+                if (blocks == nullptr) {
+                    return;
+                }
                 for (uint i = 0; i < block_count; i++) {
                     stackBlockDestroy(blocks[i]);
                 }
                 heap.drop(blocks);
             }
+            /* Creates a new stack as a deep copy of another stack.
+             * This constructor copies each element and block of the other stack
+             * into a new stack, ensuring a complete copy of all data.
+             * @param other: The stack to be copied.
+             * @return: A new stack that is a deep copy of 'other'.
+             */
+            Stack(const Stack& other) :
+                heap(),
+                element_count(other.element_count),
+                block_count(other.block_count),
+                blocks(nullptr) {
+                blocks = (StackBlock*) heap.grab(sizeof(StackBlock) * block_count);
+                for (uint i = 0; i < block_count; ++i) {
+                    blocks[i].data = (T*) heap.grab(other.blocks[i].block_capacity * sizeof(T));
+                    blocks[i].block_size = other.blocks[i].block_size;
+                    blocks[i].block_capacity = other.blocks[i].block_capacity;
+                    std::copy(other.blocks[i].data, other.blocks[i].data + blocks[i].block_size, blocks[i].data);
+                }
+            }
+            /* Creates a new stack by moving the resources of another stack.
+             * This constructor takes ownership of the resources from 'other'
+             * and leaves it in an empty state.
+             * @param other: The stack whose resources are to be moved.
+             * @return: A new stack containing the resources of 'other'.
+             */
+            Stack(Stack&& other) noexcept
+                : heap(std::move(other.heap)), blocks(other.blocks), block_count(other.block_count), element_count(other.element_count) {
+                other.blocks = nullptr;
+                other.block_count = 0;
+                other.element_count = 0;
+            }
+            /* Assigns a new value to the stack by copying another stack.
+             * The current contents of the stack are cleared and replaced
+             * with a deep copy of the contents of 'other'.
+             * @param other: The stack to be copied.
+             * @return: A reference to this stack after copying.
+             */
+            Stack& operator=(const Stack& other) {
+                if (this != &other) {
+                    for (uint i = 0; i < block_count; i++) {
+                        stackBlockDestroy(blocks[i]);
+                    }
+                    heap.drop(blocks);
+                    
+                    element_count = other.element_count;
+                    block_count = other.block_count;
+                    blocks = (StackBlock*) heap.grab(sizeof(StackBlock) * block_count);
+                    for (uint i = 0; i < block_count; ++i) {
+                        blocks[i].data = (T*) heap.grab(other.blocks[i].block_capacity * sizeof(T));
+                        blocks[i].block_size = other.blocks[i].block_size;
+                        blocks[i].block_capacity = other.blocks[i].block_capacity;
+                        std::copy(other.blocks[i].data, other.blocks[i].data + blocks[i].block_size, blocks[i].data);
+                    }
+                }
+                return *this;
+            }
+            /* Assigns a new value to the stack by moving another stack.
+             * The current contents of the stack are cleared and replaced
+             * with the resources of 'other'. 'Other' is left in an empty state.
+             * @param other: The stack whose resources are to be moved.
+             * @return: A reference to this stack after moving.
+             */
+            Stack& operator=(Stack&& other) noexcept {
+                if (this != &other) {
+                    for (uint i = 0; i < block_count; i++) {
+                        stackBlockDestroy(blocks[i]);
+                    }
+                    heap.drop(blocks);
+
+                    heap = std::move(other.heap);
+                    blocks = other.blocks;
+                    block_count = other.block_count;
+                    element_count = other.element_count;
+
+                    other.blocks = nullptr;
+                    other.block_count = 0;
+                    other.element_count = 0;
+                }
+                return *this;
+            }
 
             /* Pushes an element to the stack. If the stack is full, it will be resized to fit.
-            * @param element: The element to push.
-            */
+             * @param element: The element to push.
+             */
             void push(const T& element) {
                 if (blocks[block_count - 1].block_size == blocks[block_count - 1].block_capacity) {
                     Stack<T>::resize();
@@ -42,8 +125,8 @@ namespace cobalt {
                 blocks[block_count - 1].block_size++;
             }
             /* Employs an element to the stack. If the stack is full, it will be resized to fit.
-            * @param args: The arguments for the element constructor.
-            */
+             * @param args: The arguments for the element constructor.
+             */
             template <typename... Args>
             void emplace(Args&&... args) {
                 if (blocks[block_count - 1].block_size == blocks[block_count - 1].block_capacity) {
@@ -54,8 +137,8 @@ namespace cobalt {
                 blocks[block_count - 1].block_size++;
             }
             /* Pops an element from the stack.
-            * @return: The element popped from the stack.
-            */
+             * @return: The element popped from the stack.
+             */
             T pop() {
                 if (element_count == 0) {
                     throw ContainerException("Stack is empty");
@@ -67,8 +150,8 @@ namespace cobalt {
                 return blocks[block_count - 1].data[--blocks[block_count - 1].block_size];
             }
             /* Peeks the top element of the stack.
-            * @return: The top element of the stack.
-            */
+             * @return: The top element of the stack.
+             */
             const T& peek() const {
                 if (element_count == 0) {
                     throw ContainerException("Stack is empty");
@@ -79,8 +162,8 @@ namespace cobalt {
                 return blocks[block_count - 1].data[blocks[block_count - 1].block_size - 1];
             }
             /* Gets the size of the stack.
-            * @return: The number of elements in the stack.
-            */
+             * @return: The number of elements in the stack.
+             */
             const uint getSize() const {
                 return element_count;
             }
@@ -98,9 +181,9 @@ namespace cobalt {
             uint element_count;         // Number of elements in the stack.
 
             /* Creates a stack block with the given capacity.
-            * @param capacity: The capacity of the block.
-            * @return: A stack block with the given capacity.
-            */
+             * @param capacity: The capacity of the block.
+             * @return: A stack block with the given capacity.
+             */
             StackBlock stackBlockCreate(const uint capacity) {
                 return {
                     .data = (T*) heap.grab(capacity * sizeof(T)),
@@ -109,13 +192,13 @@ namespace cobalt {
                 };
             }
             /* Destroys a stack block.
-            * @param block: The block to destroy.
-            */
+             * @param block: The block to destroy.
+             */
             void stackBlockDestroy(StackBlock& block) {
                 heap.drop(block.data);
             }
             /* Resizes the stack to double its size.
-            */
+             */
             void resize() {
                 blocks = (StackBlock*) heap.resize(blocks, sizeof(StackBlock) * (block_count + 1));
                 blocks[block_count] = stackBlockCreate(Stack<T>::getSize());
