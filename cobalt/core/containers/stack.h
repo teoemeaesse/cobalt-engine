@@ -124,6 +124,17 @@ namespace cobalt {
                 blocks[block_count - 1].data[blocks[block_count - 1].block_size] = T(element);
                 blocks[block_count - 1].block_size++;
             }
+            /* Pushes an element to the stack. If the stack is full, it will be resized to fit.
+             * @param element: The element to push.
+             */
+            void push(T&& element) {
+                if (blocks[block_count - 1].block_size == blocks[block_count - 1].block_capacity) {
+                    Stack<T>::resize();
+                }
+                element_count++;
+                blocks[block_count - 1].data[blocks[block_count - 1].block_size] = T(std::move(element));
+                blocks[block_count - 1].block_size++;
+            }
             /* Employs an element to the stack. If the stack is full, it will be resized to fit.
              * @param args: The arguments for the element constructor.
              */
