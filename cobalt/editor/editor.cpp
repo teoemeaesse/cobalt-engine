@@ -45,7 +45,7 @@ namespace cobalt {
                 CB_INFO("Fps: {0}", getFramerate());
             }
 
-            void variableTimeStep(float delta) override {
+            void variableTimeStep(const float delta) override {
                 if (getWindow().shouldClose()) {
                     stop();
                 }
@@ -55,11 +55,14 @@ namespace cobalt {
                 getInputManager().clearEvents();
 
                 scene.getMeshes()[0].rotate(glm::vec3(0.0f, 0.01f, 0.0f));
-                renderGraph.resize(getWindow().getWidth(), getWindow().getHeight());
                 renderGraph.execute();
 
                 getWindow().swapBuffers();
 
+            }
+
+            void onResize(const uint width, const uint height) override {
+                renderGraph.resize((float) width, (float) height);
             }
 
             void bindInput() {

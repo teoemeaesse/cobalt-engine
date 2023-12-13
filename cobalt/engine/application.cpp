@@ -41,8 +41,9 @@ namespace cobalt {
                         inputManager.getMouse().onScroll((float) xoffset, (float) yoffset);
                     });
                     core::RenderContext::setResizeCallback([](GLFWwindow* window, int width, int height) {
-                        core::Window& w = static_cast<Application*>(core::RenderContext::getUserPointer())->getWindow();
-                        w.onResize(width, height);
+                        Application* app = static_cast<Application*>(core::RenderContext::getUserPointer());
+                        app->getWindow().onResize(width, height);
+                        app->onResize(width, height);
                     });
                     core::RenderContext::setDebugCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
                         switch (severity) {
@@ -122,6 +123,10 @@ namespace cobalt {
 
         void Application::setFramerateTimeWindow(const uint timeWindow) {
             framerateTimeWindow = timeWindow;
+        }
+
+        void Application::onResize(const uint width, const uint height) {
+            CB_CORE_INFO("Application's window resized to {0}x{1} px", width, height);
         }
     }
 }

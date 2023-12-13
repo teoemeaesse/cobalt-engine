@@ -36,6 +36,12 @@ namespace cobalt {
              * @param delta: The time since the last frame.
              */
             virtual void variableTimeStep(const float delta) = 0;
+
+            /* Resize callback.
+             * @param width: The new width of the window.
+             * @param height: The new height of the window.
+             */
+            virtual void onResize(const uint width, const uint height);
             
             /* Run the application.
              * This function will not return until the application is stopped.
