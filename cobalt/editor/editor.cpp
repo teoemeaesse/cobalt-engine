@@ -28,7 +28,7 @@ namespace cobalt {
                 core::Shader& testShader = CB_SHADER_LIBRARY.getShader(testShaderID);
                 
                 core::Material* material = new core::Material(CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("test_shader")), CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")), CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")), CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")));
-                core::Mesh mesh = core::Mesh::createRectangle(1000, 1000, material);
+                core::Mesh mesh = core::Mesh::createRectangle(100, 100, material);
                 scene.addMesh(std::move(mesh));
             }
 
@@ -57,10 +57,10 @@ namespace cobalt {
 
 
                 scene.getMeshes()[0].rotate(glm::vec3(0.0f, 0.01f, 0.0f));
+                renderGraph.execute();
 
                 getWindow().swapBuffers();
 
-                renderGraph.execute();
             }
 
             void bindInput() {

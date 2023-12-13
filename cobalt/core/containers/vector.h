@@ -86,7 +86,6 @@ namespace cobalt {
                     capacity = other.capacity;
                     size = other.size;
                     gaps = other.gaps;
-
                     // Deep copy elements
                     for (uint64 i = 0; i < size; i++) {
                         new((T*)((char*) data + i * sizeof(T))) T(*(T*)((char*) other.data + i * sizeof(T)));
