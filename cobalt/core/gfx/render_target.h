@@ -26,7 +26,7 @@ namespace cobalt {
              * @param other: The other render target.
              * @return: The render target.
              */
-            RenderTarget(const RenderTarget&) = delete;
+            RenderTarget(const RenderTarget&);
             /* Move constructor.
              * @param other: The other render target.
              * @return: The render target.

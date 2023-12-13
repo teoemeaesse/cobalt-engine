@@ -13,11 +13,11 @@ namespace cobalt {
         template <typename T>
         class Stack {
             public:
-            /* Creates a stack enough to hold initial_capacity elements.
-             * @param initial_capacity: The initial capacity of the stack.
+            /* Creates a stack with an initial capacity.
+             * @param initial_capacity: The initial capacity of the stack. Defaults to 16.
              * @return: A stack with the initial capacity.
              */
-            Stack(const uint initial_capacity = 16) : heap(), element_count(0), block_count(1) {
+            Stack(const uint64 initial_capacity = 16) : heap(), element_count(0), block_count(1) {
                 blocks = (StackBlock*) heap.grab(sizeof(StackBlock));
                 blocks[0] = stackBlockCreate(initial_capacity);
             }
@@ -27,7 +27,7 @@ namespace cobalt {
                 if (blocks == nullptr) {
                     return;
                 }
-                for (uint i = 0; i < block_count; i++) {
+                for (uint64 i = 0; i < block_count; i++) {
                     stackBlockDestroy(blocks[i]);
                 }
                 heap.drop(blocks);
@@ -44,7 +44,7 @@ namespace cobalt {
                 block_count(other.block_count),
                 blocks(nullptr) {
                 blocks = (StackBlock*) heap.grab(sizeof(StackBlock) * block_count);
-                for (uint i = 0; i < block_count; ++i) {
+                for (uint64 i = 0; i < block_count; ++i) {
                     blocks[i].data = (T*) heap.grab(other.blocks[i].block_capacity * sizeof(T));
                     blocks[i].block_size = other.blocks[i].block_size;
                     blocks[i].block_capacity = other.blocks[i].block_capacity;
@@ -71,7 +71,7 @@ namespace cobalt {
              */
             Stack& operator=(const Stack& other) {
                 if (this != &other) {
-                    for (uint i = 0; i < block_count; i++) {
+                    for (uint64 i = 0; i < block_count; i++) {
                         stackBlockDestroy(blocks[i]);
                     }
                     heap.drop(blocks);
@@ -79,7 +79,7 @@ namespace cobalt {
                     element_count = other.element_count;
                     block_count = other.block_count;
                     blocks = (StackBlock*) heap.grab(sizeof(StackBlock) * block_count);
-                    for (uint i = 0; i < block_count; ++i) {
+                    for (uint64 i = 0; i < block_count; ++i) {
                         blocks[i].data = (T*) heap.grab(other.blocks[i].block_capacity * sizeof(T));
                         blocks[i].block_size = other.blocks[i].block_size;
                         blocks[i].block_capacity = other.blocks[i].block_capacity;
@@ -96,7 +96,7 @@ namespace cobalt {
              */
             Stack& operator=(Stack&& other) noexcept {
                 if (this != &other) {
-                    for (uint i = 0; i < block_count; i++) {
+                    for (uint64 i = 0; i < block_count; i++) {
                         stackBlockDestroy(blocks[i]);
                     }
                     heap.drop(blocks);
@@ -113,7 +113,8 @@ namespace cobalt {
                 return *this;
             }
 
-            /* Pushes an element to the stack. If the stack is full, it will be resized to fit.
+            /* Adds an element to the top of the stack by copying it.
+             * If the stack is full, it will be resized to fit.
              * @param element: The element to push.
              */
             void push(const T& element) {
@@ -124,7 +125,8 @@ namespace cobalt {
                 blocks[block_count - 1].data[blocks[block_count - 1].block_size] = T(element);
                 blocks[block_count - 1].block_size++;
             }
-            /* Pushes an element to the stack. If the stack is full, it will be resized to fit.
+            /* Adds an element to the top of the stack by moving it.
+             * If the stack is full, it will be resized to fit.
              * @param element: The element to push.
              */
             void push(T&& element) {
@@ -135,7 +137,8 @@ namespace cobalt {
                 blocks[block_count - 1].data[blocks[block_count - 1].block_size] = T(std::move(element));
                 blocks[block_count - 1].block_size++;
             }
-            /* Employs an element to the stack. If the stack is full, it will be resized to fit.
+            /* Constructs an element in-place at the top of the stack.
+             * If the stack is full, it will be resized to fit.
              * @param args: The arguments for the element constructor.
              */
             template <typename... Args>
@@ -147,7 +150,7 @@ namespace cobalt {
                 blocks[block_count - 1].data[blocks[block_count - 1].block_size] = T(std::forward<Args>(args)...);
                 blocks[block_count - 1].block_size++;
             }
-            /* Pops an element from the stack.
+            /* Removes and returns the top element of the stack.
              * @return: The element popped from the stack.
              */
             T pop() {
@@ -160,7 +163,7 @@ namespace cobalt {
                 }
                 return blocks[block_count - 1].data[--blocks[block_count - 1].block_size];
             }
-            /* Peeks the top element of the stack.
+            /* Provides a reference to the top element of the stack.
              * @return: The top element of the stack.
              */
             const T& peek() const {
@@ -172,43 +175,46 @@ namespace cobalt {
                 }
                 return blocks[block_count - 1].data[blocks[block_count - 1].block_size - 1];
             }
-            /* Gets the size of the stack.
+            /* Gets the number of elements in the stack.
              * @return: The number of elements in the stack.
              */
-            const uint getSize() const {
+            const uint64 getSize() const {
                 return element_count;
             }
         
             private:
             struct StackBlock {
                 T *data;                // Pointer to the data.
-                uint block_size;        // Number of elements in the block.
-                uint block_capacity;    // Number of elements the block can hold.
+                uint64 block_size;      // Number of elements in the block.
+                uint64 block_capacity;  // Number of elements the block can hold.
             };
 
             HeapAllocator heap;         // Heap allocator for the stack.
             StackBlock *blocks;         // Pointer to the blocks.
-            uint block_count;           // Number of blocks in the stack.
-            uint element_count;         // Number of elements in the stack.
+            uint64 block_count;         // Number of blocks in the stack.
+            uint64 element_count;       // Number of elements in the stack.
 
-            /* Creates a stack block with the given capacity.
+            /* Creates a stack block with a specified capacity.
              * @param capacity: The capacity of the block.
              * @return: A stack block with the given capacity.
              */
-            StackBlock stackBlockCreate(const uint capacity) {
+            StackBlock stackBlockCreate(const uint64 capacity) {
                 return {
                     .data = (T*) heap.grab(capacity * sizeof(T)),
                     .block_size = 0,
                     .block_capacity = capacity,
                 };
             }
-            /* Destroys a stack block.
+            /* Destroys a given stack block.
              * @param block: The block to destroy.
              */
             void stackBlockDestroy(StackBlock& block) {
+                for (uint64 i = 0; i < block.block_size; i++) {
+                    block.data[i].~T();
+                }
                 heap.drop(block.data);
             }
-            /* Resizes the stack to double its size.
+            /* Resizes the stack to accomodate more elements.
              */
             void resize() {
                 blocks = (StackBlock*) heap.resize(blocks, sizeof(StackBlock) * (block_count + 1));

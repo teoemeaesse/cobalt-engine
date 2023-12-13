@@ -18,29 +18,31 @@ namespace cobalt {
              * @param initialCapacity: The initial capacity of the vector.
              * @return: The created vector.
              */
-            Vector(uint64 initialCapacity)
-                : heap(HeapAllocator()),
-                  data(heap.grab(initialCapacity * sizeof(T))),
-                  indices((uint64*) heap.grab(initialCapacity * sizeof(uint64))),
-                  capacity(initialCapacity),
-                  size(0),
-                  gaps(Stack<uint64>(initialCapacity))
+            Vector(uint64 initialCapacity) :
+                heap(HeapAllocator()),
+                data(heap.grab(initialCapacity * sizeof(T))),
+                indices((uint64*) heap.grab(initialCapacity * sizeof(uint64))),
+                capacity(initialCapacity),
+                size(0),
+                gaps(Stack<uint64>(initialCapacity))
                 {}
-            /* Creates a vector, copied from another vector.
+            /* Creates a new vector as a deep copy of another vector.
+             * This constructor copies each element of the 'other' vector, preserving its state.
              * @param other: The vector to copy.
              * @return: The created vector.
              */
-            Vector(const Vector<T>& other)
-                : heap(HeapAllocator()),
-                  data(heap.grab(other.capacity * sizeof(T))),
-                  indices((uint64*) heap.grab(other.capacity * sizeof(uint64))),
-                  capacity(other.capacity),
-                  size(other.size),
-                  gaps(other.gaps)
-                {
-                    memcpy(data, other.data, other.size * sizeof(T));
-                    memcpy(indices, other.indices, other.size * sizeof(uint64));
+            Vector(const Vector<T>& other) :
+                heap(HeapAllocator()),
+                data(heap.grab(other.capacity * sizeof(T))),
+                indices((uint64*) heap.grab(other.capacity * sizeof(uint64))),
+                capacity(other.capacity),
+                size(other.size),
+                gaps(other.gaps) {
+                for (uint64 i = 0; i < size; i++) {
+                    new((T*)((char*) data + i * sizeof(T))) T(*(T*)((char*) other.data + i * sizeof(T)));
+                    indices[i] = other.indices[i];
                 }
+            }
             /* Destroys the vector.
              */
             ~Vector() {
@@ -53,31 +55,61 @@ namespace cobalt {
                 heap.drop(data);
                 heap.drop(indices);
             }
-            /* Move constructor.
+            /* Creates a new vector by moving the resources of another vector.
+             * This constructor takes ownership of the resources from 'other' and leaves it in an empty state.
              * @param other: The vector to move.
              * @return: The created vector.
              */
-            Vector(Vector<T>&& other)
-                : heap(other.heap),
-                  data(other.data),
-                  indices(other.indices),
-                  capacity(other.capacity),
-                  size(other.size),
-                  gaps(std::move(other.gaps))
-                {
-                    other.data = nullptr;
-                    other.indices = nullptr;
-                    other.capacity = 0;
-                    other.size = 0;
-                }
-
-            /* Copies the contents of another vector into this vector.
+            Vector(Vector<T>&& other) noexcept :
+                heap(std::move(other.heap)),
+                data(other.data),
+                indices(other.indices),
+                capacity(other.capacity),
+                size(other.size),
+                gaps(std::move(other.gaps)) {
+                other.data = nullptr;
+                other.indices = nullptr;
+                other.capacity = 0;
+                other.size = 0;
+            }
+            /* Assigns the contents of another vector to this vector.
+             * This operation performs a deep copy of the 'other' vector's elements.
              * @param other: The vector to copy.
              * @return: This vector.
              */
             Vector<T>& operator=(const Vector<T>& other) {
                 if (this != &other) {
-                    return Vector<T>(other);
+                    clear(); // Clear current contents
+                    // Allocate new resources
+                    data = heap.grab(other.capacity * sizeof(T));
+                    indices = (uint64*) heap.grab(other.capacity * sizeof(uint64));
+                    capacity = other.capacity;
+                    size = other.size;
+                    gaps = other.gaps;
+
+                    // Deep copy elements
+                    for (uint64 i = 0; i < size; i++) {
+                        new((T*)((char*) data + i * sizeof(T))) T(*(T*)((char*) other.data + i * sizeof(T)));
+                        indices[i] = other.indices[i];
+                    }
+                }
+                return *this;
+            }
+            Vector<T>& operator=(Vector<T>&& other) noexcept {
+                if (this != &other) {
+                    clear(); // Clear current contents
+                    // Transfer ownership
+                    heap = std::move(other.heap);
+                    data = other.data;
+                    indices = other.indices;
+                    capacity = other.capacity;
+                    size = other.size;
+                    gaps = std::move(other.gaps);
+                    // Leave 'other' in a valid, empty state
+                    other.data = nullptr;
+                    other.indices = nullptr;
+                    other.capacity = 0;
+                    other.size = 0;
                 }
                 return *this;
             }
@@ -87,6 +119,9 @@ namespace cobalt {
              * @return: The element at the given index.
              */
             T& operator[](uint64 index) {
+                if (index >= size || size == 0 || index < 0) {
+                    throw ContainerException("Index out of bounds");
+                }
                 return *(T*)((char*) data + indices[index] * sizeof(T));
             }
             /* Returns the element at the given index.
@@ -94,15 +129,10 @@ namespace cobalt {
              * @return: The element at the given index.
              */
             const T& operator[](uint64 index) const {
+                if (index >= size || size == 0 || index < 0) {
+                    throw ContainerException("Index out of bounds");
+                }
                 return *(T*)((char*) data + indices[index] * sizeof(T));
-            }
-
-            /* Returns the raw memory pointer of the element at the given index.
-             * @param index: The index of the element.
-             * @return: The memory pointer
-             */
-            T* raw(uint64 index) {
-                return (T*)((char*) data + indices[index] * sizeof(T));
             }
 
             /* Pushes an element to the end of the vector.
