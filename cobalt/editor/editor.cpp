@@ -54,7 +54,7 @@ namespace cobalt {
                 getInputManager().pollEvents();
                 getInputManager().clearEvents();
 
-                scene.getMeshes()[0].rotate(glm::vec3(0.0f, 0.01f, 0.0f));
+                scene.getMeshes()[0].rotate(glm::vec3(0.03f, 0.0005f, 0.0f));
                 renderGraph.execute();
 
                 getWindow().swapBuffers();

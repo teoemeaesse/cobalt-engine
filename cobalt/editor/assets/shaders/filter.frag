@@ -12,4 +12,5 @@ uniform sampler2D u_source_scene;
 
 void main() {
     color = texture(u_source_scene, v_tex_coords);
+    
 }

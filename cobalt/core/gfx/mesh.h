@@ -89,6 +89,14 @@ namespace cobalt {
              */
             static Mesh createRectangle(const uint width, const uint height, Material* material);
 
+            /* Create a circle-shaped mesh.
+             * @param radius: The radius.
+             * @param material: The material.
+             * @return: The circle mesh.
+             */
+
+            static Mesh createSphere(const uint radius, Material* material);
+
             private:
             VAO vao;                    // Vertex array object.
             IBO ibo;                    // Index buffer object.
