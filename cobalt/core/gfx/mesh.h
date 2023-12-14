@@ -50,8 +50,8 @@ namespace cobalt {
              * @param translation: Translation vector.
              */
             void translate(const glm::vec3& translation);
-            /* Rotate the mesh around the world axes by a rotation vector (radians).
-             * @param rotation: Rotation vector (radians).
+            /* Rotate the mesh around the world axes by a rotation vector (degrees).
+             * @param rotation: Rotation vector (degrees).
              */
             void rotate(const glm::vec3& rotation);
             /* Scale the mesh by a scale vector.
@@ -103,7 +103,7 @@ namespace cobalt {
             Material* material;         // Material.
             GLPrimitive primitive;      // Primitive type.
             glm::vec3 worldTranslate;   // World position.
-            glm::vec3 worldRotate;      // World rotation (radians).
+            glm::vec3 worldRotate;      // World rotation (degrees).
             glm::vec3 worldScale;       // World scale.
         };
     }

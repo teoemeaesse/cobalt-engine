@@ -11,7 +11,7 @@ namespace cobalt {
             meshes(8),
             camera(glm::vec3(0.0, 0.0, 10.0),
                    glm::vec2(90.0, 90.0),
-                   120.0f, 25.0f,
+                   90.0f, 25.0f,
                    1.0f, 1000.0f,
                    16.0f / 9.0f)
         {}

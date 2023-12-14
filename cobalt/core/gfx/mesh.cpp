@@ -52,12 +52,13 @@ namespace cobalt {
         }
 
         glm::mat4x4 Mesh::getModelMatrix() const {
-            const float cx = cos(worldRotate.x);
-            const float sx = sin(worldRotate.x);
-            const float cy = cos(worldRotate.y);
-            const float sy = sin(worldRotate.y);
-            const float cz = cos(worldRotate.z);
-            const float sz = sin(worldRotate.z);
+            const glm::vec3 rotation = glm::radians(this->worldRotate);
+            const float cx = cos(rotation.x);
+            const float sx = sin(rotation.x);
+            const float cy = cos(rotation.y);
+            const float sy = sin(rotation.y);
+            const float cz = cos(rotation.z);
+            const float sz = sin(rotation.z);
 
             return {
                 worldScale.x * cz * cy, worldScale.x * (cz * sy * sx - cx * sz), worldScale.x * (cx * cz * sy + sx * sz), 0.0f,
