@@ -22,7 +22,7 @@ namespace cobalt {
                 CB_TEXTURE_LIBRARY.loadTextures(core::Path("cobalt/editor/assets/textures", true));
                 CB_SHADER_LIBRARY.loadShaders(core::Path("cobalt/editor/assets/shaders", true));
 
-                const core::Texture& testTexture = CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture"));
+                const core::Texture& testTexture = CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo"));
                 engine::ShaderID testShaderID = CB_SHADER_LIBRARY.getShaderID("scene_shader");
                 core::Shader& testShader = CB_SHADER_LIBRARY.getShader(testShaderID);
                 

@@ -1,10 +1,26 @@
 {
-    "test_texture" : {
+    "metal-albedo" : {
         "type" : "png",
-        "src" : "mountain.png"
+        "src" : "metal-albedo.png"
     },
-    "test_texture2" : {
+    "metal-normal" : {
         "type" : "png",
-        "src" : "mountain.png"
+        "src" : "metal-normal.png"
+    },
+    "metal-mrao" : {
+        "type" : "png",
+        "src" : "metal-mrao.png"
+    },
+    "wood-albedo" : {
+        "type" : "png",
+        "src" : "wood-albedo.png"
+    },
+    "wood-normal" : {
+        "type" : "png",
+        "src" : "wood-normal.png"
+    },
+    "wood-mrao" : {
+        "type" : "png",
+        "src" : "wood-mrao.png"
     }
 }

@@ -7,12 +7,12 @@ uniform mat4 u_view;
 uniform mat4 u_projection;
 uniform mat4 u_model;
 
-out vec3 v_position;
+out vec3 v_world_position;
 out vec2 v_tex_coords;
 
 
 void main() {
-    v_position = position;
+    v_world_position = u_model * position;
     v_tex_coords = tex_coords;
     gl_Position = u_projection * u_view * u_model * vec4(position, 1.0);
 }
