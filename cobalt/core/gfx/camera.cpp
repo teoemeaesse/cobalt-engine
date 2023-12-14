@@ -3,6 +3,7 @@
 //
 
 #include "core/gfx/camera.h"
+#include "core/utils/log.h"
 
 
 namespace cobalt {
@@ -34,7 +35,8 @@ namespace cobalt {
 
         void Camera::rotateVertical(const float amount) {
             float newPhi = direction.y + amount * angularSpeed;
-            if (0.0f < newPhi < 180.0f) {
+            if (0.0f < newPhi && newPhi < 180.0f) {
+                CB_CORE_ERROR("phi: {0}", newPhi);
                 direction.y = newPhi;
             }
         }
