@@ -19,7 +19,7 @@ void main() {
     vec3 color_top = vec3(0.5, 0.7, 1.0);
     vec3 color_bottom = mix(color_top, vec3(1.0, 1.0, 1.0), 0.8);
     vec3 gradient_color = mix(color_bottom, color_top, sqrt(uv.y));
-    color = vec4(gradiet_color, 1.0);
+    color = vec4(gradient_color, 1.0);
 
     // Mix the scene and the background
     color = mix(color, texcolor, texcolor.a);

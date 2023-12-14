@@ -5,6 +5,18 @@ out vec4 color;
 uniform int u_targetWidth;
 uniform int u_targetHeight;
 
+uniform sampler2D u_albedo;
+uniform sampler2D u_normal;
+uniform sampler2D u_mrao;
+
+uniform vec3 lightPosition;
+uniform vec3 lightColor;
+uniform vec3 camPos;
+
+in vec3 v_world_position;
+in vec2 v_tex_coords;
+
+const float PI = 3.14159265359;
 
 /* Trowbridge-Reitz GGX Normal Distribution Function.
  * https://learnopengl.com/#!PBR/Lighting
@@ -22,7 +34,6 @@ float normalDist(vec3 n, vec3 h, float a) {
     return nom / denom;
 }
 
-
 /* Smith's method using the Schlick-Beckmann.
  * approximation of the Geometric Shadowing Function.
  * https://learnopengl.com/#!PBR/Lighting
@@ -35,7 +46,7 @@ float geometrySmith(vec3 n, vec3 v, vec3 l, float k) {
     float ndv = max(dot(n, v), 0.0);
     float ndl = max(dot(n, l), 0.0);
     float ggx1 = ndv / (ndv * (1.0 - k) + k);
-    float ggx2 = ndl / (ndl * (1.0 - k) + k)
+    float ggx2 = ndl / (ndl * (1.0 - k) + k);
     return ggx1 * ggx2;
 }
 
@@ -49,5 +60,45 @@ vec3 fresnelSchlick(float cosTheta, vec3 f0) {
 }
 
 void main() {
-    color = vec4(1.0, 0.0, 0.5, 1.0);
+    vec3 albedo     = pow(texture(u_albedo, u_tex_coords).rgb, 2.2);
+    vec3 normal     = texture(u_normal, u_tex_coords).rgb;
+    vec3 mrao       = texture(u_mrao, u_tex_coords).rgb;
+    float metallic  = mrao.r;
+    float roughness = mrao.g;
+    float ao        = mrao.b;
+
+    vec3 n = normalize(normal);
+    vec3 v = normalize(camPos - v_world_position);
+
+    vec3 f0 = vec3(0.04);
+    f0 = mix(f0, albedo, metallic);
+
+    // reflectance equation
+    vec3 lo = vec3(0.0);
+    for(int i = 0; i < 1; i++) {
+        // calculate per-light radiance
+        vec3 l = normalize(lightPosition - v_world_position);
+        vec3 h = normalize(v + l);
+        float distance    = length(lightPosition - v_world_position);
+        float attenuation = 1.0 / (distance * distance);
+        vec3 radiance     = lightColor * attenuation;
+        
+        // cook-torrance brdf
+        float ndf = normalDist(n, h, roughness);
+        float g   = geometrySmith(n, v, l, roughness);
+        vec3 f    = fresnelSchlick(max(dot(h, v), 0.0), f0);
+        
+        vec3 ks = f;
+        vec3 kd = vec3(1.0) - ks;
+        kd *= 1.0 - metallic;
+        
+        vec3 specular = ndf * g * f / (4.0 * max(dot(n, v), 0.0) * max(dot(n, l), 0.0) + 0.0001);
+
+        // add to outgoing radiance lo
+        float ndl = max(dot(n, l), 0.0);
+        lo += (kd * albedo / PI + specular) * radiance * ndl;
+    }   
+  
+    vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 color = ambient + lo;
 }
