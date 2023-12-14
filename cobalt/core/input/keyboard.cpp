@@ -81,9 +81,9 @@ namespace cobalt {
             }
         }
 
-        void Keyboard::clearEvents() {
+        void Keyboard::clearEvents(const float delta) {
             while (!events.isEmpty()) {
-                events.dequeue()->execute();
+                events.dequeue()->execute(delta);
             }
         }
 

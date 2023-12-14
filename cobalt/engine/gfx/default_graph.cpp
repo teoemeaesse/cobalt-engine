@@ -13,8 +13,8 @@ namespace cobalt {
     namespace engine {
         DefaultGraph::DefaultGraph(core::Scene& scene, core::DefaultFBO& defaultFBO) : core::RenderGraph(),
             outputCamera(glm::vec3(0.0, 0.0, 10.0),
-                         glm::vec2(-1.57079633f, 0.0f),
-                         0.1f,
+                         glm::vec2(90.0, 90.0),
+                         0.0f,
                          -(float) defaultFBO.getWidth() / 2, (float) defaultFBO.getWidth() / 2,
                          -(float) defaultFBO.getHeight() / 2, (float) defaultFBO.getHeight() / 2,
                          1.0f, 1000.0f),

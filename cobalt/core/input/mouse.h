@@ -79,8 +79,9 @@ namespace cobalt {
              */
             void pollEvents() override;
             /* Clear all events from the keyboard.
+             * @param delta: The time since the last frame (in seconds).
              */
-            void clearEvents() override;
+            void clearEvents(const float delta) override;
 
             /* Get the state of a button.
              * @param button: The button to get the state of.

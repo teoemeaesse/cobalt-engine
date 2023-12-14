@@ -30,8 +30,9 @@ namespace cobalt {
              */
             void pollEvents();
             /* Clear all events from the peripherals.
+             * @param delta: The time since the last frame (in seconds).
              */
-            void clearEvents();
+            void clearEvents(const float delta);
 
             /* Get the keyboard.
              * @return: The keyboard.

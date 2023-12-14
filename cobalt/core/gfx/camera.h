@@ -30,11 +30,11 @@ namespace cobalt {
             virtual const glm::mat4x4 getProjectionMatrix() const = 0;
 
             /* Rotates the camera horizontally by the given amount.
-             * @param amount: The amount to rotate by (radians).
+             * @param amount: The amount to rotate by (degrees).
              */
             void rotateHorizontal(const float amount);
             /* Rotates the camera vertically by the given amount.
-             * @param amount: The amount to rotate by (radians).
+             * @param amount: The amount to rotate by (degrees).
              */
             void rotateVertical(const float amount);
             /* Pans the camera by the given amount.
@@ -52,7 +52,7 @@ namespace cobalt {
 
             protected:
             glm::vec3 position;     // The position of the camera in world space.
-            glm::vec2 direction;    // The direction the camera is facing (radians).
+            glm::vec2 direction;    // The direction the camera is facing (degrees).
             float angularSpeed;     // The angular speed of the camera.
             float near, far;        // The near and far clipping planes.
             float aspectRatio;      // The aspect ratio of the camera.
@@ -60,7 +60,7 @@ namespace cobalt {
             private:
             /* Creates a new camera.
              * @param position: The position of the camera in world space.
-             * @param direction: The direction the camera is facing (radians).
+             * @param direction: The direction the camera is facing (degrees).
              * @param angularSpeed: The angular speed of the camera.
              * @param near: The near clipping plane.
              * @param far: The far clipping plane.
@@ -74,8 +74,10 @@ namespace cobalt {
             public:
             /* Creates a new perspective camera.
              * @param position: The position of the camera in world space.
-             * @param direction: The direction the camera is facing (radians).
-             * @param fov: The field of view of the camera (radians).
+             * @param direction: The direction the camera is facing (degrees).
+             *                   x: 0 looking left (-x), 90 looking forward (-z), 180 looking right (+x)
+             *                   y: 0 looking down (-y), 90 looking forward (-z), 180 looking up (+y)
+             * @param fov: The field of view of the camera (degrees).
              * @param angularSpeed: The angular speed of the camera.
              * @param near: The near clipping plane.
              * @param far: The far clipping plane.
@@ -87,7 +89,7 @@ namespace cobalt {
             ~PerspectiveCamera() = default;
 
             /* Zooms the camera by the given amount.
-             * @param amount: The amount to zoom by (fov radians).
+             * @param amount: The amount to zoom by (fov degrees).
              */
             void zoom(const float amount);
 
@@ -112,7 +114,7 @@ namespace cobalt {
             public:
             /* Creates a new orthographic camera.
              * @param position: The position of the camera in world space.
-             * @param direction: The direction the camera is facing (radians).
+             * @param direction: The direction the camera is facing (degrees).
              * @param angularSpeed: The angular speed of the camera.
              * @param left: The left clipping plane.
              * @param right: The right clipping plane.

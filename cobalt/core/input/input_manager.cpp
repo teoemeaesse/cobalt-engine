@@ -14,9 +14,9 @@ namespace cobalt {
             mouse.pollEvents();
         }
 
-        void InputManager::clearEvents() {
-            keyboard.clearEvents();
-            mouse.clearEvents();
+        void InputManager::clearEvents(const float delta) {
+            keyboard.clearEvents(delta);
+            mouse.clearEvents(delta);
         }
 
         Keyboard& InputManager::getKeyboard() {

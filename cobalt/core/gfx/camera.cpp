@@ -12,7 +12,9 @@ namespace cobalt {
         {}
 
         const glm::mat4x4 Camera::getViewMatrix() const {
-            glm::vec3 center = position + glm::vec3(cos(direction.x) * cos(direction.y), sin(direction.y), sin(direction.x) * cos(direction.y));
+            float theta = glm::radians(180.0f + direction.x);
+            float phi = glm::radians(180.0f - direction.y);
+            glm::vec3 center = position + glm::vec3(cos(theta) * sin(phi), cos(phi), sin(theta) * sin(phi));
             glm::vec3 z = glm::normalize(position - center);
             glm::vec3 y = glm::vec3(0.0f, 1.0f, 0.0f);
             glm::vec3 x = glm::normalize(glm::cross(y, z));
@@ -27,23 +29,37 @@ namespace cobalt {
         }
 
         void Camera::rotateHorizontal(const float amount) {
-            direction.x += amount;
+            direction.x += amount * angularSpeed;
         }
 
         void Camera::rotateVertical(const float amount) {
-            direction.y += amount;
+            float newPhi = direction.y + amount * angularSpeed;
+            if (0.0f < newPhi < 180.0f) {
+                direction.y = newPhi;
+            }
         }
 
         void Camera::panDepth(const float amount) {
-            position += glm::vec3(cos(direction.x) * cos(direction.y), sin(direction.y), sin(direction.x) * cos(direction.y)) * amount;
+            float theta = glm::radians(180.0f + direction.x);
+            float phi = glm::radians(180.0f - direction.y);
+            glm::vec3 center = position + glm::vec3(cos(theta) * sin(phi), cos(phi), sin(theta) * sin(phi));
+            glm::vec3 forward = position - center;
+            position += forward * amount;
         }
 
         void Camera::panHorizontal(const float amount) {
-            position += glm::vec3(cos(direction.x), 0.0f, sin(direction.x)) * amount;
+            float theta = glm::radians(180.0f + direction.x);
+            float phi = glm::radians(180.0f - direction.y);
+            glm::vec3 center = position + glm::vec3(cos(theta) * sin(phi), cos(phi), sin(theta) * sin(phi));
+            glm::vec3 forward = position - center;
+            glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+            glm::vec3 left = glm::normalize(glm::cross(up, forward));
+            position += left * amount;
         }
 
         void Camera::panVertical(const float amount) {
-            position += glm::vec3(0.0f, 1.0f, 0.0f) * amount;
+            glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+            position += up * amount;
         }
 
         PerspectiveCamera::PerspectiveCamera(glm::vec3 position, glm::vec2 direction, const float fov, const float angularSpeed, const float near, const float far, const float aspectRatio)
@@ -59,7 +75,7 @@ namespace cobalt {
         }
 
         const glm::mat4x4 PerspectiveCamera::getProjectionMatrix() const {
-            float tan_half_fov = tan(fov / 2.0f);
+            float tan_half_fov = tan(glm::radians(fov) / 2.0f);
 
             return glm::mat4x4 {
                 1.0f / (aspectRatio * tan_half_fov),  0.0f,                0.0f,                               0.0f,
