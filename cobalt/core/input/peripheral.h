@@ -67,7 +67,7 @@ namespace cobalt {
             virtual void pollEvents() = 0;
             /* Clear all queued events from the peripheral.
              */
-            virtual void clearEvents(const float delta) = 0;
+            virtual void clearEvents() = 0;
 
             /* Bind a command to an input.
              * @param input: The input to bind the command to.

@@ -10,7 +10,7 @@ namespace cobalt {
     namespace editor {
         class Editor : public engine::Application {
             public:
-            Editor() : engine::Application(1),
+            Editor() : engine::Application(144),
                        configuration(CobaltConfiguration()),
                        renderGraph(scene, getWindow().getDefaultFBO())
             {
@@ -46,6 +46,8 @@ namespace cobalt {
             }
 
             void fixedTimeStep() override {
+                getInputManager().pollEvents();
+                getInputManager().clearEvents();
                 CB_INFO("Fps: {0}", getFramerate());
             }
 
@@ -55,10 +57,8 @@ namespace cobalt {
                 }
                 getWindow().clear();
 
-                getInputManager().pollEvents();
-                getInputManager().clearEvents(delta);
 
-                scene.getMeshes()[0].rotate(glm::vec3(0.03f, 0.0005f, 0.0f));
+                scene.getMeshes()[0].rotate(glm::vec3(0.3f, 0.05f, 0.2f));
                 renderGraph.execute();
 
                 getWindow().swapBuffers();
@@ -78,7 +78,7 @@ namespace cobalt {
                 getInputManager().getKeyboard().bind(core::KeyboardInputID::A, std::make_unique<PanLeft>(&scene.getCamera()));
                 getInputManager().getKeyboard().bind(core::KeyboardInputID::S, std::make_unique<PanOut>(&scene.getCamera()));
                 getInputManager().getKeyboard().bind(core::KeyboardInputID::D, std::make_unique<PanRight>(&scene.getCamera()));
-                getInputManager().getKeyboard().bind(core::KeyboardInputID::LSHIFT, std::make_unique<PanUp>(&scene.getCamera()));
+                getInputManager().getKeyboard().bind(core::KeyboardInputID::SPACE, std::make_unique<PanUp>(&scene.getCamera()));
                 getInputManager().getKeyboard().bind(core::KeyboardInputID::LCTRL, std::make_unique<PanDown>(&scene.getCamera()));
                 getInputManager().getKeyboard().bind(core::KeyboardInputID::UP, std::make_unique<PanUp>(&scene.getCamera()));
                 getInputManager().getKeyboard().bind(core::KeyboardInputID::LEFT, std::make_unique<PanLeft>(&scene.getCamera()));
@@ -87,6 +87,7 @@ namespace cobalt {
 
                 getInputManager().getMouse().bind(core::MouseInputID::RIGHT_X, std::make_unique<RotateX>(&scene.getCamera()));
                 getInputManager().getMouse().bind(core::MouseInputID::RIGHT_Y, std::make_unique<RotateY>(&scene.getCamera()));
+                getInputManager().getMouse().bind(core::MouseInputID::SCROLL_Y, std::make_unique<Zoom>(&scene.getCamera()));
             }
 
             private:

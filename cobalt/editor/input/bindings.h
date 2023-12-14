@@ -13,7 +13,7 @@ namespace cobalt {
             public:
             Quit(engine::Application* target) : core::ConcreteInputCommand<engine::Application>(target) {
             }
-            void execute(const float delta) const override {
+            void execute() const override {
                 getTarget()->stop();
             }
         };
@@ -22,7 +22,7 @@ namespace cobalt {
             public:
             Fullscreen(core::Window* target) : core::ConcreteInputCommand<core::Window>(target) {
             }
-            void execute(const float delta) const override {
+            void execute() const override {
                 if (!getInput().active) {
                     getTarget()->switchMode(core::WindowMode::Fullscreen);
                 }
@@ -33,7 +33,7 @@ namespace cobalt {
             public:
             Borderless(core::Window* target) : core::ConcreteInputCommand<core::Window>(target) {
             }
-            void execute(const float delta) const override {
+            void execute() const override {
                 if (!getInput().active) {
                     getTarget()->switchMode(core::WindowMode::Borderless);
                 }
@@ -44,7 +44,7 @@ namespace cobalt {
             public:
             Windowed(core::Window* target) : core::ConcreteInputCommand<core::Window>(target) {
             }
-            void execute(const float delta) const override {
+            void execute() const override {
                 if (!getInput().active) {
                     getTarget()->switchMode(core::WindowMode::Windowed);
                 }
@@ -55,8 +55,8 @@ namespace cobalt {
             public:
             PanLeft(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
             }
-            void execute(const float delta) const override {
-                getTarget()->panHorizontal(-25.0f * delta);
+            void execute() const override {
+                getTarget()->panHorizontal(-1.0f);
             }
         };
 
@@ -64,8 +64,8 @@ namespace cobalt {
             public:
             PanRight(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
             }
-            void execute(const float delta) const override {
-                getTarget()->panHorizontal(25.0f * delta);
+            void execute() const override {
+                getTarget()->panHorizontal(1.0f);
             }
         };
 
@@ -73,8 +73,8 @@ namespace cobalt {
             public:
             PanUp(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
             }
-            void execute(const float delta) const override {
-                getTarget()->panVertical(25.0f * delta);
+            void execute() const override {
+                getTarget()->panVertical(1.0f);
             }
         };
 
@@ -82,8 +82,8 @@ namespace cobalt {
             public:
             PanDown(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
             }
-            void execute(const float delta) const override {
-                getTarget()->panVertical(-25.0f * delta);
+            void execute() const override {
+                getTarget()->panVertical(-1.0f);
             }
         };
 
@@ -91,8 +91,8 @@ namespace cobalt {
             public:
             PanIn(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
             }
-            void execute(const float delta) const override {
-                getTarget()->panDepth(-25.0f * delta);
+            void execute() const override {
+                getTarget()->panDepth(-1.0f);
             }
         };
 
@@ -100,8 +100,8 @@ namespace cobalt {
             public:
             PanOut(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
             }
-            void execute(const float delta) const override {
-                getTarget()->panDepth(25.0f * delta);
+            void execute() const override {
+                getTarget()->panDepth(1.0f);
             }
         };
 
@@ -109,8 +109,8 @@ namespace cobalt {
             public:
             RotateY(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
             }
-            void execute(const float delta) const override {
-                getTarget()->rotateVertical(-getInput().value * delta);
+            void execute() const override {
+                getTarget()->rotateVertical(-getInput().value * 0.005f);
             }
         };
 
@@ -118,8 +118,17 @@ namespace cobalt {
             public:
             RotateX(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
             }
-            void execute(const float delta) const override {
-                getTarget()->rotateHorizontal(getInput().value * delta);
+            void execute() const override {
+                getTarget()->rotateHorizontal(getInput().value * 0.005f);
+            }
+        };
+
+        class Zoom : public core::ConcreteInputCommand<core::PerspectiveCamera> {
+            public:
+            Zoom(core::PerspectiveCamera* target) : core::ConcreteInputCommand<core::PerspectiveCamera>(target) {
+            }
+            void execute() const override {
+                getTarget()->zoom(-getInput().value * 5.0f);
             }
         };
     }

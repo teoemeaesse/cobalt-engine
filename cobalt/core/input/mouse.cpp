@@ -100,9 +100,9 @@ namespace cobalt {
             }
         }
 
-        void Mouse::clearEvents(const float delta) {
+        void Mouse::clearEvents() {
             while (!events.isEmpty()) {
-                events.dequeue()->execute(delta);
+                events.dequeue()->execute();
             }
         }
 

@@ -29,9 +29,8 @@ namespace cobalt {
             virtual ~InputCommand() = default;
 
             /* Execute the command.
-             * @param delta: The time since the last frame (in seconds).
              */
-            virtual void execute(const float delta) const = 0;
+            virtual void execute() const = 0;
             
             /* Set the input value of the bound input.
              * @param input: The input value of the bound input.
