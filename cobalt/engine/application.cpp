@@ -42,8 +42,8 @@ namespace cobalt {
                     });
                     core::RenderContext::setResizeCallback([](GLFWwindow* window, int width, int height) {
                         Application* app = static_cast<Application*>(core::RenderContext::getUserPointer());
-                        app->getWindow().onResize(width, height);
-                        app->onResize(width, height);
+                        app->getWindow().onResize((float) width, (float) height);
+                        app->onResize((float) width, (float) height);
                     });
                     core::RenderContext::setDebugCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
                         switch (severity) {
@@ -125,7 +125,7 @@ namespace cobalt {
             framerateTimeWindow = timeWindow;
         }
 
-        void Application::onResize(const uint width, const uint height) {
+        void Application::onResize(const float width, const float height) {
             CB_CORE_INFO("Application's window resized to {0}x{1} px", width, height);
         }
     }

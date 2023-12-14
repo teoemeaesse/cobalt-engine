@@ -61,12 +61,18 @@ namespace cobalt {
              * and call the protected render method.
              */
             virtual void render() = 0;
+            /* Called when the window is resized.
+             * @param width: The new width.
+             * @param height: The new height.
+             */
+            virtual void onResize(const float width, const float height) = 0;
 
             /* Add a source to the render node. It will be bound
              * to the next available texture unit.
              * @param source: The source to add.
              */
             void addSource(RenderTarget&& source);
+
 
             /* Get the sources.
              * @return: The sources.

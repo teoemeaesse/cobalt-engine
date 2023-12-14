@@ -27,12 +27,18 @@ namespace cobalt {
              * @return: The index of the node in the graph.
              */
             const uint addNode(Scope<RenderNode> node);
+
+            /* Called upon window resize.
+             * @param width: The new width of the render graph.
+             * @param height: The new height of the render graph.
+             */
+            virtual void onResize(const float width, const float height) = 0;
             
             /* Executes the render graph.
              */
             void execute();
             
-            private:
+            protected:
             Vector<Scope<RenderNode>> nodes;    // All the nodes in the graph, in topological order.
         };
     }

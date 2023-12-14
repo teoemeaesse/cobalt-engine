@@ -54,6 +54,10 @@ namespace cobalt {
             fov += amount;
         }
 
+        void PerspectiveCamera::resize(const float aspectRatio) {
+            this->aspectRatio = aspectRatio;
+        }
+
         const glm::mat4x4 PerspectiveCamera::getProjectionMatrix() const {
             float tan_half_fov = tan(fov / 2.0f);
 
@@ -69,6 +73,13 @@ namespace cobalt {
             : Camera(position, direction, angularSpeed, near, far), left(left), right(right), bottom(bottom), top(top)
         {}
 
+        void OrthographicCamera::resize(const float left, const float right, const float bottom, const float top) {
+            this->left = left;
+            this->right = right;
+            this->bottom = bottom;
+            this->top = top;
+        }
+
         const glm::mat4x4 OrthographicCamera::getProjectionMatrix() const {
             return glm::mat4x4 {
                 2.0f / (right - left),           0.0f,                            0.0f,                        0.0f,
@@ -76,13 +87,6 @@ namespace cobalt {
                 0.0f,                            0.0f,                            2.0f / (near - far),         0.0f,
                 (left + right) / (left - right), (bottom + top) / (bottom - top), (near + far) / (near - far), 1.0f
             };
-        }
-
-        void OrthographicCamera::resize(const float left, const float right, const float bottom, const float top) {
-            this->left = left;
-            this->right = right;
-            this->bottom = bottom;
-            this->top = top;
         }
     }
 }

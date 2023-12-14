@@ -120,10 +120,10 @@ namespace cobalt {
             defaultFBO.setClearColor(color);
         }
         
-        void Window::onResize(const uint width, const uint height) {
-            this->width = width;
-            this->height = height;
-            defaultFBO.resize(width, height);
+        void Window::onResize(const float width, const float height) {
+            this->width = (uint) width;
+            this->height = (uint) height;
+            defaultFBO.resize((uint) width, (uint) height);
         }
 
         const uint Window::getWidth() const {

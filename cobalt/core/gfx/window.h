@@ -57,7 +57,7 @@ namespace cobalt {
              * @param width: The new width of the window.
              * @param height: The new height of the window.
              */
-            void onResize(const uint width, const uint height);
+            void onResize(const float width, const float height);
 
             /* Gets the width of the window.
              * @return: The width of the window.

@@ -25,11 +25,11 @@ namespace cobalt {
              */
             void init();
 
-            /* Resizes the render graph output viewport.
+            /* Called upon window resize.
              * @param width: The new width of the render graph.
              * @param height: The new height of the render graph.
              */
-            void resize(const float width, const float height);
+            void onResize(const float width, const float height) override;
 
             private:
             core::OrthographicCamera outputCamera;  // The camera used to render the final image.

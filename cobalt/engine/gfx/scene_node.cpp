@@ -13,5 +13,9 @@ namespace cobalt {
                 core::RenderNode::render(meshes[i]);
             }
         }
+
+        void SceneNode::onResize(const float width, const float height) {
+            // Empty
+        }
     }
 }

@@ -58,11 +58,11 @@ namespace cobalt {
                 renderGraph.execute();
 
                 getWindow().swapBuffers();
-
             }
 
-            void onResize(const uint width, const uint height) override {
-                renderGraph.resize((float) width, (float) height);
+            void onResize(const float width, const float height) override {
+                renderGraph.onResize(width, height);
+                scene.getCamera().resize(width / height);
             }
 
             void bindInput() {

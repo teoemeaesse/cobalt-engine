@@ -91,6 +91,11 @@ namespace cobalt {
              */
             void zoom(const float amount);
 
+            /* Resizes the camera.
+             * @param aspectRatio: The new aspect ratio of the camera.
+             */
+            void resize(const float aspectRatio);
+
             /* Calculates the projection matrix of the camera.
              * @return The projection matrix of the camera.
              */
@@ -129,11 +134,6 @@ namespace cobalt {
              */
             ~OrthographicCamera() = default;
 
-            /* Calculates the projection matrix of the camera.
-             * @return The projection matrix of the camera.
-             */
-            const glm::mat4x4 getProjectionMatrix() const override;
-
             /* Resizes the camera.
              * @param left: The left clipping plane.
              * @param right: The right clipping plane.
@@ -141,6 +141,11 @@ namespace cobalt {
              * @param top: The top clipping plane.
              */
             void resize(const float left, const float right, const float bottom, const float top);
+            
+            /* Calculates the projection matrix of the camera.
+             * @return The projection matrix of the camera.
+             */
+            const glm::mat4x4 getProjectionMatrix() const override;
 
             private:
             float left, right;      // The left and right clipping planes.
