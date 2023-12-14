@@ -29,10 +29,13 @@ namespace cobalt {
                 core::Material* material = new core::Material(testShader, testTexture, testTexture, testTexture);
                 core::Mesh mesh = core::Mesh::createRectangle(10, 10, material);
                 core::Mesh ground = core::Mesh::createRectangle(100, 100, material);
+                core::Mesh sphere = core::Mesh::createSphere(5.0f, material);
                 ground.translate(glm::vec3(0.0f, -50.0f, 0.0f));
                 ground.rotate(glm::vec3(90.0f, 0.0f, 0.0f));
+                sphere.translate(glm::vec3(10.0f, 0.0f, 0.0f));
                 scene.addMesh(std::move(mesh));
                 scene.addMesh(std::move(ground));
+                scene.addMesh(std::move(sphere));
 
                 renderGraph.init();
             }
@@ -56,7 +59,6 @@ namespace cobalt {
                     stop();
                 }
                 getWindow().clear();
-
 
                 scene.getMeshes()[0].rotate(glm::vec3(0.3f, 0.05f, 0.2f));
                 renderGraph.execute();

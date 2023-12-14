@@ -20,6 +20,12 @@ namespace cobalt {
              * @return: IBO.
              */
             IBO(const GLUsage usage, const uint indexCount);
+            /* Creates an index buffer object with the given data.
+             * @param usage: GL_STATIC_DRAW, GL_DYNAMIC_DRAW, GL_STREAM_DRAW.
+             * @param data: The data.
+             * @param indexCount: The number of indices.
+             */
+            IBO(const GLUsage usage, const uint* data, const uint indexCount);
             /* Destroys the IBO.
              */
             ~IBO();

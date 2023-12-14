@@ -104,5 +104,56 @@ namespace cobalt {
             layout.push(GLType::Float, 2, false);   // Texture coordinates.
             return Mesh(std::move(VAO(vbo, layout)), std::move(IBO::fromQuads(GLUsage::StaticDraw, 1)), material);
         }
+
+        Mesh Mesh::createSphere(const uint radius, Material* material) {
+            const uint stacks = 20;
+            const uint slices = 20;
+
+            const float stackStep = M_PI / stacks;
+            const float sliceStep = 2.0f * M_PI / slices;
+
+            float vertices[5 * (stacks + 1) * (slices + 1)];
+            uint indices[6 * stacks * slices];
+
+            for (uint i = 0; i <= stacks; i++) {
+                const float stackAngle = M_PI / 2.0f - i * stackStep;
+                const float xy = radius * cos(stackAngle);
+                const float z = radius * sin(stackAngle);
+
+                for (uint j = 0; j <= slices; j++) {
+                    const float sliceAngle = j * sliceStep;
+                    const float x = xy * cos(sliceAngle);
+                    const float y = xy * sin(sliceAngle);
+
+                    vertices[5 * (i * (slices + 1) + j) + 0] = x;
+                    vertices[5 * (i * (slices + 1) + j) + 1] = y;
+                    vertices[5 * (i * (slices + 1) + j) + 2] = z;
+
+                    vertices[5 * (i * (slices + 1) + j) + 3] = x / radius;
+                    vertices[5 * (i * (slices + 1) + j) + 4] = y / radius;
+                }
+            }
+
+            for (uint i = 0; i < stacks; i++) {
+                for (uint j = 0; j < slices; j++) {
+                    indices[6 * (i * slices + j) + 0] = i * (slices + 1) + j;
+                    indices[6 * (i * slices + j) + 1] = i * (slices + 1) + j + 1;
+                    indices[6 * (i * slices + j) + 2] = (i + 1) * (slices + 1) + j;
+
+                    indices[6 * (i * slices + j) + 3] = i * (slices + 1) + j + 1;
+                    indices[6 * (i * slices + j) + 4] = (i + 1) * (slices + 1) + j + 1;
+                    indices[6 * (i * slices + j) + 5] = (i + 1) * (slices + 1) + j;
+                }
+            }
+
+            VBO vbo(GLUsage::StaticDraw);
+            vbo.bind();
+            vbo.load(vertices, sizeof(float) * 5 * (stacks + 1) * (slices + 1));
+
+            VAOLayout layout;
+            layout.push(GLType::Float, 3, false);   // Position.
+            layout.push(GLType::Float, 2, false);   // Texture coordinates.
+            return Mesh(std::move(VAO(vbo, layout)), std::move(IBO(GLUsage::StaticDraw, indices, 6 * stacks * slices)), material);
+        }
     }
 }

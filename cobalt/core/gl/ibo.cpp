@@ -11,6 +11,12 @@ namespace cobalt {
             glGenBuffers(1, &buffer);
         }
 
+        IBO::IBO(const GLUsage usage, const uint* data, const uint indexCount) : usage(usage), indexCount(indexCount) {
+            glGenBuffers(1, &buffer);
+            bind();
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(uint), data, (GLenum) usage);
+        }
+
         IBO::~IBO() {
             if (buffer != 0) {
                 glDeleteBuffers(1, &buffer);
