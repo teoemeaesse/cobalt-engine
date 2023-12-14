@@ -9,34 +9,34 @@ namespace cobalt {
     namespace core {
         Material::Material(
             Shader& shader,
-            const Texture& colorMap,
+            const Texture& albedoMap,
             const Texture& normalMap,
-            const Texture& specularMap) :
+            const Texture& mraoMap) :
             shader(shader),
-            colorMap(colorMap),
+            albedoMap(albedoMap),
             normalMap(normalMap),
-            specularMap(specularMap) {
+            mraoMap(mraoMap) {
         }
 
         Material::Material(const Material& other) :
             shader(other.shader),
-            colorMap(other.colorMap),
+            albedoMap(other.albedoMap),
             normalMap(other.normalMap),
-            specularMap(other.specularMap) {
+            mraoMap(other.mraoMap) {
         }
 
         Material::Material(Material&& other) noexcept :
             shader(other.shader),
-            colorMap(other.colorMap),
+            albedoMap(other.albedoMap),
             normalMap(other.normalMap),
-            specularMap(other.specularMap) {
+            mraoMap(other.mraoMap) {
         }
 
-        const Material::Uniform Material::getUniform(const int colorSlot, const int normalSlot, const int specularSlot) const {
-            colorMap.bindToUnit(colorSlot);
+        const Material::Uniform Material::getUniform(const int albedoSlot, const int normalSlot, const int mraoSlot) const {
+            albedoMap.bindToUnit(albedoSlot);
             normalMap.bindToUnit(normalSlot);
-            specularMap.bindToUnit(specularSlot);
-            return {colorSlot, normalSlot, specularSlot};
+            mraoMap.bindToUnit(mraoSlot);
+            return {albedoSlot, normalSlot, mraoSlot};
         }
 
         void Material::bind() const {

@@ -15,19 +15,19 @@ namespace cobalt {
         class Material {
             public:
             struct Uniform {
-                const int colorSlot;    // Color slot.
-                const int normalSlot;   // Normal slot.
-                const int specularSlot; // Specular slot.
+                const int albedoSlot;   // Surface albedo slot.
+                const int normalSlot;   // Surface normal slot.
+                const int mraoSlot;     // Metallic (R), roughness (G) and AO (B) slot.
             };
 
             /* Creates a new material.
              * @param shader: The shader program.
-             * @param colorMap: The color map.
-             * @param normalMap: The normal map.
-             * @param specularMap: The specular map.
+             * @param albedoMap: The surface albedo map.
+             * @param normalMap: The surface normal map.
+             * @param mraoMap: The metallic (R), roughness (G) and AO (B) map.
              * @return: The material.
              */
-            Material(Shader& shader, const Texture& colorMap, const Texture& normalMap, const Texture& specularMap);
+            Material(Shader& shader, const Texture& albedoMap, const Texture& normalMap, const Texture& mraoMap);
             /* Destroys the material.
              */
             ~Material() = default;
@@ -71,9 +71,9 @@ namespace cobalt {
 
             protected:
             Shader& shader;             // Shader program.
-            const Texture& colorMap;    // Color map.
-            const Texture& normalMap;   // Normal map.
-            const Texture& specularMap; // Specular map.
+            const Texture& albedoMap;   // Surface albedo map.
+            const Texture& normalMap;   // Surface normal map.
+            const Texture& mraoMap;     // Metallic (R), roughness (G) and AO (B) map.
         };
     }
 }
