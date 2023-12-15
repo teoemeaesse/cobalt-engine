@@ -26,19 +26,19 @@ namespace cobalt {
             CB_CORE_INFO("Using default filter: {0}, wrap: {1}", getGLTextureFilterName(DEFAULT_TEXTURE_FILTER), getGLTextureWrapName(DEFAULT_TEXTURE_WRAP));
         }
 
-        Texture::Texture(const Path& path,
-                         const GLTextureFormat format,
-                         const GLTextureEncoding encoding) : 
-                         source(path.getFileName()), format(format), encoding(encoding) {
+        Texture::Texture(const Path& path) : 
+                         source(path.getFileName()),
+                         format(GLTextureFormat::RGBA),
+                         encoding(GLTextureEncoding::RGBA8) {
             int width, height, channels;
             stbi_set_flip_vertically_on_load(true);
-            data = stbi_load(path.getPath().c_str(), &width, &height, &channels, 0);
+            data = stbi_load(path.getPath().c_str(), &width, &height, &channels, 4);
             if (!data) {
                 throw GLException("Failed to load texture: " + source);
             }
             glGenTextures(1, &texture);
             glBindTexture(GL_TEXTURE_2D, texture);
-            glTexImage2D(GL_TEXTURE_2D, 0, (GLint) encoding, width, height, 0, (GLenum) format, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, (GLint) GL_RGBA8, width, height, 0, (GLenum) GL_RGBA, GL_UNSIGNED_BYTE, data);
             setFilter(DEFAULT_TEXTURE_FILTER);
             setWrap(DEFAULT_TEXTURE_WRAP); 
             CB_CORE_INFO("Loaded {0}x{1} px texture (GL: {2}) from {3} with encoding: {4}, format: {4}", width, height, texture, path.getFileName(), getGLTextureEncodingName(encoding), getGLTextureFormatName(format));

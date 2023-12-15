@@ -26,15 +26,12 @@ namespace cobalt {
                     const GLTextureFormat format = GLTextureFormat::RGBA,
                     const GLTextureEncoding encoding = GLTextureEncoding::RGBA8);
             /* Creates a texture from the given path.
-             * The format is the internal format of the texture.
+             * The texture is always converted to 4 channels.
+             * TODO: Add specific format support. This increases memory usage.
              * @param path: The path to the texture.
-             * @param format: The pixel format of the texture.
-             * @param encoding: The internal format of the texture.
              * @return: The created texture.
              */
-            Texture(const Path& path,
-                    const GLTextureFormat format = GLTextureFormat::RGBA,
-                    const GLTextureEncoding encoding = GLTextureEncoding::RGBA8);
+            Texture(const Path& path);
             /* Destroys the texture and frees the memory.
              */
             ~Texture();

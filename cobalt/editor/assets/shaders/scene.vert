@@ -12,7 +12,7 @@ out vec2 v_tex_coords;
 
 
 void main() {
-    v_world_position = u_model * position;
+    v_world_position = (u_model * vec4(position, 1.0)).xyz;
     v_tex_coords = tex_coords;
     gl_Position = u_projection * u_view * u_model * vec4(position, 1.0);
 }

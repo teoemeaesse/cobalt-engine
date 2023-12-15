@@ -60,9 +60,9 @@ vec3 fresnelSchlick(float cosTheta, vec3 f0) {
 }
 
 void main() {
-    vec3 albedo     = pow(texture(u_albedo, u_tex_coords).rgb, 2.2);
-    vec3 normal     = texture(u_normal, u_tex_coords).rgb;
-    vec3 mrao       = texture(u_mrao, u_tex_coords).rgb;
+    vec3 albedo     = pow(texture(u_albedo, v_tex_coords).rgb, vec3(2.2));
+    vec3 normal     = texture(u_normal, v_tex_coords).rgb;
+    vec3 mrao       = texture(u_mrao, v_tex_coords).rgb;
     float metallic  = mrao.r;
     float roughness = mrao.g;
     float ao        = mrao.b;

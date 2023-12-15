@@ -22,11 +22,15 @@ namespace cobalt {
                 CB_TEXTURE_LIBRARY.loadTextures(core::Path("cobalt/editor/assets/textures", true));
                 CB_SHADER_LIBRARY.loadShaders(core::Path("cobalt/editor/assets/shaders", true));
 
-                const core::Texture& testTexture = CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo"));
-                engine::ShaderID testShaderID = CB_SHADER_LIBRARY.getShaderID("scene_shader");
-                core::Shader& testShader = CB_SHADER_LIBRARY.getShader(testShaderID);
+                const core::Texture& woodAlbedo = CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo"));
+                const core::Texture& woodNormal = CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-normal"));
+                const core::Texture& woodMrao = CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-mrao"));
+                const core::Texture& metalAlbedo = CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("metal-albedo"));
+                const core::Texture& metalNormal = CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("metal-normal"));
+                const core::Texture& metalMrao = CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("metal-mrao"));
+                core::Shader& shader = CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("scene_shader"));
                 
-                core::Material* material = new core::Material(testShader, testTexture, testTexture, testTexture);
+                core::Material* material = new core::Material(shader, woodAlbedo, woodNormal, woodMrao);
                 core::Mesh mesh = core::Mesh::createRectangle(10, 10, material);
                 core::Mesh ground = core::Mesh::createRectangle(100, 100, material);
                 core::Mesh sphere = core::Mesh::createSphere(5.0f, material);
