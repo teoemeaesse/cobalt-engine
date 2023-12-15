@@ -6,7 +6,6 @@
 #include "core/gfx/render_context.h"
 #include "core/exceptions/gfx_exception.h"
 #include "core/utils/log.h"
-#include "engine/internal/texture_library.h"
 
 
 namespace cobalt {
@@ -25,12 +24,9 @@ namespace cobalt {
                 shader.setUniformInt("u_albedo", 6);
                 shader.setUniformInt("u_normal", 7);
                 shader.setUniformInt("u_mrao", 8);
-                shader.setUniformVec3("lightPosition", glm::vec3(0.0, -49.0, 0.0));
-                shader.setUniformVec3("lightColor", glm::vec3(5000.0, 1000.0, 1000.0));
+                shader.setUniformVec3("lightPosition", glm::vec3(0.0, -40.0, 0.0));
+                shader.setUniformVec3("lightColor", glm::vec3(50000.0, 10000.0, 10000.0));
                 shader.setUniformVec3("camPos", target.getCamera().getPosition());
-                CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo")).bindToUnit(6);
-                CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-normal")).bindToUnit(7);
-                CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-mrao")).bindToUnit(8);
                 target.sendUniforms(shader);
                 const glm::mat4& model = mesh.getModelMatrix();
                 shader.setUniformMat4("u_model", model);

@@ -39,7 +39,7 @@ namespace cobalt {
                 sphere.translate(glm::vec3(10.0f, 0.0f, 0.0f));
                 scene.addMesh(std::move(mesh));
                 scene.addMesh(std::move(ground));
-                //scene.addMesh(std::move(sphere));
+                scene.addMesh(std::move(sphere));
 
                 renderGraph.init();
             }

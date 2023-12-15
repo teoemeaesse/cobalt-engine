@@ -126,14 +126,14 @@ namespace cobalt {
                     const float x = xy * cos(sliceAngle);
                     const float y = xy * sin(sliceAngle);
 
-                    vertices[5 * (i * (slices + 1) + j) + 0] = x;
-                    vertices[5 * (i * (slices + 1) + j) + 1] = y;
-                    vertices[5 * (i * (slices + 1) + j) + 2] = z;
-                    vertices[5 * (i * (slices + 1) + j) + 3] = (float) j / slices;
-                    vertices[5 * (i * (slices + 1) + j) + 4] = (float) i / stacks;
-                    vertices[5 * (i * (slices + 1) + j) + 5] = x / radius;
-                    vertices[5 * (i * (slices + 1) + j) + 6] = y / radius;
-                    vertices[5 * (i * (slices + 1) + j) + 7] = z / radius;
+                    vertices[8 * (i * (slices + 1) + j) + 0] = x;
+                    vertices[8 * (i * (slices + 1) + j) + 1] = y;
+                    vertices[8 * (i * (slices + 1) + j) + 2] = z;
+                    vertices[8 * (i * (slices + 1) + j) + 3] = (float) j / slices;
+                    vertices[8 * (i * (slices + 1) + j) + 4] = (float) i / stacks;
+                    vertices[8 * (i * (slices + 1) + j) + 5] = x / radius;
+                    vertices[8 * (i * (slices + 1) + j) + 6] = y / radius;
+                    vertices[8 * (i * (slices + 1) + j) + 7] = z / radius;
                 }
             }
 
@@ -142,7 +142,6 @@ namespace cobalt {
                     indices[6 * (i * slices + j) + 0] = i * (slices + 1) + j;
                     indices[6 * (i * slices + j) + 1] = i * (slices + 1) + j + 1;
                     indices[6 * (i * slices + j) + 2] = (i + 1) * (slices + 1) + j;
-
                     indices[6 * (i * slices + j) + 3] = i * (slices + 1) + j + 1;
                     indices[6 * (i * slices + j) + 4] = (i + 1) * (slices + 1) + j + 1;
                     indices[6 * (i * slices + j) + 5] = (i + 1) * (slices + 1) + j;

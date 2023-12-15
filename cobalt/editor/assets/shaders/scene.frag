@@ -127,7 +127,7 @@ void main() {
         lo += (kd * albedo / PI + specular) * radiance * ndl;
     }   
   
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 ambient = vec3(0.1) * albedo * ao;
     vec3 c = ambient + lo;
 
     c = c / (c + vec3(1.0));
