@@ -28,6 +28,10 @@ namespace cobalt {
                 -glm::dot(position, x),  -glm::dot(position, y),  -glm::dot(position, z),  1.0f,
             };
         }
+        
+        const glm::vec3 Camera::getPosition() const {
+            return position;
+        }
 
         void Camera::rotateHorizontal(const float amount) {
             direction.x += amount * angularSpeed;

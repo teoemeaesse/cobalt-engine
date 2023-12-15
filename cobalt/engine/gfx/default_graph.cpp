@@ -27,9 +27,9 @@ namespace cobalt {
         void DefaultGraph::init() {
             core::Material* filter = new core::Material(
                 CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("filter_shader")),
-                CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")),
-                CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture")),
-                CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("test_texture"))
+                CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("metal-albedo")),
+                CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("metal-albedo")),
+                CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("metal-albedo"))
             );
             Scope<SceneNode> sceneNode = std::make_unique<SceneNode>(SceneNode(scene, renderer, core::RenderTarget(sceneFBO, scene.getCamera(), "scene")));
             Scope<FilterNode> filterNode = std::make_unique<FilterNode>(FilterNode(renderer, core::RenderTarget(defaultFBO, outputCamera, "output"), filter));

@@ -29,6 +29,8 @@ namespace cobalt {
              */
             virtual const glm::mat4x4 getProjectionMatrix() const = 0;
 
+            const glm::vec3 getPosition() const;
+
             /* Rotates the camera horizontally by the given amount.
              * @param amount: The amount to rotate by (degrees).
              */

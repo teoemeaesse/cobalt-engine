@@ -52,5 +52,9 @@ namespace cobalt {
         const std::string& RenderTarget::getName() const {
             return name;
         }
+
+        const Camera& RenderTarget::getCamera() const {
+            return camera;
+        }
     }
 }

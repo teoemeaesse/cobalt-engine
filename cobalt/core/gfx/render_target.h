@@ -64,6 +64,8 @@ namespace cobalt {
              * @return: The name.
              */
             const std::string& getName() const;
+            
+            const Camera& getCamera() const;
 
             private:
             const FBO& fbo;         // Frame buffer object.

@@ -9,7 +9,7 @@
 #include "core/utils/log.h"
 
 
-#define DEFAULT_TEXTURE_FILTER GLTextureFilter::Nearest
+#define DEFAULT_TEXTURE_FILTER GLTextureFilter::Linear
 #define DEFAULT_TEXTURE_WRAP GLTextureWrap::Repeat
 
 namespace cobalt {
@@ -90,8 +90,7 @@ namespace cobalt {
         }
 
         void Texture::bindToUnit(GLuint unit) const {
-            glBindTexture(GL_TEXTURE_2D, texture);
-            glBindTextureUnit(GL_TEXTURE0 + unit, texture);
+            glBindTextureUnit(unit, texture);
         }
 
         void Texture::setWrap(GLTextureWrap wrap) {

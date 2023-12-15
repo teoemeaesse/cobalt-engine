@@ -15,8 +15,25 @@ uniform vec3 camPos;
 
 in vec3 v_world_position;
 in vec2 v_tex_coords;
+in vec3 v_normal;
 
 const float PI = 3.14159265359;
+
+vec3 getNormalFromMap() {
+    vec3 tangentNormal = texture(u_normal, v_tex_coords).xyz * 2.0 - 1.0;
+
+    vec3 Q1  = dFdx(v_world_position);
+    vec3 Q2  = dFdy(v_world_position);
+    vec2 st1 = dFdx(v_tex_coords);
+    vec2 st2 = dFdy(v_tex_coords);
+
+    vec3 N   = normalize(v_normal);
+    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 B  = -normalize(cross(N, T));
+    mat3 TBN = mat3(T, B, N);
+
+    return normalize(TBN * tangentNormal);
+}
 
 /* Trowbridge-Reitz GGX Normal Distribution Function.
  * https://learnopengl.com/#!PBR/Lighting
@@ -100,5 +117,10 @@ void main() {
     }   
   
     vec3 ambient = vec3(0.03) * albedo * ao;
-    vec3 color = ambient + lo;
+    vec3 c = ambient + lo;
+
+    c = c / (c + vec3(1.0));
+    c = pow(c, vec3(1.0/2.2));
+
+    color = vec4(c, 1.0);
 }

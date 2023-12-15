@@ -88,20 +88,21 @@ namespace cobalt {
             const float w = width / 2.0f;
             const float h = height / 2.0f;
 
-            const float vertices[] = {
-                -w, -h, 0.0f, 0.0f, 0.0f,
-                 w, -h, 0.0f, 1.0f, 0.0f,
-                 w,  h, 0.0f, 1.0f, 1.0f,
-                -w,  h, 0.0f, 0.0f, 1.0f
+            const float vertices[] = { // Position, texture coordinates, normal.
+                -w, -h, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
+                 w, -h, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f,
+                 w,  h, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
+                -w,  h, 0.0f, 0.0f, 1.0f ,0.0f, 0.0f, -1.0f
             };
 
             VBO vbo(GLUsage::StaticDraw);
             vbo.bind();
-            vbo.load(vertices, sizeof(float) * 20);
+            vbo.load(vertices, sizeof(float) * 32);
 
             VAOLayout layout;
             layout.push(GLType::Float, 3, false);   // Position.
             layout.push(GLType::Float, 2, false);   // Texture coordinates.
+            layout.push(GLType::Float, 3, false);   // Normal.
             return Mesh(std::move(VAO(vbo, layout)), std::move(IBO::fromQuads(GLUsage::StaticDraw, 1)), material);
         }
 
@@ -112,7 +113,7 @@ namespace cobalt {
             const float stackStep = M_PI / stacks;
             const float sliceStep = 2.0f * M_PI / slices;
 
-            float vertices[5 * (stacks + 1) * (slices + 1)];
+            float vertices[8 * (stacks + 1) * (slices + 1)];
             uint indices[6 * stacks * slices];
 
             for (uint i = 0; i <= stacks; i++) {
@@ -128,9 +129,11 @@ namespace cobalt {
                     vertices[5 * (i * (slices + 1) + j) + 0] = x;
                     vertices[5 * (i * (slices + 1) + j) + 1] = y;
                     vertices[5 * (i * (slices + 1) + j) + 2] = z;
-
-                    vertices[5 * (i * (slices + 1) + j) + 3] = x / radius;
-                    vertices[5 * (i * (slices + 1) + j) + 4] = y / radius;
+                    vertices[5 * (i * (slices + 1) + j) + 3] = (float) j / slices;
+                    vertices[5 * (i * (slices + 1) + j) + 4] = (float) i / stacks;
+                    vertices[5 * (i * (slices + 1) + j) + 5] = x / radius;
+                    vertices[5 * (i * (slices + 1) + j) + 6] = y / radius;
+                    vertices[5 * (i * (slices + 1) + j) + 7] = z / radius;
                 }
             }
 
@@ -148,11 +151,12 @@ namespace cobalt {
 
             VBO vbo(GLUsage::StaticDraw);
             vbo.bind();
-            vbo.load(vertices, sizeof(float) * 5 * (stacks + 1) * (slices + 1));
+            vbo.load(vertices, sizeof(float) * 8 * (stacks + 1) * (slices + 1));
 
             VAOLayout layout;
             layout.push(GLType::Float, 3, false);   // Position.
             layout.push(GLType::Float, 2, false);   // Texture coordinates.
+            layout.push(GLType::Float, 3, false);   // Normal.
             return Mesh(std::move(VAO(vbo, layout)), std::move(IBO(GLUsage::StaticDraw, indices, 6 * stacks * slices)), material);
         }
     }
