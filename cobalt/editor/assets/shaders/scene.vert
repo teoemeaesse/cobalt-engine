@@ -15,8 +15,8 @@ out vec3 v_normal;
 
 
 void main() {
-    v_world_position = (u_model * vec4(position, 1.0)).xyz;
+    v_world_position = vec3(u_model * vec4(position, 1.0));
     v_tex_coords = tex_coords;
-    v_normal = u_normal_matrix * normal;
-    gl_Position = u_projection * u_view * u_model * vec4(position, 1.0);
+    v_normal = normalize(u_normal_matrix * normal);
+    gl_Position = u_projection * u_view * vec4(v_world_position, 1.0);
 }

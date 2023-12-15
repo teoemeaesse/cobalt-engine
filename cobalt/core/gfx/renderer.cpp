@@ -25,8 +25,8 @@ namespace cobalt {
                 shader.setUniformInt("u_albedo", 6);
                 shader.setUniformInt("u_normal", 7);
                 shader.setUniformInt("u_mrao", 8);
-                shader.setUniformVec3("lightPosition", glm::vec3(0.0, -4.0, 0.0));
-                shader.setUniformVec3("lightColor", glm::vec3(1.0, 0.0, 1.0));
+                shader.setUniformVec3("lightPosition", glm::vec3(0.0, -49.0, 0.0));
+                shader.setUniformVec3("lightColor", glm::vec3(5000.0, 1000.0, 1000.0));
                 shader.setUniformVec3("camPos", target.getCamera().getPosition());
                 CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo")).bindToUnit(6);
                 CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-normal")).bindToUnit(7);

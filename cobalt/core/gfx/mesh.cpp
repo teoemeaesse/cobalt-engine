@@ -89,10 +89,10 @@ namespace cobalt {
             const float h = height / 2.0f;
 
             const float vertices[] = { // Position, texture coordinates, normal.
-                -w, -h, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
-                 w, -h, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f,
-                 w,  h, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
-                -w,  h, 0.0f, 0.0f, 1.0f ,0.0f, 0.0f, -1.0f
+                -w, -h, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+                 w, -h, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+                 w,  h, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+                -w,  h, 0.0f, 0.0f, 1.0f ,0.0f, 0.0f, 1.0f
             };
 
             VBO vbo(GLUsage::StaticDraw);

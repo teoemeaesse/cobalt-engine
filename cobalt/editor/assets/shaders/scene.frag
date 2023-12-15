@@ -57,13 +57,24 @@ float normalDist(vec3 n, vec3 h, float a) {
  * @param n: normal.
  * @param v: view vector.
  * @param l: light vector.
- * @param k: remapping of the roughness.
+ * @param a: roughness.
  */
-float geometrySmith(vec3 n, vec3 v, vec3 l, float k) {
-    float ndv = max(dot(n, v), 0.0);
-    float ndl = max(dot(n, l), 0.0);
-    float ggx1 = ndv / (ndv * (1.0 - k) + k);
-    float ggx2 = ndl / (ndl * (1.0 - k) + k);
+float geometrySchlickGGX(float NdotV, float a) {
+    float r = (a + 1.0);
+    float k = (r*r) / 8.0;
+
+    float nom   = NdotV;
+    float denom = NdotV * (1.0 - k) + k;
+
+    return nom / denom;
+}
+// ----------------------------------------------------------------------------
+float geometrySmith(vec3 N, vec3 V, vec3 L, float a) {
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
+    float ggx2 = geometrySchlickGGX(NdotV, a);
+    float ggx1 = geometrySchlickGGX(NdotL, a);
+
     return ggx1 * ggx2;
 }
 
@@ -84,7 +95,7 @@ void main() {
     float roughness = mrao.g;
     float ao        = mrao.b;
 
-    vec3 n = normalize(normal);
+    vec3 n = getNormalFromMap();
     vec3 v = normalize(camPos - v_world_position);
 
     vec3 f0 = vec3(0.04);
@@ -92,7 +103,7 @@ void main() {
 
     // reflectance equation
     vec3 lo = vec3(0.0);
-    for(int i = 0; i < 1; i++) {
+    for(int i = 0; i < 2; i++) {
         // calculate per-light radiance
         vec3 l = normalize(lightPosition - v_world_position);
         vec3 h = normalize(v + l);
