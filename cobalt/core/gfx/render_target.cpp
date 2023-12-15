@@ -41,8 +41,16 @@ namespace cobalt {
             shader.setUniformInt("u_targetHeight", fbo.getHeight());
         }
 
-        const Texture& RenderTarget::getTexture() const {
-            return dynamic_cast<const TargetFBO&>(fbo).getTexture();
+        const Texture& RenderTarget::getColorBuffer() const {
+            return dynamic_cast<const TargetFBO&>(fbo).getColorBuffer();
+        }
+
+        const Texture& RenderTarget::getDepthBuffer() const {
+            return dynamic_cast<const TargetFBO&>(fbo).getDepthBuffer();
+        }
+
+        const Texture& RenderTarget::getStencilBuffer() const {
+            return dynamic_cast<const TargetFBO&>(fbo).getStencilBuffer();
         }
 
         const FBO& RenderTarget::getFBO() const {

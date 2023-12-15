@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include "core/gl/texture.h"
 #include "core/gfx/color.h"
 
@@ -40,15 +42,17 @@ namespace cobalt {
             /* Returns the width of the FBO.
              * @return: The width of the FBO.
              */
-            virtual const uint getWidth() const = 0;
+            const uint getWidth() const;
             /* Returns the height of the FBO.
              * @return: The height of the FBO.
              */
-            virtual const uint getHeight() const = 0;
+            const uint getHeight() const;
 
             protected:
             Color clearColor;                   // The color to clear the FBO with.
             const GLFramebufferAttachment type; // The type of the texture attached to the FBO.
+            uint width;                         // The width of the FBO.
+            uint height;                        // The height of the FBO.
             
             /* Creates a new FBO with the given width and height.
              * The FBO will have a texture attached to it.
@@ -77,19 +81,6 @@ namespace cobalt {
             /* Binds the FBO.
              */
             void bind() const override;
-
-            /* Returns the width of the FBO.
-             * @return: The width of the FBO.
-             */
-            const uint getWidth() const override;
-            /* Returns the height of the FBO.
-             * @return: The height of the FBO.
-             */
-            const uint getHeight() const override;
-
-            private:
-            uint width;     // The width of the FBO.
-            uint height;    // The height of the FBO.
         };
 
         class TargetFBO : public FBO {
@@ -98,14 +89,14 @@ namespace cobalt {
              * The FBO will have a texture attached to it.
              * @param width: The width of the FBO.
              * @param height: The height of the FBO.
-             * @param format: The format of the texture attached to the FBO.
-             * @param encoding: The encoding of the texture attached to the FBO.
+             * @param type: The type of the texture attached to the FBO.
              * @return: A new FBO.
              */
             TargetFBO(const uint width, const uint height,
                       const GLFramebufferAttachment type = GLFramebufferAttachment::Color,
-                      const GLTextureFormat format = GLTextureFormat::RGBA,
-                      const GLTextureEncoding encoding = GLTextureEncoding::RGBA8);
+                      const GLTextureFilter filter = GLTextureFilter::Linear,
+                      const GLTextureWrap wrap = GLTextureWrap::ClampToEdge,
+                      const bool srgb = false);
             /* Destroys the FBO.
             */
             ~TargetFBO();
@@ -119,22 +110,28 @@ namespace cobalt {
              */
             void bind() const override;
 
+            /* Returns whether the FBO has this attachment.
+             * @param attachment: The attachment to check for.
+             * @return: Whether the FBO has this attachment.
+             */
+            const bool hasAttachment(const GLFramebufferAttachment attachment) const;
             /* Returns the texture attached to the FBO.
              * @return: The texture attached to the FBO.
              */
-            const Texture& getTexture() const;
-            /* Returns the width of the FBO.
-             * @return: The width of the FBO.
+            const Texture& getColorBuffer() const;
+            /* Returns the depth texture attached to the FBO.
+             * @return: The depth texture attached to the FBO.
              */
-            const uint getWidth() const override;
-            /* Returns the height of the FBO.
-             * @return: The height of the FBO.
+            const Texture& getDepthBuffer() const;
+            /* Returns the stencil texture attached to the FBO.
+             * @return: The stencil texture attached to the FBO.
              */
-            const uint getHeight() const override;
+            const Texture& getStencilBuffer() const;
 
             private:
-            GLHandle buffer;    // The FBO handle.
-            Texture texture;    // The texture attached to the FBO.
+            GLHandle buffer;                        // The FBO handle.
+            std::optional<Texture> color;           // The texture attached to the FBO.
+            std::optional<Texture> depthStencil;    // The depth and/or stencil texture attached to the FBO.
         };
     }
 }

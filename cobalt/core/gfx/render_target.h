@@ -52,10 +52,21 @@ namespace cobalt {
              */
             void sendUniforms(Shader& shader) const;
 
-            /* Get the rendered texture. This will throw an exception if the fbo is the default fbo.
+            /* Get the texture for the color buffer.
+             * This will throw an exception if the fbo is the default fbo.
              * @return: The texture.
              */
-            const Texture& getTexture() const;
+            const Texture& getColorBuffer() const;
+            /* Get the texture for the depth buffer.
+             * This will throw an exception if the fbo is the default fbo.
+             * @return: The texture.
+             */
+            const Texture& getDepthBuffer() const;
+            /* Get the texture for the stencil buffer.
+             * This will throw an exception if the fbo is the default fbo.
+             * @return: The texture.
+             */
+            const Texture& getStencilBuffer() const;
             /* Get the FBO.
              * @return: The FBO.
              */

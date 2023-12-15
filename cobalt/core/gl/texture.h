@@ -12,26 +12,9 @@
 namespace cobalt {
     namespace core {
         class Texture {
+            friend class TextureBuilder;
+
             public:
-            /* Creates an empty texture with the given width and height
-             * and reserves the memory for it.
-             * The format is the internal format of the texture.
-             * @param width: The width of the texture.
-             * @param height: The height of the texture.
-             * @param format: The pixel format of the texture.
-             * @param encoding: The internal format of the texture.
-             * @return: The created texture.
-             */
-            Texture(const uint width, const uint height,
-                    const GLTextureFormat format = GLTextureFormat::RGBA,
-                    const GLTextureEncoding encoding = GLTextureEncoding::RGBA8);
-            /* Creates a texture from the given path.
-             * The texture is always converted to 4 channels.
-             * TODO: Add specific format support. This increases memory usage.
-             * @param path: The path to the texture.
-             * @return: The created texture.
-             */
-            Texture(const Path& path);
             /* Destroys the texture and frees the memory.
              */
             ~Texture();
@@ -101,6 +84,113 @@ namespace cobalt {
             GLTextureEncoding encoding;         // The internal format of the texture.
             uint width, height;                 // The width and height of the texture.
             uchar *data;                        // The raw data of the texture.
+
+            /* Creates an empty texture with the given width and height
+             * and reserves the memory for it.
+             * The format is the internal format of the texture.
+             * @param width: The width of the texture.
+             * @param height: The height of the texture.
+             * @param format: The pixel format of the texture.
+             * @param encoding: The internal format of the texture.
+             * @param filter: The filter mode of the texture.
+             * @param wrap: The wrap mode of the texture.
+             * @return: The created texture.
+             */
+            Texture(const uint width, const uint height,
+                    const GLTextureFormat format = GLTextureFormat::RGBA,
+                    const GLTextureEncoding encoding = GLTextureEncoding::RGBA,
+                    const GLTextureFilter filter = GLTextureFilter::Linear,
+                    const GLTextureWrap wrap = GLTextureWrap::Repeat);
+            /* Creates a texture from the given path.
+             * The texture is always converted to 4 channels.
+             * TODO: Add specific format support. This increases memory usage.
+             * @param path: The path to the texture.
+             * @param filter: The filter mode of the texture.
+             * @param wrap: The wrap mode of the texture.
+             * @param isSrgb: Whether the texture is in srgb color space.
+             * @return: The created texture.
+             */
+            Texture(const Path& path,
+                    const GLTextureFilter filter = GLTextureFilter::Linear,
+                    const GLTextureWrap wrap = GLTextureWrap::Repeat,
+                    const bool isSrgb = false);
+        };
+
+        class TextureBuilder {
+            public:
+            /* Constructs a TextureBuilder object with the default configuration.
+             * @return: The constructed TextureBuilder object.
+             */
+            TextureBuilder();
+            /* Destroys the TextureBuilder object.
+             */
+            ~TextureBuilder() = default;
+
+            /* Constructs an empty Texture object based on the current configuration.
+             * @return: The constructed Texture object.
+             */
+            Texture buildEmpty() const;
+            /* Constructs a Texture object from a source based on the current configuration.
+             * @return: The constructed Texture object.
+             */
+            Texture buildFromSource(const Path& path) const;
+
+            /* Sets the dimensions of the texture.
+             * @param width: The width of the texture in pixels.
+             * @param height: The height of the texture in pixels.
+             * @return: Reference to the current TextureBuilder instance.
+             */
+            TextureBuilder& setDimensions(const uint width, const uint height);
+            /* Sets the wrapping mode of the texture.
+             * @param wrap: The GLTextureWrap enum specifying the wrap mode.
+             * @return: Reference to the current TextureBuilder instance.
+             */
+            TextureBuilder& setWrap(const GLTextureWrap wrap);
+            /* Sets the filtering mode of the texture.
+             * @param filter: The GLTextureFilter enum specifying the filter mode.
+             * @return: Reference to the current TextureBuilder instance.
+             */
+            TextureBuilder& setFilter(const GLTextureFilter filter);
+            /* Sets the number of channels of the texture.
+             * This is irrelevant if the texture is a depth or stencil buffer.
+             * @param channels: The number of channels.
+             * @return: Reference to the current TextureBuilder instance.
+             */
+            TextureBuilder& setChannels(const uint channels);
+            /* Sets whether the texture is a color buffer.
+             * Mutually exclusive with setIsDepth and setIsStencil.
+             * @param isColor: Whether the texture is a color texture.
+             * @return: Reference to the current TextureBuilder instance.
+             */
+            TextureBuilder& setIsColor(const bool isColor);
+            /* Sets whether the texture is a depth buffer.
+             * Mutually exclusive with setIsColor.
+             * @param isDepth: Whether the texture is a depth texture.
+             * @return: Reference to the current TextureBuilder instance.
+             */
+            TextureBuilder& setIsDepth(const bool isDepth);
+            /* Sets whether the texture is a stencil buffer.
+             * Mutually exclusive with setIsColor.
+             * Assumes that the texture is a depth buffer as well.
+             * @param isStencil: Whether the texture is a stencil texture.
+             * @return: Reference to the current TextureBuilder instance.
+             */
+            TextureBuilder& setIsStencil(const bool isStencil);
+            /* Sets whether the texture is in srgb color space.
+             * @param isSrgb: Whether the texture is in srgb color space.
+             * @return: Reference to the current TextureBuilder instance.
+             */
+            TextureBuilder& setIsSrgb(const bool isSrgb);
+
+            private:
+            uint channels;
+            uint width, height;
+            bool isColor;
+            bool isDepth;
+            bool isStencil;
+            bool isSrgb;
+            GLTextureWrap wrap;
+            GLTextureFilter filter;
         };
     }
 }

@@ -26,9 +26,8 @@ namespace cobalt {
                 CB_CORE_WARN("Render node has no targets");
             }
             for (uint i = 0; i < sources.getSize(); i++) {
-                uint binding = renderer.bindTexture("source_" + sources[i].getName(), sources[i].getTexture());
+                uint binding = renderer.bindTexture("source_" + sources[i].getName(), sources[i].getColorBuffer());
             }
-            
             CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo")).bindToUnit(6);
             CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-normal")).bindToUnit(7);
             CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-mrao")).bindToUnit(8);
@@ -49,6 +48,5 @@ namespace cobalt {
         Vector<RenderTarget>& RenderNode::getTargets() {
             return targets;
         }
-
     }
 }

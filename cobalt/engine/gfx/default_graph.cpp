@@ -17,10 +17,10 @@ namespace cobalt {
                          0.0f,
                          -(float) defaultFBO.getWidth() / 2, (float) defaultFBO.getWidth() / 2,
                          -(float) defaultFBO.getHeight() / 2, (float) defaultFBO.getHeight() / 2,
-                         1.0f, 1000.0f),
+                         1.0f, 100.0f),
             renderer(core::Renderer()),
             defaultFBO(defaultFBO),
-            sceneFBO(core::TargetFBO(defaultFBO.getWidth(), defaultFBO.getHeight())),
+            sceneFBO(core::TargetFBO(defaultFBO.getWidth(), defaultFBO.getHeight(), core::GLFramebufferAttachment::ColorDepth)),
             scene(scene) {
         }
 

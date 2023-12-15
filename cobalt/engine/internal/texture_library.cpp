@@ -16,7 +16,7 @@ namespace cobalt {
 
         TextureLibrary::TextureLibrary() :
             textures(8) {
-            textures.push({"null", std::move(core::Texture(1, 1))});
+            textures.push({"null", std::move(core::TextureBuilder().setDimensions(1, 1).setIsColor(true).setChannels(4).buildEmpty())});
         }
         
         void TextureLibrary::loadTextures(const core::Path& texturesDirectory) {
@@ -36,7 +36,7 @@ namespace cobalt {
                 core::Path texturePath = texturesDirectory + textureJson["src"].get<std::string>();
                 CB_INFO("Loading texture: {}", textureName);
                 CB_INFO("From source: {}", texturePath.getFileName());
-                textures.push({textureName, std::move(core::Texture(texturePath))});
+                textures.push({textureName, std::move(core::TextureBuilder().buildFromSource(texturePath))});
             }
         }
 

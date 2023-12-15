@@ -82,6 +82,10 @@ namespace cobalt {
             if (callbackSetter != nullptr) {
                 callbackSetter();
             }
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_BLEND);
+            glDepthFunc(GL_LESS);
+            glEnable(GL_DEPTH_TEST);
             CB_CORE_INFO("Created window");
         }
 

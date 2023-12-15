@@ -32,27 +32,33 @@ namespace cobalt {
         };
 
         enum class GLTextureEncoding {
-            R8 = GL_R8,                         // Red channel with 8 bits per channel.
-            RG8 = GL_RG8,                       // Red and green channels with 8 bits per channel.
-            RGB8 = GL_RGB8,                     // Red, green and blue channels with 8 bits per channel.
-            RGBA8 = GL_RGBA8,                   // Red, green, blue and alpha channels with 8 bits per channel.
-            SRGB8 = GL_SRGB8,                   // Red, green and blue channels with 8 bits per channel.
-            SRGBA8 = GL_SRGB8_ALPHA8           // Red, green, blue and alpha channels with 8 bits per channel.
+            RED = GL_RED,                       // Red channel.
+            RG = GL_RG,                         // Red and green channels.
+            RGB = GL_RGB,                       // Red, green and blue channels.
+            RGBA = GL_RGBA,                     // Red, green, blue and alpha channels.
+            DEPTH = GL_DEPTH_COMPONENT,         // Depth component.
+            DEPTH_STENCIL = GL_DEPTH_STENCIL,   // Depth and stencil components.
+            SRGB = GL_SRGB8,                    // sRGB color space.
+            SRGBA = GL_SRGB8_ALPHA8,            // sRGB color space with alpha.
         };
-        inline std::string getGLTextureEncodingName(GLTextureEncoding format) {
-            switch (format) {
-                case GLTextureEncoding::R8:
-                    return "R8";
-                case GLTextureEncoding::RG8:
-                    return "RG8";
-                case GLTextureEncoding::RGB8:
-                    return "RGB8";
-                case GLTextureEncoding::RGBA8:
-                    return "RGBA8";
-                case GLTextureEncoding::SRGB8:
-                    return "SRGB8";
-                case GLTextureEncoding::SRGBA8:
-                    return "SRGBA8";
+        inline std::string getGLTextureEncodingName(GLTextureEncoding encoding) {
+            switch (encoding) {
+                case GLTextureEncoding::RED:
+                    return "RED";
+                case GLTextureEncoding::RG:
+                    return "RG";
+                case GLTextureEncoding::RGB:
+                    return "RGB";
+                case GLTextureEncoding::RGBA:
+                    return "RGBA";
+                case GLTextureEncoding::DEPTH:
+                    return "DEPTH";
+                case GLTextureEncoding::DEPTH_STENCIL:
+                    return "DEPTH_STENCIL";
+                case GLTextureEncoding::SRGB:
+                    return "SRGB";
+                case GLTextureEncoding::SRGBA:
+                    return "SRGBA";
                 default:
                     throw GLException("Invalid GLTextureEncoding");
             }
