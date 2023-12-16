@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <unordered_map>
+
 #include "core/gfx/mesh.h"
 #include "core/gfx/render_target.h"
 #include "core/containers/vector.h"
@@ -41,12 +43,18 @@ namespace cobalt {
              */
             uint bindTexture(const std::string& name, const Texture& texture);
 
+            /* Send all the bound textures to the shader.
+             * @param shader: The shader to send the uniforms to.
+             */
+            void sendUniforms(Shader& shader) const;
+
             /* Unbind all texture units.
              */
             void clearTextureUnits();
 
             private:
-            Vector<std::string> textureUnits;   // List of bound textures.
+            std::unordered_map<std::string, uint> textureUnits; // Map of bound textures.
+            uint currentUnit;                                   // Current texture unit.
         };
     }
 }

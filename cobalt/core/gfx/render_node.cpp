@@ -28,9 +28,9 @@ namespace cobalt {
             for (uint i = 0; i < sources.getSize(); i++) {
                 uint binding = renderer.bindTexture("source_" + sources[i].getName(), sources[i].getColorBuffer());
             }
-            CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo")).bindToUnit(6);
-            CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-normal")).bindToUnit(7);
-            CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-mrao")).bindToUnit(8);
+            renderer.bindTexture("albedo", CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo")));
+            renderer.bindTexture("normal", CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-normal")));
+            renderer.bindTexture("mrao", CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-mrao")));
             for (uint i = 0; i < targets.getSize(); i++) {
                 renderer.render(mesh, targets[i]);
             }

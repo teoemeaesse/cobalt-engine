@@ -11,7 +11,8 @@
 namespace cobalt {
     namespace core {
         Renderer::Renderer() :
-            textureUnits(1) {}
+            textureUnits(1),
+            currentUnit(0) {}
 
         void Renderer::render(Mesh& mesh, RenderTarget& target) const {
             mesh.getVAO().bind();
@@ -20,10 +21,7 @@ namespace cobalt {
             shader.use();
             target.bind();
             try {
-                shader.setUniformInt("u_source_scene", 0);
-                shader.setUniformInt("u_albedo", 6);
-                shader.setUniformInt("u_normal", 7);
-                shader.setUniformInt("u_mrao", 8);
+                sendUniforms(shader);
                 shader.setUniformVec3("lightPosition", glm::vec3(0.0, -45.0, 0.0));
                 shader.setUniformVec3("lightColor", glm::vec3(5000.0, 5000.0, 5000.0));
                 shader.setUniformVec3("camPos", target.getCamera().getPosition());
@@ -31,8 +29,8 @@ namespace cobalt {
                 const glm::mat4& model = mesh.getModelMatrix();
                 shader.setUniformMat4("u_model", model);
                 shader.setUniformMat3("u_normal_matrix", glm::transpose(glm::inverse(glm::mat3(model))));
-                for (uint i = 0; i < textureUnits.getSize(); i++) {
-                    shader.setUniformInt("u_" + textureUnits[i], i);
+                for (auto it = textureUnits.begin(); it != textureUnits.end(); it++) {
+                    shader.setUniformInt("u_" + it->first, it->second);
                 }
             } catch (const GLException& e) {
                 CB_CORE_WARN(e.what());
@@ -43,26 +41,33 @@ namespace cobalt {
 
         uint Renderer::getTextureUnit(const std::string& name) const {
             CB_CORE_WARN("Texture unit: " + name);
-            for (uint i = 0; i < textureUnits.getSize(); i++) {
-                CB_CORE_WARN("Texture unit f: " + textureUnits[i]);
-                if (textureUnits[i] == name) {
-                    return i;
+            for (auto it = textureUnits.begin(); it != textureUnits.end(); it++) {
+                CB_CORE_WARN("Texture unit f: " + it->first);
+                if (it->first == name) {
+                    return it->second;
                 }
             }
             throw GFXException("Texture not found");
         }
 
         uint Renderer::bindTexture(const std::string& name, const Texture& texture) {
-            if (textureUnits.getSize() >= RenderContext::queryMaxFragTextureUnits()) {
+            if (currentUnit >= RenderContext::queryMaxFragTextureUnits()) {
                 throw GFXException("No more available texture units");
             }
-            texture.bindToUnit(textureUnits.getSize());
-            textureUnits.push(std::string(name));
-            return textureUnits.getSize() - 1;
+            texture.bindToUnit(currentUnit);
+            textureUnits[name] = currentUnit++;
+            return currentUnit - 1;
         }
 
         void Renderer::clearTextureUnits() {
             textureUnits.clear();
+            currentUnit = 0;
+        }
+
+        void Renderer::sendUniforms(Shader& shader) const {
+            for (auto it = textureUnits.begin(); it != textureUnits.end(); it++) {
+                shader.setUniformInt("u_" + it->first, it->second);
+            }
         }
     }
 }
