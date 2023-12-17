@@ -36,7 +36,8 @@ namespace cobalt {
         void Editor::fixedTimeStep() {
             getInputManager().pollEvents();
             getInputManager().clearEvents();
-            //CB_INFO("Fps: {0}", getFramerate());
+
+            getWindow().setTitle("Cobalt Editor - " + std::to_string(getFramerate()) + " FPS");
         }
 
         void Editor::variableTimeStep(const float delta) {

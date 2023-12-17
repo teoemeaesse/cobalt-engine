@@ -92,8 +92,8 @@ namespace cobalt {
              */
             void unbind() const;
 
-            GLHandle buffer;    // The VAO handle.
             private:
+            GLHandle buffer;    // The VAO handle.
         };
     }
 }

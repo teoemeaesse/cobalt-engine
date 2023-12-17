@@ -1,26 +1,30 @@
 {
     "metal-albedo" : {
-        "type" : "png",
+        "type" : "2d",
         "src" : "metal-albedo.png"
     },
     "metal-normal" : {
-        "type" : "png",
+        "type" : "2d",
         "src" : "metal-normal.png"
     },
     "metal-mrao" : {
-        "type" : "png",
+        "type" : "2d",
         "src" : "metal-mrao.png"
     },
     "wood-albedo" : {
-        "type" : "png",
+        "type" : "2d",
         "src" : "wood-albedo.png"
     },
     "wood-normal" : {
-        "type" : "png",
+        "type" : "2d",
         "src" : "wood-normal.png"
     },
     "wood-mrao" : {
-        "type" : "png",
+        "type" : "2d",
         "src" : "wood-mrao.png"
+    },
+    "skybox" : {
+        "type" : "3d",
+        "src" : "skybox"
     }
 }

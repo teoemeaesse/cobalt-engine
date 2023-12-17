@@ -95,6 +95,10 @@ namespace cobalt {
              * @param mode: The new mode of the window.
              */
             void setMode(const WindowMode mode);
+            /* Sets the title of the window.
+             * @param title: The new title of the window.
+             */
+            void setTitle(const std::string& title);
 
             private:
             /* Creates a new window.

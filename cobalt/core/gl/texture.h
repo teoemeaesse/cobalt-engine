@@ -12,8 +12,6 @@
 namespace cobalt {
     namespace core {
         class Texture {
-            friend class TextureBuilder;
-
             public:
             /* Destroys the texture and frees the memory.
              */
@@ -43,10 +41,10 @@ namespace cobalt {
              * @param width: The width of the texture. 0 will use the current width.
              * @param height: The height of the texture. 0 will use the current height.
              */
-            void reserve(const uint width, const uint height);
+            virtual void reserve(const uint width, const uint height) = 0;
             /* Binds the texture to the current opengl rendering context.
              */
-            void bind() const;
+            virtual void bind() const = 0;
             /* Binds the texture to the given texture unit.
              * @param unit: The texture unit to bind the texture to.
              */
@@ -54,11 +52,11 @@ namespace cobalt {
             /* Sets the wrap mode of the texture.
              * @param wrap: The wrap mode.
              */
-            void setWrap(const GLTextureWrap wrap);
+            virtual void setWrap(const GLTextureWrap wrap) = 0;
             /* Sets the filter mode of the texture.
              * @param filter: The filter mode.
              */
-            void setFilter(const GLTextureFilter filter);
+            virtual void setFilter(const GLTextureFilter filter) = 0;
 
             /* Returns the GL handle to the texture.
              * @return: The GL handle to the texture.
@@ -77,16 +75,76 @@ namespace cobalt {
              */
             inline GLTextureEncoding getEncoding() const { return encoding; }
 
-            private:
+            protected:
             GLHandle texture;                   // The OpenGL handle to the texture.
             std::string source;                 // The source of the texture.
             GLTextureFormat format;             // The pixel format of the texture.
             GLTextureEncoding encoding;         // The internal format of the texture.
             uint width, height;                 // The width and height of the texture.
-            uchar *data;                        // The raw data of the texture.
 
-            /* Creates an empty texture with the given width and height
+            /* Creates an opengl texture.
+             * @param texture: The OpenGL handle to the texture.
+             * @param format: The pixel format of the texture.
+             * @param encoding: The internal format of the texture.
+             * @return: The created texture.
+             */
+            Texture(const GLTextureFormat format,
+                    const GLTextureEncoding encoding);
+        };
+
+        class Texture2D : public Texture {
+            friend class TextureBuilder;
+
+            /* Creates an empty 2d texture with the given width and height
              * and reserves the memory for it.
+             * @param width: The width of the texture.
+             * @param height: The height of the texture.
+             * @param format: The pixel format of the texture.
+             * @param encoding: The internal format of the texture.
+             * @param filter: The filter mode of the texture.
+             * @param wrap: The wrap mode of the texture.
+             * @return: The created texture.
+             */
+            Texture2D(const uint width, const uint height,
+                      const GLTextureFormat format = GLTextureFormat::RGBA,
+                      const GLTextureEncoding encoding = GLTextureEncoding::RGBA,
+                      const GLTextureFilter filter = GLTextureFilter::Linear,
+                      const GLTextureWrap wrap = GLTextureWrap::Repeat);
+            /* Creates a 2d texture from the given path to a file.
+             * @param path: The path to the texture.
+             * @param filter: The filter mode of the texture.
+             * @param wrap: The wrap mode of the texture.
+             * @param isSrgb: Whether the texture is in srgb color space.
+             * @return: The created texture.
+             */
+            Texture2D(const Path& path,
+                      const GLTextureFilter filter = GLTextureFilter::Linear,
+                      const GLTextureWrap wrap = GLTextureWrap::Repeat,
+                      const bool isSrgb = false);
+            
+            /* Reserves the memory for the texture.
+             * @param width: The width of the texture. 0 will use the current width.
+             * @param height: The height of the texture. 0 will use the current height.
+             */
+            void reserve(const uint width, const uint height) override;
+            /* Binds the texture to the current opengl rendering context.
+             */
+            void bind() const override;
+            /* Sets the wrap mode of the texture.
+             * @param wrap: The wrap mode.
+             */
+            void setWrap(const GLTextureWrap wrap) override;
+            /* Sets the filter mode of the texture.
+             * @param filter: The filter mode.
+             */
+            void setFilter(const GLTextureFilter filter) override;
+        };
+
+        class Texture3D : public Texture {
+            friend class TextureBuilder;
+
+            /* Creates an empty cubemap with the given width and height 
+             * for the faces and reserves the memory for it.
              * The format is the internal format of the texture.
              * @param width: The width of the texture.
              * @param height: The height of the texture.
@@ -96,24 +154,40 @@ namespace cobalt {
              * @param wrap: The wrap mode of the texture.
              * @return: The created texture.
              */
-            Texture(const uint width, const uint height,
-                    const GLTextureFormat format = GLTextureFormat::RGBA,
-                    const GLTextureEncoding encoding = GLTextureEncoding::RGBA,
-                    const GLTextureFilter filter = GLTextureFilter::Linear,
-                    const GLTextureWrap wrap = GLTextureWrap::Repeat);
-            /* Creates a texture from the given path.
-             * The texture is always converted to 4 channels.
-             * TODO: Add specific format support. This increases memory usage.
+            Texture3D(const uint width, const uint height,
+                      const GLTextureFormat format = GLTextureFormat::RGBA,
+                      const GLTextureEncoding encoding = GLTextureEncoding::RGBA,
+                      const GLTextureFilter filter = GLTextureFilter::Linear,
+                      const GLTextureWrap wrap = GLTextureWrap::Repeat);
+            /* Creates a cubemap from the given path to a directory containing the faces
+             * in 6 distinct png files: right.png, left.png, top.png, bottom.png, front.png, back.png.
              * @param path: The path to the texture.
              * @param filter: The filter mode of the texture.
              * @param wrap: The wrap mode of the texture.
              * @param isSrgb: Whether the texture is in srgb color space.
              * @return: The created texture.
              */
-            Texture(const Path& path,
-                    const GLTextureFilter filter = GLTextureFilter::Linear,
-                    const GLTextureWrap wrap = GLTextureWrap::Repeat,
-                    const bool isSrgb = false);
+            Texture3D(const Path& path,
+                      const GLTextureFilter filter = GLTextureFilter::Linear,
+                      const GLTextureWrap wrap = GLTextureWrap::Repeat,
+                      const bool isSrgb = false);
+            
+            /* Reserves the memory for the texture.
+             * @param width: The width of the texture. 0 will use the current width.
+             * @param height: The height of the texture. 0 will use the current height.
+             */
+            void reserve(const uint width, const uint height) override;
+            /* Binds the texture to the current opengl rendering context.
+             */
+            void bind() const override;
+            /* Sets the wrap mode of the texture.
+             * @param wrap: The wrap mode.
+             */
+            void setWrap(const GLTextureWrap wrap) override;
+            /* Sets the filter mode of the texture.
+             * @param filter: The filter mode.
+             */
+            void setFilter(const GLTextureFilter filter) override;
         };
 
         class TextureBuilder {
@@ -126,14 +200,23 @@ namespace cobalt {
              */
             ~TextureBuilder() = default;
 
-            /* Constructs an empty Texture object based on the current configuration.
-             * @return: The constructed Texture object.
+            /* Constructs an empty Texture2D object based on the current configuration.
+             * @return: The constructed Texture2D object.
              */
-            Texture buildEmpty() const;
-            /* Constructs a Texture object from a source based on the current configuration.
-             * @return: The constructed Texture object.
+            Texture2D buildEmpty2D() const;
+            /* Constructs a Texture2D object from a source based on the current configuration.
+             * @return: The constructed Texture2D object.
              */
-            Texture buildFromSource(const Path& path) const;
+            Texture2D buildFromSource2D(const Path& path) const;
+
+            /* Constructs an empty Texture3D object based on the current configuration.
+             * @return: The constructed Texture2D object.
+             */
+            Texture3D buildEmpty3D() const;
+            /* Constructs a Texture3D object from a source based on the current configuration.
+             * @return: The constructed Texture3D object.
+             */
+            Texture3D buildFromSource3D(const Path& path) const;
 
             /* Sets the dimensions of the texture.
              * @param width: The width of the texture in pixels.

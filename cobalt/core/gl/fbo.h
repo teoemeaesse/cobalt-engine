@@ -130,8 +130,8 @@ namespace cobalt {
 
             private:
             GLHandle buffer;                        // The FBO handle.
-            std::optional<Texture> color;           // The texture attached to the FBO.
-            std::optional<Texture> depthStencil;    // The depth and/or stencil texture attached to the FBO.
+            std::optional<Texture2D> color;         // The texture attached to the FBO.
+            std::optional<Texture2D> depthStencil;  // The depth and/or stencil texture attached to the FBO.
         };
     }
 }

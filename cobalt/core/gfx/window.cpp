@@ -156,12 +156,19 @@ namespace cobalt {
             glfwSetWindowSize(RenderContext::getGLFWContext(), width, height);
             defaultFBO.resize(width, height);
         }
+
         void Window::setVsync(const bool vsync) {
             this->vsync = vsync;
             glfwSwapInterval(vsync);
         }
+
         void Window::setMode(const WindowMode mode) {
             switchMode(mode);
+        }
+
+        void Window::setTitle(const std::string& title) {
+            this->title = title;
+            glfwSetWindowTitle(RenderContext::getGLFWContext(), title.c_str());
         }
 
         WindowBuilder::WindowBuilder() :

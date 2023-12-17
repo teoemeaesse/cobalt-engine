@@ -104,7 +104,7 @@ namespace cobalt {
             this->height = height;
             if (color.has_value()) color.value().reserve(width, height);
             if (depthStencil.has_value()) depthStencil.value().reserve(width, height);
-            CB_CORE_INFO("Resized FBO to {0}x{1} px (GL handle: {2})", width, height, buffer);
+            CB_CORE_INFO("Resized FBO to {0}x{1} px (GL: {2})", width, height, buffer);
         }
 
         void TargetFBO::bind() const {
