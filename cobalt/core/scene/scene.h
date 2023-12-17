@@ -26,6 +26,9 @@ namespace cobalt {
              * @return: The index of the mesh in the scene.
              */
             const uint addMesh(Mesh&& mesh);
+            /* Removes all the meshes from the scene.
+             */
+            void clear();
 
             /* Gets the meshes in the scene.
              * @return: The meshes in the scene.

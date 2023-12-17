@@ -12,8 +12,8 @@
 namespace cobalt {
     namespace core {
         static void windowCloseCallback(GLFWwindow* window) {
-            CB_WARN("Window closed");
-            CB_WARN("Shutting down");
+            CB_CORE_WARN("Window closed");
+            CB_CORE_WARN("Shutting down");
         }
 
         Window::Window(

@@ -33,6 +33,8 @@ namespace cobalt {
              */
             void swapBuffers() const;
             /* Switches the mode of the window.
+             * VAOs and VBOs are not preserved, so make sure to rebuild your
+             * scene after switching the mode of the window.
              * @param mode: The new mode of the window.
              */
             void switchMode(const WindowMode mode);

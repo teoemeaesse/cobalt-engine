@@ -5,48 +5,71 @@
 #pragma once
 
 #include "engine/cobalt.h"
+#include "editor/editor.h"
 
 
 namespace cobalt {
     namespace editor {
-        class Quit : public core::ConcreteInputCommand<engine::Application> {
+        class Spawn : public core::ConcreteInputCommand<core::Scene> {
             public:
-            Quit(engine::Application* target) : core::ConcreteInputCommand<engine::Application>(target) {
+            Spawn(core::Scene* target) : core::ConcreteInputCommand<core::Scene>(target) {
+            }
+            void execute() const override {
+                if (getInput().held || !getInput().active)
+                    return;
+                static int i = 2;
+                core::Material* material = new core::Material(
+                    CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("scene_shader")),
+                    CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo")),
+                    CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-normal")),
+                    CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-mrao"))
+                );
+                core::Mesh sphere = core::Mesh::createSphere(5.0f, material);
+                sphere.translate(glm::vec3(10.0f * i++, 0.0f, 0.0f));
+                getTarget()->addMesh(std::move(sphere));
+            }
+        };
+        class Quit : public core::ConcreteInputCommand<Editor> {
+            public:
+            Quit(Editor* target) : core::ConcreteInputCommand<Editor>(target) {
             }
             void execute() const override {
                 getTarget()->stop();
             }
         };
 
-        class Fullscreen : public core::ConcreteInputCommand<core::Window> {
+        class Fullscreen : public core::ConcreteInputCommand<Editor> {
             public:
-            Fullscreen(core::Window* target) : core::ConcreteInputCommand<core::Window>(target) {
+            Fullscreen(Editor* target) : core::ConcreteInputCommand<Editor>(target) {
             }
             void execute() const override {
                 if (!getInput().active) {
-                    getTarget()->switchMode(core::WindowMode::Fullscreen);
+                    getTarget()->getWindow().switchMode(core::WindowMode::Fullscreen);
+                    getTarget()->createScene();
                 }
             }
         };
 
-        class Borderless : public core::ConcreteInputCommand<core::Window> {
+        class Borderless : public core::ConcreteInputCommand<Editor> {
             public:
-            Borderless(core::Window* target) : core::ConcreteInputCommand<core::Window>(target) {
+            Borderless(Editor* target) : core::ConcreteInputCommand<Editor>(target) {
             }
             void execute() const override {
                 if (!getInput().active) {
-                    getTarget()->switchMode(core::WindowMode::Borderless);
+                    getTarget()->getWindow().switchMode(core::WindowMode::Borderless);
+                    getTarget()->createScene();
                 }
             }
         };
 
-        class Windowed : public core::ConcreteInputCommand<core::Window> {
+        class Windowed : public core::ConcreteInputCommand<Editor> {
             public:
-            Windowed(core::Window* target) : core::ConcreteInputCommand<core::Window>(target) {
+            Windowed(Editor* target) : core::ConcreteInputCommand<Editor>(target) {
             }
             void execute() const override {
                 if (!getInput().active) {
-                    getTarget()->switchMode(core::WindowMode::Windowed);
+                    getTarget()->getWindow().switchMode(core::WindowMode::Windowed);
+                    getTarget()->createScene();
                 }
             }
         };

@@ -21,6 +21,10 @@ namespace cobalt {
             return meshes.getSize() - 1;
         }
 
+        void Scene::clear() {
+            meshes.clear();
+        }
+
         Vector<Mesh>& Scene::getMeshes() {
             return meshes;
         }
