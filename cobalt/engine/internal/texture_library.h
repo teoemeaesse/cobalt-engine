@@ -11,13 +11,21 @@
 
 namespace cobalt {
     namespace engine {
-        using TextureID = core::uint64;
+        struct TextureID {
+            core::uint64 index;
+            enum class Type {
+                TEXTURE_2D,
+                TEXTURE_3D
+            } type;
+        };
 
         class TextureLibrary {
             public:
+            template<typename T>
             struct TextureEntry {
-                std::string name;       // The name of the texture.
-                core::Texture texture;  // The texture.
+                static_assert(std::is_base_of<core::Texture, T>::value, "T must be a subclass of core::Texture");
+                std::string name;   // The name of the texture.
+                T texture;          // The texture.
             };
 
             /* Creates an empty texture library.
@@ -37,7 +45,7 @@ namespace cobalt {
             void loadTextures(const core::Path& texturesDirectory);
 
             /* Returns the texture ID of the texture with the given name.
-             * If the texture does not exist, returns 0.
+             * If the texture does not exist, returns the null texture ID.
              * @param name: The name of the texture.
              */
             const TextureID getTextureID(const std::string& name);
@@ -57,9 +65,10 @@ namespace cobalt {
             static TextureLibrary& getTextureLibrary();
 
             private:
-            core::Vector<TextureEntry> textures;  // The textures in the library.
+            core::Vector<TextureEntry<core::Texture2D>> textures2D; // The 2D textures in the library.
+            core::Vector<TextureEntry<core::Texture3D>> textures3D; // The cubemap textures in the library.
 
-            static std::unique_ptr<TextureLibrary> instance;  // The singleton instance of the texture library.
+            static std::unique_ptr<TextureLibrary> instance;    // The singleton instance of the texture library.
         };
     }
 }

@@ -95,6 +95,25 @@ namespace cobalt {
         class Texture2D : public Texture {
             friend class TextureBuilder;
 
+            public:
+            /* Reserves the memory for the texture.
+             * @param width: The width of the texture. 0 will use the current width.
+             * @param height: The height of the texture. 0 will use the current height.
+             */
+            void reserve(const uint width, const uint height) override;
+            /* Binds the texture to the current opengl rendering context.
+             */
+            void bind() const override;
+            /* Sets the wrap mode of the texture.
+             * @param wrap: The wrap mode.
+             */
+            void setWrap(const GLTextureWrap wrap) override;
+            /* Sets the filter mode of the texture.
+             * @param filter: The filter mode.
+             */
+            void setFilter(const GLTextureFilter filter) override;
+
+            private:
             /* Creates an empty 2d texture with the given width and height
              * and reserves the memory for it.
              * @param width: The width of the texture.
@@ -121,7 +140,12 @@ namespace cobalt {
                       const GLTextureFilter filter = GLTextureFilter::Linear,
                       const GLTextureWrap wrap = GLTextureWrap::Repeat,
                       const bool isSrgb = false);
-            
+        };
+
+        class Texture3D : public Texture {
+            friend class TextureBuilder;
+
+            public:
             /* Reserves the memory for the texture.
              * @param width: The width of the texture. 0 will use the current width.
              * @param height: The height of the texture. 0 will use the current height.
@@ -138,11 +162,8 @@ namespace cobalt {
              * @param filter: The filter mode.
              */
             void setFilter(const GLTextureFilter filter) override;
-        };
 
-        class Texture3D : public Texture {
-            friend class TextureBuilder;
-
+            private:
             /* Creates an empty cubemap with the given width and height 
              * for the faces and reserves the memory for it.
              * The format is the internal format of the texture.
@@ -171,23 +192,6 @@ namespace cobalt {
                       const GLTextureFilter filter = GLTextureFilter::Linear,
                       const GLTextureWrap wrap = GLTextureWrap::Repeat,
                       const bool isSrgb = false);
-            
-            /* Reserves the memory for the texture.
-             * @param width: The width of the texture. 0 will use the current width.
-             * @param height: The height of the texture. 0 will use the current height.
-             */
-            void reserve(const uint width, const uint height) override;
-            /* Binds the texture to the current opengl rendering context.
-             */
-            void bind() const override;
-            /* Sets the wrap mode of the texture.
-             * @param wrap: The wrap mode.
-             */
-            void setWrap(const GLTextureWrap wrap) override;
-            /* Sets the filter mode of the texture.
-             * @param filter: The filter mode.
-             */
-            void setFilter(const GLTextureFilter filter) override;
         };
 
         class TextureBuilder {

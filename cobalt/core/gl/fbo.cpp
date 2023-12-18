@@ -69,7 +69,7 @@ namespace cobalt {
                                                          .setFilter(filter)
                                                          .setWrap(wrap)
                                                          .setIsSrgb(srgb);
-                color = builder.setChannels(4).setIsColor(true).buildEmpty();
+                color = builder.setChannels(4).setIsColor(true).buildEmpty2D();
                 color.value().bind();
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color.value().getGLHandle(), 0);
             }
@@ -82,7 +82,7 @@ namespace cobalt {
                 if (static_cast<int>(type) & static_cast<int>(GLFramebufferAttachment::Stencil)) {
                     builder.setIsStencil(true);
                 }
-                depthStencil = builder.buildEmpty();
+                depthStencil = builder.buildEmpty2D();
                 depthStencil.value().bind();
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthStencil.value().getGLHandle(), 0);
                 if (static_cast<int>(type) & static_cast<int>(GLFramebufferAttachment::Stencil)) {
