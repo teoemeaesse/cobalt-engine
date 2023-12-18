@@ -8,5 +8,5 @@ uniform samplerCube u_skybox;
 
 
 void main() {
-    color = texture(u_skybox, -normalize(v_tex_coords));
+    color = texture(u_skybox, -v_tex_coords);
 }

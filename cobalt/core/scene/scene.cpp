@@ -23,6 +23,7 @@ namespace cobalt {
 
         void Scene::clear() {
             meshes.clear();
+            this->skybox.reset();
         }
 
         void Scene::setSkybox(Skybox&& skybox) {
