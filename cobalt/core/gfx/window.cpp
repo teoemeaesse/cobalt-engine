@@ -86,6 +86,7 @@ namespace cobalt {
             glEnable(GL_BLEND);
             glDepthFunc(GL_LEQUAL);
             glEnable(GL_DEPTH_TEST);
+            glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); 
             CB_CORE_INFO("Created window");
         }
 
