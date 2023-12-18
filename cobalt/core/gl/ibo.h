@@ -66,6 +66,10 @@ namespace cobalt {
              * @param count: The number of quads.
              */
             static IBO fromQuads(const GLUsage usage, const uint count);
+            /* Create an IBO for a cube.
+             * @param usage: The usage of the buffer.
+             */
+            static IBO fromCube(const GLUsage usage);
 
             private:
             GLHandle buffer;        // The opengl buffer handle.

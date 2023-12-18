@@ -121,6 +121,14 @@ namespace cobalt {
             glDisable(GL_DEPTH_TEST);
         }
 
+        void RenderContext::enableDepthWriting() {
+            glDepthMask(GL_TRUE);
+        }
+
+        void RenderContext::disableDepthWriting() {
+            glDepthMask(GL_FALSE);
+        }
+
         void RenderContext::setUserPointer(void* pointer) {
             glfwSetWindowUserPointer(instance->context, pointer);
         }

@@ -8,5 +8,10 @@
         "type" : "render",
         "vertex" : "filter.vert",
         "fragment" : "filter.frag"
+    },
+    "skybox" : {
+        "type" : "render",
+        "vertex" : "skybox.vert",
+        "fragment" : "skybox.frag"
     }
 }

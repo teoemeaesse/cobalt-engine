@@ -14,12 +14,10 @@ namespace cobalt {
             textureUnits(1),
             currentUnit(0) {}
 
-        void Renderer::render(Mesh& mesh, RenderTarget& target) const {
-            mesh.getVAO().bind();
-            mesh.getIBO().bind();
-            Shader& shader = mesh.getMaterial().getShader();
-            shader.use();
+        void Renderer::renderMesh(Mesh& mesh, RenderTarget& target) const {
+            mesh.bind();
             target.bind();
+            Shader& shader = mesh.getMaterial().getShader();
             try {
                 sendUniforms(shader);
                 shader.setUniformVec3("lightPosition", glm::vec3(0.0, -45.0, 0.0));
@@ -36,7 +34,23 @@ namespace cobalt {
                 CB_CORE_WARN(e.what());
             }
             // TODO: inject uniforms into shader. use UBOs.
-            glDrawElements((GLenum) mesh.getPrimitive(), mesh.getIBO().getCount(), GL_UNSIGNED_INT, nullptr);
+            mesh.render();
+        }
+        
+        void Renderer::renderSkybox(Skybox& skybox, RenderTarget& target) const {
+            skybox.bind();
+            target.bind();
+            Shader& shader = skybox.getShader();
+            try {
+                sendUniforms(shader);
+                shader.setUniformMat4("u_view", glm::mat4(glm::mat3(target.getCamera().getViewMatrix())));
+                shader.setUniformMat4("u_projection", target.getCamera().getProjectionMatrix());
+            } catch (const GLException& e) {
+                CB_CORE_WARN(e.what());
+            }
+            RenderContext::disableDepthWriting();
+            skybox.render();
+            RenderContext::enableDepthWriting();
         }
 
         uint Renderer::getTextureUnit(const std::string& name) const {

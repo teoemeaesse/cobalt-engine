@@ -65,28 +65,34 @@ namespace cobalt {
             return {0, TextureID::Type::TEXTURE_2D};
         }
 
-        const core::Texture& TextureLibrary::getTexture(const TextureID id) {
+        const core::Texture2D& TextureLibrary::getTexture2D(const TextureID id) {
             if (id.index == 0) {
                 CB_WARN("Texture ID 0 is reserved for null texture");
                 return textures2D[0].texture;
             }
-            switch (id.type) {
-                case TextureID::Type::TEXTURE_2D:
-                    if (id.index > textures2D.getSize()) {
-                        CB_WARN("Texture ID {} is out of bounds", id.index);
-                        return textures2D[0].texture;
-                    }
-                    return textures2D[id.index - 1].texture;
-                    break;
-                case TextureID::Type::TEXTURE_3D:
-                    if (id.index > textures3D.getSize()) {
-                        CB_WARN("Texture ID {} is out of bounds", id.index);
-                        return textures2D[0].texture;
-                    }
-                    return textures3D[id.index - 1].texture;
-                    break;
+            if (id.type == TextureID::Type::TEXTURE_2D) {
+                if (id.index > textures2D.getSize()) {
+                    CB_WARN("Texture ID {} is out of bounds", id.index);
+                    return textures2D[0].texture;
+                }
+                return textures2D[id.index - 1].texture;
             }
             return textures2D[0].texture;
+        }
+
+        const core::Texture3D& TextureLibrary::getTexture3D(const TextureID id) {
+            if (id.index == 0) {
+                CB_WARN("Texture ID 0 is reserved for null texture");
+                return textures3D[0].texture;
+            }
+            if(id.type == TextureID::Type::TEXTURE_3D) {
+                if (id.index > textures3D.getSize()) {
+                    CB_WARN("Texture ID {} is out of bounds", id.index);
+                    return textures3D[0].texture;
+                }
+                return textures3D[id.index - 1].texture;
+            }
+            return textures3D[0].texture;
         }
 
         void TextureLibrary::init() {

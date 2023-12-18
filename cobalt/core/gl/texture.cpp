@@ -210,8 +210,8 @@ namespace cobalt {
             std::string faces[6] = {
                 "right.png",
                 "left.png",
-                "top.png",
                 "bottom.png",
+                "top.png",
                 "front.png",
                 "back.png"
             };

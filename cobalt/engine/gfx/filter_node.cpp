@@ -19,7 +19,7 @@ namespace cobalt {
                 height,
                 filter
             );
-            RenderNode::render(filterMesh);
+            RenderNode::renderMesh(filterMesh);
         }
 
         void FilterNode::onResize(const float width, const float height) {

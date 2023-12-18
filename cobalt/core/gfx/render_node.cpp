@@ -21,18 +21,29 @@ namespace cobalt {
             targets(std::move(other.targets)) {
         }
 
-        void RenderNode::render(Mesh& mesh) {
+        void RenderNode::renderMesh(Mesh& mesh) {
             if (targets.getSize() == 0) {
                 CB_CORE_WARN("Render node has no targets");
             }
             for (uint i = 0; i < sources.getSize(); i++) {
                 uint binding = renderer.bindTexture("source_" + sources[i].getName(), sources[i].getColorBuffer());
             }
-            renderer.bindTexture("albedo", CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo")));
-            renderer.bindTexture("normal", CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-normal")));
-            renderer.bindTexture("mrao", CB_TEXTURE_LIBRARY.getTexture(CB_TEXTURE_LIBRARY.getTextureID("wood-mrao")));
+            renderer.bindTexture("albedo", CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo")));
+            renderer.bindTexture("normal", CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-normal")));
+            renderer.bindTexture("mrao", CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-mrao")));
             for (uint i = 0; i < targets.getSize(); i++) {
-                renderer.render(mesh, targets[i]);
+                renderer.renderMesh(mesh, targets[i]);
+            }
+            renderer.clearTextureUnits();
+        }
+        
+        void RenderNode::renderSkybox(Skybox& skybox) {
+            if (targets.getSize() == 0) {
+                CB_CORE_WARN("Render node has no targets");
+            }
+            renderer.bindTexture("skybox", skybox.getTexture());
+            for (uint i = 0; i < targets.getSize(); i++) {
+                renderer.renderSkybox(skybox, targets[i]);
             }
             renderer.clearTextureUnits();
         }

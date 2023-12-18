@@ -50,11 +50,17 @@ namespace cobalt {
              */
             const TextureID getTextureID(const std::string& name);
 
-            /* Returns the texture with the given ID.
+            /* Returns the 2D texture with the given ID.
              * If the texture does not exist, returns a null texture.
              * @param id: The ID of the texture.
              */
-            const core::Texture& getTexture(const TextureID id);
+            const core::Texture2D& getTexture2D(const TextureID id);
+
+            /* Returns the 3D texture with the given ID.
+             * If the texture does not exist, returns a null texture.
+             * @param id: The ID of the texture.
+             */
+            const core::Texture3D& getTexture3D(const TextureID id);
 
             /* Initializes the singleton instance of the texture library.
              */

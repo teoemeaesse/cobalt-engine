@@ -22,8 +22,8 @@ namespace cobalt {
             
             private:
             CobaltConfiguration configuration;
-            core::Scene scene;
             engine::DefaultGraph renderGraph;
+            core::Scene scene;
         };
     }
 }

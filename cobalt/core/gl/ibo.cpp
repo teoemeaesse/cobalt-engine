@@ -58,6 +58,21 @@ namespace cobalt {
             return ibo;
         }
 
+        IBO IBO::fromCube(const GLUsage usage) {
+            IBO ibo(usage, 36);
+            ibo.bind();
+            uint indices[36] = {
+                3, 0, 2, 1, 2, 0, // Front.
+                1, 2, 6, 6, 5, 1, // Right.
+                5, 6, 7, 7, 4, 5, // Back.
+                3, 0, 4, 4, 7, 3, // Left.
+                4, 5, 1, 1, 0, 4, // Top.
+                3, 2, 6, 6, 7, 3  // Bottom.
+            };
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, 36 * sizeof(uint), indices, (GLenum) usage);
+            return ibo;
+        }
+
         const uint IBO::getCount() const {
             return this->indexCount;
         }

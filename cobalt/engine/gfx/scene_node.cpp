@@ -10,7 +10,10 @@ namespace cobalt {
         void SceneNode::render() {
             auto& meshes = scene.getMeshes();
             for (uint i = 0; i < meshes.getSize(); i++) {
-                core::RenderNode::render(meshes[i]);
+                core::RenderNode::renderMesh(meshes[i]);
+            }
+            if (scene.getSkybox().has_value()) {
+                core::RenderNode::renderSkybox(scene.getSkybox().value());
             }
         }
 

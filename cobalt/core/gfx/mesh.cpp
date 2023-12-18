@@ -68,20 +68,18 @@ namespace cobalt {
             };
         }
 
-        VAO& Mesh::getVAO() {
-            return this->vao;
+        void Mesh::bind() const {
+            this->vao.bind();
+            this->ibo.bind();
+            this->material->getShader().use();
         }
 
-        IBO& Mesh::getIBO() {
-            return this->ibo;
+        void Mesh::render() const {
+            glDrawElements((GLenum) this->primitive, this->ibo.getCount(), GL_UNSIGNED_INT, nullptr);
         }
 
         Material& Mesh::getMaterial() {
             return *this->material;
-        }
-
-        GLPrimitive Mesh::getPrimitive() const {
-            return this->primitive;
         }
 
         Mesh Mesh::createRectangle(const uint width, const uint height, Material* material) {
@@ -103,7 +101,7 @@ namespace cobalt {
             layout.push(GLType::Float, 3, false);   // Position.
             layout.push(GLType::Float, 2, false);   // Texture coordinates.
             layout.push(GLType::Float, 3, false);   // Normal.
-            return Mesh(std::move(VAO(vbo, layout)), std::move(IBO::fromQuads(GLUsage::StaticDraw, 1)), material);
+            return Mesh(VAO(vbo, layout), IBO::fromQuads(GLUsage::StaticDraw, 1), material);
         }
 
         Mesh Mesh::createSphere(const uint radius, Material* material) {
@@ -156,7 +154,7 @@ namespace cobalt {
             layout.push(GLType::Float, 3, false);   // Position.
             layout.push(GLType::Float, 2, false);   // Texture coordinates.
             layout.push(GLType::Float, 3, false);   // Normal.
-            return Mesh(std::move(VAO(vbo, layout)), std::move(IBO(GLUsage::StaticDraw, indices, 6 * stacks * slices)), material);
+            return Mesh(VAO(vbo, layout), IBO(GLUsage::StaticDraw, indices, 6 * stacks * slices), material);
         }
     }
 }

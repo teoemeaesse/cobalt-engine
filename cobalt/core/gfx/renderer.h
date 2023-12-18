@@ -8,6 +8,7 @@
 
 #include "core/gfx/mesh.h"
 #include "core/gfx/render_target.h"
+#include "core/gfx/skybox.h"
 #include "core/containers/vector.h"
 
 
@@ -23,11 +24,17 @@ namespace cobalt {
              */
             ~Renderer() = default;
 
-            /* Render call.
+            /* Render a mesh.
              * @param mesh: The mesh to render.
              * @param target: The render target to render to.
              */
-            void render(Mesh& mesh, RenderTarget& target) const;
+            void renderMesh(Mesh& mesh, RenderTarget& target) const;
+
+            /* Render a skybox.
+             * @param skybox: The skybox to render.
+             * @param target: The render target to render to.
+             */
+            void renderSkybox(Skybox& skybox, RenderTarget& target) const;
 
             /* Get the bound texture unit of a given named texture.
              * @param name: The name of the texture.

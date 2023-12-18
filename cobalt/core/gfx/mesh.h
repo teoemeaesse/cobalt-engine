@@ -64,14 +64,12 @@ namespace cobalt {
              */
             glm::mat4x4 getModelMatrix() const;
 
-            /* Get the mesh vertex array object.
-             * @return: The vertex array object.
+            /* Bind the mesh.
              */
-            VAO& getVAO();
-            /* Get the mesh index buffer object.
-             * @return: The index buffer object.
+            void bind() const;
+            /* Render the mesh.
              */
-            IBO& getIBO();
+            void render() const;
             /* Get the mesh material.
              * @return: The material.
              */

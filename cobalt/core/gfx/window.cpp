@@ -84,7 +84,7 @@ namespace cobalt {
             }
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_BLEND);
-            glDepthFunc(GL_LESS);
+            glDepthFunc(GL_LEQUAL);
             glEnable(GL_DEPTH_TEST);
             CB_CORE_INFO("Created window");
         }

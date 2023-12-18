@@ -25,8 +25,16 @@ namespace cobalt {
             meshes.clear();
         }
 
+        void Scene::setSkybox(Skybox&& skybox) {
+            this->skybox.emplace(std::move(skybox));
+        }
+
         Vector<Mesh>& Scene::getMeshes() {
             return meshes;
+        }
+
+        std::optional<Skybox>& Scene::getSkybox() {
+            return skybox;
         }
 
         PerspectiveCamera& Scene::getCamera() {

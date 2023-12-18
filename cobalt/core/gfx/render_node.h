@@ -94,7 +94,14 @@ namespace cobalt {
              * this method.
              * @param mesh: The mesh to render.
              */
-            void render(Mesh& mesh);
+            void renderMesh(Mesh& mesh);
+
+            /* Render a skybox to the targets.
+             * Each render node should decide how to call
+             * this method.
+             * @param skybox: The skybox to render.
+             */
+            void renderSkybox(Skybox& skybox);
         };
     }
 }

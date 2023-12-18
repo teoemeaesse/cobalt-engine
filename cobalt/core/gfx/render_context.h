@@ -84,6 +84,12 @@ namespace cobalt {
             /* Disables depth testing.
              */
             static void disableDepthTest();
+            /* Enables writing to the depth buffer.
+             */
+            static void enableDepthWriting();
+            /* Disables writing to the depth buffer.
+             */
+            static void disableDepthWriting();
             /* Sets the user pointer. This is any pointer that
              * can be used by anyone with the render context.
              * @param pointer: The user pointer.
