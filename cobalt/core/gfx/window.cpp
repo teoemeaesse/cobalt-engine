@@ -68,6 +68,7 @@ namespace cobalt {
                 default:
                     throw GFXException("Invalid window mode");
             }
+            
             RenderContext::recreateFromContext(RenderContext::getGLFWContext());
             glfwSwapInterval(vsync);
             glfwSetWindowTitle(RenderContext::getGLFWContext(), title.c_str());
