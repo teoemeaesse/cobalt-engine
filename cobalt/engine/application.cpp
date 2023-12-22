@@ -2,11 +2,9 @@
 // Created by tomas on 29-11-2023.
 //
 
-#include <time.h>
-
 #include "engine/application.h"
-#include "core/utils/log.h"
 #include "core/gfx/render_context.h"
+#include "core/pch.h"
 
 
 namespace cobalt {

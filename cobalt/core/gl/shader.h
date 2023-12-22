@@ -4,10 +4,7 @@
 
 #pragma once
 
-#include <memory>
-
-#include "core/utils/types.h"
-#include "core/gl/definitions.h"
+#include "core/pch.h"
 
 
 namespace cobalt {

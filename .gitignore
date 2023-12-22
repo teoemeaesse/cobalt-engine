@@ -46,3 +46,8 @@ CMakeDoxyfile.in
 Testing
 CTestTestfile.cmake
 DartConfiguration.tcl
+
+# Lib
+lib/glfw/tests
+lib/glfw/docs
+lib/glfw/examples

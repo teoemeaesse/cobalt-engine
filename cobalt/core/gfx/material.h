@@ -4,10 +4,9 @@
 
 #pragma once
 
-#include "core/gl/definitions.h"
+#include "core/pch.h"
 #include "core/gl/texture.h"
 #include "core/gl/shader.h"
-#include "core/gfx/color.h"
 
 
 namespace cobalt {

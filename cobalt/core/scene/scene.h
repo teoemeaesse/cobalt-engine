@@ -4,12 +4,10 @@
 
 #pragma once
 
-#include <optional>
-
-#include "core/containers/vector.h"
 #include "core/gfx/mesh.h"
 #include "core/gfx/camera.h"
 #include "core/gfx/skybox.h"
+#include "core/pch.h"
 
 
 namespace cobalt {

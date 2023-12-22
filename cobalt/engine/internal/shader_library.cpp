@@ -2,15 +2,10 @@
 // Created by tomas on 06-12-2023.
 //
 
-#include <fstream>
-
-#include "json/json.hpp"
-
 #include "engine/internal/shader_library.h"
-#include "core/io/file.h"
 #include "core/gl/render_shader.h"
 #include "core/gl/compute_shader.h"
-#include "core/utils/log.h"
+#include "core/pch.h"
 
 
 namespace cobalt {

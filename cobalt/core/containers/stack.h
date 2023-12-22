@@ -17,7 +17,7 @@ namespace cobalt {
              * @param initial_capacity: The initial capacity of the stack. Defaults to 16.
              * @return: A stack with the initial capacity.
              */
-            Stack(const uint64 initial_capacity = 16) : heap(), element_count(0), block_count(1) {
+            Stack(const uint initial_capacity = 16) : heap(), element_count(0), block_count(1) {
                 blocks = (StackBlock*) heap.grab(sizeof(StackBlock));
                 blocks[0] = stackBlockCreate(initial_capacity);
             }
@@ -27,7 +27,7 @@ namespace cobalt {
                 if (blocks == nullptr) {
                     return;
                 }
-                for (uint64 i = 0; i < block_count; i++) {
+                for (uint i = 0; i < block_count; i++) {
                     stackBlockDestroy(blocks[i]);
                 }
                 heap.drop(blocks);
@@ -44,7 +44,7 @@ namespace cobalt {
                 block_count(other.block_count),
                 blocks(nullptr) {
                 blocks = (StackBlock*) heap.grab(sizeof(StackBlock) * block_count);
-                for (uint64 i = 0; i < block_count; ++i) {
+                for (uint i = 0; i < block_count; ++i) {
                     blocks[i].data = (T*) heap.grab(other.blocks[i].block_capacity * sizeof(T));
                     blocks[i].block_size = other.blocks[i].block_size;
                     blocks[i].block_capacity = other.blocks[i].block_capacity;
@@ -71,7 +71,7 @@ namespace cobalt {
              */
             Stack& operator=(const Stack& other) {
                 if (this != &other) {
-                    for (uint64 i = 0; i < block_count; i++) {
+                    for (uint i = 0; i < block_count; i++) {
                         stackBlockDestroy(blocks[i]);
                     }
                     heap.drop(blocks);
@@ -79,7 +79,7 @@ namespace cobalt {
                     element_count = other.element_count;
                     block_count = other.block_count;
                     blocks = (StackBlock*) heap.grab(sizeof(StackBlock) * block_count);
-                    for (uint64 i = 0; i < block_count; ++i) {
+                    for (uint i = 0; i < block_count; ++i) {
                         blocks[i].data = (T*) heap.grab(other.blocks[i].block_capacity * sizeof(T));
                         blocks[i].block_size = other.blocks[i].block_size;
                         blocks[i].block_capacity = other.blocks[i].block_capacity;
@@ -96,7 +96,7 @@ namespace cobalt {
              */
             Stack& operator=(Stack&& other) noexcept {
                 if (this != &other) {
-                    for (uint64 i = 0; i < block_count; i++) {
+                    for (uint i = 0; i < block_count; i++) {
                         stackBlockDestroy(blocks[i]);
                     }
                     heap.drop(blocks);
@@ -178,27 +178,27 @@ namespace cobalt {
             /* Gets the number of elements in the stack.
              * @return: The number of elements in the stack.
              */
-            const uint64 getSize() const {
+            const uint getSize() const {
                 return element_count;
             }
         
             private:
             struct StackBlock {
                 T *data;                // Pointer to the data.
-                uint64 block_size;      // Number of elements in the block.
-                uint64 block_capacity;  // Number of elements the block can hold.
+                uint block_size;      // Number of elements in the block.
+                uint block_capacity;  // Number of elements the block can hold.
             };
 
             HeapAllocator heap;         // Heap allocator for the stack.
             StackBlock *blocks;         // Pointer to the blocks.
-            uint64 block_count;         // Number of blocks in the stack.
-            uint64 element_count;       // Number of elements in the stack.
+            uint block_count;         // Number of blocks in the stack.
+            uint element_count;       // Number of elements in the stack.
 
             /* Creates a stack block with a specified capacity.
              * @param capacity: The capacity of the block.
              * @return: A stack block with the given capacity.
              */
-            StackBlock stackBlockCreate(const uint64 capacity) {
+            StackBlock stackBlockCreate(const uint capacity) {
                 return {
                     .data = (T*) heap.grab(capacity * sizeof(T)),
                     .block_size = 0,
@@ -209,7 +209,7 @@ namespace cobalt {
              * @param block: The block to destroy.
              */
             void stackBlockDestroy(StackBlock& block) {
-                for (uint64 i = 0; i < block.block_size; i++) {
+                for (uint i = 0; i < block.block_size; i++) {
                     block.data[i].~T();
                 }
                 heap.drop(block.data);

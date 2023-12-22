@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "core/utils/log.h"
 #include "core/gfx/render_context.h"
 #include "engine/application.h"
 #include "engine/internal/shader_library.h"

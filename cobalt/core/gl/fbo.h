@@ -4,10 +4,8 @@
 
 #pragma once
 
-#include <optional>
-
 #include "core/gl/texture.h"
-#include "core/gfx/color.h"
+#include "core/pch.h"
 
 
 namespace cobalt {

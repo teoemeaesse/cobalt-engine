@@ -30,7 +30,7 @@ namespace cobalt {
             return path;
         }
 
-        uint64 File::getSize() const {
+        uint64_t File::getSize() const {
             return std::filesystem::file_size(path.getPath());
         }
 

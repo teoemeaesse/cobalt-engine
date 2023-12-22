@@ -4,8 +4,7 @@
 
 #include "core/gfx/renderer.h"
 #include "core/gfx/render_context.h"
-#include "core/exceptions/gfx_exception.h"
-#include "core/utils/log.h"
+#include "core/pch.h"
 
 
 namespace cobalt {

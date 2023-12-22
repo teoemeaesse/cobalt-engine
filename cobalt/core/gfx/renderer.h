@@ -4,12 +4,10 @@
 
 #pragma once
 
-#include <unordered_map>
-
 #include "core/gfx/mesh.h"
 #include "core/gfx/render_target.h"
 #include "core/gfx/skybox.h"
-#include "core/containers/vector.h"
+#include "core/pch.h"
 
 
 namespace cobalt {

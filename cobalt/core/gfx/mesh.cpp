@@ -3,7 +3,7 @@
 //
 
 #include "core/gfx/mesh.h"
-#include "core/containers/vector.h"
+#include "core/pch.h"
 
 
 namespace cobalt {

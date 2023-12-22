@@ -40,7 +40,11 @@ target_include_directories(cobalt PRIVATE
     ${LIBDIR}/glew/include
 )
 
-if(APPLE AND NOT UNIX)
+target_precompile_headers(cobalt PRIVATE
+    ${SOURCEDIR}/core/pch.h
+)
+
+if(APPLE)
     target_link_libraries(cobalt PRIVATE
         glfw
         glew

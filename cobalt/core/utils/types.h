@@ -15,9 +15,5 @@
 
 namespace cobalt {
     namespace core {
-        using uchar = unsigned char;
-        using int64 = int64_t;
-        using uint64 = uint64_t;
-        using uint = unsigned int;
     }
 }

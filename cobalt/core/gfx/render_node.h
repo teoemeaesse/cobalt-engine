@@ -6,8 +6,7 @@
 
 #include "core/gfx/renderer.h"
 #include "core/gfx/render_target.h"
-#include "core/containers/vector.h"
-#include "core/utils/log.h"
+#include "core/pch.h"
 
 
 namespace cobalt {

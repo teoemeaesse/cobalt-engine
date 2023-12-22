@@ -4,9 +4,8 @@
 
 #pragma once
 
-#include "core/containers/vector.h"
-#include "core/io/path.h"
 #include "core/gl/texture.h"
+#include "core/pch.h"
 
 
 namespace cobalt {

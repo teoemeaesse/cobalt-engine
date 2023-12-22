@@ -4,21 +4,14 @@
 
 #pragma once
 
+// Precompiled header
+#include "core/pch.h"
 
 // Graphics
-
 #include "core/gfx/window.h"
 #include "core/gfx/render_graph.h"
 
-// Memory
-
-#include "core/memory/allocator.h"
-#include "core/memory/heap.h"
-#include "core/memory/pool.h"
-#include "core/memory/arena.h"
-
 // Engine
-
 #include "engine/entry_point.h"
 #include "engine/internal/configuration.h"
 #include "engine/gfx/default_graph.h"

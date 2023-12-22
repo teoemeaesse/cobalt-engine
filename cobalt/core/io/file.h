@@ -36,7 +36,7 @@ namespace cobalt {
             /* Get the size of the file.
              * @return: The size.
              */
-            uint64 getSize() const;
+            uint64_t getSize() const;
 
             /* Check if the file exists.
              * @return: True if the file exists, false otherwise.

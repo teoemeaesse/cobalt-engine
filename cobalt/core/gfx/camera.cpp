@@ -3,7 +3,7 @@
 //
 
 #include "core/gfx/camera.h"
-#include "core/utils/log.h"
+#include "core/pch.h"
 
 
 namespace cobalt {

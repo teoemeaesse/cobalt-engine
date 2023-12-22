@@ -2,12 +2,8 @@
 // Created by tomas on 06-12-2023.
 //
 
-#include <fstream>
-
-#include "json/json.hpp"
-
 #include "engine/internal/texture_library.h"
-#include "core/utils/log.h"
+#include "core/pch.h"
 
 
 namespace cobalt {

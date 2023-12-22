@@ -18,13 +18,13 @@ namespace cobalt {
              * @param initialCapacity: The initial capacity of the vector.
              * @return: The created vector.
              */
-            Vector(uint64 initialCapacity) :
+            Vector(uint initialCapacity) :
                 heap(HeapAllocator()),
                 data(heap.grab(initialCapacity * sizeof(T))),
-                indices((uint64*) heap.grab(initialCapacity * sizeof(uint64))),
+                indices((uint*) heap.grab(initialCapacity * sizeof(uint))),
                 capacity(initialCapacity),
                 size(0),
-                gaps(Stack<uint64>(initialCapacity))
+                gaps(Stack<uint>(initialCapacity))
                 {}
             /* Creates a new vector as a deep copy of another vector.
              * This constructor copies each element of the 'other' vector, preserving its state.
@@ -34,11 +34,11 @@ namespace cobalt {
             Vector(const Vector<T>& other) :
                 heap(HeapAllocator()),
                 data(heap.grab(other.capacity * sizeof(T))),
-                indices((uint64*) heap.grab(other.capacity * sizeof(uint64))),
+                indices((uint*) heap.grab(other.capacity * sizeof(uint))),
                 capacity(other.capacity),
                 size(other.size),
                 gaps(other.gaps) {
-                for (uint64 i = 0; i < size; i++) {
+                for (uint i = 0; i < size; i++) {
                     new((T*)((char*) data + i * sizeof(T))) T(*(T*)((char*) other.data + i * sizeof(T)));
                     indices[i] = other.indices[i];
                 }
@@ -49,7 +49,7 @@ namespace cobalt {
                 if (data == nullptr) {
                     return;
                 }
-                for (uint64 i = 0; i < size; i++) {
+                for (uint i = 0; i < size; i++) {
                     ((T*)((char*) data + indices[i] * sizeof(T)))->~T();
                 }
                 heap.drop(data);
@@ -82,12 +82,12 @@ namespace cobalt {
                     clear(); // Clear current contents
                     // Allocate new resources
                     data = heap.grab(other.capacity * sizeof(T));
-                    indices = (uint64*) heap.grab(other.capacity * sizeof(uint64));
+                    indices = (uint*) heap.grab(other.capacity * sizeof(uint));
                     capacity = other.capacity;
                     size = other.size;
                     gaps = other.gaps;
                     // Deep copy elements
-                    for (uint64 i = 0; i < size; i++) {
+                    for (uint i = 0; i < size; i++) {
                         new((T*)((char*) data + i * sizeof(T))) T(*(T*)((char*) other.data + i * sizeof(T)));
                         indices[i] = other.indices[i];
                     }
@@ -117,7 +117,7 @@ namespace cobalt {
              * @param index: The index of the element.
              * @return: The element at the given index.
              */
-            T* raw(uint64 index) {
+            T* raw(uint index) {
                 if (index >= size || size == 0 || index < 0) {
                     throw ContainerException("Index out of bounds");
                 }
@@ -128,7 +128,7 @@ namespace cobalt {
              * @param index: The index of the element.
              * @return: The element at the given index.
              */
-            T& operator[](uint64 index) {
+            T& operator[](uint index) {
                 if (index >= size || size == 0 || index < 0) {
                     throw ContainerException("Index out of bounds");
                 }
@@ -138,7 +138,7 @@ namespace cobalt {
              * @param index: The index of the element.
              * @return: The element at the given index.
              */
-            const T& operator[](uint64 index) const {
+            const T& operator[](uint index) const {
                 if (index >= size || size == 0 || index < 0) {
                     throw ContainerException("Index out of bounds");
                 }
@@ -150,7 +150,7 @@ namespace cobalt {
              */
             void push(const T& element) {
                 if (gaps.getSize() > 0) {
-                    uint64 index = gaps.pop();
+                    uint index = gaps.pop();
                     indices[index] = size;
                     new((T*)((char*) data + index * sizeof(T))) T(element);
                 } else {
@@ -167,7 +167,7 @@ namespace cobalt {
              */
             void push(T&& element) {
                 if (gaps.getSize() > 0) {
-                    uint64 index = gaps.pop();
+                    uint index = gaps.pop();
                     indices[index] = size;
                     new((T*)((char*) data + index * sizeof(T))) T(std::move(element));
                 } else {
@@ -185,7 +185,7 @@ namespace cobalt {
             template <typename... Args>
             void emplace(Args&&... args) {
                 if (gaps.getSize() > 0) {
-                    uint64 index = gaps.pop();
+                    uint index = gaps.pop();
                     indices[index] = size;
                     new((T*)((char*) data + index * sizeof(T))) T(std::forward<Args>(args)...);
                 } else {
@@ -201,14 +201,14 @@ namespace cobalt {
             /* Removes the element at the given index.
              * @param index: The index of the element to remove.
              */
-            void remove(uint64 index) {
+            void remove(uint index) {
                 if (index >= size || size == 0 || index < 0) {
                     throw ContainerException("Index out of bounds");
                 }
                 ((T*)((char*) data + indices[index] * sizeof(T)))->~T();
                 gaps.push(indices[index]);
                 size--;
-                for (uint64 i = index; i < size; i++) {
+                for (uint i = index; i < size; i++) {
                     indices[i] = indices[i + 1];
                 }
             }
@@ -216,7 +216,7 @@ namespace cobalt {
             /* Returns the size of the vector.
              * @return: The size of the vector.
              */
-            uint64 getSize() const {
+            uint getSize() const {
                 return size;
             }
 
@@ -231,17 +231,17 @@ namespace cobalt {
             private:
             HeapAllocator heap; // The heap allocator used to allocate the vector.
             void* data;         // The data of the vector.
-            uint64* indices;    // Maps each index to its corresponding block.
-            uint64 capacity;    // The capacity of the vector.
-            uint64 size;        // The size of the vector.
-            Stack<uint64> gaps; // The gaps in the vector.
+            uint* indices;    // Maps each index to its corresponding block.
+            uint capacity;    // The capacity of the vector.
+            uint size;        // The size of the vector.
+            Stack<uint> gaps; // The gaps in the vector.
 
             /* Resizes the vector to the given capacity.
              * @param newCapacity: The new capacity of the vector.
              */
-            void resize(uint64 newCapacity) {
+            void resize(uint newCapacity) {
                 data = heap.resize(data, newCapacity * sizeof(T));
-                indices = (uint64*) heap.resize(indices, newCapacity * sizeof(uint64));
+                indices = (uint*) heap.resize(indices, newCapacity * sizeof(uint));
                 capacity = newCapacity;
             }
         };
