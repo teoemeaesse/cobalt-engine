@@ -12,6 +12,7 @@ namespace cobalt {
         class ContainerException : public std::runtime_error {
             public:
             ContainerException(const std::string& message) : std::runtime_error(message) {}
+            ContainerException(const char* message) : std::runtime_error(message) {}
         };
     }
 }

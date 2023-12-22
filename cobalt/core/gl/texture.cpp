@@ -86,7 +86,7 @@ namespace cobalt {
 
         Texture::Texture(const GLTextureFormat format, 
                          const GLTextureEncoding encoding) :
-                         texture(texture), format(format), encoding(encoding) {}
+                         texture(0), format(format), encoding(encoding) {}
 
         Texture::~Texture() {
             if (texture != 0) {
@@ -116,7 +116,8 @@ namespace cobalt {
         }
 
         void Texture::bindToUnit(GLuint unit) const {
-            glBindTextureUnit(unit, texture);
+            glActiveTexture(GL_TEXTURE0 + unit);
+            glBindTexture(GL_TEXTURE_2D, texture);
         }
 
         Texture2D::Texture2D(const uint width, const uint height, 

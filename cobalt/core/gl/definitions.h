@@ -4,9 +4,13 @@
 
 #pragma once
 
+#include <string>
+
 #ifndef GL_GLEXT_PROTOTYPES
 #define GL_GLEXT_PROTOTYPES
 #endif
+#define GLEW_STATIC
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "core/exceptions/gl_exception.h"

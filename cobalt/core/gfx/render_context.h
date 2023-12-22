@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "core/gl/definitions.h"
+#include "core/utils/types.h"
 
 
 namespace cobalt {
@@ -113,6 +114,16 @@ namespace cobalt {
             
             // -- OpenGL queries --
 
+            /* Query the OpenGL version.
+             * @return: The OpenGL version.
+             */
+            static const char* queryGLVersion();
+
+            /* Query the GLSL version.
+             * @return: The GLSL version.
+             */
+            static const char* queryGLSLVersion();
+
             /* Query the maximum number of textures that can be accessed
              * by the fragment shader.
              * @return: The maximum number of bound textures.
@@ -123,6 +134,10 @@ namespace cobalt {
              * @return: The maximum number of bound textures.
              */
             static uint queryMaxTotalTextureUnits();
+
+            /* Log all OpenGL queries.
+             */
+            static void logQueries();
             
 
             /* Creates a new render context.

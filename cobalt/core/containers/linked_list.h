@@ -6,6 +6,7 @@
 
 #include "core/memory/pool.h"
 #include "core/exceptions/container_exception.h"
+#include "core/utils/types.h"
 
 
 namespace cobalt {

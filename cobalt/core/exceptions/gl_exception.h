@@ -12,6 +12,7 @@ namespace cobalt {
         class GLException : public std::runtime_error {
             public:
             GLException(const std::string& message) : std::runtime_error(message) {}
+            GLException(const char* message) : std::runtime_error(message) {}
         };
     }
 }

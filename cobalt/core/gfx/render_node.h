@@ -33,7 +33,7 @@ namespace cobalt {
             }
             /* Destroy the render node.
              */
-            ~RenderNode() = default;
+            virtual ~RenderNode() = default;
             /* Copy constructor.
              * @param other: The other render node.
              * @return: The render node.

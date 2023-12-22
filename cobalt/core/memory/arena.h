@@ -73,7 +73,7 @@ namespace cobalt {
             * @param size: The new size of the block.
             * @return: A pointer to the resized block.
             */
-            void* realloc(void* ptr, const size_t size);
+            void* realloc(void* ptr, const size_t size) override;
 
             /* Creates an arena block with a given size.
             * @param heap: The heap allocator of the arena.

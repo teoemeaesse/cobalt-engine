@@ -16,10 +16,6 @@ namespace cobalt {
              * @return: The file.
              */
             explicit File(const Path& path);
-            /* Create an empty file.
-             * @return: The file.
-             */
-            File() = default;
             /* Destroy the file.
              */
             ~File() = default;

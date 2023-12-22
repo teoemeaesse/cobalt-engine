@@ -45,20 +45,6 @@ namespace cobalt {
                         app->getWindow().onResize((float) width, (float) height);
                         app->onResize((float) width, (float) height);
                     });
-                    core::RenderContext::setDebugCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
-                        switch (severity) {
-                            case GL_DEBUG_SEVERITY_HIGH:
-                            case GL_DEBUG_SEVERITY_MEDIUM:
-                                CB_CORE_ERROR(message);
-                                break;
-                            case GL_DEBUG_SEVERITY_LOW:
-                                CB_CORE_WARN(message);
-                                break;
-                            case GL_DEBUG_SEVERITY_NOTIFICATION:
-                                CB_CORE_INFO(message);
-                                break;
-                        }
-                    });
                 })
                 .build()
             ) {

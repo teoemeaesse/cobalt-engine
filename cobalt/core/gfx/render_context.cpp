@@ -18,12 +18,13 @@ namespace cobalt {
             if (instance) {
                 throw GFXException("Render context already initialized");
             }
-            instance = std::make_shared<RenderContext>();
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+            instance = std::make_shared<RenderContext>();
+            glewExperimental = GL_TRUE; // Needed for core profile
             CB_CORE_INFO("Initialized render context");
         }
         
@@ -50,7 +51,10 @@ namespace cobalt {
             }
             instance->context = glfwCreateWindow(1, 1, "", nullptr, nullptr);
             if (!instance->context) {
-                throw GFXException("Failed to recreate render context");
+                // check for glfw errors
+                const char* error;
+                glfwGetError(&error);
+                throw GFXException("Failed to recreate render context: " + std::string(error));
             }
             glfwMakeContextCurrent(instance->context);
             if (pointer) {
@@ -64,7 +68,9 @@ namespace cobalt {
                 pointer = instance->getUserPointer();
                 GLFWwindow* newContext = glfwCreateWindow(1, 1, "", nullptr, oldContext);
                 if (!newContext) {
-                    throw GFXException("Failed to recreate render context from GLFW context");
+                    const char* error;
+                    glfwGetError(&error);
+                    throw GFXException("Failed to recreate render context from old context: " + std::string(error));
                 }
                 glfwMakeContextCurrent(newContext);
                 glfwDestroyWindow(oldContext);
@@ -151,6 +157,14 @@ namespace cobalt {
             return instance->context;
         }
 
+        const char* RenderContext::queryGLVersion() {
+            return (const char*)glGetString(GL_VERSION);
+        }    
+
+        const char* RenderContext::queryGLSLVersion() {
+            return (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+        }
+
         uint RenderContext::queryMaxFragTextureUnits() {
             int max;
             glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &max);
@@ -163,6 +177,13 @@ namespace cobalt {
             return max;
         }
 
+        void RenderContext::logQueries() {
+            CB_CORE_INFO("OpenGL version: {0}", queryGLVersion());
+            CB_CORE_INFO("GLSL version: {0}", queryGLSLVersion());
+            CB_CORE_INFO("Max fragment texture units: {0}", queryMaxFragTextureUnits());
+            CB_CORE_INFO("Max total texture units: {0}", queryMaxTotalTextureUnits());
+        }
+
         RenderContext::RenderContext() :
             context() {
             context = glfwCreateWindow(1, 1, "", nullptr, nullptr);
@@ -170,6 +191,11 @@ namespace cobalt {
                 throw GFXException("Failed to create render context");
             }
             glfwMakeContextCurrent(context);
+            GLenum err = glewInit();
+            if (err != GLEW_OK) {
+                throw GFXException("Failed to initialize GLEW: " + std::string((const char*)glewGetErrorString(err)));
+            }
+            logQueries();
         }
 
         RenderContext::RenderContext(GLFWContext context) :

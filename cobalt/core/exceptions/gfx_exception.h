@@ -12,6 +12,7 @@ namespace cobalt {
         class GFXException : public std::runtime_error {
             public:
             GFXException(const std::string& message) : std::runtime_error(message) {}
+            GFXException(const char* message) : std::runtime_error(message) {}
         };
     }
 }

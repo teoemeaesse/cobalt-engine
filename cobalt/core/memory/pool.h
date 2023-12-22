@@ -5,6 +5,7 @@
 #pragma once
 
 #include "core/memory/heap.h"
+#include "core/utils/types.h"
 
 
 namespace cobalt {
@@ -44,8 +45,8 @@ namespace cobalt {
                     }
                 }
                 chunks = (PoolChunk*) heap.resize(chunks, (chunk_count + 1) * sizeof(PoolChunk));
-                chunks[chunk_count] = poolChunkCreate(heap, PoolAllocator<T>::getSize());
-                return (T*) ((char*) chunks[chunk_count].data + chunks[chunk_count++].block_count++ * sizeof(T));
+                chunks[chunk_count++] = poolChunkCreate(heap, PoolAllocator<T>::getSize());
+                return (T*) ((char*) chunks[chunk_count - 1].data + chunks[chunk_count - 1].block_count++ * sizeof(T));
             }
             /* Frees a block of memory from the pool.
             * @param ptr: The pointer to the block to free.
