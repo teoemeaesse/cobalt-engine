@@ -8,6 +8,7 @@ project(cobalt-core-tests)
 set(CMAKE_CXX_STANDARD 20)
 set(SOURCEDIR ../cobalt)
 set(INCLUDEDIR ../include)
+set(LIBDIR lib)
 set(TESTDIR .)
 
 # Set additional flags
@@ -31,6 +32,10 @@ include_directories(${TESTDIR}/core)
 file(GLOB_RECURSE TEST_SOURCES ${TESTDIR}/core/*.cpp)
 file(GLOB_RECURSE CORE_SOURCES ${SOURCEDIR}/core/*.cpp)
 
+# Add the GLFW subdirectory
+add_subdirectory(${LIBDIR}/glfw)
+add_subdirectory(${LIBDIR}/glew/build/cmake)
+
 # Include the Unity test framework
 add_library(unity STATIC ${INCLUDEDIR}/unity/unity.c)
 
@@ -44,23 +49,38 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
     set_target_properties(${TEST_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
     target_include_directories(${TEST_NAME} PRIVATE
         ${SOURCEDIR}
+        ${LIBDIR}/glew/include
     )
-    target_link_libraries(${TEST_NAME} PRIVATE
-        GL
-        GLU
-        glfw3
-        X11
-        Xxf86vm
-        Xrandr
-        pthread
-        Xi
-        dl
-        m
-        Xinerama
-        Xcursor
-        unity
-        ${FREETYPE_LIBRARIES}
-    )
+    if(APPLE AND NOT UNIX)
+        target_link_libraries(${TEST_NAME} PRIVATE
+            glfw
+            glew
+            "-framework Cocoa"
+            "-framework IOKit"
+            "-framework CoreVideo"
+            pthread
+            dl
+            m
+            unity
+        )
+    elseif(UNIX AND NOT APPLE)
+        target_link_libraries(${TEST_NAME} PRIVATE
+            GL
+            GLU
+            glfw
+            glew
+            X11
+            Xxf86vm
+            Xrandr
+            pthread
+            Xi
+            dl
+            m
+            Xinerama
+            Xcursor
+            unity
+        )
+    endif()
     
     # Run the tests after building
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
