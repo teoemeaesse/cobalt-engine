@@ -8,16 +8,13 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/tomasmarques/cobalt-engine/include/glfw/deps/glad_gl.c" "examples/CMakeFiles/gears.dir/__/deps/glad_gl.c.o" "gcc" "examples/CMakeFiles/gears.dir/__/deps/glad_gl.c.o.d"
-  "/Users/tomasmarques/cobalt-engine/include/glfw/examples/gears.c" "examples/CMakeFiles/gears.dir/gears.c.o" "gcc" "examples/CMakeFiles/gears.dir/gears.c.o.d"
+  "/home/tomas/cobalt-workspace/cobalt-engine/lib/glfw/deps/glad_gl.c" "examples/CMakeFiles/gears.dir/__/deps/glad_gl.c.o" "gcc" "examples/CMakeFiles/gears.dir/__/deps/glad_gl.c.o.d"
+  "/home/tomas/cobalt-workspace/cobalt-engine/lib/glfw/examples/gears.c" "examples/CMakeFiles/gears.dir/gears.c.o" "gcc" "examples/CMakeFiles/gears.dir/gears.c.o.d"
   )
 
-# Targets to which this target links which contain Fortran sources.
-set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
-  )
-
-# Targets to which this target links which contain Fortran sources.
-set(CMAKE_Fortran_TARGET_FORWARD_LINKED_INFO_FILES
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
+  "/home/tomas/cobalt-workspace/cobalt-engine/lib/glfw/src/CMakeFiles/glfw.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

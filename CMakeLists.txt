@@ -40,7 +40,7 @@ target_include_directories(cobalt PRIVATE
     ${LIBDIR}/glew/include
 )
 
-if(APPLE)
+if(APPLE AND NOT UNIX)
     target_link_libraries(cobalt PRIVATE
         glfw
         glew
@@ -51,7 +51,7 @@ if(APPLE)
         dl
         m
     )
-elseif(UNIX)
+elseif(UNIX AND NOT APPLE)
     target_link_libraries(cobalt PRIVATE
         GL
         GLU

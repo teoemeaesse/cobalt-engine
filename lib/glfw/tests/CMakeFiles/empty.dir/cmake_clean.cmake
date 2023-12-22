@@ -5,7 +5,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/empty.dir/__/deps/tinycthread.c.o.d"
   "CMakeFiles/empty.dir/empty.c.o"
   "CMakeFiles/empty.dir/empty.c.o.d"
-  "empty.app/Contents/MacOS/empty"
+  "empty"
   "empty.pdb"
 )
 

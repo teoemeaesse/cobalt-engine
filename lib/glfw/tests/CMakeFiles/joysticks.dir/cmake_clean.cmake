@@ -3,7 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/joysticks.dir/__/deps/glad_gl.c.o.d"
   "CMakeFiles/joysticks.dir/joysticks.c.o"
   "CMakeFiles/joysticks.dir/joysticks.c.o.d"
-  "joysticks.app/Contents/MacOS/joysticks"
+  "joysticks"
   "joysticks.pdb"
 )
 

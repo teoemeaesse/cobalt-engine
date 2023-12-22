@@ -3,8 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/simple.dir/__/deps/glad_gl.c.o.d"
   "CMakeFiles/simple.dir/simple.c.o"
   "CMakeFiles/simple.dir/simple.c.o.d"
-  "simple.app/Contents/MacOS/simple"
-  "simple.app/Contents/Resources/glfw.icns"
+  "simple"
   "simple.pdb"
 )
 

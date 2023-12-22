@@ -91,9 +91,9 @@ namespace cobalt {
             const core::Texture& woodAlbedo = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo"));
             const core::Texture& woodNormal = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-normal"));
             const core::Texture& woodMrao = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-mrao"));
-            const core::Texture& metalAlbedo = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("metal-albedo"));
-            const core::Texture& metalNormal = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("metal-normal"));
-            const core::Texture& metalMrao = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("metal-mrao"));
+            const core::Texture& metalAlbedo = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-albedo"));
+            const core::Texture& metalNormal = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-normal"));
+            const core::Texture& metalMrao = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-mrao"));
             core::Shader& shader = CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("scene_shader"));
             core::Material* material = new core::Material(shader, woodAlbedo, woodNormal, woodMrao);
             core::Mesh mesh = core::Mesh::createRectangle(10, 10, material);

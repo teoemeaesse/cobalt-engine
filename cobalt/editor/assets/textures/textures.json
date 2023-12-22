@@ -1,15 +1,15 @@
 {
-    "metal-albedo" : {
+    "steel-albedo" : {
         "type" : "2d",
-        "src" : "metal-albedo.png"
+        "src" : "steel-albedo.png"
     },
-    "metal-normal" : {
+    "steel-normal" : {
         "type" : "2d",
-        "src" : "metal-normal.png"
+        "src" : "steel-normal.png"
     },
-    "metal-mrao" : {
+    "steel-mrao" : {
         "type" : "2d",
-        "src" : "metal-mrao.png"
+        "src" : "steel-mrao.png"
     },
     "wood-albedo" : {
         "type" : "2d",

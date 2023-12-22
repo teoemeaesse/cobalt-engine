@@ -3,8 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/sharing.dir/__/deps/glad_gl.c.o.d"
   "CMakeFiles/sharing.dir/sharing.c.o"
   "CMakeFiles/sharing.dir/sharing.c.o.d"
-  "sharing.app/Contents/MacOS/sharing"
-  "sharing.app/Contents/Resources/glfw.icns"
+  "sharing"
   "sharing.pdb"
 )
 

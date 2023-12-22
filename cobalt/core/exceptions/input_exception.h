@@ -12,7 +12,7 @@ namespace cobalt {
         class InputException : public std::runtime_error {
             public:
             InputException(const std::string& message) : std::runtime_error(message) {}
-            InputException(const const char* message) : std::runtime_error(message) {}
+            InputException(const char* message) : std::runtime_error(message) {}
         };
     }
 }

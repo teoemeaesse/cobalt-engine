@@ -3,7 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/icon.dir/__/deps/glad_gl.c.o.d"
   "CMakeFiles/icon.dir/icon.c.o"
   "CMakeFiles/icon.dir/icon.c.o.d"
-  "icon.app/Contents/MacOS/icon"
+  "icon"
   "icon.pdb"
 )
 

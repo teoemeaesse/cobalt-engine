@@ -34,6 +34,14 @@
 # VS code
 .vscode
 
+# CMake
+CMakeCache.txt
+CMakeFiles
+CMake
+cmake_install.cmake
+cmake_uninstall.cmake
+CMakeDoxyfile.in
+
 # CTest
 Testing
 CTestTestfile.cmake

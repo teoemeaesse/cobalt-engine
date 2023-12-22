@@ -1,3 +1,4 @@
 # Hashes of file build rules.
-0d1b1f4e797c99aa8fad4d97cb968da9 CMakeFiles/uninstall
-dce84311c76bf703ea32c67d59b91ab6 src/CMakeFiles/update_mappings
+e838fb7841d226470a9284e5602b8828 CMakeFiles/uninstall
+d719a81f8d2c81d87c33aa4b4915df1e docs/CMakeFiles/docs
+b817ee6ea3646631815ba670fc62416c src/CMakeFiles/update_mappings

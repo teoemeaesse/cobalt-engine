@@ -3,8 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/gears.dir/__/deps/glad_gl.c.o.d"
   "CMakeFiles/gears.dir/gears.c.o"
   "CMakeFiles/gears.dir/gears.c.o.d"
-  "gears.app/Contents/MacOS/gears"
-  "gears.app/Contents/Resources/glfw.icns"
+  "gears"
   "gears.pdb"
 )
 
