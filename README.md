@@ -4,12 +4,10 @@ A 3D general-purpose game engine for Unix distributions, being used in the game 
 ## System Requirements
 To compile and run you need the following:
 - A GPU with **OpenGL 4.0** minimum support;
-- **GCC** and [**GLFW 3**](https://stackoverflow.com/questions/17768008/how-to-build-install-glfw-3-and-use-it-in-a-linux-project) installed on your machine.
-- **FreeType** library. Install it from their [website](https://freetype.org/)
 - **CMake 3.10**
 
 ## Build
-Use the provided build scripts to build the tests and example.
+Use the provided build scripts to build the tests, example and editor.
 
 ```
 chmod +x build_example.sh 
@@ -17,7 +15,7 @@ chmod +x build_example.sh
 ```
 
 ## Compatibility
-Currently only compatible with **Linux** distributions. There are future plans for a **Windows** version. Mostly untested outside of **Ubuntu 23.10**.
+Currently compatible with **Linux** distributions and **MacOS** on ARM. There are future plans for a **Windows** version. Mostly untested outside of **Ubuntu 23.10** and **MacOS Sonoma 14.1**.
 
 ## Engine structure
 **cobalt** is divided into two main parts:
