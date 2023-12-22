@@ -38,13 +38,3 @@
 Testing
 CTestTestfile.cmake
 DartConfiguration.tcl
-
-# CMake
-CMakeFiles
-CMakeCache.txt
-CMakeScripts
-cmake_install.cmake
-build
-
-# Make
-Makefile

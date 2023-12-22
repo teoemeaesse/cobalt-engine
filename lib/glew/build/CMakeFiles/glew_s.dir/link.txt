@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc lib/libGLEW.a "CMakeFiles/glew_s.dir/Users/tomasmarques/cobalt-engine/lib/glew/src/glew.c.o"
+/Library/Developer/CommandLineTools/usr/bin/ranlib lib/libGLEW.a
