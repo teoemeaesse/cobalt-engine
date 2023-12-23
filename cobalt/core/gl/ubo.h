@@ -5,6 +5,7 @@
 #pragma once
 
 #include "core/pch.h"
+#include "core/gl/shader.h"
 
 
 namespace cobalt {
@@ -17,9 +18,10 @@ namespace cobalt {
             /* Creates a uniform buffer object.
             * @param usage: GL_STATIC_DRAW, GL_DYNAMIC_DRAW, GL_STREAM_DRAW.
             * @param size: The size of the buffer in bytes.
+            * @param bindingPoint: The binding point of the buffer.
             * @return: UBO.
             */
-            UBO(const GLUsage usage, const size_t size);
+            UBO(const GLUsage usage, const size_t size, const uint bindingPoint);
             /* Destroys the UBO.
             */
             ~UBO();
@@ -27,14 +29,14 @@ namespace cobalt {
             /* Binds the UBO to the current context.
             */
             void bind() const;
+            /* Use the UBO in a shader.
+            * @param shader: The shader to bind to.
+            * @param name: The name of the uniform block.
+            */
+            void bindToShader(const Shader& shader, const std::string& name) const;
             /* Unbinds the UBO from the current context.
             */
             void unbind() const;
-            /* Binds the UBO to a shader binding point. Bind before calling.
-            * @param shader: The shader to bind to.
-            * @param bindingPoint: The binding point to bind to.
-            */
-            void setBindingPoint(const GLHandle shader, const GLHandle bindingPoint) const;
             /* Sets the data of the entire buffer. Bind before calling.
             * @param data: The data to load.
             * @param size: The size of the data in bytes.
@@ -50,7 +52,8 @@ namespace cobalt {
             private:
             GLHandle buffer;        // The opengl buffer handle.
             const GLUsage usage;    // The usage of the buffer.
-            const size_t size;      // The size of the buffer in bytes.  
+            const size_t size;      // The size of the buffer in bytes.
+            const uint bindingPoint;// The binding point of the buffer.  
         };
     }
 }

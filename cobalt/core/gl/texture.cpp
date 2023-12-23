@@ -116,11 +116,6 @@ namespace cobalt {
             return *this;
         }
 
-        void Texture::bindToUnit(GLuint unit) const {
-            glActiveTexture(GL_TEXTURE0 + unit);
-            glBindTexture(GL_TEXTURE_2D, texture);
-        }
-
         Texture2D::Texture2D(const uint width, const uint height, 
                              const GLTextureFormat format, 
                              const GLTextureEncoding encoding,
@@ -169,6 +164,11 @@ namespace cobalt {
         }
 
         void Texture2D::bind() const {
+            glBindTexture(GL_TEXTURE_2D, texture);
+        }
+
+        void Texture2D::bindToUnit(GLuint unit) const {
+            glActiveTexture(GL_TEXTURE0 + unit);
             glBindTexture(GL_TEXTURE_2D, texture);
         }
 
@@ -244,6 +244,11 @@ namespace cobalt {
         }
 
         void Texture3D::bind() const {
+            glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+        }
+
+        void Texture3D::bindToUnit(GLuint unit) const {
+            glActiveTexture(GL_TEXTURE0 + unit);
             glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
         }
 

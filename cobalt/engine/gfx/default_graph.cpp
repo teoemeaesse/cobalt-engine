@@ -31,9 +31,9 @@ namespace cobalt {
                 CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-albedo")),
                 CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-albedo"))
             );
-            Scope<SceneNode> sceneNode = std::make_unique<SceneNode>(SceneNode(scene, renderer, core::RenderTarget(sceneFBO, scene.getCamera(), "scene")));
-            Scope<FilterNode> filterNode = std::make_unique<FilterNode>(FilterNode(renderer, core::RenderTarget(defaultFBO, outputCamera, "output"), filter));
-            filterNode->addSource(core::RenderTarget(sceneFBO, scene.getCamera(), "scene"));
+            Scope<SceneNode> sceneNode = std::make_unique<SceneNode>(SceneNode(scene, renderer, core::RenderTarget(sceneFBO, scene.getCamera(), "scene", 0)));
+            Scope<FilterNode> filterNode = std::make_unique<FilterNode>(FilterNode(renderer, core::RenderTarget(defaultFBO, outputCamera, "output", 1), filter));
+            filterNode->addSource(core::RenderTarget(sceneFBO, scene.getCamera(), "scene", 0));
 
             addNode(std::move(sceneNode));
             addNode(std::move(filterNode));

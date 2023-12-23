@@ -3,6 +3,7 @@
 //
 
 #include "core/gfx/render_node.h"
+#include "core/gfx/render_context.h"
 #include "core/pch.h"
 
 

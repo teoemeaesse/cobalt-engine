@@ -3,6 +3,7 @@
 //
 
 #include "core/gfx/render_graph.h"
+#include "core/gfx/render_context.h"
 
 
 namespace cobalt {

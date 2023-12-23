@@ -188,6 +188,18 @@ namespace cobalt {
             CB_CORE_INFO("Max total texture units: {0}", queryMaxTotalTextureUnits());
         }
 
+        void RenderContext::clearGLErrors() {
+            GLenum error;
+            while((error = glGetError()));
+        }
+
+        void RenderContext::checkGLErrors() {
+            GLenum error;
+            while((error = glGetError()) != GL_NO_ERROR) {
+                CB_CORE_ERROR("GL error code: {0}", error);
+            }
+        }
+
         RenderContext::RenderContext() :
             context() {
             context = glfwCreateWindow(1, 1, "", nullptr, nullptr);

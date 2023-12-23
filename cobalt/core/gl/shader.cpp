@@ -27,6 +27,10 @@ namespace cobalt {
             }
             return index;
         }
+
+        const GLHandle Shader::getGLHandle() const {
+            return program;
+        }
         
         const GLuint Shader::getUniformLocation(const std::string& name) {
             GLint linkStatus;

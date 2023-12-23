@@ -5,6 +5,7 @@
 #pragma once
 
 #include "core/gl/fbo.h"
+#include "core/gl/ubo.h"
 #include "core/gfx/camera.h"
 
 
@@ -16,9 +17,10 @@ namespace cobalt {
              * @param fbo: Frame buffer object to render to.
              * @param camera: The camera to render with.
              * @param name: The name of the render target.
+             * @param cameraUBOBinding: The binding point for the camera UBO.
              * @return: The render target.
              */
-            RenderTarget(const FBO& fbo, const Camera& camera, const std::string& name);
+            RenderTarget(const FBO& fbo, const Camera& camera, const std::string& name, const uint cameraUBOBinding);
             /* Destroy the render target.
              */
             ~RenderTarget() = default;
@@ -50,7 +52,7 @@ namespace cobalt {
             /* Send the render target uniforms to a shader.
              * @param shader: The shader.
              */
-            void sendUniforms(Shader& shader) const;
+            void sendUBO(const Shader& shader) const;
 
             /* Get the texture for the color buffer.
              * This will throw an exception if the fbo is the default fbo.
@@ -79,6 +81,7 @@ namespace cobalt {
             const Camera& getCamera() const;
 
             private:
+            const UBO ubo;          // Uniform buffer object.
             const FBO& fbo;         // Frame buffer object.
             const Camera& camera;   // Camera.
             std::string name;       // Name of the render target. This is used to send uniforms for a 

@@ -139,6 +139,13 @@ namespace cobalt {
             /* Log all OpenGL queries.
              */
             static void logQueries();
+
+            /* Clear all OpenGL errors.
+             */
+            static void clearGLErrors();
+            /* Check for OpenGL errors.
+             */
+            static void checkGLErrors();
             
 
             /* Creates a new render context.

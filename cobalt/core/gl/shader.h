@@ -34,6 +34,10 @@ namespace cobalt {
              * @return: The index of the uniform block object.
              */
             const GLuint getUBIndex(const std::string& name) const;
+            /* Gets the opengl program handle.
+             * @return: The opengl program handle.
+             */
+            const GLHandle getGLHandle() const;
 
             /* Sets a uniform integer array for the given uniform name.
              * @param name: The name of the uniform.

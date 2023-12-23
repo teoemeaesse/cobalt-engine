@@ -4,9 +4,6 @@ out vec4 color;
 
 in vec2 v_tex_coords;
 
-uniform int u_targetWidth;
-uniform int u_targetHeight;
-
 uniform sampler2D u_source_scene;
 
 const float exposure = 1.0;

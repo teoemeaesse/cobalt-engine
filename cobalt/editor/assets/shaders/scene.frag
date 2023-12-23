@@ -2,9 +2,6 @@
 
 out vec4 color;
 
-uniform int u_targetWidth;
-uniform int u_targetHeight;
-
 uniform sampler2D u_albedo;
 uniform sampler2D u_normal;
 uniform sampler2D u_mrao;
@@ -19,6 +16,9 @@ in vec3 v_normal;
 
 const float PI = 3.14159265359;
 
+/* Get normal from normal map.
+ * https://learnopengl.com/#!PBR/Lighting
+ */
 vec3 getNormalFromMap() {
     vec3 tangentNormal = texture(u_normal, v_tex_coords).xyz * 2.0 - 1.0;
 
@@ -68,7 +68,6 @@ float geometrySchlickGGX(float NdotV, float a) {
 
     return nom / denom;
 }
-// ----------------------------------------------------------------------------
 float geometrySmith(vec3 N, vec3 V, vec3 L, float a) {
     float NdotV = max(dot(N, V), 0.0);
     float NdotL = max(dot(N, L), 0.0);

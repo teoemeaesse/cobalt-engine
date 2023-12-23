@@ -46,7 +46,7 @@ namespace cobalt {
             /* Binds the texture to the given texture unit.
              * @param unit: The texture unit to bind the texture to.
              */
-            void bindToUnit(const GLuint unit) const;
+            virtual void bindToUnit(const GLuint unit) const = 0;
             /* Sets the wrap mode of the texture.
              * @param wrap: The wrap mode.
              */
@@ -102,6 +102,10 @@ namespace cobalt {
             /* Binds the texture to the current opengl rendering context.
              */
             void bind() const override;
+            /* Binds the texture to the given texture unit.
+             * @param unit: The texture unit to bind the texture to.
+             */
+            void bindToUnit(const GLuint unit) const override;
             /* Sets the wrap mode of the texture.
              * @param wrap: The wrap mode.
              */
@@ -152,6 +156,10 @@ namespace cobalt {
             /* Binds the texture to the current opengl rendering context.
              */
             void bind() const override;
+            /* Binds the texture to the given texture unit.
+             * @param unit: The texture unit to bind the texture to.
+             */
+            void bindToUnit(const GLuint unit) const override;
             /* Sets the wrap mode of the texture.
              * @param wrap: The wrap mode.
              */

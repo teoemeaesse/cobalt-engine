@@ -3,6 +3,7 @@
 //
 
 #include "engine/gfx/scene_node.h"
+#include "core/gfx/render_context.h"
 
 
 namespace cobalt {

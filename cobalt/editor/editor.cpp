@@ -103,6 +103,7 @@ namespace cobalt {
             ground.translate(glm::vec3(0.0f, -50.0f, 0.0f));
             ground.rotate(glm::vec3(90.0f, 0.0f, 0.0f));
             sphere.translate(glm::vec3(10.0f, 0.0f, 0.0f));
+            mesh.translate(glm::vec3(-10.0f, 0.0f, 0.0f));
             scene.addMesh(std::move(mesh));
             scene.addMesh(std::move(ground));
             scene.addMesh(std::move(sphere));
