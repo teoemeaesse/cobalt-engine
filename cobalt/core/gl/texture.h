@@ -124,7 +124,7 @@ namespace cobalt {
              */
             Texture2D(const uint width, const uint height,
                       const GLTextureFormat format = GLTextureFormat::RGBA,
-                      const GLTextureEncoding encoding = GLTextureEncoding::RGBA,
+                      const GLTextureEncoding encoding = GLTextureEncoding::SRGBA,
                       const GLTextureFilter filter = GLTextureFilter::Linear,
                       const GLTextureWrap wrap = GLTextureWrap::Repeat);
             /* Creates a 2d texture from the given path to a file.
@@ -175,7 +175,7 @@ namespace cobalt {
              */
             Texture3D(const uint width, const uint height,
                       const GLTextureFormat format = GLTextureFormat::RGBA,
-                      const GLTextureEncoding encoding = GLTextureEncoding::RGBA,
+                      const GLTextureEncoding encoding = GLTextureEncoding::SRGBA,
                       const GLTextureFilter filter = GLTextureFilter::Linear,
                       const GLTextureWrap wrap = GLTextureWrap::Repeat);
             /* Creates a cubemap from the given path to a directory containing the faces

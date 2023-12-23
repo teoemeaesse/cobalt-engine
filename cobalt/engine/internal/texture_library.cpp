@@ -31,17 +31,18 @@ namespace cobalt {
                 std::string textureName = it.key();
                 nlohmann::json textureJson = it.value();
                 std::string textureType = textureJson["type"].get<std::string>();
+                bool isSrgb = textureJson["srgb"].get<bool>();
                 core::Path texturePath = texturesDirectory + textureJson["src"].get<std::string>();
                 if (textureType == "2d") {
                     CB_INFO("Loading 2D texture: {}", textureName);
                     CB_INFO("From source file: {}", texturePath.getFileName());
-                    textures2D.push({textureName, std::move(core::TextureBuilder().buildFromSource2D(texturePath))});
+                    textures2D.push({textureName, std::move(core::TextureBuilder().setIsSrgb(isSrgb).buildFromSource2D(texturePath))});
                     continue;
                 }
                 else if (textureType == "3d") {
                     CB_INFO("Loading cubemap: {}", textureName);
                     CB_INFO("From source directory: {}", texturePath.getFileName());
-                    textures3D.push({textureName, std::move(core::TextureBuilder().buildFromSource3D(texturePath))});
+                    textures3D.push({textureName, std::move(core::TextureBuilder().setIsSrgb(isSrgb).buildFromSource3D(texturePath))});
                     continue;
                 }
             }

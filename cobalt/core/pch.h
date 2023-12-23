@@ -90,8 +90,8 @@ namespace cobalt {
             RGBA = GL_RGBA,                     // Red, green, blue and alpha channels.
             DEPTH = GL_DEPTH_COMPONENT,         // Depth component.
             DEPTH_STENCIL = GL_DEPTH_STENCIL,   // Depth and stencil components.
-            SRGB = GL_SRGB8,                    // sRGB color space.
-            SRGBA = GL_SRGB8_ALPHA8,            // sRGB color space with alpha.
+            SRGB = GL_SRGB,                     // sRGB color space.
+            SRGBA = GL_SRGB_ALPHA,              // sRGB color space with alpha.
         };
         inline std::string getGLTextureEncodingName(GLTextureEncoding encoding) {
             switch (encoding) {
