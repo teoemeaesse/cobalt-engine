@@ -68,7 +68,8 @@ namespace cobalt {
                 TextureBuilder builder = TextureBuilder().setDimensions(width, height)
                                                          .setFilter(filter)
                                                          .setWrap(wrap)
-                                                         .setIsSrgb(srgb);
+                                                         .setIsSrgb(srgb)
+                                                         .setIsHdr(true);
                 color = builder.setChannels(4).setIsColor(true).buildEmpty2D();
                 color.value().bind();
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color.value().getGLHandle(), 0);
@@ -77,7 +78,8 @@ namespace cobalt {
                 TextureBuilder builder = TextureBuilder().setDimensions(width, height)
                                                          .setFilter(filter)
                                                          .setWrap(wrap)
-                                                         .setIsSrgb(srgb);
+                                                         .setIsSrgb(srgb)
+                                                         .setIsHdr(false);
                 builder.setIsDepth(true);
                 if (static_cast<int>(type) & static_cast<int>(GLFramebufferAttachment::Stencil)) {
                     builder.setIsStencil(true);

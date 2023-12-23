@@ -26,23 +26,23 @@ namespace cobalt {
             }
         }
 
-        static GLTextureEncoding getColorGLTextureEncoding(const uint channels, const bool isSrgb) {
+        static GLTextureEncoding getColorGLTextureEncoding(const uint channels, const bool isSrgb, const bool isHdr) {
             switch (channels) {
                 case 1:
-                    return GLTextureEncoding::RED;
+                    return isHdr ? GLTextureEncoding::RED_HDR : GLTextureEncoding::RED;
                 case 2:
-                    return GLTextureEncoding::RG;
+                    return isHdr ? GLTextureEncoding::RG_HDR : GLTextureEncoding::RG;
                 case 3:
                     if (isSrgb) {
                         return GLTextureEncoding::SRGB;
                     } else {
-                        return GLTextureEncoding::RGB;
+                        return isHdr ? GLTextureEncoding::RGB_HDR : GLTextureEncoding::RGB;
                     }
                 case 4:
                     if (isSrgb) {
                         return GLTextureEncoding::SRGBA;
                     } else {
-                        return GLTextureEncoding::RGBA;
+                        return isHdr ? GLTextureEncoding::RGBA_HDR : GLTextureEncoding::RGBA;
                     }
                 default:
                     throw GLException("Invalid number of channels");
@@ -71,9 +71,10 @@ namespace cobalt {
             const bool isColor,
             const bool isDepth,
             const bool isStencil,
-            const bool isSrgb) {
+            const bool isSrgb,
+            const bool isHdr) {
             if (isColor) {
-                return getColorGLTextureEncoding(channels, isSrgb);
+                return getColorGLTextureEncoding(channels, isSrgb, isHdr);
             } else if (isDepth) {
                 if (isStencil) {
                     return GLTextureEncoding::DEPTH_STENCIL;
@@ -148,7 +149,7 @@ namespace cobalt {
                 throw GLException("Failed to load texture: " + source);
             }
             format = getColorGLTextureFormat(channels);
-            encoding = getColorGLTextureEncoding(channels, isSrgb);
+            encoding = getColorGLTextureEncoding(channels, isSrgb, false);
             glGenTextures(1, &texture);
             glBindTexture(GL_TEXTURE_2D, texture);
             glTexImage2D(GL_TEXTURE_2D, 0, (GLint) encoding, width, height, 0, (GLenum) format, GL_UNSIGNED_BYTE, data);
@@ -222,7 +223,7 @@ namespace cobalt {
                     throw GLException("Failed to load texture: " + source);
                 }
                 format = getColorGLTextureFormat(channels);
-                encoding = getColorGLTextureEncoding(channels, isSrgb);
+                encoding = getColorGLTextureEncoding(channels, isSrgb, false);
                 glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint) encoding, width, height, 0, (GLenum) format, GL_UNSIGNED_BYTE, data);
                 stbi_image_free(data);
             }
@@ -267,11 +268,12 @@ namespace cobalt {
             isColor(false), 
             isDepth(false), 
             isStencil(false), 
-            isSrgb(false) {}
+            isSrgb(false),
+            isHdr(true) {}
 
         Texture2D TextureBuilder::buildEmpty2D() const {
             GLTextureFormat format = getGLTextureFormat(channels, isColor, isDepth, isStencil);
-            GLTextureEncoding encoding = getGLTextureEncoding(channels, isColor, isDepth, isStencil, isSrgb);
+            GLTextureEncoding encoding = getGLTextureEncoding(channels, isColor, isDepth, isStencil, isSrgb, isHdr);
             return Texture2D(width, height, format, encoding, filter, wrap);
         }
 
@@ -281,7 +283,7 @@ namespace cobalt {
 
         Texture3D TextureBuilder::buildEmpty3D() const {
             GLTextureFormat format = getGLTextureFormat(channels, isColor, isDepth, isStencil);
-            GLTextureEncoding encoding = getGLTextureEncoding(channels, isColor, isDepth, isStencil, isSrgb);
+            GLTextureEncoding encoding = getGLTextureEncoding(channels, isColor, isDepth, isStencil, isSrgb, isHdr);
             return Texture3D(width, height, format, encoding, filter, wrap);
         }
 
@@ -327,6 +329,11 @@ namespace cobalt {
 
         TextureBuilder& TextureBuilder::setIsSrgb(const bool isSrgb) {
             this->isSrgb = isSrgb;
+            return *this;
+        }
+
+        TextureBuilder& TextureBuilder::setIsHdr(const bool isHdr) {
+            this->isHdr = isHdr;
             return *this;
         }
     }

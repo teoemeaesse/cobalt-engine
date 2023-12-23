@@ -128,10 +128,5 @@ void main() {
     }   
   
     vec3 ambient = vec3(0.1) * albedo * ao;
-    vec3 c = ambient + lo;
-
-    c = c / (c + vec3(1.0));
-    c = pow(c, vec3(1.0/2.2));
-
-    color = vec4(c, 1.0);
+    color = vec4(ambient + lo, 1.0);
 }

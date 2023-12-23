@@ -266,6 +266,11 @@ namespace cobalt {
              * @return: Reference to the current TextureBuilder instance.
              */
             TextureBuilder& setIsSrgb(const bool isSrgb);
+            /* Sets whether the texture is hdr.
+             * @param isHdr: Whether the texture is hdr.
+             * @return: Reference to the current TextureBuilder instance.
+             */
+            TextureBuilder& setIsHdr(const bool isHdr);
 
             private:
             uint channels;
@@ -274,6 +279,7 @@ namespace cobalt {
             bool isDepth;
             bool isStencil;
             bool isSrgb;
+            bool isHdr;
             GLTextureWrap wrap;
             GLTextureFilter filter;
         };

@@ -92,6 +92,10 @@ namespace cobalt {
             DEPTH_STENCIL = GL_DEPTH_STENCIL,   // Depth and stencil components.
             SRGB = GL_SRGB,                     // sRGB color space.
             SRGBA = GL_SRGB_ALPHA,              // sRGB color space with alpha.
+            RED_HDR = GL_R32F,                  // Red channel with 32-bit floating point.
+            RG_HDR = GL_RG32F,                  // Red and green channels with 32-bit floating point.
+            RGB_HDR = GL_RGB32F,                // Red, green and blue channels with 32-bit floating point.
+            RGBA_HDR = GL_RGBA32F               // Red, green, blue and alpha channels with 32-bit floating point.
         };
         inline std::string getGLTextureEncodingName(GLTextureEncoding encoding) {
             switch (encoding) {
@@ -111,6 +115,14 @@ namespace cobalt {
                     return "SRGB";
                 case GLTextureEncoding::SRGBA:
                     return "SRGBA";
+                case GLTextureEncoding::RED_HDR:
+                    return "RED_HDR";
+                case GLTextureEncoding::RG_HDR:
+                    return "RG_HDR";
+                case GLTextureEncoding::RGB_HDR:
+                    return "RGB_HDR";
+                case GLTextureEncoding::RGBA_HDR:
+                    return "RGBA_HDR";
                 default:
                     throw GLException("Invalid GLTextureEncoding");
             }
