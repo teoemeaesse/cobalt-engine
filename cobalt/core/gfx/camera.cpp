@@ -73,7 +73,7 @@ namespace cobalt {
 
         void PerspectiveCamera::zoom(const float amount) {
             const float newFov = fov + amount;
-            if (1.0f < newFov && newFov < 180.0f) {
+            if (30.0f < newFov && newFov < 150.0f) {
                 fov = newFov;
             }
         }
