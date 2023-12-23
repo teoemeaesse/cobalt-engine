@@ -32,6 +32,13 @@ namespace cobalt {
             mraoMap(other.mraoMap) {
         }
 
+        bool Material::operator==(const Material& other) const {
+            return shader.getGLHandle() == other.shader.getGLHandle() &&
+                   albedoMap.getGLHandle() == other.albedoMap.getGLHandle() &&
+                   normalMap.getGLHandle() == other.normalMap.getGLHandle() &&
+                   mraoMap.getGLHandle() == other.mraoMap.getGLHandle();
+        }
+
         const Material::Uniform Material::getUniform(const int albedoSlot, const int normalSlot, const int mraoSlot) const {
             albedoMap.bindToUnit(albedoSlot);
             normalMap.bindToUnit(normalSlot);

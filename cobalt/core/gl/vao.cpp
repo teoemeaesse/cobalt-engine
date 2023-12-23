@@ -7,6 +7,15 @@
 
 namespace cobalt {
     namespace core {
+        void VAOLayout::push(const GLType type, const uint count, const bool normalized) {
+            attributes.push({count, type, normalized, stride});
+            stride += count * getGLTypeSize(type);
+        }
+
+        size_t VAOLayout::getStride() const {
+            return stride;
+        }
+
         VAO::VAO(const VBO& vbo, const VAOLayout& layout) {
             glGenVertexArrays(1, &buffer);
             glBindVertexArray(buffer);

@@ -50,6 +50,11 @@ namespace cobalt {
              * @return: The moved material.
              */
             Material& operator=(Material&& other) noexcept = delete;
+            /* Equality operator.
+             * @param other: The other material.
+             * @return: True if the materials are equal, false otherwise.
+             */
+            bool operator==(const Material& other) const;
 
             /* Returns the uniform for this material.
              * @param colorSlot: The color slot.

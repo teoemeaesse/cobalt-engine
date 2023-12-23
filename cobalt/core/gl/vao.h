@@ -29,10 +29,12 @@ namespace cobalt {
              * @param count: The number of elements in the attribute.
              * @param normalized: Whether the attribute should be normalized.
              */
-            void push(const GLType type, const uint count, const bool normalized) {
-                attributes.push({count, type, normalized, stride});
-                stride += count * getGLTypeSize(type);
-            }
+            void push(const GLType type, const uint count, const bool normalized);
+
+            /* Get the stride of the vertex layout.
+             * @return: The stride of the vertex layout.
+             */
+            size_t getStride() const;
 
             private:
             struct Attribute {
