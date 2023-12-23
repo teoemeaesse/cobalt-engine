@@ -21,7 +21,7 @@ namespace cobalt {
             /* Destroys the render graph.
              */
             ~RenderGraph() = default;
-
+            
             /* Adds a node to the render graph.
              * @param node: The node to add.
              * @return: The index of the node in the graph.

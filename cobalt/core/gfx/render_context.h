@@ -62,6 +62,10 @@ namespace cobalt {
              * @param callback: The window resize callback.
              */
             static void setResizeCallback(GLFWwindowsizefun callback);
+            /* Sets the framebuffer resize callback.
+             * @param callback: The framebuffer resize callback.
+             */
+            static void setFramebufferResizeCallback(GLFWframebuffersizefun callback);
             /* Sets the opengl debug callback.
              * @param callback: The opengl debug callback.
              */

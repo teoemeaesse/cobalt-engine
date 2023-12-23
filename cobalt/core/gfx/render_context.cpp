@@ -22,6 +22,7 @@ namespace cobalt {
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+            glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
             instance = std::make_shared<RenderContext>();
             glewExperimental = GL_TRUE; // Needed for core profile
             CB_CORE_INFO("Initialized render context");
@@ -100,6 +101,10 @@ namespace cobalt {
 
         void RenderContext::setResizeCallback(GLFWwindowsizefun callback) {
             glfwSetWindowSizeCallback(instance->context, callback);
+        }
+
+        void RenderContext::setFramebufferResizeCallback(GLFWframebuffersizefun callback) {
+            glfwSetFramebufferSizeCallback(instance->context, callback);
         }
 
         void RenderContext::setDebugCallback(GLDEBUGPROC callback) {

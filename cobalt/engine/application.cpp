@@ -38,7 +38,7 @@ namespace cobalt {
                         core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
                         inputManager.getMouse().onScroll((float) xoffset, (float) yoffset);
                     });
-                    core::RenderContext::setResizeCallback([](GLFWwindow* window, int width, int height) {
+                    core::RenderContext::setFramebufferResizeCallback([](GLFWwindow* window, int width, int height) {
                         Application* app = static_cast<Application*>(core::RenderContext::getUserPointer());
                         app->getWindow().onResize((float) width, (float) height);
                         app->onResize((float) width, (float) height);
