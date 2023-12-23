@@ -58,10 +58,18 @@ namespace cobalt {
              * @return: The uniform.
              */
             const Uniform getUniform(const int colorSlot, const int normalSlot, const int specularSlot) const;
-
-            /* Binds the material.
+            /* Get the albedo map.
+             * @return: The albedo map.
              */
-            void bind() const;
+            const Texture& getAlbedoMap() const;
+            /* Get the normal map.
+             * @return: The normal map.
+             */
+            const Texture& getNormalMap() const;
+            /* Get the metallic (R), roughness (G) and AO (B) map.
+             * @return: The metallic (R), roughness (G) and AO (B) map.
+             */
+            const Texture& getMRAOMap() const;
 
             /* Get the shader for this material.
              * @return: The shader.

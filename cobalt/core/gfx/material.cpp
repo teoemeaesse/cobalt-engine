@@ -39,8 +39,16 @@ namespace cobalt {
             return {albedoSlot, normalSlot, mraoSlot};
         }
 
-        void Material::bind() const {
-            // TODO: set material uniforms.
+        const Texture& Material::getAlbedoMap() const {
+            return albedoMap;
+        }
+
+        const Texture& Material::getNormalMap() const {
+            return normalMap;
+        }
+
+        const Texture& Material::getMRAOMap() const {
+            return mraoMap;
         }
 
         Shader& Material::getShader() {

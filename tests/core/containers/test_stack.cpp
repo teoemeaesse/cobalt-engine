@@ -71,7 +71,10 @@ void test_stack_push() {
     TEST_ASSERT_EQUAL_INT(1000, stack.getSize());
 }
 
-struct TestStruct {
+class TestStruct {
+    public:
+    TestStruct(int a, int b, int c) : a(a), b(b), c(c) {}
+    ~TestStruct() {}
     int a;
     int b;
     int c;

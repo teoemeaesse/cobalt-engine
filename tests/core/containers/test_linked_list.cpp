@@ -23,7 +23,10 @@ void test_ll_push() {
     TEST_ASSERT_EQUAL(100, list.getSize());
 }
 
-struct TestStruct {
+class TestStruct {
+    public:
+    TestStruct(int a, int b, int c) : a(a), b(b), c(c) {}
+    ~TestStruct() {}
     int a;
     int b;
     int c;

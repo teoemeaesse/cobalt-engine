@@ -39,9 +39,6 @@ add_subdirectory(${LIBDIR}/glew/build/cmake)
 # Include the Unity test framework
 add_library(unity STATIC ${INCLUDEDIR}/unity/unity.c)
 
-# Find the Freetype library
-find_package(Freetype REQUIRED)
-
 # Create an executable for each test source file
 foreach(TEST_SOURCE ${TEST_SOURCES})
     get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
@@ -51,7 +48,10 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
         ${SOURCEDIR}
         ${LIBDIR}/glew/include
     )
-    if(APPLE AND NOT UNIX)
+    target_precompile_headers(${TEST_NAME} PRIVATE
+        ${SOURCEDIR}/core/pch.h
+    )
+    if(APPLE)
         target_link_libraries(${TEST_NAME} PRIVATE
             glfw
             glew
