@@ -10,9 +10,9 @@
 
 namespace cobalt {
     namespace engine {
-        std::unique_ptr<ShaderLibrary> ShaderLibrary::instance;
+        core::Scope<ShaderLibrary> ShaderLibrary::instance;
 
-        static std::unique_ptr<core::RenderShader> parseRenderShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
+        static core::Scope<core::RenderShader> parseRenderShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
             std::string vertexName = shaderJson["vertex"].get<std::string>();
             std::string fragmentName = shaderJson["fragment"].get<std::string>();
@@ -31,7 +31,7 @@ namespace cobalt {
             return builder.buildRenderShader();
         }
 
-        static std::unique_ptr<core::ComputeShader> parseComputeShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
+        static core::Scope<core::ComputeShader> parseComputeShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
             std::string computeName = shaderJson["compute"].get<std::string>();
             core::File computeFile(shadersDirectory + computeName);
@@ -79,6 +79,10 @@ namespace cobalt {
 
         core::Shader& ShaderLibrary::getShader(const ShaderID id) {
             return *shaders[id - 1].shader;
+        }
+
+        core::Shader& ShaderLibrary::getShader(const std::string& name) {
+            return getShader(getShaderID(name));
         }
         
         void ShaderLibrary::init() {

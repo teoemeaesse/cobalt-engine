@@ -10,21 +10,21 @@
 
 namespace cobalt {
     namespace core {
-        /* A pool allocator is a memory allocator that allocates
+        /** A pool allocator is a memory allocator that allocates
         * memory in blocks of a fixed size. It is useful for allocating many objects
         * of the same type (e.g. components in an ECS).
         */
         template <typename T>
         class PoolAllocator : public Allocator {
             public:
-            /* Creates a pool allocator with a given block capacity and block count.
+            /** Creates a pool allocator with a given block capacity and block count.
             * @param block_capacity: The number of blocks in the pool.
             */
             PoolAllocator(const uint block_capacity) : heap(), chunk_count(1), block_count(0) {
                 chunks = (PoolChunk*) heap.grab(sizeof(PoolChunk));
                 chunks[0] = poolChunkCreate(heap, block_capacity);
             }
-            /* Destroys a pool allocator.
+            /** Destroys a pool allocator.
             */
             ~PoolAllocator() {
                 for (uint i = 0; i < chunk_count; i++) {
@@ -33,7 +33,7 @@ namespace cobalt {
                 heap.drop(chunks);
             }
 
-            /* Allocates a block of memory from the pool.
+            /** Allocates a block of memory from the pool.
             * @return: A pointer to the allocated block.
             */
             T* grab() {
@@ -48,7 +48,7 @@ namespace cobalt {
                 chunks[chunk_count++] = poolChunkCreate(heap, PoolAllocator<T>::getSize());
                 return (T*) ((char*) chunks[chunk_count - 1].data + chunks[chunk_count - 1].block_count++ * sizeof(T));
             }
-            /* Frees a block of memory from the pool.
+            /** Frees a block of memory from the pool.
             * @param ptr: The pointer to the block to free.
             */
             void drop(T* ptr) {
@@ -60,7 +60,7 @@ namespace cobalt {
                     }
                 }
             }
-            /* Calculate the allocated size of the pool.
+            /** Calculate the allocated size of the pool.
             * @return: The allocated size of the pool in bytes.
             */
             size_t getSize() {
@@ -80,20 +80,20 @@ namespace cobalt {
             uint chunk_count;           // The number of chunks allocated by the pool.
             uint block_count;           // The number of blocks allocated by the pool.
             
-            /* Allocates a block of memory from the pool.
+            /** Allocates a block of memory from the pool.
             * @param size: The size of the block to allocate. This parameter is ignored.
             * @return: A pointer to the allocated block.
             */
             void* alloc(const size_t size) override {
                 return grab();
             }
-            /* Frees a block of memory from the pool.
+            /** Frees a block of memory from the pool.
             * @param ptr: The pointer to the block to free.
             */
             void free(void* ptr) override {
                 drop((T*) ptr);
             }
-            /* Reallocates a block of memory from the pool.
+            /** Reallocates a block of memory from the pool.
             * Since the pool allocator does not support variable block sizes, this
             * function simply throws an error.
             * @param ptr: The pointer to the block to reallocate.
@@ -102,7 +102,7 @@ namespace cobalt {
             void *realloc(void* ptr, const size_t size) override {
                 return nullptr;
             }
-            /* Creates a pool chunk with a given block capacity.
+            /** Creates a pool chunk with a given block capacity.
             * @param block_capacity: The number of blocks in the chunk.
             * @return: The created chunk.
             */
@@ -118,7 +118,7 @@ namespace cobalt {
                 }
                 return chunk;
             }
-            /* Destroys a pool chunk.
+            /** Destroys a pool chunk.
             * @param chunk: The chunk to destroy.
             */
             void poolChunkDestroy(HeapAllocator& heap, PoolChunk* chunk) {

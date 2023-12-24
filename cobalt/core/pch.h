@@ -49,6 +49,7 @@
 #include "core/containers/stack.h"
 #include "core/containers/queue.h"
 #include "core/containers/vector.h"
+#include "core/containers/buffer.h"
 
 // Memory.
 #include "core/memory/pool.h"
@@ -68,7 +69,15 @@ namespace cobalt {
         using uint = unsigned int;
         using GLHandle = GLuint;    // OpenGL handle type.
 
-        /* Usage mode of a buffer object.
+        template<typename T, typename S>
+        using UMap = std::unordered_map<T, S>;
+        template<typename T, typename S>
+        using USet = std::unordered_set<T, S>;
+        template<typename T>
+        using Opt = std::optional<T>;
+
+
+        /** Usage mode of a buffer object.
         */
         enum class GLUsage {
             StaticDraw = GL_STATIC_DRAW,        // Buffer data will be modified once and used many times.
@@ -211,7 +220,7 @@ namespace cobalt {
             TriangleFan = GL_TRIANGLE_FAN       // Triangle fan.
         };
 
-        /* Gets the size of a GLType.
+        /** Gets the size of a GLType.
          * @param type: The GLType.
          * @return: The size in bytes of the GLType.
          */

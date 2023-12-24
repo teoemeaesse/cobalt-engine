@@ -94,9 +94,9 @@ namespace cobalt {
             const core::Texture& steelAlbedo = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-albedo"));
             const core::Texture& steelNormal = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-normal"));
             const core::Texture& steelMrao = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-mrao"));
-            core::Shader& shader = CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("scene_shader"));
-            core::Material* woodMaterial = new core::Material(shader, woodAlbedo, woodNormal, woodMrao);
-            core::Material* steelMaterial = new core::Material(shader, steelAlbedo, steelNormal, steelMrao);
+            core::Shader& shader = CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("pbr"));
+            core::Material woodMaterial(shader, woodAlbedo, woodNormal, woodMrao);
+            core::Material steelMaterial(shader, steelAlbedo, steelNormal, steelMrao);
             core::Mesh mesh = core::Mesh::createRectangle(10, 10, woodMaterial);
             core::Mesh ground = core::Mesh::createRectangle(100, 100, woodMaterial);
             core::Mesh sphere = core::Mesh::createSphere(5.0f, woodMaterial);

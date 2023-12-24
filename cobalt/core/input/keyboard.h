@@ -25,11 +25,11 @@ namespace cobalt {
             friend class Keyboard;
             
             public:
-            /* Check if the key is currently down.
+            /** Check if the key is currently down.
              * @return: Whether the key is currently down.
              */
             bool isDown() const;
-            /* Check if the key has been polled since the last frame.
+            /** Check if the key has been polled since the last frame.
              * @return: Whether the key has been polled since the last frame.
              */
             bool isPolled() const;
@@ -38,38 +38,38 @@ namespace cobalt {
             bool down = false;      // Whether the key is currently down.
             bool polled = true;     // Whether the key has been polled since the last frame.
 
-            /* Create a new key state.
+            /** Create a new key state.
              * @return: The new key state.
              */
             KeyState();
-            /* Destroy the key state.
+            /** Destroy the key state.
              */
             ~KeyState() = default;
         };
 
         class Keyboard : public Peripheral<KeyboardInputID> {
             public:
-            /* Create a new keyboard.
+            /** Create a new keyboard.
              * @return: The new keyboard.
              */
             Keyboard();
-            /* Destroy the keyboard.
+            /** Destroy the keyboard.
              */
             ~Keyboard() = default;
 
-            /* Callback for when a key is pressed.
+            /** Callback for when a key is pressed.
              * @param key: The key that was pressed.
              * @param action: The action that was performed.
              */
             void onKeyPress(const int key, const int action);
-            /* Poll the keyboard for events.
+            /** Poll the keyboard for events.
              */
             void pollEvents() override;
-            /* Clear all events from the keyboard.
+            /** Clear all events from the keyboard.
              */
             void clearEvents() override;
 
-            /* Get the state of a key.
+            /** Get the state of a key.
              * @param key: The key to get the state of.
              * @return: The state of the key.
              */

@@ -19,15 +19,15 @@ namespace cobalt {
                 std::unique_ptr<core::Shader> shader;   // The shader.
             };
 
-            /* Creates an empty shader library.
+            /** Creates an empty shader library.
              * @return: The shader library.
              */
             ShaderLibrary();
-            /* Destroys the shader library and all shaders it contains.
+            /** Destroys the shader library and all shaders it contains.
              */
             ~ShaderLibrary() = default;
 
-            /* Loads all shaders from the given directory.
+            /** Loads all shaders from the given directory.
              * This directory should contain a file called "shaders.json" which
              * contains a list of internal shader names and their corresponding
              * vertex/fragment/geometry or compute shader source files.
@@ -35,22 +35,30 @@ namespace cobalt {
              */
             void loadShaders(const core::Path& shadersDirectory);
 
-            /* Returns the shader ID of the shader with the given name.
+            /** Returns the shader ID of the shader with the given name.
              * If the shader does not exist, returns 0.
              * @param name: The name of the shader.
+             * @return: The shader ID.
              */
             const ShaderID getShaderID(const std::string& name);
 
-            /* Returns the shader with the given ID.
+            /** Returns the shader with the given ID.
              * If the shader does not exist, returns a null shader.
              * @param id: The ID of the shader.
+             * @return: The shader.
              */
             core::Shader& getShader(const ShaderID id);
+            /** Returns the shader with the given name.
+             * If the shader does not exist, returns a null shader.
+             * @param name: The name of the shader.
+             * @return: The shader.
+             */
+            core::Shader& getShader(const std::string& name);
 
-            /* Initializes the singleton instance of the shader library.
+            /** Initializes the singleton instance of the shader library.
              */
             static void init();
-            /* Returns the singleton instance of the shader library.
+            /** Returns the singleton instance of the shader library.
              * @return: The shader library.
              */
             static ShaderLibrary& getShaderLibrary();

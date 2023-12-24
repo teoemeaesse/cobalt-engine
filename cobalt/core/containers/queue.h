@@ -10,19 +10,19 @@
 
 namespace cobalt {
     namespace core {
-        /* A queue container. It is a FIFO (First In First Out) container.
+        /** A queue container. It is a FIFO (First In First Out) container.
          * No support for priority queues.
          */
         template <typename T>
         class Queue {
             public:
-            /* Creates a queue enough to hold initial_capacity elements.
+            /** Creates a queue enough to hold initial_capacity elements.
              * @param initial_capacity: The initial capacity of the queue.
              * @return: A queue with the initial capacity.
              */
             Queue(const uint initial_capacity = 16) : 
                 pool(initial_capacity), head(nullptr), tail(nullptr), size(0) {}
-            /* Destroys the queue
+            /** Destroys the queue
              */
             ~Queue() {
                 if (head != nullptr) {
@@ -35,7 +35,7 @@ namespace cobalt {
                 }
             }
 
-            /* Pushes an element to the queue.
+            /** Pushes an element to the queue.
              * @param element: The element to push.
              */
             void enqueue(const T& element) {
@@ -52,7 +52,7 @@ namespace cobalt {
                 size++;
             }
 
-            /* Pops an element from the queue.
+            /** Pops an element from the queue.
              * @return: The element popped from the queue.
              */
             T dequeue() {

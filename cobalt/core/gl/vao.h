@@ -10,28 +10,28 @@
 
 namespace cobalt {
     namespace core {
-        /* VAO layout specifies the format of the vertex data.
+        /** VAO layout specifies the format of the vertex data.
          * It is a list of vertex attributes and their layout.
          */
         class VAOLayout {
             friend class VAO;
 
             public:
-            /* Creates a VAO layout.
+            /** Creates a VAO layout.
              */
             VAOLayout() : stride(0) {};
-            /* Destroys the VAO layout.
+            /** Destroys the VAO layout.
              */
             ~VAOLayout() = default;
 
-            /* Push a vertex attribute to the VAO layout.
+            /** Push a vertex attribute to the VAO layout.
              * @param type: The type of the attribute.
              * @param count: The number of elements in the attribute.
              * @param normalized: Whether the attribute should be normalized.
              */
             void push(const GLType type, const uint count, const bool normalized);
 
-            /* Get the stride of the vertex layout.
+            /** Get the stride of the vertex layout.
              * @return: The stride of the vertex layout.
              */
             size_t getStride() const;
@@ -48,12 +48,12 @@ namespace cobalt {
             size_t stride;                      // The current stride of the vertex data.
         };
 
-        /* Vertex Array Object (VAO) specifies the format of the vertex data as well as 
+        /** Vertex Array Object (VAO) specifies the format of the vertex data as well as 
          * the vertex buffer objects (VBOs) that contain the vertex data.
          */
         class VAO {
             public:
-            /* Creates a VAO from a VBO and a VAO layout.
+            /** Creates a VAO from a VBO and a VAO layout.
              * The VAO layout specifies the format of the vertex data.
              * The VBO contains the vertex data.
              * @param vbo: The VBO containing the vertex data.
@@ -61,34 +61,34 @@ namespace cobalt {
              * @return: A VAO.
              */
             VAO(const VBO& vbo, const VAOLayout& layout);
-            /* Destroys the VAO.
+            /** Destroys the VAO.
              */
             ~VAO();
-            /* Copy constructor.
+            /** Copy constructor.
              * @param other: The VAO to copy.
              * @return: A VAO.
              */
             VAO(const VAO& other) = delete;
-            /* Move constructor.
+            /** Move constructor.
              * @param other: The VAO to move.
              * @return: A VAO.
              */
             VAO(VAO&& other) noexcept;
-            /* Copy assignment operator.
+            /** Copy assignment operator.
              * @param other: The VAO to copy.
              * @return: The copied VAO.
              */
             VAO& operator=(const VAO& other) = delete;
-            /* Move assignment operator.
+            /** Move assignment operator.
              * @param other: The VAO to move.
              * @return: The moved VAO.
              */
             VAO& operator=(VAO&& other) noexcept;
 
-            /* Binds the VAO to the current opengl context.
+            /** Binds the VAO to the current opengl context.
              */
             void bind() const;
-            /* Unbinds the VAO from the current opengl context.
+            /** Unbinds the VAO from the current opengl context.
              */
             void unbind() const;
 

@@ -8,7 +8,7 @@
 
 namespace cobalt {
     namespace core {
-        Mesh::Mesh(VAO&& vao, IBO&& ibo, Material* material, const GLPrimitive& primitive)
+        Mesh::Mesh(VAO&& vao, IBO&& ibo, Material& material, const GLPrimitive& primitive)
         : vao(std::move(vao)),
           ibo(std::move(ibo)),
           material(material),
@@ -21,22 +21,11 @@ namespace cobalt {
         Mesh::Mesh(Mesh&& other) noexcept 
         : vao(std::move(other.vao)),
           ibo(std::move(other.ibo)),
-          material(std::move(other.material)),
+          material(other.material),
           primitive(other.primitive),
           worldTranslate(other.worldTranslate),
           worldRotate(other.worldRotate),
           worldScale(other.worldScale) {
-        }
-
-        Mesh& Mesh::operator=(Mesh&& other) noexcept {
-            this->vao = std::move(other.vao);
-            this->ibo = std::move(other.ibo);
-            this->material = std::move(other.material);
-            this->primitive = other.primitive;
-            this->worldTranslate = other.worldTranslate;
-            this->worldRotate = other.worldRotate;
-            this->worldScale = other.worldScale;
-            return *this;
         }
 
         void Mesh::translate(const glm::vec3& translation) {
@@ -71,7 +60,7 @@ namespace cobalt {
         void Mesh::bind() const {
             this->vao.bind();
             this->ibo.bind();
-            this->material->getShader().use();
+            this->material.getShader().use();
         }
 
         void Mesh::render() const {
@@ -79,10 +68,10 @@ namespace cobalt {
         }
 
         Material& Mesh::getMaterial() {
-            return *this->material;
+            return this->material;
         }
 
-        Mesh Mesh::createRectangle(const uint width, const uint height, Material* material) {
+        Mesh Mesh::createRectangle(const uint width, const uint height, Material& material) {
             const float w = width / 2.0f;
             const float h = height / 2.0f;
 
@@ -104,7 +93,7 @@ namespace cobalt {
             return Mesh(VAO(vbo, layout), IBO::fromQuads(GLUsage::StaticDraw, 1), material);
         }
 
-        Mesh Mesh::createSphere(const uint radius, Material* material) {
+        Mesh Mesh::createSphere(const uint radius, Material& material) {
             const uint stacks = 20;
             const uint slices = 20;
 

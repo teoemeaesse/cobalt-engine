@@ -7,7 +7,7 @@
 
 namespace cobalt {
     namespace engine {
-        FilterNode::FilterNode(core::Renderer& renderer, core::RenderTarget&& defaultTarget, core::Material* filter) : RenderNode(renderer, std::move(defaultTarget)),
+        FilterNode::FilterNode(core::Renderer& renderer, core::RenderTarget&& defaultTarget, core::Material& filter) : RenderNode(renderer, std::move(defaultTarget)),
             filter(filter),
             width(defaultTarget.getFBO().getWidth()),
             height(defaultTarget.getFBO().getHeight())

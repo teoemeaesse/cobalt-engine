@@ -1,10 +1,10 @@
 {
-    "scene_shader" : {
+    "pbr" : {
         "type" : "render",
-        "vertex" : "scene.vert",
-        "fragment" : "scene.frag"
+        "vertex" : "pbr.vert",
+        "fragment" : "pbr.frag"
     },
-    "filter_shader" : {
+    "filter" : {
         "type" : "render",
         "vertex" : "filter.vert",
         "fragment" : "filter.frag"

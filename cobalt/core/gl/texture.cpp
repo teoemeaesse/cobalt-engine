@@ -115,6 +115,42 @@ namespace cobalt {
             other.texture = 0;
             return *this;
         }
+        
+        Texture2D::Texture2D(const uchar red,
+                             const uchar green,
+                             const uchar blue,
+                             const uchar alpha,
+                             const GLTextureFilter filter,
+                             const GLTextureWrap wrap) :
+                             Texture(GLTextureFormat::RGBA, GLTextureEncoding::RGBA) {
+            source = "";
+            GLubyte data[] = { red, green, blue, alpha };
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexImage2D(GL_TEXTURE_2D, 0, (GLint) encoding, 1, 1, 0, (GLenum) format, GL_UNSIGNED_BYTE, data);
+            setFilter(filter);
+            setWrap(wrap);
+            CB_CORE_INFO("Created 1x1 px 2D texture (GL: {0}) with encoding: {1}, format: {2}", texture, getGLTextureEncodingName(encoding), getGLTextureFormatName(format));
+            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", getGLTextureFilterName(filter), getGLTextureWrapName(wrap));
+        }
+
+        Texture2D::Texture2D(const Color& color,
+                             const GLTextureFilter filter,
+                             const GLTextureWrap wrap) :
+                             Texture(GLTextureFormat::RGBA, GLTextureEncoding::RGBA) {
+            source = "";
+            GLubyte data[] = { (uchar) (color.r * 255.0f),
+                               (uchar) (color.g * 255.0f),
+                               (uchar) (color.b * 255.0f),
+                               (uchar) (color.a * 255.0f) };
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexImage2D(GL_TEXTURE_2D, 0, (GLint) encoding, 1, 1, 0, (GLenum) format, GL_UNSIGNED_BYTE, data);
+            setFilter(filter);
+            setWrap(wrap);
+            CB_CORE_INFO("Created 1x1 px 2D texture (GL: {0}) with encoding: {1}, format: {2}", texture, getGLTextureEncodingName(encoding), getGLTextureFormatName(format));
+            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", getGLTextureFilterName(filter), getGLTextureWrapName(wrap));
+        }
 
         Texture2D::Texture2D(const uint width, const uint height, 
                              const GLTextureFormat format, 
@@ -182,6 +218,46 @@ namespace cobalt {
             glBindTexture(GL_TEXTURE_2D, texture);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLint) filter);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint) filter);
+        }
+
+        Texture3D::Texture3D(const uchar red,
+                             const uchar green,
+                             const uchar blue,
+                             const uchar alpha,
+                             const GLTextureFilter filter,
+                             const GLTextureWrap wrap) :
+                             Texture(GLTextureFormat::RGBA, GLTextureEncoding::RGBA) {
+            source = "";
+            GLubyte data[] = { red, green, blue, alpha };
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+            for (uint i = 0; i < 6; i++) {
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint) encoding, 1, 1, 0, (GLenum) format, GL_UNSIGNED_BYTE, data);
+            }
+            setFilter(filter);
+            setWrap(wrap);
+            CB_CORE_INFO("Created 1x1 px per face cubemap (GL: {0}) with encoding: {1}, format: {2}", texture, getGLTextureEncodingName(encoding), getGLTextureFormatName(format));
+            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", getGLTextureFilterName(filter), getGLTextureWrapName(wrap));
+        }
+
+        Texture3D::Texture3D(const Color& color,
+                             const GLTextureFilter filter,
+                             const GLTextureWrap wrap) :
+                             Texture(GLTextureFormat::RGBA, GLTextureEncoding::RGBA) {
+            source = "";
+            GLubyte data[] = { (uchar) (color.r * 255.0f),
+                               (uchar) (color.g * 255.0f),
+                               (uchar) (color.b * 255.0f),
+                               (uchar) (color.a * 255.0f) };
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+            for (uint i = 0; i < 6; i++) {
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint) encoding, 1, 1, 0, (GLenum) format, GL_UNSIGNED_BYTE, data);
+            }
+            setFilter(filter);
+            setWrap(wrap);
+            CB_CORE_INFO("Created 1x1 px per face cubemap (GL: {0}) with encoding: {1}, format: {2}", texture, getGLTextureEncodingName(encoding), getGLTextureFormatName(format));
+            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", getGLTextureFilterName(filter), getGLTextureWrapName(wrap));
         }
 
         Texture3D::Texture3D(const uint width, const uint height, 

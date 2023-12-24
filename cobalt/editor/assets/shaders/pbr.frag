@@ -16,7 +16,7 @@ in vec3 v_normal;
 
 const float PI = 3.14159265359;
 
-/* Get normal from normal map.
+/** Get normal from normal map.
  * https://learnopengl.com/#!PBR/Lighting
  */
 vec3 getNormalFromMap() {
@@ -35,7 +35,7 @@ vec3 getNormalFromMap() {
     return normalize(TBN * tangentNormal);
 }
 
-/* Trowbridge-Reitz GGX Normal Distribution Function.
+/** Trowbridge-Reitz GGX Normal Distribution Function.
  * https://learnopengl.com/#!PBR/Lighting
  * @param n: normal.
  * @param h: half vector.
@@ -51,7 +51,7 @@ float normalDist(vec3 n, vec3 h, float a) {
     return nom / denom;
 }
 
-/* Smith's method using the Schlick-Beckmann.
+/** Smith's method using the Schlick-Beckmann.
  * approximation of the Geometric Shadowing Function.
  * https://learnopengl.com/#!PBR/Lighting
  * @param n: normal.
@@ -77,7 +77,7 @@ float geometrySmith(vec3 N, vec3 V, vec3 L, float a) {
     return ggx1 * ggx2;
 }
 
-/* Fresnel-Schlick approximation.
+/** Fresnel-Schlick approximation.
  * https://learnopengl.com/#!PBR/Lighting
  * @param cosTheta: cosine of the angle between the normal and the view vector.
  * @param f0: base reflectivity.

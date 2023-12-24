@@ -12,32 +12,32 @@
 
 namespace cobalt {
     namespace core {
-        /* The input manager. Handles all input from peripherals such as the keyboard and mouse.
+        /** The input manager. Handles all input from peripherals such as the keyboard and mouse.
          * It then dispatches events to the appropriate listeners.
          */
         class InputManager {
             public:
-            /* Create a new input manager.
+            /** Create a new input manager.
              * @param mouseSensitivity: The mouse sensitivity.
              * @return: The new input manager.
              */
             InputManager(const float mouseSensitivity = 1.0f);
-            /* Destroy the input manager.
+            /** Destroy the input manager.
              */
             ~InputManager() = default;
 
-            /* Poll all events from the peripherals.
+            /** Poll all events from the peripherals.
              */
             void pollEvents();
-            /* Clear all events from the peripherals.
+            /** Clear all events from the peripherals.
              */
             void clearEvents();
 
-            /* Get the keyboard.
+            /** Get the keyboard.
              * @return: The keyboard.
              */
             Keyboard& getKeyboard();
-            /* Get the mouse.
+            /** Get the mouse.
              * @return: The mouse.
              */
             Mouse& getMouse();

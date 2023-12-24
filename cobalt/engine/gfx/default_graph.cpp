@@ -25,8 +25,8 @@ namespace cobalt {
         }
 
         void DefaultGraph::init() {
-            core::Material* filter = new core::Material(
-                CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("filter_shader")),
+            core::Material filter(
+                CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("filter")),
                 CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-albedo")),
                 CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-albedo")),
                 CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-albedo"))

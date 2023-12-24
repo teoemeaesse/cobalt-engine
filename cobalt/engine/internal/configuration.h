@@ -23,20 +23,20 @@ namespace cobalt {
 
         class Configuration {
             public:
-            /* Create a configuration from a file.
+            /** Create a configuration from a file.
              * @param path: The path to the file.
              * @return: The configuration.
              */
             explicit Configuration(const core::Path& path);
-            /* Create an empty configuration.
+            /** Create an empty configuration.
              * @return: The configuration.
              */
             Configuration() = default;
-            /* Destroy the configuration.
+            /** Destroy the configuration.
              */
             ~Configuration() = default;
 
-            /* Set a value in the configuration.
+            /** Set a value in the configuration.
              * @param key: The key to set the value for.
              * @param value: The value to set.
              */
@@ -45,7 +45,7 @@ namespace cobalt {
                 checkType<T>();
                 entries[key] = value;
             }
-            /* Get a value from the configuration.
+            /** Get a value from the configuration.
              * @param key: The key to get the value for.
              * @return: The value.
              */
@@ -63,7 +63,7 @@ namespace cobalt {
                     throw ConfigurationException(key, typeid(T).name());
                 }
             }
-            /* Get a value from the configuration.
+            /** Get a value from the configuration.
              * @param key: The key to get the value for.
              * @return: The value.
              */
@@ -72,29 +72,29 @@ namespace cobalt {
                 std::string keyString(key);
                 return get<T>(keyString);
             }
-            /* Check if the configuration has a value for a key.
+            /** Check if the configuration has a value for a key.
              * @param key: The key to check.
              * @return: True if the configuration has a value for the key, false otherwise.
              */
             const bool has(const std::string& key) const;
 
-            /* Write the configuration to a file as JSON.
+            /** Write the configuration to a file as JSON.
              * @param path: The path to write the configuration to.
              */
             void serialize(const core::Path& path) const;
-            /* Merge another configuration into this one.
+            /** Merge another configuration into this one.
              * Overrides values in this configuration with values from the other configuration.
              * @param other: The other configuration.
              */
             void merge(const Configuration& other);
-            /* Log the configuration to the console.
+            /** Log the configuration to the console.
              */
             void log() const;
 
             private:
-            std::unordered_map<std::string, std::any> entries;
+            core::UMap<std::string, std::any> entries;
 
-            /* Check if a type is supported.
+            /** Check if a type is supported.
              * @param T: The type to check.
              */
             template <typename T>

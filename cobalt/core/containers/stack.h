@@ -13,7 +13,7 @@ namespace cobalt {
         template <typename T>
         class Stack {
             public:
-            /* Creates a stack with an initial capacity.
+            /** Creates a stack with an initial capacity.
              * @param initial_capacity: The initial capacity of the stack. Defaults to 16.
              * @return: A stack with the initial capacity.
              */
@@ -21,7 +21,7 @@ namespace cobalt {
                 blocks = (StackBlock*) heap.grab(sizeof(StackBlock));
                 blocks[0] = stackBlockCreate(initial_capacity);
             }
-            /* Destroys the stack
+            /** Destroys the stack
              */
             ~Stack() {
                 if (blocks == nullptr) {
@@ -32,7 +32,7 @@ namespace cobalt {
                 }
                 heap.drop(blocks);
             }
-            /* Creates a new stack as a deep copy of another stack.
+            /** Creates a new stack as a deep copy of another stack.
              * This constructor copies each element and block of the other stack
              * into a new stack, ensuring a complete copy of all data.
              * @param other: The stack to be copied.
@@ -51,7 +51,7 @@ namespace cobalt {
                     std::copy(other.blocks[i].data, other.blocks[i].data + blocks[i].block_size, blocks[i].data);
                 }
             }
-            /* Creates a new stack by moving the resources of another stack.
+            /** Creates a new stack by moving the resources of another stack.
              * This constructor takes ownership of the resources from 'other'
              * and leaves it in an empty state.
              * @param other: The stack whose resources are to be moved.
@@ -63,7 +63,7 @@ namespace cobalt {
                 other.block_count = 0;
                 other.element_count = 0;
             }
-            /* Assigns a new value to the stack by copying another stack.
+            /** Assigns a new value to the stack by copying another stack.
              * The current contents of the stack are cleared and replaced
              * with a deep copy of the contents of 'other'.
              * @param other: The stack to be copied.
@@ -88,7 +88,7 @@ namespace cobalt {
                 }
                 return *this;
             }
-            /* Assigns a new value to the stack by moving another stack.
+            /** Assigns a new value to the stack by moving another stack.
              * The current contents of the stack are cleared and replaced
              * with the resources of 'other'. 'Other' is left in an empty state.
              * @param other: The stack whose resources are to be moved.
@@ -113,7 +113,7 @@ namespace cobalt {
                 return *this;
             }
 
-            /* Adds an element to the top of the stack by copying it.
+            /** Adds an element to the top of the stack by copying it.
              * If the stack is full, it will be resized to fit.
              * @param element: The element to push.
              */
@@ -125,7 +125,7 @@ namespace cobalt {
                 blocks[block_count - 1].data[blocks[block_count - 1].block_size] = T(element);
                 blocks[block_count - 1].block_size++;
             }
-            /* Adds an element to the top of the stack by moving it.
+            /** Adds an element to the top of the stack by moving it.
              * If the stack is full, it will be resized to fit.
              * @param element: The element to push.
              */
@@ -137,7 +137,7 @@ namespace cobalt {
                 blocks[block_count - 1].data[blocks[block_count - 1].block_size] = T(std::move(element));
                 blocks[block_count - 1].block_size++;
             }
-            /* Constructs an element in-place at the top of the stack.
+            /** Constructs an element in-place at the top of the stack.
              * If the stack is full, it will be resized to fit.
              * @param args: The arguments for the element constructor.
              */
@@ -150,7 +150,7 @@ namespace cobalt {
                 blocks[block_count - 1].data[blocks[block_count - 1].block_size] = T(std::forward<Args>(args)...);
                 blocks[block_count - 1].block_size++;
             }
-            /* Removes and returns the top element of the stack.
+            /** Removes and returns the top element of the stack.
              * @return: The element popped from the stack.
              */
             T pop() {
@@ -163,7 +163,7 @@ namespace cobalt {
                 }
                 return blocks[block_count - 1].data[--blocks[block_count - 1].block_size];
             }
-            /* Provides a reference to the top element of the stack.
+            /** Provides a reference to the top element of the stack.
              * @return: The top element of the stack.
              */
             const T& peek() const {
@@ -175,7 +175,7 @@ namespace cobalt {
                 }
                 return blocks[block_count - 1].data[blocks[block_count - 1].block_size - 1];
             }
-            /* Gets the number of elements in the stack.
+            /** Gets the number of elements in the stack.
              * @return: The number of elements in the stack.
              */
             const uint getSize() const {
@@ -194,7 +194,7 @@ namespace cobalt {
             uint block_count;         // Number of blocks in the stack.
             uint element_count;       // Number of elements in the stack.
 
-            /* Creates a stack block with a specified capacity.
+            /** Creates a stack block with a specified capacity.
              * @param capacity: The capacity of the block.
              * @return: A stack block with the given capacity.
              */
@@ -205,7 +205,7 @@ namespace cobalt {
                     .block_capacity = capacity,
                 };
             }
-            /* Destroys a given stack block.
+            /** Destroys a given stack block.
              * @param block: The block to destroy.
              */
             void stackBlockDestroy(StackBlock& block) {
@@ -214,7 +214,7 @@ namespace cobalt {
                 }
                 heap.drop(block.data);
             }
-            /* Resizes the stack to accomodate more elements.
+            /** Resizes the stack to accomodate more elements.
              */
             void resize() {
                 blocks = (StackBlock*) heap.resize(blocks, sizeof(StackBlock) * (block_count + 1));

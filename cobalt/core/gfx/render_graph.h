@@ -13,28 +13,28 @@ namespace cobalt {
     namespace core {
         class RenderGraph {
             public:
-            /* Creates an empty render graph. 
+            /** Creates an empty render graph. 
              * The graph is empty, so it is not possible to render anything.
              * @return: A render graph with no nodes.
              */
             RenderGraph();
-            /* Destroys the render graph.
+            /** Destroys the render graph.
              */
             ~RenderGraph() = default;
             
-            /* Adds a node to the render graph.
+            /** Adds a node to the render graph.
              * @param node: The node to add.
              * @return: The index of the node in the graph.
              */
             const uint addNode(Scope<RenderNode> node);
 
-            /* Called upon window resize.
+            /** Called upon window resize.
              * @param width: The new width of the render graph.
              * @param height: The new height of the render graph.
              */
             virtual void onResize(const float width, const float height) = 0;
             
-            /* Executes the render graph.
+            /** Executes the render graph.
              */
             void execute();
             

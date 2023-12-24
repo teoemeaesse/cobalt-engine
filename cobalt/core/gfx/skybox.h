@@ -14,50 +14,50 @@ namespace cobalt {
     namespace core {
         class Skybox {
             public:
-            /* Destroys the skybox.
+            /** Destroys the skybox.
              */
             ~Skybox() = default;
 
-            /* Copy constructor.
+            /** Copy constructor.
              * @param other: The other skybox.
              * @return: The copied skybox.
              */
             Skybox(const Skybox& other) = delete;
-            /* Move constructor.
+            /** Move constructor.
              * @param other: The other skybox.
              * @return: The moved skybox.
              */
             Skybox(Skybox&& other) noexcept;
-            /* Copy assignment operator.
+            /** Copy assignment operator.
              * @param other: The other skybox.
              * @return: The copied skybox.
              */
             Skybox& operator=(const Skybox& other) = delete;
-            /* Move assignment operator.
+            /** Move assignment operator.
              * @param other: The other skybox.
              * @return: The moved skybox.
              */
             Skybox& operator=(Skybox&& other) = delete;
 
-            /* Creates a new skybox.
+            /** Creates a new skybox.
              * @param texture: The texture of the skybox.
              * @param shader: The shader to render it with.
              * @return: The skybox.
              */
             static Skybox create(const Texture3D& texture, Shader& shader);
             
-            /* Binds the skybox.
+            /** Binds the skybox.
              */
             void bind() const;
-            /* Renders the skybox.
+            /** Renders the skybox.
              */
             void render() const;
 
-            /* Gets the texture.
+            /** Gets the texture.
              * @return: The texture.
              */
             const Texture3D& getTexture() const;
-            /* Gets the shader.
+            /** Gets the shader.
              * @return: The shader.
              */
             Shader& getShader() const;
@@ -68,7 +68,7 @@ namespace cobalt {
             const Texture3D& texture;   // The texture.
             Shader& shader;             // The shader.
 
-            /* Creates a new skybox.
+            /** Creates a new skybox.
              * @param texture: The texture.
              * @param shader: The shader.
              * @param vao: The vertex array object.

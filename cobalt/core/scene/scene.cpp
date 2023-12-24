@@ -34,7 +34,7 @@ namespace cobalt {
             return meshes;
         }
 
-        std::optional<Skybox>& Scene::getSkybox() {
+        Opt<Skybox>& Scene::getSkybox() {
             return skybox;
         }
 

@@ -10,16 +10,16 @@
 
 namespace cobalt {
     namespace core {
-        /* A linked list implementation.
+        /** A linked list implementation.
         */
         template<typename T>
         class LinkedList {
             public:
-            /* Creates a new linked list.
+            /** Creates a new linked list.
             * @return: The new linked list.
             */
             LinkedList() : head(nullptr), tail(nullptr), size(0), pool(1) {}
-            /* Destroys the linked list.
+            /** Destroys the linked list.
             */
             ~LinkedList() {
                 Node* node = head;
@@ -30,7 +30,7 @@ namespace cobalt {
                 }
             }
             
-            /* Push an element to the tail end of the list.
+            /** Push an element to the tail end of the list.
             * @param data: The data to insert.
             */
             void push(const T& data) {
@@ -45,14 +45,14 @@ namespace cobalt {
                 }
                 size++;
             }
-            /* Emplace an element at the tail end of the list.
+            /** Emplace an element at the tail end of the list.
             * @param args: The arguments to forward to the constructor.
             */
             template <typename... Args>
             void emplace(Args&&... args) {
                 push(T(std::forward<Args>(args)...));
             }
-            /* Removes the element at the tail end of the list.
+            /** Removes the element at the tail end of the list.
             * @return: The element at the tail end of the list.
             */
             T pop() {
@@ -60,7 +60,7 @@ namespace cobalt {
                 remove(size - 1);
                 return data;
             }
-            /* Removes the element at the given index.
+            /** Removes the element at the given index.
             * @param index: The index of the element to remove.
             */
             void remove(const uint index) {
@@ -82,7 +82,7 @@ namespace cobalt {
                 pool.drop(node);
                 size--;
             }
-            /* Inserts an element after the given index.
+            /** Inserts an element after the given index.
             * @param index: The index to insert after.
             * @param data: The data to insert.
             */
@@ -101,7 +101,7 @@ namespace cobalt {
                 new_node->next = next;
                 size++;
             }
-            /* Gets the element at the given index.
+            /** Gets the element at the given index.
             * @param index: The index of the element to get.
             * @return: The element at the given index.
             */
@@ -115,7 +115,7 @@ namespace cobalt {
                 }
                 return node->data;
             }
-            /* Gets the number of elements in the list.
+            /** Gets the number of elements in the list.
             * @return: The size of the list.
             */
             uint getSize() const { return size; }
@@ -131,7 +131,7 @@ namespace cobalt {
             Node* tail;                 // The last node in the list.
             uint size;                  // The number of nodes in the list.
         
-            /* Creates a new node.
+            /** Creates a new node.
             * @param data: The data to store in the node.
             * @return: The new node.
             */

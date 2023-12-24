@@ -9,11 +9,11 @@
 
 namespace cobalt {
     namespace core {
-        /* A compute shader program.
+        /** A compute shader program.
          */
         class ComputeShader : public Shader {
             public:
-            /* Creates a new compute shader.
+            /** Creates a new compute shader.
              * @param computeSource: The source code of the compute shader.
              * @return: The compute shader.
              */

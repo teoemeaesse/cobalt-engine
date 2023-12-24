@@ -18,20 +18,20 @@ namespace cobalt {
             bool operator==(const PeripheralInput<T>& other) const {
                 return id == other.id;
             }
-            /* Create a new peripheral input.
+            /** Create a new peripheral input.
              * @return: The new peripheral input.
              */
             PeripheralInput() = default;
-            /* Create a new peripheral input.
+            /** Create a new peripheral input.
              * @param id: The id of the peripheral input.
              * @return: The new peripheral input.
              */
             PeripheralInput(const T id) : id(id) {}
-            /* Destroy the peripheral input.
+            /** Destroy the peripheral input.
              */
             ~PeripheralInput() = default;
 
-            /* Get the id of the peripheral input.
+            /** Get the id of the peripheral input.
              * @return: The id of the peripheral input.
              */
             T getId() const {
@@ -42,17 +42,17 @@ namespace cobalt {
             T id;   // The id of the peripheral input.
         };
 
-        /* A peripheral is an input device such as a keyboard or mouse.
+        /** A peripheral is an input device such as a keyboard or mouse.
          * @tparam T: The type of peripheral input that commands can be bound to.
          */
         template <typename T>
         class Peripheral {
             public:
-            /* Create a new peripheral.
+            /** Create a new peripheral.
              * @return: The new peripheral.
              */
             Peripheral() : events(16), bindings() {}
-            /* Destroy the peripheral.
+            /** Destroy the peripheral.
              */
             ~Peripheral() {
                 for (auto& binding : bindings) {
@@ -60,14 +60,14 @@ namespace cobalt {
                 }
             }
 
-            /* Poll the peripheral for events.
+            /** Poll the peripheral for events.
              */
             virtual void pollEvents() = 0;
-            /* Clear all queued events from the peripheral.
+            /** Clear all queued events from the peripheral.
              */
             virtual void clearEvents() = 0;
 
-            /* Bind a command to an input.
+            /** Bind a command to an input.
              * @param input: The input to bind the command to.
              * @param command: The command to bind.
              */
@@ -76,8 +76,8 @@ namespace cobalt {
             }
 
             protected:
-            Queue<const InputCommand*> events;                              // The events to execute.
-            std::unordered_map<PeripheralInput<T>, std::unique_ptr<InputCommand>> bindings; // The bindings for the peripheral.
+            Queue<const InputCommand*> events;                                  // The events to execute.
+            UMap<PeripheralInput<T>, std::unique_ptr<InputCommand>> bindings;   // The bindings for the peripheral.
         };
     }
 }

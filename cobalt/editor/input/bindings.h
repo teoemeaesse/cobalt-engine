@@ -18,8 +18,8 @@ namespace cobalt {
                 if (getInput().held || !getInput().active)
                     return;
                 static int i = 2;
-                core::Material* material = new core::Material(
-                    CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("scene_shader")),
+                core::Material material(
+                    CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("pbr")),
                     CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo")),
                     CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-normal")),
                     CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-mrao"))

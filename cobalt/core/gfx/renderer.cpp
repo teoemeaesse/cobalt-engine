@@ -20,7 +20,7 @@ namespace cobalt {
             try {
                 sendUniforms(shader);
                 shader.setUniformVec3("lightPosition", glm::vec3(0.0, -45.0, 0.0));
-                shader.setUniformVec3("lightColor", glm::vec3(5000.0, 5000.0, 5000.0));
+                shader.setUniformVec3("lightColor", glm::vec3(10000.0, 5000.0, 5000.0));
                 shader.setUniformVec3("camPos", target.getCamera().getPosition());
                 target.sendUBO(shader);
                 const glm::mat4& model = mesh.getModelMatrix();

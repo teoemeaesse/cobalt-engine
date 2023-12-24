@@ -9,12 +9,12 @@
 
 namespace cobalt {
     namespace core {
-        /* A resizable buffer that you can keep pushing data into,
+        /** A resizable buffer that you can keep pushing data into,
          * and then get a pointer to the data.
          */
         class Buffer {
             public:
-            /* Create a buffer.
+            /** Create a buffer.
              * @param initialCapacity: The initial capacity of the buffer.
              */
             Buffer(size_t initialCapacity) :
@@ -23,13 +23,13 @@ namespace cobalt {
                 size(0),
                 capacity(initialCapacity)
                 {}
-            /* Destroy the buffer.
+            /** Destroy the buffer.
              */
             ~Buffer() {
                 heap.drop(data);
             }
 
-            /* Push data into the buffer.
+            /** Push data into the buffer.
              * @param data: The data to push.
              */
             template <typename T>
@@ -41,7 +41,7 @@ namespace cobalt {
                 new((T*)((char*) this->data + this->size)) T(data);
                 this->size += sizeof(T);
             }
-            /* Push data into the buffer.
+            /** Push data into the buffer.
              * @param data: The data to push.
              */
             template <typename T>
@@ -53,7 +53,7 @@ namespace cobalt {
                 new((T*)((char*) this->data + this->size)) T(std::move(data));
                 this->size += sizeof(T);
             }
-            /* Push data into the buffer.
+            /** Push data into the buffer.
              * @param data: The data to push.
              * @param size: The size of the data to push.
              */
@@ -66,7 +66,7 @@ namespace cobalt {
                 this->size += size;
             }
 
-            /* Get a pointer to the data in the buffer.
+            /** Get a pointer to the data in the buffer.
              * @return: A pointer to the data in the buffer.
              */
             const void* getData() const {
