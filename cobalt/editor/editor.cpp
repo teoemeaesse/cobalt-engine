@@ -88,15 +88,21 @@ namespace cobalt {
                     CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("skybox"))
                 )
             );
-            const core::Texture& woodAlbedo = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo"));
-            const core::Texture& woodNormal = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-normal"));
-            const core::Texture& woodMrao = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-mrao"));
-            const core::Texture& steelAlbedo = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-albedo"));
-            const core::Texture& steelNormal = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-normal"));
-            const core::Texture& steelMrao = CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-mrao"));
-            core::Shader& shader = CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("pbr"));
-            core::Material woodMaterial(shader, woodAlbedo, woodNormal, woodMrao);
-            core::Material steelMaterial(shader, steelAlbedo, steelNormal, steelMrao);
+            const engine::TextureID woodAlbedo = CB_TEXTURE_LIBRARY.getTextureID("wood-albedo");
+            const engine::TextureID woodNormal = CB_TEXTURE_LIBRARY.getTextureID("wood-normal");
+            const engine::TextureID woodMrao = CB_TEXTURE_LIBRARY.getTextureID("wood-mrao");
+            const engine::TextureID steelAlbedo = CB_TEXTURE_LIBRARY.getTextureID("steel-albedo");
+            const engine::TextureID steelNormal = CB_TEXTURE_LIBRARY.getTextureID("steel-normal");
+            const engine::TextureID steelMrao = CB_TEXTURE_LIBRARY.getTextureID("steel-mrao");
+            const core::Texture2D& woodAlbedoTexture = CB_TEXTURE_LIBRARY.getTexture2D(woodAlbedo);
+            const core::Texture2D& woodNormalTexture = CB_TEXTURE_LIBRARY.getTexture2D(woodNormal);
+            const core::Texture2D& woodMraoTexture = CB_TEXTURE_LIBRARY.getTexture2D(woodMrao);
+            const core::Texture2D& steelAlbedoTexture = CB_TEXTURE_LIBRARY.getTexture2D(steelAlbedo);
+            const core::Texture2D& steelNormalTexture = CB_TEXTURE_LIBRARY.getTexture2D(steelNormal);
+            const core::Texture2D& steelMraoTexture = CB_TEXTURE_LIBRARY.getTexture2D(steelMrao);
+
+            core::Material& woodMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("wood", COLOR_BLUE, 1.0f, 1.0f, 1.0f));
+            core::Material& steelMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("steel", steelAlbedo, steelNormal, steelMrao));
             core::Mesh mesh = core::Mesh::createRectangle(10, 10, woodMaterial);
             core::Mesh ground = core::Mesh::createRectangle(100, 100, woodMaterial);
             core::Mesh sphere = core::Mesh::createSphere(5.0f, woodMaterial);

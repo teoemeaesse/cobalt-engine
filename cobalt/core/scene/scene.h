@@ -39,7 +39,7 @@ namespace cobalt {
             /** Gets the meshes in the scene.
              * @return: The meshes in the scene.
              */
-            Vector<Mesh>& getMeshes();
+            Vec<Mesh>& getMeshes();
             /** Gets the skybox of the scene.
              * @return: The skybox of the scene.
              */
@@ -50,10 +50,10 @@ namespace cobalt {
             PerspectiveCamera& getCamera();
 
             private:
-            Vector<Mesh> meshes;    // All the meshes in the scene.
-                                    // This is a massive oversimplification.
-                                    // TODO: Add a proper scene graph.
-            Opt<Skybox> skybox;     // The skybox of the scene.
+            Vec<Mesh> meshes;   // All the meshes in the scene.
+                                // This is a massive oversimplification.
+                                // TODO: Add a proper scene graph.
+            Opt<Skybox> skybox; // The skybox of the scene.
 
             PerspectiveCamera camera;   // The camera used to render the scene.
         };

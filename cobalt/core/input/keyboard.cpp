@@ -66,7 +66,7 @@ namespace cobalt {
                 if (state.down) {
                     auto it = bindings.find(static_cast<KeyboardInputID>(i));
                     if (it != bindings.end()) {
-                        events.enqueue(it->second.get()->withInput({state.down, state.polled, 1.0f}));
+                        events.push(it->second.get()->withInput({state.down, state.polled, 1.0f}));
                     }
                     if (!state.polled) {
                         state.polled = true;
@@ -75,15 +75,16 @@ namespace cobalt {
                     state.polled = false;
                     auto it = bindings.find(static_cast<KeyboardInputID>(i));
                     if (it != bindings.end()) {
-                        events.enqueue(it->second.get()->withInput({state.down, state.polled, 1.0f}));
+                        events.push(it->second.get()->withInput({state.down, state.polled, 1.0f}));
                     }
                 }
             }
         }
 
         void Keyboard::clearEvents() {
-            while (!events.isEmpty()) {
-                events.dequeue()->execute();
+            while (!events.empty()) {
+                events.front()->execute();
+                events.pop();
             }
         }
 

@@ -39,7 +39,7 @@ namespace cobalt {
              * @param other: The other material.
              * @return: The moved material.
              */
-            Material(Material&& other) noexcept;
+            Material(Material&& other) noexcept = delete;
             /** Copy assignment operator.
              * @param other: The other material.
              * @return: The copied material.

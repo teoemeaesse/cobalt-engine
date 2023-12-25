@@ -16,6 +16,11 @@
 #include <sstream>
 #include <iostream>
 #include <any>
+#include <list>
+#include <deque>
+#include <vector>
+#include <stack>
+#include <queue>
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-volatile"
 #include <glm/glm.hpp>
@@ -29,7 +34,6 @@
 #include "json/json.hpp"
 
 // Exceptions.
-#include "core/exceptions/container_exception.h"
 #include "core/exceptions/gfx_exception.h"
 #include "core/exceptions/gl_exception.h"
 #include "core/exceptions/input_exception.h"
@@ -43,13 +47,6 @@
 // IO.
 #include "core/io/path.h"
 #include "core/io/file.h"
-
-// Containers.
-#include "core/containers/linked_list.h"
-#include "core/containers/stack.h"
-#include "core/containers/queue.h"
-#include "core/containers/vector.h"
-#include "core/containers/buffer.h"
 
 // Memory.
 #include "core/memory/pool.h"
@@ -75,6 +72,16 @@ namespace cobalt {
         using USet = std::unordered_set<T, S>;
         template<typename T>
         using Opt = std::optional<T>;
+        template<typename T>
+        using Vec = std::vector<T>;
+        template<typename T>
+        using List = std::list<T>;
+        template<typename T>
+        using Deque = std::deque<T>;
+        template<typename T>
+        using Stack = std::stack<T>;
+        template<typename T>
+        using Queue = std::queue<T>;
 
 
         /** Usage mode of a buffer object.

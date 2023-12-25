@@ -22,7 +22,7 @@ namespace cobalt {
              */
             Mesh(VAO&& vao,
                  IBO&& ibo,
-                 Material& material,
+                Material& material,
                  const GLPrimitive& primitive = GLPrimitive::Triangles);
             /** Destroy the mesh.
              */

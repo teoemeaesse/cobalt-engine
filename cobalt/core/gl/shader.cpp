@@ -13,7 +13,23 @@ namespace cobalt {
         }
 
         Shader::~Shader() {
-            glDeleteProgram(program);
+            if (program != 0) {
+                glDeleteProgram(program);
+            }
+        }
+
+        Shader::Shader(Shader&& other) noexcept :
+            program(other.program),
+            uniformLocations(other.uniformLocations)
+        {
+            other.program = 0;
+        }
+
+        Shader& Shader::operator=(Shader&& other) noexcept {
+            program = other.program;
+            uniformLocations = other.uniformLocations;
+            other.program = 0;
+            return *this;
         }
 
         void Shader::use() const {
@@ -145,7 +161,7 @@ namespace cobalt {
             return *this;
         }
 
-        std::unique_ptr<RenderShader> ShaderBuilder::buildRenderShader() const {
+        RenderShader ShaderBuilder::buildRenderShader() const {
             std::string vertexSource;
             std::string fragmentSource;
             try {
@@ -156,16 +172,16 @@ namespace cobalt {
             }
             try {
                 std::string geometrySource = sources.at(ShaderStep::Geometry);
-                return std::make_unique<RenderShader>(vertexSource, fragmentSource, geometrySource);
+                return RenderShader(vertexSource, fragmentSource, geometrySource);
             } catch (std::out_of_range& e) {
-                return std::make_unique<RenderShader>(vertexSource, fragmentSource);
+                return RenderShader(vertexSource, fragmentSource);
             }
         }
 
-        std::unique_ptr<ComputeShader> ShaderBuilder::buildComputeShader() const {
+        ComputeShader ShaderBuilder::buildComputeShader() const {
             try {
                 std::string computeSource = sources.at(ShaderStep::Compute);
-                return std::make_unique<ComputeShader>(computeSource);
+                return ComputeShader(computeSource);
             }
             catch (std::out_of_range& e) {
                 throw GLException("A compute shader must have a compute shader source");

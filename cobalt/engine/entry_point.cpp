@@ -4,7 +4,6 @@
 
 #include <signal.h>
 
-#include "core/exceptions/container_exception.h"
 #include "core/exceptions/gfx_exception.h"
 #include "core/exceptions/input_exception.h"
 #include "engine/entry_point.h"
@@ -30,6 +29,7 @@ int main(int argc, char** argv) {
     cobalt::core::RenderContext::init();
     cobalt::engine::TextureLibrary::init();
     cobalt::engine::ShaderLibrary::init();
+    cobalt::engine::MaterialLibrary::init();
 
     // Create the application.
     auto app = cobalt::engine::createApplication();
@@ -50,8 +50,6 @@ int main(int argc, char** argv) {
         CB_ERROR("Input exception: {0}", e.what());
     } catch (const cobalt::core::GFXException& e) {
         CB_ERROR("GFX exception: {0}", e.what());
-    } catch (const cobalt::core::ContainerException& e) {
-        CB_ERROR("Container exception: {0}", e.what());
     } catch (const std::exception& e) {
         CB_ERROR("Unknown exception: {0}", e.what());
     }

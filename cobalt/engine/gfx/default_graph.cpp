@@ -6,7 +6,7 @@
 #include "engine/gfx/scene_node.h"
 #include "engine/gfx/filter_node.h"
 #include "engine/internal/shader_library.h"
-#include "engine/internal/texture_library.h"
+#include "engine/internal/material_library.h"
 
 
 namespace cobalt {
@@ -25,12 +25,7 @@ namespace cobalt {
         }
 
         void DefaultGraph::init() {
-            core::Material filter(
-                CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("filter")),
-                CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-albedo")),
-                CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-albedo")),
-                CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("steel-albedo"))
-            );
+            core::Material& filter = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("filter", COLOR_WHITE, 1.0f, 1.0f, 1.0f));
             Scope<SceneNode> sceneNode = std::make_unique<SceneNode>(SceneNode(scene, renderer, core::RenderTarget(sceneFBO, scene.getCamera(), "scene", 0)));
             Scope<FilterNode> filterNode = std::make_unique<FilterNode>(FilterNode(renderer, core::RenderTarget(defaultFBO, outputCamera, "output", 1), filter));
             filterNode->addSource(core::RenderTarget(sceneFBO, scene.getCamera(), "scene", 0));
@@ -43,7 +38,7 @@ namespace cobalt {
             outputCamera.rotateHorizontal(10.0f);
             outputCamera.resize(-width / 2, width / 2, -height / 2, height / 2);
             sceneFBO.resize((uint) width, (uint) height);
-            for (uint i = 0; i < nodes.getSize(); i++) {
+            for (uint i = 0; i < nodes.size(); i++) {
                 nodes[i]->onResize(width, height);
             }
         }

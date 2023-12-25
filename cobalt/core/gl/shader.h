@@ -25,6 +25,26 @@ namespace cobalt {
             /** Destroys the shader program.
             */
             virtual ~Shader();
+            /** Copy constructor.
+             * @param other: The shader to copy.
+             * @return: The copied shader.
+             */
+            Shader(const Shader& other) = delete;
+            /** Move constructor.
+             * @param other: The shader to move.
+             * @return: The moved shader.
+             */
+            Shader(Shader&& other) noexcept;
+            /** Copy assignment operator.
+             * @param other: The shader to copy.
+             * @return: The copied shader.
+             */
+            Shader& operator=(const Shader& other) = delete;
+            /** Move assignment operator.
+             * @param other: The shader to move.
+             * @return: The moved shader.
+             */
+            Shader& operator=(Shader&& other) noexcept;
 
             /** Binds the shader program.
             */
@@ -139,7 +159,7 @@ namespace cobalt {
             const GLuint getUniformLocation(const std::string& name);
 
             protected:
-            const GLHandle program; // The opengl program handle.
+            GLHandle program;   // The opengl program handle.
             
             /** Creates a new shader program.
             * @param program: The opengl program handle.
@@ -173,11 +193,11 @@ namespace cobalt {
             /** Builds a render shader.
              * @return: The render shader.
              */
-            std::unique_ptr<RenderShader> buildRenderShader() const;
+            RenderShader buildRenderShader() const;
             /** Builds a compute shader.
              * @return: The compute shader.
              */
-            std::unique_ptr<ComputeShader> buildComputeShader() const;
+            ComputeShader buildComputeShader() const;
 
             private:
             UMap<ShaderStep, std::string> sources;  // The shader sources.

@@ -15,7 +15,7 @@ namespace cobalt {
              * @param vertices: The buffer to push the vertices into.
              * @param indices: The buffer to push the indices into.
              */
-            virtual void pushInto(Buffer& vertices, Buffer& indices) const;
+            virtual void pushInto(Vec<char>& vertices, Vec<char>& indices) const;
 
             private:
             glm::vec3 worldTranslate;   // The world translation of the mesh.
@@ -37,7 +37,7 @@ namespace cobalt {
              * @param vertices: The buffer to push the vertices into.
              * @param indices: The buffer to push the indices into.
              */
-            void pushInto(Buffer& vertices, Buffer& indices) const override;
+            void pushInto(Vec<char>& vertices, Vec<char>& indices) const override;
         };
 
         class BatchSphere : public BatchMesh {
@@ -46,7 +46,7 @@ namespace cobalt {
              * @param vertices: The buffer to push the vertices into.
              * @param indices: The buffer to push the indices into.
              */
-            void pushInto(Buffer& vertices, Buffer& indices) const override;
+            void pushInto(Vec<char>& vertices, Vec<char>& indices) const override;
         };
     }
 }

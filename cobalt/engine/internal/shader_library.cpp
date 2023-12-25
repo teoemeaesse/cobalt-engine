@@ -12,7 +12,7 @@ namespace cobalt {
     namespace engine {
         core::Scope<ShaderLibrary> ShaderLibrary::instance;
 
-        static core::Scope<core::RenderShader> parseRenderShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
+        static core::RenderShader parseRenderShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
             std::string vertexName = shaderJson["vertex"].get<std::string>();
             std::string fragmentName = shaderJson["fragment"].get<std::string>();
@@ -31,7 +31,7 @@ namespace cobalt {
             return builder.buildRenderShader();
         }
 
-        static core::Scope<core::ComputeShader> parseComputeShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
+        static core::ComputeShader parseComputeShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
             std::string computeName = shaderJson["compute"].get<std::string>();
             core::File computeFile(shadersDirectory + computeName);
@@ -39,9 +39,6 @@ namespace cobalt {
             builder.addShaderStep(core::ShaderStep::Compute, computeFile.read());
             return builder.buildComputeShader();
         }
-
-        ShaderLibrary::ShaderLibrary()
-            : shaders(8) {}
 
         void ShaderLibrary::loadShaders(const core::Path& shadersDirectory) {
             core::Path shadersJsonPath = shadersDirectory;
@@ -59,26 +56,27 @@ namespace cobalt {
                 nlohmann::json shaderJson = it.value();
                 if (shaderJson["type"].get<std::string>() == "render") {
                     CB_INFO("Loading render shader: {}", shaderName);
-                    shaders.push({shaderName, std::move(parseRenderShader(shaderJson, shadersDirectory))});
+                    shaders.emplace_back(shaderName, std::move(parseRenderShader(shaderJson, shadersDirectory)));
                 }
                 else if (shaderJson["type"].get<std::string>() == "compute") {
                     CB_INFO("Loading compute shader: {}", shaderName);
-                    shaders.push({shaderName, std::move(parseComputeShader(shaderJson, shadersDirectory))});
+                    shaders.emplace_back(shaderName, std::move(parseComputeShader(shaderJson, shadersDirectory)));
                 }
             }
         }
 
         const ShaderID ShaderLibrary::getShaderID(const std::string& name) {
-            for (core::uint64 i = 0; i < shaders.getSize(); i++) {
+            for (core::uint64 i = 0; i < shaders.size(); i++) {
                 if (shaders[i].name == name) {
                     return i + 1;
                 }
             }
+            CB_WARN("Shader ID {0} not found, returning default shader", name);
             return 0;
         }
 
         core::Shader& ShaderLibrary::getShader(const ShaderID id) {
-            return *shaders[id - 1].shader;
+            return shaders[id - 1].shader;
         }
 
         core::Shader& ShaderLibrary::getShader(const std::string& name) {

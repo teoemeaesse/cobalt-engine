@@ -50,7 +50,7 @@ namespace cobalt {
         void Mouse::queueEvent(const MouseInputID id, const InputValue value) {
             auto it = bindings.find(id);
             if (it != bindings.end()) {
-                events.enqueue(it->second.get()->withInput(value));
+                events.push(it->second.get()->withInput(value));
             }
         }
 
@@ -101,8 +101,9 @@ namespace cobalt {
         }
 
         void Mouse::clearEvents() {
-            while (!events.isEmpty()) {
-                events.dequeue()->execute();
+            while (!events.empty()) {
+                events.front()->execute();
+                events.pop();
             }
         }
 

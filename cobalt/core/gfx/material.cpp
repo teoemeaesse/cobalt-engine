@@ -25,13 +25,6 @@ namespace cobalt {
             mraoMap(other.mraoMap) {
         }
 
-        Material::Material(Material&& other) noexcept :
-            shader(other.shader),
-            albedoMap(other.albedoMap),
-            normalMap(other.normalMap),
-            mraoMap(other.mraoMap) {
-        }
-
         bool Material::operator==(const Material& other) const {
             return shader.getGLHandle() == other.shader.getGLHandle() &&
                    albedoMap.getGLHandle() == other.albedoMap.getGLHandle() &&

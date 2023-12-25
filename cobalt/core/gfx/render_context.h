@@ -163,9 +163,9 @@ namespace cobalt {
             ~RenderContext();
 
             private:
-            GLFWContext context;                                // The GLFW context.
+            GLFWContext context;    // The GLFW context.
 
-            static std::shared_ptr<RenderContext> instance;     // The current render context.
+            static Ref<RenderContext> instance; // The current render context.
         };
     }
 }

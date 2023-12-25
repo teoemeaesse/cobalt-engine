@@ -74,11 +74,11 @@ namespace cobalt {
             inline GLTextureEncoding getEncoding() const { return encoding; }
 
             protected:
-            GLHandle texture;                   // The OpenGL handle to the texture.
-            std::string source;                 // The source of the texture.
-            GLTextureFormat format;             // The pixel format of the texture.
-            GLTextureEncoding encoding;         // The internal format of the texture.
-            uint width, height;                 // The width and height of the texture.
+            GLHandle texture;           // The OpenGL handle to the texture.
+            std::string source;         // The source of the texture.
+            GLTextureFormat format;     // The pixel format of the texture.
+            GLTextureEncoding encoding; // The internal format of the texture.
+            uint width, height;         // The width and height of the texture.
 
             /** Creates an opengl texture.
              * @param texture: The OpenGL handle to the texture.

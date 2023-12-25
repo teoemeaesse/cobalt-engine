@@ -21,5 +21,11 @@ namespace cobalt {
         #define COLOR_MAGENTA COLOR(1.0f, 0.0f, 1.0f, 1.0f)
         #define COLOR_CYAN COLOR(0.0f, 1.0f, 1.0f, 1.0f)
         #define COLOR_TRANSPARENT COLOR(0.0f, 0.0f, 0.0f, 0.0f)
+
+        inline std::string colorToString(const Color& color) {
+            std::stringstream ss;
+            ss << "Color(" << color.r << ", " << color.g << ", " << color.b << ", " << color.a << ")";
+            return ss.str();
+        }
     }
 }

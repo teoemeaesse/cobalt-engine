@@ -11,13 +11,23 @@
 
 namespace cobalt {
     namespace engine {
-        using MaterialID = core::uint64;
+        using MaterialID = core::uint;
 
         class MaterialLibrary {
             public:
             struct MaterialEntry {
                 std::string name;
                 core::Material material;
+
+                /** Creates a new material entry.
+                 * @param name: The name of the material.
+                 * @param material: The material.
+                 * @return: The material entry.
+                 */
+                MaterialEntry(const std::string& name, const core::Material& material) :
+                    name(name),
+                    material(material)
+                {}
             };
 
             /** Creates an empty material library.
@@ -59,9 +69,9 @@ namespace cobalt {
              * @param name: The name of the material.
              * @param shader: The shader program.
              * @param albedo: The surface albedo.
-             * @param metallic: The surface metallic value.
-             * @param roughness: The surface roughness value.
-             * @param ao: The surface ambient occlusion value.
+             * @param metallic: The surface metallic value (0.0f - 1.0f).
+             * @param roughness: The surface roughness value (0.0f - 1.0f).
+             * @param ao: The surface ambient occlusion value (0.0f - 1.0f).
              * @return: The material.
              */
             const MaterialID makePBR(
@@ -82,9 +92,11 @@ namespace cobalt {
             static MaterialLibrary& getMaterialLibrary();
 
             private:
-            core::Vector<MaterialEntry> materials;  // The materials in the library.
+            core::Deque<MaterialEntry> materials;   // The materials in the library.
 
             static core::Scope<MaterialLibrary> instance;   // The singleton instance of the material library.
         };
     }
 }
+
+#define CB_MATERIAL_LIBRARY ::cobalt::engine::MaterialLibrary::getMaterialLibrary()

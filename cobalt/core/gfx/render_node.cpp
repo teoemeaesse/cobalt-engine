@@ -22,41 +22,41 @@ namespace cobalt {
         }
 
         void RenderNode::renderMesh(Mesh& mesh) {
-            if (targets.getSize() == 0) {
+            if (targets.size() == 0) {
                 CB_CORE_WARN("Render node has no targets");
             }
-            for (uint i = 0; i < sources.getSize(); i++) {
+            for (uint i = 0; i < sources.size(); i++) {
                 uint binding = renderer.bindTexture("source_" + sources[i].getName(), sources[i].getColorBuffer());
             }
             renderer.bindTexture("albedo", mesh.getMaterial().getAlbedoMap());
             renderer.bindTexture("normal", mesh.getMaterial().getNormalMap());
             renderer.bindTexture("mrao", mesh.getMaterial().getMRAOMap());
-            for (uint i = 0; i < targets.getSize(); i++) {
+            for (uint i = 0; i < targets.size(); i++) {
                 renderer.renderMesh(mesh, targets[i]);
             }
             renderer.clearTextureUnits();
         }
         
         void RenderNode::renderSkybox(Skybox& skybox) {
-            if (targets.getSize() == 0) {
+            if (targets.size() == 0) {
                 CB_CORE_WARN("Render node has no targets");
             }
             renderer.bindTexture("skybox", skybox.getTexture());
-            for (uint i = 0; i < targets.getSize(); i++) {
+            for (uint i = 0; i < targets.size(); i++) {
                 renderer.renderSkybox(skybox, targets[i]);
             }
             renderer.clearTextureUnits();
         }
 
         void RenderNode::addSource(RenderTarget&& source) {
-            sources.push(std::move(source));
+            sources.push_back(std::move(source));
         }
 
-        Vector<RenderTarget>& RenderNode::getSources() {
+        Vec<RenderTarget>& RenderNode::getSources() {
             return sources;
         }
 
-        Vector<RenderTarget>& RenderNode::getTargets() {
+        Vec<RenderTarget>& RenderNode::getTargets() {
             return targets;
         }
     }

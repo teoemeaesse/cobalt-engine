@@ -22,8 +22,8 @@ namespace cobalt {
             void add(BatchMesh& mesh);
 
             private:
-            Buffer vertices;
-            Buffer indices;
+            Vec<char> vertices;
+            Vec<char> indices;
         };
 
         class BatchRenderer {

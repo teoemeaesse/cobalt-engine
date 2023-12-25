@@ -38,14 +38,27 @@ namespace cobalt {
 
             private:
             struct Attribute {
-                uint count;                     // The number of elements in the attribute.
-                GLType type;                    // The type of the elements in the attribute.
-                bool normalized;                // Whether the attribute should be normalized.
-                size_t stride;                  // The stride of the attribute.
+                uint count;             // The number of elements in the attribute.
+                GLType type;            // The type of the elements in the attribute.
+                bool normalized;        // Whether the attribute should be normalized.
+                size_t stride;          // The stride of the attribute.
+
+                /** Creates an attribute.
+                 * @param count: The number of elements in the attribute.
+                 * @param type: The type of the elements in the attribute.
+                 * @param normalized: Whether the attribute should be normalized.
+                 * @param stride: The stride of the attribute.
+                 * @return: An attribute.
+                 */
+                Attribute(const uint count, const GLType type, const bool normalized, const size_t stride) :
+                    count(count),
+                    type(type),
+                    normalized(normalized),
+                    stride(stride) {}
             };
             
-            LinkedList<Attribute> attributes;   // The list of attributes.
-            size_t stride;                      // The current stride of the vertex data.
+            List<Attribute> attributes; // The list of attributes.
+            size_t stride;              // The current stride of the vertex data.
         };
 
         /** Vertex Array Object (VAO) specifies the format of the vertex data as well as 

@@ -51,7 +51,7 @@ namespace cobalt {
             /** Create a new peripheral.
              * @return: The new peripheral.
              */
-            Peripheral() : events(16), bindings() {}
+            Peripheral() : bindings() {}
             /** Destroy the peripheral.
              */
             ~Peripheral() {
@@ -86,7 +86,7 @@ namespace std {
     template <typename T>
     struct hash<cobalt::core::PeripheralInput<T>> {
         std::size_t operator()(const cobalt::core::PeripheralInput<T>& input) const {
-            return std::hash<T>()(input.getId());
+            return hash<T>()(input.getId());
         }
     };
 }

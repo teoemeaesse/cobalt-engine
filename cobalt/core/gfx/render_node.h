@@ -24,11 +24,9 @@ namespace cobalt {
              */
             template<typename... Targets>
             RenderNode(Renderer& renderer, Targets&&... targets)
-                : renderer(renderer),
-                  sources(1),
-                  targets(sizeof...(targets))
+                : renderer(renderer)
             {
-                ((this->targets.push(std::move(targets))), ...);
+                ((this->targets.push_back(std::move(targets))), ...);
             }
             /** Destroy the render node.
              */
@@ -72,20 +70,19 @@ namespace cobalt {
              */
             void addSource(RenderTarget&& source);
 
-
             /** Get the sources.
              * @return: The sources.
              */
-            Vector<RenderTarget>& getSources();
+            Vec<RenderTarget>& getSources();
             /** Get the targets.
              * @return: The targets.
              */
-            Vector<RenderTarget>& getTargets();
+            Vec<RenderTarget>& getTargets();
 
             protected:
-            Vector<RenderTarget> sources;   // The list of sources.
-            Vector<RenderTarget> targets;   // The list of targets.
-            Renderer& renderer;             // The renderer to use.
+            Vec<RenderTarget> sources;  // The list of sources.
+            Vec<RenderTarget> targets;  // The list of targets.
+            Renderer& renderer;         // The renderer to use.
             
             /** Render to the targets, binding the sources
              * to the adequate texture units.

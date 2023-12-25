@@ -17,7 +17,7 @@ namespace cobalt {
              * The graph is empty, so it is not possible to render anything.
              * @return: A render graph with no nodes.
              */
-            RenderGraph();
+            RenderGraph() = default;
             /** Destroys the render graph.
              */
             ~RenderGraph() = default;
@@ -39,7 +39,7 @@ namespace cobalt {
             void execute();
             
             protected:
-            Vector<Scope<RenderNode>> nodes;    // All the nodes in the graph, in topological order.
+            Vec<Scope<RenderNode>> nodes;   // All the nodes in the graph, in topological order.
         };
     }
 }

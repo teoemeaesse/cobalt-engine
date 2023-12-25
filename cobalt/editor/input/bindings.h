@@ -18,12 +18,11 @@ namespace cobalt {
                 if (getInput().held || !getInput().active)
                     return;
                 static int i = 2;
-                core::Material material(
-                    CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("pbr")),
-                    CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-albedo")),
-                    CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-normal")),
-                    CB_TEXTURE_LIBRARY.getTexture2D(CB_TEXTURE_LIBRARY.getTextureID("wood-mrao"))
-                );
+                const engine::TextureID woodAlbedo = CB_TEXTURE_LIBRARY.getTextureID("wood-albedo");
+                const engine::TextureID woodNormal = CB_TEXTURE_LIBRARY.getTextureID("wood-normal");
+                const engine::TextureID woodMrao = CB_TEXTURE_LIBRARY.getTextureID("wood-mrao");
+                const engine::MaterialID woodMaterial = CB_MATERIAL_LIBRARY.makePBR("wood", woodAlbedo, woodNormal, woodMrao);
+                core::Material& material = CB_MATERIAL_LIBRARY.getMaterial(woodMaterial);
                 core::Mesh sphere = core::Mesh::createSphere(5.0f, material);
                 sphere.translate(glm::vec3(10.0f * i++, 0.0f, 0.0f));
                 getTarget()->addMesh(std::move(sphere));

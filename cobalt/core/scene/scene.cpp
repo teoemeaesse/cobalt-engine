@@ -8,7 +8,6 @@
 namespace cobalt {
     namespace core {
         Scene::Scene() :
-            meshes(8),
             camera(glm::vec3(0.0, 0.0, 10.0),
                    glm::vec2(90.0, 90.0),
                    90.0f, 25.0f,
@@ -17,8 +16,8 @@ namespace cobalt {
         {}
 
         const uint Scene::addMesh(Mesh&& mesh) {
-            meshes.push(std::move(mesh));
-            return meshes.getSize() - 1;
+            meshes.push_back(std::move(mesh));
+            return meshes.size() - 1;
         }
 
         void Scene::clear() {
@@ -30,7 +29,7 @@ namespace cobalt {
             this->skybox.emplace(std::move(skybox));
         }
 
-        Vector<Mesh>& Scene::getMeshes() {
+        Vec<Mesh>& Scene::getMeshes() {
             return meshes;
         }
 

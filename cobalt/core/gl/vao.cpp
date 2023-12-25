@@ -8,7 +8,7 @@
 namespace cobalt {
     namespace core {
         void VAOLayout::push(const GLType type, const uint count, const bool normalized) {
-            attributes.push({count, type, normalized, stride});
+            attributes.emplace_back(count, type, normalized, stride);
             stride += count * getGLTypeSize(type);
         }
 
@@ -20,10 +20,10 @@ namespace cobalt {
             glGenVertexArrays(1, &buffer);
             glBindVertexArray(buffer);
             vbo.bind();
-            for (uint i = 0; i < layout.attributes.getSize(); i++) {
-                const auto& attribute = layout.attributes.get(i);
+            uint i = 0;
+            for (const auto& attribute : layout.attributes) {
                 glEnableVertexAttribArray(i);
-                glVertexAttribPointer(i, attribute.count, (GLenum) attribute.type, attribute.normalized, layout.stride, (void*) attribute.stride);
+                glVertexAttribPointer(i++, attribute.count, (GLenum) attribute.type, attribute.normalized, layout.stride, (void*) attribute.stride);
             }
             glBindVertexArray(0);
             vbo.unbind();

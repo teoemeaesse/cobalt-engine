@@ -10,19 +10,29 @@
 
 namespace cobalt {
     namespace engine {
-        using ShaderID = core::uint64;
+        using ShaderID = core::uint;
 
         class ShaderLibrary {
             public:
             struct ShaderEntry {
-                std::string name;                       // The name of the shader.
-                std::unique_ptr<core::Shader> shader;   // The shader.
+                std::string name;       // The name of the shader.
+                core::Shader shader;    // The shader.
+
+                /** Creates a new shader entry.
+                 * @param name: The name of the shader.
+                 * @param shader: The shader.
+                 * @return: The shader entry.
+                 */
+                ShaderEntry(const std::string& name, core::Shader&& shader) :
+                    name(name),
+                    shader(std::move(shader))
+                {}
             };
 
             /** Creates an empty shader library.
              * @return: The shader library.
              */
-            ShaderLibrary();
+            ShaderLibrary() = default;
             /** Destroys the shader library and all shaders it contains.
              */
             ~ShaderLibrary() = default;
@@ -64,9 +74,9 @@ namespace cobalt {
             static ShaderLibrary& getShaderLibrary();
 
             private:
-            core::Vector<ShaderEntry> shaders;  // The shaders in the library.
+            core::Deque<ShaderEntry> shaders;   // The shaders in the library.
 
-            static std::unique_ptr<ShaderLibrary> instance; // The singleton instance of the shader library.
+            static core::Scope<ShaderLibrary> instance; // The singleton instance of the shader library.
         };
     }
 }
