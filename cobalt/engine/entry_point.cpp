@@ -2,8 +2,6 @@
 // Created by tomas on 03-12-2023.
 //
 
-#include <signal.h>
-
 #include "core/exceptions/gfx_exception.h"
 #include "core/exceptions/input_exception.h"
 #include "engine/entry_point.h"
@@ -26,6 +24,7 @@ namespace cobalt {
 int main(int argc, char** argv) {
     // Initialize the engine.
     cobalt::core::Log::init();
+    cobalt::core::Platform::log();
     cobalt::core::RenderContext::init();
     cobalt::engine::TextureLibrary::init();
     cobalt::engine::ShaderLibrary::init();

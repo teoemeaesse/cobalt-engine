@@ -21,6 +21,7 @@
 #include <vector>
 #include <stack>
 #include <queue>
+#include <signal.h>
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-volatile"
 #include <glm/glm.hpp>
@@ -52,6 +53,9 @@
 #include "core/memory/pool.h"
 #include "core/memory/arena.h"
 #include "core/memory/heap.h"
+
+// Platform.
+#include "core/utils/platform.h"
 
 
 namespace cobalt {

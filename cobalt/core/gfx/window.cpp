@@ -4,8 +4,8 @@
 
 #include "core/gfx/window.h"
 #include "core/gfx/render_context.h"
-#include "core/pch.h"
 #include "core/input/input_manager.h"
+#include "core/pch.h"
 
 
 namespace cobalt {
@@ -52,6 +52,12 @@ namespace cobalt {
                     CB_CORE_INFO("Running in windowed mode");
                     break;
                 case WindowMode::Borderless:
+                    if (Platform::isMacOS()) {
+                        CB_CORE_WARN("Borderless window mode is not supported on macOS");
+                        mode = WindowMode::Windowed;
+                        init(); // Rewind, go back to windowed mode
+                        return;
+                    }
                     primaryMonitor = NULL;
                     this->width = videoMode->width;
                     this->height = videoMode->height;
@@ -59,6 +65,12 @@ namespace cobalt {
                     CB_CORE_INFO("Running in borderless fullscreen mode");
                     break;
                 case WindowMode::Fullscreen:
+                    if (Platform::isMacOS()) {
+                        CB_CORE_WARN("Fullscreen window mode is not supported on macOS");
+                        mode = WindowMode::Windowed;
+                        init(); // Rewind, go back to windowed mode
+                        return;
+                    }
                     this->width = videoMode->width;
                     this->height = videoMode->height;
                     glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
