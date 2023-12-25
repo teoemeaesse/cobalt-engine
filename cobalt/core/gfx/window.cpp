@@ -78,7 +78,9 @@ namespace cobalt {
                 glfwSetWindowAspectRatio(RenderContext::getGLFWContext(), this->width, this->height);
             }
             glfwSetWindowSize(RenderContext::getGLFWContext(), this->width, this->height);
-            defaultFBO.resize(this->width, this->height);
+            int framebufferWidth, framebufferHeight;
+            glfwGetFramebufferSize(RenderContext::getGLFWContext(), &framebufferWidth, &framebufferHeight);
+            defaultFBO.resize(framebufferWidth, framebufferHeight);
             if (callbackSetter != nullptr) {
                 callbackSetter();
             }
@@ -125,10 +127,12 @@ namespace cobalt {
             defaultFBO.setClearColor(color);
         }
         
-        void Window::onResize(const float width, const float height) {
-            this->width = (uint) width;
-            this->height = (uint) height;
-            defaultFBO.resize((uint) width, (uint) height);
+        void Window::onResize(const uint width, const uint height) {
+            defaultFBO.resize(width, height);
+        }
+
+        void Window::resize() {
+            glfwSetWindowSize(RenderContext::getGLFWContext(), width, height);
         }
 
         const uint Window::getWidth() const {
@@ -154,8 +158,6 @@ namespace cobalt {
         void Window::setDimensions(const uint width, const uint height) {
             this->width = width;
             this->height = height;
-            glfwSetWindowSize(RenderContext::getGLFWContext(), width, height);
-            defaultFBO.resize(width, height);
         }
 
         void Window::setVsync(const bool vsync) {

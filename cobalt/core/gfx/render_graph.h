@@ -32,7 +32,7 @@ namespace cobalt {
              * @param width: The new width of the render graph.
              * @param height: The new height of the render graph.
              */
-            virtual void onResize(const float width, const float height) = 0;
+            virtual void onResize(const uint width, const uint height) = 0;
             
             /** Executes the render graph.
              */

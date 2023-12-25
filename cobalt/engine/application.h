@@ -41,7 +41,7 @@ namespace cobalt {
              * @param width: The new width of the window.
              * @param height: The new height of the window.
              */
-            virtual void onResize(const float width, const float height);
+            virtual void onResize(const uint width, const uint height);
             
             /** Run the application.
              * This function will not return until the application is stopped.

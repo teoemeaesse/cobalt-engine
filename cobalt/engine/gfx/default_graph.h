@@ -29,7 +29,7 @@ namespace cobalt {
              * @param width: The new width of the render graph.
              * @param height: The new height of the render graph.
              */
-            void onResize(const float width, const float height) override;
+            void onResize(const uint width, const uint height) override;
 
             private:
             core::OrthographicCamera outputCamera;  // The camera used to render the final image.

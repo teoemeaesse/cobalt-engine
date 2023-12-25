@@ -41,13 +41,15 @@ namespace cobalt {
                 bool vsync = get<bool>("vsync");
                 core::WindowMode mode = static_cast<core::WindowMode>(get<int>("mode"));
                 window.setDimensions(width, height);
+                window.resize();
                 window.setVsync(vsync);
                 window.setMode(mode);
             } catch (const engine::ConfigurationException& e) {
                 CB_WARN("Failed to load Cobalt configuration: {}", e.what());
                 window.setDimensions(800, 600);
+                window.resize();
                 window.setVsync(false);
-            }
+            }  
         }
     }
 }

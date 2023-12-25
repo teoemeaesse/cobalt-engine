@@ -40,8 +40,12 @@ namespace cobalt {
                     });
                     core::RenderContext::setFramebufferResizeCallback([](GLFWwindow* window, int width, int height) {
                         Application* app = static_cast<Application*>(core::RenderContext::getUserPointer());
-                        app->getWindow().onResize((float) width, (float) height);
-                        app->onResize((float) width, (float) height);
+                        app->getWindow().onResize((uint) width, (uint) height);
+                        app->onResize((uint) width, (uint) height);
+                    });
+                    core::RenderContext::setResizeCallback([](GLFWwindow* window, int width, int height) {
+                        Application* app = static_cast<Application*>(core::RenderContext::getUserPointer());
+                        app->getWindow().setDimensions((uint) width, (uint) height);
                     });
                 })
                 .build()
@@ -56,6 +60,9 @@ namespace cobalt {
 
         extern bool shutdownInterrupt;
         void Application::run() {
+            int framebufferWidth, framebufferHeight;
+            glfwGetFramebufferSize(core::RenderContext::getGLFWContext(), &framebufferWidth, &framebufferHeight);
+            onResize((uint) framebufferWidth, (uint) framebufferHeight);
             CB_INFO("Starting up game loop");
             
             uint64_t delta = 1000000 / targetFramerate,
@@ -109,7 +116,7 @@ namespace cobalt {
             framerateTimeWindow = timeWindow;
         }
 
-        void Application::onResize(const float width, const float height) {
+        void Application::onResize(const uint width, const uint height) {
             CB_CORE_INFO("Application's window resized to {0}x{1} px", width, height);
         }
     }

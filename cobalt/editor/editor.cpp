@@ -8,9 +8,10 @@
 
 namespace cobalt {
     namespace editor {
-        Editor::Editor() : engine::Application(144),
-                    configuration(CobaltConfiguration()),
-                    renderGraph(scene, getWindow().getDefaultFBO())
+        Editor::Editor() :
+            engine::Application(144),
+            configuration(CobaltConfiguration()),
+            renderGraph(scene, getWindow().getDefaultFBO())
         {
             configuration.configureWindow(getWindow());
             getWindow().setClearColor(COLOR(0.2f, 0.2f, 0.2f, 1.0f));
@@ -52,9 +53,9 @@ namespace cobalt {
             getWindow().swapBuffers();
         }
 
-        void Editor::onResize(const float width, const float height) {
+        void Editor::onResize(const uint width, const uint height) {
             renderGraph.onResize(width, height);
-            scene.getCamera().resize(width / height);
+            scene.getCamera().resize((float) width / (float) height);
         }
 
         void Editor::bindInput() {

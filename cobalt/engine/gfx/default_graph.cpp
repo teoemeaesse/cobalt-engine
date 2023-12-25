@@ -34,10 +34,10 @@ namespace cobalt {
             addNode(std::move(filterNode));
         }
 
-        void DefaultGraph::onResize(const float width, const float height) {
+        void DefaultGraph::onResize(const uint width, const uint height) {
             outputCamera.rotateHorizontal(10.0f);
-            outputCamera.resize(-width / 2, width / 2, -height / 2, height / 2);
-            sceneFBO.resize((uint) width, (uint) height);
+            outputCamera.resize(-(float) width / 2, (float) width / 2, -(float) height / 2, (float) height / 2);
+            sceneFBO.resize(width, height);
             for (uint i = 0; i < nodes.size(); i++) {
                 nodes[i]->onResize(width, height);
             }

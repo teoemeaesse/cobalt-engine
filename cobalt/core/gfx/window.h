@@ -58,7 +58,10 @@ namespace cobalt {
              * @param width: The new width of the window.
              * @param height: The new height of the window.
              */
-            void onResize(const float width, const float height);
+            void onResize(const uint width, const uint height);
+            /** Call to resize the GLFW window to match this window's dimensions.
+             */
+            void resize();
 
             /** Gets the width of the window.
              * @return: The width of the window.
