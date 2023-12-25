@@ -14,6 +14,14 @@ chmod +x build_example.sh
 ./build_example.sh
 ```
 
+## Tests
+You can run the provided script on your machine or use the Docker image.
+
+```
+sudo docker build -t cobalt-tests .
+sudo docker run cobalt-tests
+```
+
 ## Compatibility
 Currently compatible with **Linux** distributions and **MacOS** on ARM. There are future plans for a **Windows** version. Mostly untested outside of **Ubuntu 23.10** and **MacOS Sonoma 14.1**.
 
