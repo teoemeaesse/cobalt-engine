@@ -124,7 +124,9 @@ namespace cobalt {
                              const GLTextureWrap wrap) :
                              Texture(GLTextureFormat::RGBA, GLTextureEncoding::RGBA) {
             source = "";
-            GLubyte data[] = { red, green, blue, alpha };
+            this->width = 1;
+            this->height = 1;
+            uchar data[] = { red, green, blue, alpha };
             glGenTextures(1, &texture);
             glBindTexture(GL_TEXTURE_2D, texture);
             glTexImage2D(GL_TEXTURE_2D, 0, (GLint) encoding, 1, 1, 0, (GLenum) format, GL_UNSIGNED_BYTE, data);
@@ -139,10 +141,12 @@ namespace cobalt {
                              const GLTextureWrap wrap) :
                              Texture(GLTextureFormat::RGBA, GLTextureEncoding::RGBA) {
             source = "";
-            GLubyte data[] = { (uchar) (color.r * 255.0f),
-                               (uchar) (color.g * 255.0f),
-                               (uchar) (color.b * 255.0f),
-                               (uchar) (color.a * 255.0f) };
+            this->width = 1;
+            this->height = 1;
+            uchar data[] = { (uchar) (color.r * 255.0f),
+                             (uchar) (color.g * 255.0f),
+                             (uchar) (color.b * 255.0f),
+                             (uchar) (color.a * 255.0f) };
             glGenTextures(1, &texture);
             glBindTexture(GL_TEXTURE_2D, texture);
             glTexImage2D(GL_TEXTURE_2D, 0, (GLint) encoding, 1, 1, 0, (GLenum) format, GL_UNSIGNED_BYTE, data);

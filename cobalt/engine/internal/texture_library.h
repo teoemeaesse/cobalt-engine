@@ -189,8 +189,8 @@ namespace cobalt {
             static TextureLibrary& getTextureLibrary();
 
             private:
-            core::Vec<TextureEntry<core::Texture2D>> textures2D;    // The 2D textures in the library.
-            core::Vec<TextureEntry<core::Texture3D>> textures3D;    // The cubemap textures in the library.
+            core::Deque<TextureEntry<core::Texture2D>> textures2D;  // The 2D textures in the library.
+            core::Deque<TextureEntry<core::Texture3D>> textures3D;  // The cubemap textures in the library.
             core::UMap<TextureCache, TextureID> cache;              // The cache of textures.
 
             static core::Scope<TextureLibrary> instance;    // The singleton instance of the texture library.

@@ -102,11 +102,11 @@ namespace cobalt {
                                                             const core::GLTextureFilter filter,
                                                             const core::GLTextureWrap wrap) {
             TextureCache entry = {TextureID::Type::TEXTURE_2D, color};
-            if (cache.find(entry) != cache.end()) {
+            if (cache.find(entry) == cache.end()) {
                 textures2D.emplace_back(core::colorToString(color), std::move(core::Texture2D(color, filter, wrap)));
                 cache[entry] = {(uint) textures2D.size() - 1, TextureID::Type::TEXTURE_2D};
             }
-            return textures2D[cache[entry].index].texture;
+            return getTexture2D(cache[entry]);
         }
 
         const core::Texture2D& TextureLibrary::getTexture2D(const core::uchar red,
@@ -117,11 +117,11 @@ namespace cobalt {
                                                             const core::GLTextureWrap wrap) {
             core::Color color = COLOR(red, green, blue, alpha);
             TextureCache entry = {TextureID::Type::TEXTURE_2D, color};
-            if (cache.find(entry) != cache.end()) {
-                textures2D.emplace_back(core::colorToString(color), std::move(core::Texture2D(color, filter, wrap)));
+            if (cache.find(entry) == cache.end()) {
+                textures2D.emplace_back(core::colorToString(color), std::move(core::Texture2D(red, green, blue, alpha, filter, wrap)));
                 cache[entry] = {(uint) textures2D.size() - 1, TextureID::Type::TEXTURE_2D};
             }
-            return textures2D[cache[entry].index].texture;
+            return getTexture2D(cache[entry]);
         }
 
         const core::Texture3D& TextureLibrary::getTexture3D(const TextureID id) {
@@ -143,11 +143,11 @@ namespace cobalt {
                                                             const core::GLTextureFilter filter,
                                                             const core::GLTextureWrap wrap) {
             TextureCache entry = {TextureID::Type::TEXTURE_3D, color};
-            if (cache.find(entry) != cache.end()) {
+            if (cache.find(entry) == cache.end()) {
                 textures3D.emplace_back(core::colorToString(color), std::move(core::Texture3D(color, filter, wrap)));
                 cache[entry] = {(uint) textures3D.size() - 1, TextureID::Type::TEXTURE_3D};
             }
-            return textures3D[cache[entry].index].texture;
+            return getTexture3D(cache[entry]);
         }
 
         const core::Texture3D& TextureLibrary::getTexture3D(const core::uchar red,
@@ -158,11 +158,11 @@ namespace cobalt {
                                                             const core::GLTextureWrap wrap) {
             core::Color color = COLOR(red, green, blue, alpha);
             TextureCache entry = {TextureID::Type::TEXTURE_3D, color};
-            if (cache.find(entry) != cache.end()) {
-                textures3D.emplace_back(core::colorToString(color), std::move(core::Texture3D(color, filter, wrap)));
+            if (cache.find(entry) == cache.end()) {
+                textures3D.emplace_back(core::colorToString(color), std::move(core::Texture3D(red, green, blue, alpha, filter, wrap)));
                 cache[entry] = {(uint) textures3D.size() - 1, TextureID::Type::TEXTURE_3D};
             }
-            return textures3D[cache[entry].index].texture;
+            return getTexture3D(cache[entry]);
         }
     }
 }

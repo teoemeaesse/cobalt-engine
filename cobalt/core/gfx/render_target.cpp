@@ -57,6 +57,7 @@ namespace cobalt {
                 glm::vec2(0.0)
             };
             ubo.load(&cameraUBO, sizeof(CameraUBO), 0);
+            fbo.bind();
         }
 
         const Texture& RenderTarget::getColorBuffer() const {

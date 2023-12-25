@@ -84,8 +84,8 @@ namespace cobalt {
             scene.clear();
             scene.setSkybox(
                 core::Skybox::create(
-                    CB_TEXTURE_LIBRARY.getTexture3D(CB_TEXTURE_LIBRARY.getTextureID("skybox")),
-                    CB_SHADER_LIBRARY.getShader(CB_SHADER_LIBRARY.getShaderID("skybox"))
+                    CB_TEXTURE_LIBRARY.getTexture3D("skybox"),
+                    CB_SHADER_LIBRARY.getShader("skybox")
                 )
             );
             const engine::TextureID woodAlbedo = CB_TEXTURE_LIBRARY.getTextureID("wood-albedo");
@@ -101,7 +101,7 @@ namespace cobalt {
             const core::Texture2D& steelNormalTexture = CB_TEXTURE_LIBRARY.getTexture2D(steelNormal);
             const core::Texture2D& steelMraoTexture = CB_TEXTURE_LIBRARY.getTexture2D(steelMrao);
 
-            core::Material& woodMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("wood", COLOR_BLUE, 1.0f, 1.0f, 1.0f));
+            core::Material& woodMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("wood", woodAlbedo, woodNormal, woodMrao));
             core::Material& steelMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("steel", steelAlbedo, steelNormal, steelMrao));
             core::Mesh mesh = core::Mesh::createRectangle(10, 10, woodMaterial);
             core::Mesh ground = core::Mesh::createRectangle(100, 100, woodMaterial);

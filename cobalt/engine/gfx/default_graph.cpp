@@ -25,7 +25,7 @@ namespace cobalt {
         }
 
         void DefaultGraph::init() {
-            core::Material& filter = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("filter", COLOR_WHITE, 1.0f, 1.0f, 1.0f));
+            core::Material& filter = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makeFromShader("filterMaterial", "filter"));
             Scope<SceneNode> sceneNode = std::make_unique<SceneNode>(SceneNode(scene, renderer, core::RenderTarget(sceneFBO, scene.getCamera(), "scene", 0)));
             Scope<FilterNode> filterNode = std::make_unique<FilterNode>(FilterNode(renderer, core::RenderTarget(defaultFBO, outputCamera, "output", 1), filter));
             filterNode->addSource(core::RenderTarget(sceneFBO, scene.getCamera(), "scene", 0));

@@ -3,8 +3,6 @@
 //
 
 #include "engine/internal/material_library.h"
-#include "engine/internal/texture_library.h"
-#include "engine/internal/shader_library.h"
 
 
 namespace cobalt {
@@ -52,11 +50,33 @@ namespace cobalt {
             materials.emplace_back(name, core::Material(
                 CB_SHADER_LIBRARY.getShader("pbr"),
                 CB_TEXTURE_LIBRARY.getTexture2D(albedo),
-                CB_TEXTURE_LIBRARY.getTexture2D(0, 255, 0),
+                CB_TEXTURE_LIBRARY.getTexture2D(127, 127, 255),
                 CB_TEXTURE_LIBRARY.getTexture2D(
                     (core::uchar) (metallic * 255.0f),
                     (core::uchar) (roughness * 255.0f),
                     (core::uchar) (ao * 255.0f))));
+            return materials.size() - 1;
+        }
+
+        const MaterialID MaterialLibrary::makeFromShader(
+            const std::string& name,
+            const ShaderID& shader) {
+            materials.emplace_back(name, core::Material(
+                CB_SHADER_LIBRARY.getShader(shader),
+                CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255),
+                CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255),
+                CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255)));
+            return materials.size() - 1;
+        }
+
+        const MaterialID MaterialLibrary::makeFromShader(
+            const std::string& name,
+            const std::string& shader) {
+            materials.emplace_back(name, core::Material(
+                CB_SHADER_LIBRARY.getShader(shader),
+                CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255),
+                CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255),
+                CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255)));
             return materials.size() - 1;
         }
 

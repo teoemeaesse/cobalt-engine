@@ -7,6 +7,7 @@
 #include "core/pch.h"
 #include "core/gfx/material.h"
 #include "engine/internal/texture_library.h"
+#include "engine/internal/shader_library.h"
 
 
 namespace cobalt {
@@ -80,6 +81,24 @@ namespace cobalt {
                 const float metallic,
                 const float roughness,
                 const float ao);
+
+            /** Creates a new material from the given shader.
+             * @param name: The name of the material.
+             * @param shader: The shader program.
+             * @return: The material. TODO: Variadic template for different material types.
+             */
+            const MaterialID makeFromShader(
+                const std::string& name,
+                const ShaderID& shader);
+            
+            /** Creates a new material from the given shader.
+             * @param name: The name of the material.
+             * @param shader: The name of shader program.
+             * @return: The material. TODO: Variadic template for different material types.
+             */
+            const MaterialID makeFromShader(
+                const std::string& name,
+                const std::string& shader);
 
             /** Initializes the singleton instance of the material library.
              * This loads the default materials, so it needs to be called after
