@@ -57,4 +57,9 @@ jobs:
         sudo make
 
     - name: Build and run Tests
-      run: ./build_tests.sh
+      run: |
+        cd tests
+        mkdir -p build && cd build
+        cmake -DTEST_ENVIRONMENT=ON ..
+        cmake -DTEST_ENVIRONMENT=ON --build .
+        make test
