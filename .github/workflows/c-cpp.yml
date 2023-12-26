@@ -38,7 +38,6 @@ jobs:
           freeglut \
           xorgproto \
           mesa \
-          glu \
           glfw
 
     - name: Clean project
