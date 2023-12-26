@@ -45,14 +45,14 @@ jobs:
 
     - name: Build GLEW
       run: |
-        cd /app/tests/lib/glew
+        cd tests/lib/glew
         make
         make install
         make clean
 
     - name: Build GLFW
       run: |
-        cd /app/tests/lib/glfw
+        cd tests/lib/glfw
         cmake .
         make
 
