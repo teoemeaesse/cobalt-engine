@@ -11,7 +11,7 @@ set(INCLUDEDIR include)
 set(LIBDIR lib)
 
 if(TEST_ENVIRONMENT)
-  add_definitions(-DSTBI_NO_SIMD)
+  add_definitions(-DTEST_ENVIRONMENT)
 endif()
 
 # Set additional flags

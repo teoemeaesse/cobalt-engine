@@ -2,6 +2,9 @@
 // Created by tomas on 01-12-2023.
 //
 
+#ifdef TEST_ENVIRONMENT
+#define STBI_NO_SIMD
+#endif
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image/stb_image.h"
 
