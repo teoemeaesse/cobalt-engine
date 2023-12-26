@@ -16,23 +16,45 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc g++ cmake \
+          xorg-dev \
+          libgl1-mesa-dev \
+          libglu1-mesa-dev \
+          libxrandr-dev \
+          libxinerama-dev \
+          libxcursor-dev \
+          libxi-dev \
+          libxxf86vm-dev
+
+    - name: Install dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew update
+        brew install gcc cmake \
+          xorgproto \
+          mesa \
+          glu \
+          glfw
+
     - name: Clean project
       run: ./clean.sh
 
     - name: Build GLEW
       run: |
-        cd tests/lib/glew
+        cd /app/tests/lib/glew
         make
         make install
         make clean
-        cd ../../..
 
     - name: Build GLFW
       run: |
-        cd tests/lib/glfw
+        cd /app/tests/lib/glfw
         cmake .
         make
-        cd ../../..
 
-    - name: run_tests
+    - name: Build and run Tests
       run: ./build_tests.sh
