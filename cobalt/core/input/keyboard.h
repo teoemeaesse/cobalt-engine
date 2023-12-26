@@ -58,14 +58,17 @@ namespace cobalt {
             ~Keyboard() = default;
 
             /** Callback for when a key is pressed.
-             * @param key: The key that was pressed.
-             * @param action: The action that was performed.
+             * @param key: The key (glfw) that was pressed.
+             * @param action: The action (glfw) that was performed.
              */
             void onKeyPress(const int key, const int action);
             /** Poll the keyboard for events.
+             * This generates peripheral events for all keys
+             * that are currently down or just released.
              */
             void pollEvents() override;
             /** Clear all events from the keyboard.
+             * Executes all pending input events.
              */
             void clearEvents() override;
 
@@ -77,6 +80,22 @@ namespace cobalt {
 
             private:
             KeyState keyStates[static_cast<size_t>(KeyboardInputID::COUNT)];    // The states of all the keys.
+
+
+
+            public: // ----- DEBUG -----
+            /** Convert a GLFW key to a Cobalt key.
+             * Mostly for internal use. Use the KeyboardInputID enum instead.
+             * @param key: The GLFW key code.
+             * @return: The Cobalt key code.
+             */
+            static const KeyboardInputID glfwToCobalt(const int glfwKey);
+            /** Convert a Cobalt key to a GLFW key.
+             * Mostly for testing. Use the KeyboardInputID enum instead.
+             * @param key: The Cobalt key code.
+             * @return: The GLFW key code.
+             */
+            static const int cobaltToGlfw(const KeyboardInputID cobaltKey);
         };
     }
 }

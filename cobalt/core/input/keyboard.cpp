@@ -30,12 +30,21 @@ namespace cobalt {
             { GLFW_KEY_UP, KeyboardInputID::UP }
         };
 
-        const static KeyboardInputID glfwToCobalt(const int key) {
-            auto it = GLFW_TO_CB.find(key);
+        const KeyboardInputID Keyboard::glfwToCobalt(const int glfwKey) {
+            auto it = GLFW_TO_CB.find(glfwKey);
             if (it != GLFW_TO_CB.end()) {
                 return it->second;
             }
             return KeyboardInputID::COUNT;
+        }
+
+        const int Keyboard::cobaltToGlfw(const KeyboardInputID cobaltKey) {
+            for (auto it = GLFW_TO_CB.begin(); it != GLFW_TO_CB.end(); it++) {
+                if (it->second == cobaltKey) {
+                    return it->first;
+                }
+            }
+            return -1;
         }
 
         bool KeyState::isDown() const {
