@@ -1,3 +1,4 @@
+[![C/C++ CI](https://github.com/teoemeaesse/cobalt-engine/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/teoemeaesse/cobalt-engine/actions/workflows/c-cpp.yml)
 # cobalt
 A 3D general-purpose game engine for Unix distributions, being used in the game Celestine.
 
