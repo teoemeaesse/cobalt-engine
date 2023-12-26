@@ -35,6 +35,7 @@ jobs:
       run: |
         brew update
         brew install gcc cmake \
+          freeglut \
           xorgproto \
           mesa \
           glu \
