@@ -33,8 +33,8 @@ jobs:
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
-        brew update
-        brew install gcc cmake \
+        sudo brew update
+        sudo brew install gcc cmake \
           xorgproto \
           mesa \
           glu \
@@ -46,15 +46,15 @@ jobs:
     - name: Build GLEW
       run: |
         cd tests/lib/glew
-        make
-        make install
-        make clean
+        sudo make
+        sudo make install
+        sudo make clean
 
     - name: Build GLFW
       run: |
         cd tests/lib/glfw
         cmake .
-        make
+        sudo make
 
     - name: Build and run Tests
       run: ./build_tests.sh
