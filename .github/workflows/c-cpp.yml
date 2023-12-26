@@ -33,8 +33,8 @@ jobs:
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
-        sudo brew update
-        sudo brew install gcc cmake \
+        brew update
+        brew install gcc cmake \
           xorgproto \
           mesa \
           glu \
