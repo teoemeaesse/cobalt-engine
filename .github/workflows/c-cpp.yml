@@ -15,5 +15,24 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Clean project
+      run: ./clean.sh
+
+    - name: Build GLEW
+      run: |
+        cd tests/lib/glew
+        make
+        make install
+        make clean
+        cd ../../..
+
+    - name: Build GLFW
+      run: |
+        cd tests/lib/glfw
+        cmake .
+        make
+        cd ../../..
+
     - name: run_tests
       run: ./build_tests.sh
