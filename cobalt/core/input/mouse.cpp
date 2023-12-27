@@ -3,6 +3,7 @@
 //
 
 #include "core/input/mouse.h"
+#include "core/exceptions/input_exception.h"
 
 
 namespace cobalt {
@@ -37,13 +38,11 @@ namespace cobalt {
         }
 
         void Mouse::onButtonPress(const int button, const int action) {
-            if (button == GLFW_MOUSE_BUTTON_LEFT) {
-                buttonStates[static_cast<size_t>(MouseInputID::LEFT)].down = action == GLFW_PRESS;
-            } else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
-                buttonStates[static_cast<size_t>(MouseInputID::RIGHT)].down = action == GLFW_PRESS;
-            } else if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
-                buttonStates[static_cast<size_t>(MouseInputID::MIDDLE)].down = action == GLFW_PRESS;
+            MouseInputID id = glfwToCobalt(button);
+            if (id == MouseInputID::UNKNOWN) {
+                throw InputException<MouseInputID>("Invalid button", button, *this);    
             }
+            buttonStates[static_cast<size_t>(id)].down = action == GLFW_PRESS;
         }
 
         void Mouse::queueEvent(const MouseInputID id, const InputValue value) {

@@ -7,6 +7,7 @@
 #include "core/input/input_command.h"
 #include "core/input/keyboard.h"
 #include "core/input/mouse.h"
+#include "core/exceptions/input_exception.h"
 #include "core/pch.h"
 
 

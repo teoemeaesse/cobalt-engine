@@ -36,6 +36,11 @@ include_directories(${TESTDIR}/core)
 file(GLOB_RECURSE TEST_SOURCES ${TESTDIR}/core/*.cpp)
 file(GLOB_RECURSE CORE_SOURCES ${SOURCEDIR}/core/*.cpp)
 
+# Create a static library for the core
+add_library(cobalt_core STATIC ${CORE_SOURCES})
+target_precompile_headers(cobalt_core PRIVATE ${SOURCEDIR}/core/pch.h)
+target_include_directories(cobalt_core PUBLIC ${SOURCEDIR} ${LIBDIR}/glew/include ${LIBDIR}/glfw/include)
+
 # Add the GLFW subdirectory
 add_subdirectory(${LIBDIR}/glfw)
 add_subdirectory(${LIBDIR}/glew/build/cmake)
@@ -46,17 +51,14 @@ add_library(unity STATIC ${INCLUDEDIR}/unity/unity.c)
 # Create an executable for each test source file
 foreach(TEST_SOURCE ${TEST_SOURCES})
     get_filename_component(TEST_NAME ${TEST_SOURCE} NAME_WE)
-    add_executable(${TEST_NAME} ${TEST_SOURCE} ${CORE_SOURCES})
+    add_executable(${TEST_NAME} ${TEST_SOURCE})
     set_target_properties(${TEST_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
-    target_include_directories(${TEST_NAME} PRIVATE
-        ${SOURCEDIR}
-        ${LIBDIR}/glew/include
-    )
     target_precompile_headers(${TEST_NAME} PRIVATE
         ${SOURCEDIR}/core/pch.h
     )
     if(APPLE)
         target_link_libraries(${TEST_NAME} PRIVATE
+            cobalt_core
             glfw
             glew
             "-framework Cocoa"
@@ -69,6 +71,7 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
         )
     elseif(UNIX AND NOT APPLE)
         target_link_libraries(${TEST_NAME} PRIVATE
+            cobalt_core
             GL
             GLU
             glfw

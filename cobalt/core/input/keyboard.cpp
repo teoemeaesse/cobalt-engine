@@ -3,6 +3,7 @@
 //
 
 #include "core/input/keyboard.h"
+#include "core/exceptions/input_exception.h"
 
 
 namespace cobalt {
@@ -26,6 +27,9 @@ namespace cobalt {
 
         void Keyboard::onKeyPress(const int key, const int action) {
             KeyboardInputID id = glfwToCobalt(key);
+            if (id == KeyboardInputID::UNKNOWN) {
+                throw InputException<KeyboardInputID>("Invalid key", id, *this);
+            }
             keyStates[static_cast<size_t>(id)].down = action != GLFW_RELEASE;
         }
 

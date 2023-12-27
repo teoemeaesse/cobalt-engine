@@ -121,16 +121,30 @@ void testKeyboardHold() {
 }
 
 void testKeyboardOutOfBounds() {
+    bool exceptionThrown = false;
     eventCounter = 0;
-    keyboard->onKeyPress(-1, GLFW_PRESS);
-    keyboard->pollEvents();
-    keyboard->clearEvents();
-    TEST_ASSERT_EQUAL_INT(0, eventCounter);
-    keyboard->onKeyPress(123456789, GLFW_PRESS);
-    keyboard->pollEvents();
-    keyboard->clearEvents();
+    try {
+        keyboard->onKeyPress(-1, GLFW_PRESS);
+        keyboard->pollEvents();
+        keyboard->clearEvents();
+    } catch (const std::exception& e) {
+        exceptionThrown = true;
+    }
+    TEST_ASSERT_TRUE_MESSAGE(exceptionThrown, "Expected exception for lower bound key press was not thrown.");
+
+    exceptionThrown = false;
+    eventCounter = 0;
+    try {
+        keyboard->onKeyPress(123456789, GLFW_PRESS);
+        keyboard->pollEvents();
+        keyboard->clearEvents();
+    } catch (const std::exception& e) {
+        exceptionThrown = true;
+    }
+    TEST_ASSERT_TRUE_MESSAGE(exceptionThrown, "Expected exception for upper bound key press was not thrown.");
     TEST_ASSERT_EQUAL_INT(0, eventCounter);
 }
+
 
 
 int main(void) {
