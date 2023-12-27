@@ -3,7 +3,6 @@
 //
 
 #include "core/input/mouse.h"
-#include "core/exceptions/input_exception.h"
 
 
 namespace cobalt {
@@ -19,7 +18,7 @@ namespace cobalt {
             return polled;
         }
 
-        Mouse::Mouse(const float sensitivity) : Peripheral(), sensitivity(sensitivity), x(0.0f), y(0.0f), dx(0.0f), dy(0.0f), dsx(0.0f), dsy(0.0f) {
+        Mouse::Mouse(const float sensitivity) : Peripheral("Mouse"), sensitivity(sensitivity), x(0.0f), y(0.0f), dx(0.0f), dy(0.0f), dsx(0.0f), dsy(0.0f) {
             for (size_t i = 0; i < static_cast<size_t>(MouseInputID::COUNT); i++) {
                 buttonStates[i] = ButtonState();
             }
@@ -141,6 +140,55 @@ namespace cobalt {
 
         void Mouse::setSensitivity(const float sensitivity) {
             this->sensitivity = sensitivity;
+        }
+
+
+        const static UMap<int, MouseInputID> GLFW_TO_CB = {
+            { GLFW_MOUSE_BUTTON_LEFT, MouseInputID::LEFT },
+            { GLFW_MOUSE_BUTTON_RIGHT, MouseInputID::RIGHT },
+            { GLFW_MOUSE_BUTTON_MIDDLE, MouseInputID::MIDDLE }
+        };
+
+        const static UMap<MouseInputID, std::string> CB_TO_STR = {
+            { MouseInputID::LEFT, "Left" }, { MouseInputID::RIGHT, "Right" }, { MouseInputID::MIDDLE, "Middle" },
+            { MouseInputID::AXIS_X, "X" }, { MouseInputID::AXIS_Y, "Y" },
+            { MouseInputID::LEFT_X, "Left X" }, { MouseInputID::LEFT_Y, "Left Y" },
+            { MouseInputID::RIGHT_X, "Right X" }, { MouseInputID::RIGHT_Y, "Right Y" },
+            { MouseInputID::MIDDLE_X, "Middle X" }, { MouseInputID::MIDDLE_Y, "Middle Y" },
+            { MouseInputID::SCROLL_X, "Scroll X" }, { MouseInputID::SCROLL_Y, "Scroll Y" },
+            { MouseInputID::COUNT, "Count" }, { MouseInputID::UNKNOWN, "Unknown" }
+        };
+
+        const std::string& Mouse::toString() const {
+            return KeyCodes::peripheralToString(id);
+        }
+
+        const MouseInputID Mouse::glfwToCobalt(const int glfwCode) const {
+            auto it = GLFW_TO_CB.find(glfwCode);
+            if (it != GLFW_TO_CB.end()) {
+                return it->second;
+            }
+            return MouseInputID::UNKNOWN;
+            // throw InputException<MouseInputID>("Invalid button", glfwCode, *this);
+        }
+
+        const int Mouse::cobaltToGlfw(const MouseInputID cobaltCode) const {
+            for (const auto& [glfwCode, cobaltCode_] : GLFW_TO_CB) {
+                if (cobaltCode_ == cobaltCode) {
+                    return glfwCode;
+                }
+            }
+            return GLFW_KEY_UNKNOWN;
+            // throw InputException<MouseInputID>("Invalid button", cobaltCode, *this);
+        }
+
+        const std::string& Mouse::cobaltToStr(const MouseInputID cobaltCode) const {
+            auto it = CB_TO_STR.find(cobaltCode);
+            if (it != CB_TO_STR.end()) {
+                return it->second;
+            }
+            return CB_TO_STR.at(MouseInputID::UNKNOWN);
+            // throw InputException<MouseInputID>("Invalid input", cobaltCode, *this);
         }
     }
 }

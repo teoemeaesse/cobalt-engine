@@ -16,7 +16,7 @@ namespace cobalt {
             LEFT_Y, RIGHT_Y, MIDDLE_Y,
             AXIS_X, AXIS_Y,
             SCROLL_X, SCROLL_Y,
-            COUNT
+            COUNT, UNKNOWN
         };
 
         class ButtonState {
@@ -133,6 +133,28 @@ namespace cobalt {
              * @param value: The value of the event.
              */
             void queueEvent(const MouseInputID id, const InputValue value);
+        
+        
+            public: // ----- DEBUG -----
+            /** Get a user-friendly string for the peripheral.
+             * @return: The converted string.
+             */
+            const std::string& toString() const override;
+            /** Convert a GLFW key code to a Cobalt key code.
+             * @param glfwCode: The GLFW key code.
+             * @return: The Cobalt key code.
+             */
+            const MouseInputID glfwToCobalt(const int glfwCode) const override;
+            /** Convert a Cobalt key code to a GLFW key code.
+             * @param cobaltCode: The Cobalt key code.
+             * @return: The GLFW key code.
+             */
+            const int cobaltToGlfw(const MouseInputID cobaltCode) const override;
+            /** Convert a Cobalt key code to a user-friendly string.
+             * @param cobaltCode: The Cobalt key code.
+             * @return: The converted string.
+             */
+            const std::string& cobaltToStr(const MouseInputID cobaltCode) const override;
         };
     }
 }

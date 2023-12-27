@@ -18,7 +18,7 @@ namespace cobalt {
             LSHIFT, RSHIFT, LCTRL, RCTRL, LALT, RALT,
             SPACE, ENTER, ESCAPE, TAB, BACKSPACE, INSERT, DELETE,
             RIGHT, LEFT, DOWN, UP,
-            COUNT
+            COUNT, UNKNOWN
         };
 
         class KeyState {
@@ -77,25 +77,31 @@ namespace cobalt {
              * @return: The state of the key.
              */
             KeyState& getKey(const KeyboardInputID key);
-
+            
             private:
             KeyState keyStates[static_cast<size_t>(KeyboardInputID::COUNT)];    // The states of all the keys.
 
 
-
             public: // ----- DEBUG -----
-            /** Convert a GLFW key to a Cobalt key.
-             * Mostly for internal use. Use the KeyboardInputID enum instead.
-             * @param key: The GLFW key code.
+            /** Get a user-friendly string for the peripheral.
+             * @return: The converted string.
+             */
+            const std::string& toString() const override;
+            /** Convert a GLFW key code to a Cobalt key code.
+             * @param glfwCode: The GLFW key code.
              * @return: The Cobalt key code.
              */
-            static const KeyboardInputID glfwToCobalt(const int glfwKey);
-            /** Convert a Cobalt key to a GLFW key.
-             * Mostly for testing. Use the KeyboardInputID enum instead.
-             * @param key: The Cobalt key code.
+            const KeyboardInputID glfwToCobalt(const int glfwCode) const override;
+            /** Convert a Cobalt key code to a GLFW key code.
+             * @param cobaltCode: The Cobalt key code.
              * @return: The GLFW key code.
              */
-            static const int cobaltToGlfw(const KeyboardInputID cobaltKey);
+            const int cobaltToGlfw(const KeyboardInputID cobaltCode) const override;
+            /** Convert a Cobalt key code to a user-friendly string.
+             * @param cobaltCode: The Cobalt key code.
+             * @return: The converted string.
+             */
+            const std::string& cobaltToStr(const KeyboardInputID cobaltCode) const override;
         };
     }
 }

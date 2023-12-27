@@ -37,7 +37,6 @@
 // Exceptions.
 #include "core/exceptions/gfx_exception.h"
 #include "core/exceptions/gl_exception.h"
-#include "core/exceptions/input_exception.h"
 
 // Logging.
 #include "core/utils/log.h"

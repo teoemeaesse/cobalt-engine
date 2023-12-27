@@ -4,7 +4,7 @@ A 3D general-purpose game engine for Unix distributions, being used in the game 
 
 ## System Requirements
 To compile and run you need the following:
-- A GPU with **OpenGL 4.0** minimum support;
+- A GPU with **OpenGL 4.1** minimum support;
 - **CMake 3.10**
 
 ## Build

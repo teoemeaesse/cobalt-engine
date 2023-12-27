@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
     // Initialize the engine.
     cobalt::core::Log::init();
     cobalt::core::Platform::log();
+    cobalt::core::KeyCodes::init();
     cobalt::core::RenderContext::init();
     cobalt::engine::TextureLibrary::init();
     cobalt::engine::ShaderLibrary::init();
@@ -45,12 +46,10 @@ int main(int argc, char** argv) {
         app->run();
     } catch (const cobalt::core::GLException& e) {
         CB_ERROR("GL exception: {0}", e.what());
-    } catch (const cobalt::core::InputException& e) {
-        CB_ERROR("Input exception: {0}", e.what());
     } catch (const cobalt::core::GFXException& e) {
         CB_ERROR("GFX exception: {0}", e.what());
     } catch (const std::exception& e) {
-        CB_ERROR("Unknown exception: {0}", e.what());
+        CB_ERROR("Exception: {0}", e.what());
     }
 
     // Cleanup.

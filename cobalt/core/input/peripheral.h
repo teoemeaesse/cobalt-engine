@@ -5,7 +5,7 @@
 #pragma once
 
 #include "core/input/input_command.h"
-#include "core/pch.h"
+#include "core/input/keycodes.h"
 
 
 namespace cobalt {
@@ -49,9 +49,12 @@ namespace cobalt {
         class Peripheral {
             public:
             /** Create a new peripheral.
+             * @param name: The name of the peripheral.
              * @return: The new peripheral.
              */
-            Peripheral() : bindings() {}
+            Peripheral(const std::string& name) : bindings() {
+                id = KeyCodes::registerPeripheral(name);
+            }
             /** Destroy the peripheral.
              */
             ~Peripheral() {
@@ -71,13 +74,34 @@ namespace cobalt {
              * @param input: The input to bind the command to.
              * @param command: The command to bind.
              */
-            void bind(const PeripheralInput<T> input, std::unique_ptr<InputCommand> command) {
+            void bind(const PeripheralInput<T> input, Scope<InputCommand> command) {
                 bindings[input] = std::move(command);
             }
 
+            /** Get the string representation of the peripheral.
+             * @return: The string representation of the peripheral.
+             */
+            virtual const std::string& toString() const = 0;
+            /** Convert a GLFW key code to a Cobalt key code.
+             * @param glfwCode: The GLFW key code.
+             * @return: The Cobalt key code.
+             */
+            virtual const T glfwToCobalt(const int glfwCode) const = 0;
+            /** Convert a Cobalt key code to a GLFW key code.
+             * @param cobaltCode: The Cobalt key code.
+             * @return: The GLFW key code.
+             */
+            virtual const int cobaltToGlfw(const T cobaltCode) const = 0;
+            /** Convert a Cobalt key code to a user-friendly string.
+             * @param cobaltCode: The Cobalt key code.
+             * @return: The converted string.
+             */
+            virtual const std::string& cobaltToStr(const T cobaltCode) const = 0;
+
             protected:
-            Queue<const InputCommand*> events;                                  // The events to execute.
-            UMap<PeripheralInput<T>, std::unique_ptr<InputCommand>> bindings;   // The bindings for the peripheral.
+            Queue<const InputCommand*> events;                      // The events to execute.
+            UMap<PeripheralInput<T>, Scope<InputCommand>> bindings; // The bindings for the peripheral.
+            KeyCodes::PeripheralID id;                              // The id of the peripheral.
         };
     }
 }

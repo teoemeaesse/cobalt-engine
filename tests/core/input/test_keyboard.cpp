@@ -38,7 +38,7 @@ class TestClass {
         TestPeripheralCmd##num(TestClass* test) : cobalt::core::ConcreteInputCommand<TestClass>(test) {} \
         void execute() const override {getTarget()->setValue(num, getInput().active); eventCounter++;} \
     };
-#define BIND_KEY(num, bindptr) keyboard.bind(static_cast<cobalt::core::KeyboardInputID>(num), std::make_unique<TestPeripheralCmd##num>(bindptr));
+#define BIND_KEY(num, bindptr) keyboard->bind(static_cast<cobalt::core::KeyboardInputID>(num), std::make_unique<TestPeripheralCmd##num>(bindptr));
 #define X(num) DEFINE_PERIPHERAL_CMD(num)
 #define Y(num, bindptr) BIND_KEY(num, bindptr)
 // Goes up to 78. Sue me.
@@ -50,15 +50,17 @@ X(0); X(1); X(2); X(3); X(4); X(5); X(6); X(7); X(8); X(9); X(10); X(11); X(12);
 
 
 TestClass testClass;
-cobalt::core::Keyboard keyboard;
+cobalt::core::Keyboard *keyboard;
 
 
 void setUp(void) {
+    cobalt::core::KeyCodes::init();
+    keyboard = new cobalt::core::Keyboard();
     BIND_KEYS(&testClass);
 }
 
 void tearDown(void) {
-    // Burn a goat.
+    delete keyboard;
 }
 
 void testKeyboardSingleTaps() {
@@ -67,15 +69,15 @@ void testKeyboardSingleTaps() {
     for (int repeats = 0; repeats < 5; repeats++) {
         for (int i = 0; i < KEY_MAX; i++) {
             // Tap key. Ensure that the key input is calling the correct command.
-            keyboard.onKeyPress(cobalt::core::Keyboard::cobaltToGlfw(static_cast<cobalt::core::KeyboardInputID>(i)), GLFW_PRESS);
-            keyboard.pollEvents();
-            keyboard.clearEvents();
+            keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::KeyboardInputID>(i)), GLFW_PRESS);
+            keyboard->pollEvents();
+            keyboard->clearEvents();
             testClass.assertValue(i);
             testClass.assertPressed();
             // Release key.
-            keyboard.onKeyPress(cobalt::core::Keyboard::cobaltToGlfw(static_cast<cobalt::core::KeyboardInputID>(i)), GLFW_RELEASE);
-            keyboard.pollEvents();
-            keyboard.clearEvents();
+            keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::KeyboardInputID>(i)), GLFW_RELEASE);
+            keyboard->pollEvents();
+            keyboard->clearEvents();
             testClass.assertValue(i);
             testClass.assertReleased();
         }
@@ -88,34 +90,46 @@ void testKeyboardHold() {
     eventCounter = 0;
     // Hold every key.
     for (int i = 0; i < KEY_MAX; i++) {
-        keyboard.onKeyPress(cobalt::core::Keyboard::cobaltToGlfw(static_cast<cobalt::core::KeyboardInputID>(i)), GLFW_PRESS);
+        keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::KeyboardInputID>(i)), GLFW_PRESS);
     }
-    keyboard.pollEvents();
-    keyboard.clearEvents();
+    keyboard->pollEvents();
+    keyboard->clearEvents();
     TEST_ASSERT_EQUAL_INT(KEY_MAX, eventCounter);
 
     // Next frame, make sure that the keys are still down.
-    keyboard.pollEvents();
-    keyboard.clearEvents();
+    keyboard->pollEvents();
+    keyboard->clearEvents();
     TEST_ASSERT_EQUAL_INT(KEY_MAX * 2, eventCounter);
     // No extra events should be generated.
-    keyboard.clearEvents();
+    keyboard->clearEvents();
     TEST_ASSERT_EQUAL_INT(KEY_MAX * 2, eventCounter);
     eventCounter = 0;
 
     // Double poll. Make sure that all the events are queued.
-    keyboard.pollEvents(); keyboard.pollEvents();
-    keyboard.clearEvents();
+    keyboard->pollEvents(); keyboard->pollEvents();
+    keyboard->clearEvents();
     TEST_ASSERT_EQUAL_INT(KEY_MAX * 2, eventCounter);
     eventCounter = 0;
 
     // Release events should only be generated once.
     for (int i = 0; i < KEY_MAX; i++) {
-        keyboard.onKeyPress(cobalt::core::Keyboard::cobaltToGlfw(static_cast<cobalt::core::KeyboardInputID>(i)), GLFW_RELEASE);
+        keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::KeyboardInputID>(i)), GLFW_RELEASE);
     }
-    keyboard.pollEvents(); keyboard.pollEvents(); keyboard.pollEvents();
-    keyboard.clearEvents(); keyboard.clearEvents();
+    keyboard->pollEvents(); keyboard->pollEvents(); keyboard->pollEvents();
+    keyboard->clearEvents(); keyboard->clearEvents();
     TEST_ASSERT_EQUAL_INT(KEY_MAX, eventCounter);
+}
+
+void testKeyboardOutOfBounds() {
+    eventCounter = 0;
+    keyboard->onKeyPress(-1, GLFW_PRESS);
+    keyboard->pollEvents();
+    keyboard->clearEvents();
+    TEST_ASSERT_EQUAL_INT(0, eventCounter);
+    keyboard->onKeyPress(123456789, GLFW_PRESS);
+    keyboard->pollEvents();
+    keyboard->clearEvents();
+    TEST_ASSERT_EQUAL_INT(0, eventCounter);
 }
 
 
@@ -123,5 +137,6 @@ int main(void) {
     UNITY_BEGIN();
     RUN_TEST(testKeyboardSingleTaps);
     RUN_TEST(testKeyboardHold);
+    RUN_TEST(testKeyboardOutOfBounds);
     return UNITY_END();
 }
