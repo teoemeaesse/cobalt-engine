@@ -12,7 +12,7 @@
 namespace cobalt {
     namespace core {
         template <typename T>
-        class InputException : public std::runtime_error {
+        class InvalidInputException : public std::runtime_error {
             public:
             /** Create a new input exception.
              * @param error: Brief description of the error.
@@ -20,10 +20,10 @@ namespace cobalt {
              * @param peripheral: The peripheral that caused the error.
              * @return: The new input exception.
              */
-            InputException(const std::string& error,
+            InvalidInputException(const std::string& error,
                            const T cobaltCode,
-                           const Peripheral<T>& peripheral) : std::runtime_error(error),
-                message(error + " (by " + peripheral.toString() + " with cobalt input: " + peripheral.cobaltToStr(cobaltCode) + ")"),
+                           const Peripheral<T>* peripheral) : std::runtime_error(error),
+                message(error + " (by " + peripheral->toString() + " with cobalt input: " + peripheral->cobaltToStr(cobaltCode) + ")"),
                 cobaltCode(cobaltCode),
                 peripheral(peripheral) {
             }
@@ -33,14 +33,14 @@ namespace cobalt {
              * @param peripheral: The peripheral that caused the error.
              * @return: The new input exception.
              */
-            InputException(const std::string& error,
+            InvalidInputException(const std::string& error,
                            const int glfwCode,
-                           const Peripheral<T>& peripheral) : std::runtime_error(error),
-                message(error + " (by " + peripheral.toString() + " with glfw input: " + std::to_string(glfwCode) + ")"),
-                cobaltCode(peripheral.glfwToCobalt(glfwCode)),
+                           const Peripheral<T>* peripheral) : std::runtime_error(error),
+                message(error + " (by " + peripheral->toString() + " with glfw input: " + std::to_string(glfwCode) + ")"),
+                cobaltCode(peripheral->glfwToCobalt(glfwCode)),
                 peripheral(peripheral) {
             }
-            ~InputException() = default;
+            ~InvalidInputException() = default;
      
             /** Get the composed error message.
              * @return: The error message.
@@ -50,9 +50,26 @@ namespace cobalt {
             }
 
             private:
-            std::string message;                // The error message.
-            const T cobaltCode;                 // The input that caused the error. 
-            const Peripheral<T>& peripheral;    // The peripheral that caused the error.
+            std::string message;                        // The error message.
+            const Opt<T> cobaltCode;                    // The input that caused the error. 
+            const Opt<const Peripheral<T>*> peripheral; // The peripheral that caused the error.
+        };
+
+        class PeripheralNotFoundException : public std::runtime_error {
+            public:
+            /** Create a new peripheral not found exception.
+             * @param peripheral: The peripheral that was not found.
+             * @return: The new peripheral not found exception.
+             */
+            PeripheralNotFoundException(const std::string& peripheral) : std::runtime_error("Peripheral not found: " + peripheral) {
+            }
+            /** Create a new peripheral not found exception.
+             * @param id: The peripheral's device id that was not found.
+             * @return: The new peripheral not found exception.
+             */
+            PeripheralNotFoundException(const DeviceID id) : std::runtime_error("Peripheral not found for DID: " + std::to_string(id)) {
+            }
+            ~PeripheralNotFoundException() = default;
         };
     }
 }

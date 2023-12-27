@@ -5,11 +5,12 @@
 #pragma once
 
 #include "core/input/input_command.h"
-#include "core/input/keycodes.h"
 
 
 namespace cobalt {
     namespace core {
+        using DeviceID = int;
+
         template <typename T>
         class PeripheralInput {
             static_assert(std::is_enum<T>::value, "T must be an enum class");
@@ -42,18 +43,42 @@ namespace cobalt {
             T id;   // The id of the peripheral input.
         };
 
+        /** An input device is a device that can be polled to generate input events.
+         */
+        class InputDevice {
+            public:
+            InputDevice(const DeviceID id) : id(id) {}
+            virtual ~InputDevice() = default;
+
+            /** Poll the peripheral for events.
+             */
+            virtual void pollEvents() = 0;
+            /** Clear all queued events from the peripheral.
+             */
+            virtual void clearEvents() = 0;
+
+            /** Get the id of the input device.
+             * @return: The id of the input device.
+             */
+            const DeviceID getId() const {
+                return id;
+            }
+
+            private:
+            const DeviceID id;  // The id of the input device.
+        };
+
         /** A peripheral is an input device such as a keyboard or mouse.
          * @tparam T: The type of peripheral input that commands can be bound to.
          */
         template <typename T>
-        class Peripheral {
+        class Peripheral : public InputDevice {
             public:
             /** Create a new peripheral.
-             * @param name: The name of the peripheral.
+             * @param id: The id for the peripheral.
              * @return: The new peripheral.
              */
-            Peripheral(const std::string& name) : bindings() {
-                id = KeyCodes::registerPeripheral(name);
+            Peripheral(const DeviceID id) : InputDevice(id), bindings() {
             }
             /** Destroy the peripheral.
              */
@@ -101,7 +126,6 @@ namespace cobalt {
             protected:
             Queue<const InputCommand*> events;                      // The events to execute.
             UMap<PeripheralInput<T>, Scope<InputCommand>> bindings; // The bindings for the peripheral.
-            KeyCodes::PeripheralID id;                              // The id of the peripheral.
         };
     }
 }

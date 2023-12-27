@@ -8,6 +8,8 @@
 
 namespace cobalt {
     namespace core {
+        const std::string Mouse::NAME = "Mouse";
+
         ButtonState::ButtonState() : down(false), polled(false) {
         }
 
@@ -19,7 +21,11 @@ namespace cobalt {
             return polled;
         }
 
-        Mouse::Mouse(const float sensitivity) : Peripheral("Mouse"), sensitivity(sensitivity), x(0.0f), y(0.0f), dx(0.0f), dy(0.0f), dsx(0.0f), dsy(0.0f) {
+        Mouse::Mouse(const DeviceID id, const float sensitivity) : Peripheral(id),
+            sensitivity(sensitivity),
+            x(0.0f), y(0.0f),
+            dx(0.0f), dy(0.0f),
+            dsx(0.0f), dsy(0.0f) {
             for (size_t i = 0; i < static_cast<size_t>(MouseInputID::COUNT); i++) {
                 buttonStates[i] = ButtonState();
             }
@@ -40,7 +46,7 @@ namespace cobalt {
         void Mouse::onButtonPress(const int button, const int action) {
             MouseInputID id = glfwToCobalt(button);
             if (id == MouseInputID::UNKNOWN) {
-                throw InputException<MouseInputID>("Invalid button", button, *this);    
+                throw InvalidInputException<MouseInputID>("Invalid button", button, this);    
             }
             buttonStates[static_cast<size_t>(id)].down = action == GLFW_PRESS;
         }
@@ -159,7 +165,7 @@ namespace cobalt {
         };
 
         const std::string& Mouse::toString() const {
-            return KeyCodes::peripheralToString(id);
+            return NAME;
         }
 
         const MouseInputID Mouse::glfwToCobalt(const int glfwCode) const {
@@ -168,7 +174,6 @@ namespace cobalt {
                 return it->second;
             }
             return MouseInputID::UNKNOWN;
-            // throw InputException<MouseInputID>("Invalid button", glfwCode, *this);
         }
 
         const int Mouse::cobaltToGlfw(const MouseInputID cobaltCode) const {
@@ -178,7 +183,6 @@ namespace cobalt {
                 }
             }
             return GLFW_KEY_UNKNOWN;
-            // throw InputException<MouseInputID>("Invalid button", cobaltCode, *this);
         }
 
         const std::string& Mouse::cobaltToStr(const MouseInputID cobaltCode) const {
@@ -187,7 +191,6 @@ namespace cobalt {
                 return it->second;
             }
             return CB_TO_STR.at(MouseInputID::UNKNOWN);
-            // throw InputException<MouseInputID>("Invalid input", cobaltCode, *this);
         }
     }
 }

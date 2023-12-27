@@ -15,7 +15,7 @@ namespace cobalt {
             shouldStop(false),
             frameCount(0),
             framerateTimeWindow(1),
-            inputManager(1.0f),
+            inputManager(),
             window(core::WindowBuilder()
                 .setTitle("Cobalt")
                 .setWidth(1280)
@@ -25,26 +25,42 @@ namespace cobalt {
                     core::RenderContext::setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
                         core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
                         try {
-                            inputManager.getKeyboard().onKeyPress(key, action);
-                        } catch (core::InputException<core::KeyboardInputID>& e) {
+                            inputManager.getPeripheral<core::Keyboard>(core::Keyboard::NAME).onKeyPress(key, action);
+                        } catch (core::InvalidInputException<core::KeyboardInputID>& e) {
+                            CB_CORE_ERROR("{}", e.what());
+                        } catch (core::PeripheralNotFoundException& e) {
                             CB_CORE_ERROR("{}", e.what());
                         }
                     });
                     core::RenderContext::setCursorPosCallback([](GLFWwindow* window, double xpos, double ypos) {
                         core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
-                        inputManager.getMouse().onMove((float) xpos, (float) ypos);
+                        try {
+                            inputManager.getPeripheral<core::Mouse>(core::Mouse::NAME).onMove((float) xpos, (float) ypos);
+                        } catch (core::InvalidInputException<core::MouseInputID>& e) {
+                            CB_CORE_ERROR("{}", e.what());
+                        } catch (core::PeripheralNotFoundException& e) {
+                            CB_CORE_ERROR("{}", e.what());
+                        }
                     });
                     core::RenderContext::setMouseButtonCallback([](GLFWwindow* window, int button, int action, int mods) {
                         core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
                         try {
-                            inputManager.getMouse().onButtonPress(button, action);
-                        } catch (core::InputException<core::MouseInputID>& e) {
+                            inputManager.getPeripheral<core::Mouse>(core::Mouse::NAME).onButtonPress(button, action);
+                        } catch (core::InvalidInputException<core::MouseInputID>& e) {
+                            CB_CORE_ERROR("{}", e.what());
+                        } catch (core::PeripheralNotFoundException& e) {
                             CB_CORE_ERROR("{}", e.what());
                         }
                     });
                     core::RenderContext::setScrollCallback([](GLFWwindow* window, double xoffset, double yoffset) {
                         core::InputManager& inputManager = static_cast<Application*>(core::RenderContext::getUserPointer())->getInputManager();
-                        inputManager.getMouse().onScroll((float) xoffset, (float) yoffset);
+                        try {
+                            inputManager.getPeripheral<core::Mouse>(core::Mouse::NAME).onScroll((float) xoffset, (float) yoffset);
+                        } catch (core::InvalidInputException<core::MouseInputID>& e) {
+                            CB_CORE_ERROR("{}", e.what());
+                        } catch (core::PeripheralNotFoundException& e) {
+                            CB_CORE_ERROR("{}", e.what());
+                        }
                     });
                     core::RenderContext::setFramebufferResizeCallback([](GLFWwindow* window, int width, int height) {
                         Application* app = static_cast<Application*>(core::RenderContext::getUserPointer());
@@ -59,6 +75,8 @@ namespace cobalt {
                 .build()
             ) {
             core::RenderContext::setUserPointer(this);
+            inputManager.registerPeripheral<core::Keyboard>(core::Keyboard::NAME);
+            inputManager.registerPeripheral<core::Mouse>(core::Mouse::NAME, 1.0f);
             CB_INFO("Created application");
         }
 

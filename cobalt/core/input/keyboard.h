@@ -49,10 +49,13 @@ namespace cobalt {
 
         class Keyboard : public Peripheral<KeyboardInputID> {
             public:
+            const static std::string NAME;
+            
             /** Create a new keyboard.
+             * @param id: The device id for the keyboard.
              * @return: The new keyboard.
              */
-            Keyboard();
+            Keyboard(const DeviceID id);
             /** Destroy the keyboard.
              */
             ~Keyboard() = default;

@@ -22,7 +22,7 @@ namespace cobalt {
              * @param mouseSensitivity: The mouse sensitivity.
              * @return: The new input manager.
              */
-            InputManager(const float mouseSensitivity = 1.0f);
+            InputManager();
             /** Destroy the input manager.
              */
             ~InputManager() = default;
@@ -34,18 +34,54 @@ namespace cobalt {
              */
             void clearEvents();
 
-            /** Get the keyboard.
-             * @return: The keyboard.
+            /** Register a peripheral to the input manager.
+             * @param name: The name of the peripheral.
+             * @tparam T: The type of the peripheral.
+             * @tparam Args: The arguments to pass to the constructor of the peripheral.
+             * @return: The new peripheral's device id.
              */
-            Keyboard& getKeyboard();
-            /** Get the mouse.
-             * @return: The mouse.
+            template<typename T, typename... Args>
+            const DeviceID registerPeripheral(const std::string& name, Args&&... args) {
+                const DeviceID id = peripherals.size();
+                Scope<InputDevice> peripheral = std::make_unique<T>(id, std::forward<Args>(args)...);
+                peripherals[peripheral->getId()] = std::move(peripheral);
+                peripheralIDs[name] = id;
+                return id;
+            }
+            
+            /** Get the name of a peripheral, given its registered handle.
+             * @param id: The peripheral's device id.
+             * @return: The name of the peripheral.
              */
-            Mouse& getMouse();
+            const std::string& peripheralToString(const DeviceID id);
+
+            /** Get a peripheral, given its handle.
+             * @param id: The peripheral's device id.
+             * @return: The peripheral.
+             */
+            template<typename T>
+            T& getPeripheral(const DeviceID id) {
+                static_assert(std::is_base_of_v<InputDevice, T>, "T must be derived from an InputDevice");
+                if (peripherals.find(id) == peripherals.end()) {
+                    throw PeripheralNotFoundException(peripheralToString(id));
+                }
+                return *static_cast<T*>(peripherals[id].get());
+            }
+            /** Get a peripheral, given its name.
+             * @return: The peripheral.
+             */
+            template<typename T>
+            T& getPeripheral(const std::string& name) {
+                static_assert(std::is_base_of_v<InputDevice, T>, "T must be derived from an InputDevice");
+                if (peripheralIDs.find(name) == peripheralIDs.end()) {
+                    throw PeripheralNotFoundException(name);
+                }
+                return getPeripheral<T>(peripheralIDs[name]);
+            }
 
             private:
-            Keyboard keyboard;          // The keyboard.
-            Mouse mouse;                // The mouse.
+            UMap<std::string, DeviceID> peripheralIDs;      // Map from peripheral names to peripheral ids for easy lookup.
+            UMap<DeviceID, Scope<InputDevice>> peripherals; // The peripherals.
         };
     }
 }

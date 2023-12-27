@@ -8,26 +8,36 @@
 
 namespace cobalt {
     namespace core {
+        DeviceID unknownPeripheral;
+
         void InputManager::pollEvents() {
             glfwPollEvents();
-            keyboard.pollEvents();
-            mouse.pollEvents();
+            for (const auto& [name, id] : peripheralIDs) {
+                if (name != "Unknown") {
+                    peripherals[id]->pollEvents();
+                }
+            }
         }
 
         void InputManager::clearEvents() {
-            keyboard.clearEvents();
-            mouse.clearEvents();
+            for (const auto& [name, id] : peripheralIDs) {
+                if (name != "Unknown") {
+                    peripherals[id]->clearEvents();
+                }
+            }
         }
 
-        Keyboard& InputManager::getKeyboard() {
-            return keyboard;
+        InputManager::InputManager() {
+            unknownPeripheral = registerPeripheral<Keyboard>("Unknown"); // TODO: Create NULL peripheral type
         }
 
-        Mouse& InputManager::getMouse() {
-            return mouse;
-        }
-
-        InputManager::InputManager(const float mouseSensitivity) : keyboard(), mouse(mouseSensitivity) {
+        const std::string& InputManager::peripheralToString(const DeviceID peripheral) {
+            for (const auto& [name, id] : peripheralIDs) {
+                if (id == peripheral) {
+                    return name;
+                }
+            }
+            return peripheralToString(unknownPeripheral);
         }
     }
 }

@@ -59,26 +59,35 @@ namespace cobalt {
         }
 
         void Editor::bindInput() {
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::ESCAPE, std::make_unique<Quit>(this));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::F9, std::make_unique<Windowed>(this));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::F10, std::make_unique<Borderless>(this));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::F11, std::make_unique<Fullscreen>(this));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::W, std::make_unique<PanIn>(&scene.getCamera()));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::A, std::make_unique<PanLeft>(&scene.getCamera()));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::S, std::make_unique<PanOut>(&scene.getCamera()));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::D, std::make_unique<PanRight>(&scene.getCamera()));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::SPACE, std::make_unique<PanUp>(&scene.getCamera()));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::LCTRL, std::make_unique<PanDown>(&scene.getCamera()));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::UP, std::make_unique<PanUp>(&scene.getCamera()));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::LEFT, std::make_unique<PanLeft>(&scene.getCamera()));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::DOWN, std::make_unique<PanDown>(&scene.getCamera()));
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::RIGHT, std::make_unique<PanRight>(&scene.getCamera()));
+            try {
+                core::Keyboard& keyboard = getInputManager().getPeripheral<core::Keyboard>(core::Keyboard::NAME);
+                keyboard.bind(core::KeyboardInputID::ESCAPE, std::make_unique<Quit>(this));
+                keyboard.bind(core::KeyboardInputID::F9, std::make_unique<Windowed>(this));
+                keyboard.bind(core::KeyboardInputID::F10, std::make_unique<Borderless>(this));
+                keyboard.bind(core::KeyboardInputID::F11, std::make_unique<Fullscreen>(this));
+                keyboard.bind(core::KeyboardInputID::W, std::make_unique<PanIn>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::A, std::make_unique<PanLeft>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::S, std::make_unique<PanOut>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::D, std::make_unique<PanRight>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::SPACE, std::make_unique<PanUp>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::LCTRL, std::make_unique<PanDown>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::UP, std::make_unique<PanUp>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::LEFT, std::make_unique<PanLeft>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::DOWN, std::make_unique<PanDown>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::RIGHT, std::make_unique<PanRight>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::P, std::make_unique<Spawn>(&scene));
+            } catch (const core::PeripheralNotFoundException& e) {
+                CB_EDITOR_ERROR(e.what());
+            }
 
-            getInputManager().getMouse().bind(core::MouseInputID::RIGHT_X, std::make_unique<RotateX>(&scene.getCamera()));
-            getInputManager().getMouse().bind(core::MouseInputID::RIGHT_Y, std::make_unique<RotateY>(&scene.getCamera()));
-            getInputManager().getMouse().bind(core::MouseInputID::SCROLL_Y, std::make_unique<Zoom>(&scene.getCamera()));
-
-            getInputManager().getKeyboard().bind(core::KeyboardInputID::P, std::make_unique<Spawn>(&scene));
+            try {
+                core::Mouse& mouse = getInputManager().getPeripheral<core::Mouse>(core::Mouse::NAME);
+                mouse.bind(core::MouseInputID::RIGHT_X, std::make_unique<RotateX>(&scene.getCamera()));
+                mouse.bind(core::MouseInputID::RIGHT_Y, std::make_unique<RotateY>(&scene.getCamera()));
+                mouse.bind(core::MouseInputID::SCROLL_Y, std::make_unique<Zoom>(&scene.getCamera()));
+            } catch (const core::PeripheralNotFoundException& e) {
+                CB_EDITOR_ERROR(e.what());
+            }
         }
 
         void Editor::createScene() {

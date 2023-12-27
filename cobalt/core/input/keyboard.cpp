@@ -8,6 +8,8 @@
 
 namespace cobalt {
     namespace core {
+        const std::string Keyboard::NAME = "Keyboard";
+        
         bool KeyState::isDown() const {
             return down;
         }
@@ -19,7 +21,7 @@ namespace cobalt {
         KeyState::KeyState() : down(false), polled(false) {
         }
 
-        Keyboard::Keyboard() : Peripheral("Keyboard") {
+        Keyboard::Keyboard(const DeviceID id) : Peripheral(id) {
             for (size_t i = 0; i < static_cast<size_t>(KeyboardInputID::COUNT); i++) {
                 keyStates[i] = KeyState();
             }
@@ -28,7 +30,7 @@ namespace cobalt {
         void Keyboard::onKeyPress(const int key, const int action) {
             KeyboardInputID id = glfwToCobalt(key);
             if (id == KeyboardInputID::UNKNOWN) {
-                throw InputException<KeyboardInputID>("Invalid key", id, *this);
+                throw InvalidInputException<KeyboardInputID>("Invalid key", id, this);
             }
             keyStates[static_cast<size_t>(id)].down = action != GLFW_RELEASE;
         }
@@ -114,7 +116,7 @@ namespace cobalt {
         };
 
         const std::string& Keyboard::toString() const {
-            return KeyCodes::peripheralToString(id);
+            return NAME;
         }
 
         const KeyboardInputID Keyboard::glfwToCobalt(const int glfwCode) const {
@@ -123,7 +125,6 @@ namespace cobalt {
                 return it->second;
             }
             return KeyboardInputID::UNKNOWN;
-            //throw InputException<KeyboardInputID>("Invalid key", glfwCode, *this);
         }
 
         const int Keyboard::cobaltToGlfw(const KeyboardInputID cobaltCode) const {
@@ -133,7 +134,6 @@ namespace cobalt {
                 }
             }
             return GLFW_KEY_UNKNOWN;
-            //throw InputException<KeyboardInputID>("Invalid key", cobaltCode, *this);
         }
 
         const std::string& Keyboard::cobaltToStr(const KeyboardInputID cobaltCode) const {
@@ -142,7 +142,6 @@ namespace cobalt {
                 return it->second;
             }
             return CB_TO_STR.at(KeyboardInputID::UNKNOWN);
-            //throw InputException<KeyboardInputID>("Invalid key", cobaltCode, *this);
         }
     }
 }

@@ -47,11 +47,14 @@ namespace cobalt {
 
         class Mouse : public Peripheral<MouseInputID> {
             public:
+            const static std::string NAME;
+            
             /** Create a new mouse with the given sensitivity.
+             * @param id: The device id for the mouse.
              * @param sensitivity: The mouse sensitivity.
              * @return: A new mouse.
              */
-            Mouse(const float sensitivity);
+            Mouse(const DeviceID id, const float sensitivity);
             /** Destroy the mouse.
              */
             ~Mouse() = default;

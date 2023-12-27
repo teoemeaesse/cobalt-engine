@@ -24,9 +24,8 @@ namespace cobalt {
 int main(int argc, char** argv) {
     // Initialize the engine.
     cobalt::core::Log::init();
-    cobalt::core::Platform::log();
-    cobalt::core::KeyCodes::init();
     cobalt::core::RenderContext::init();
+    cobalt::core::Platform::log();
     cobalt::engine::TextureLibrary::init();
     cobalt::engine::ShaderLibrary::init();
     cobalt::engine::MaterialLibrary::init();

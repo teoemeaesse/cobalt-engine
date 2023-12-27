@@ -54,8 +54,7 @@ cobalt::core::Keyboard *keyboard;
 
 
 void setUp(void) {
-    cobalt::core::KeyCodes::init();
-    keyboard = new cobalt::core::Keyboard();
+    keyboard = new cobalt::core::Keyboard(1);
     BIND_KEYS(&testClass);
 }
 

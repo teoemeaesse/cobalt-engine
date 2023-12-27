@@ -11,6 +11,7 @@ namespace cobalt {
     namespace core {
         std::shared_ptr<spdlog::logger> Log::coreLogger;
         std::shared_ptr<spdlog::logger> Log::engineLogger;
+        std::shared_ptr<spdlog::logger> Log::editorLogger;
 
         void Log::init() {
             spdlog::set_pattern("[%r] %^%n: %v%$");
@@ -18,6 +19,8 @@ namespace cobalt {
             coreLogger->set_level(spdlog::level::trace);
             engineLogger = spdlog::stdout_color_mt("ENGINE");
             engineLogger->set_level(spdlog::level::trace);
+            editorLogger = spdlog::stdout_color_mt("EDITOR");
+            editorLogger->set_level(spdlog::level::trace);
         }
     }
 }
