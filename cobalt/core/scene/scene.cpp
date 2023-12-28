@@ -8,10 +8,11 @@
 namespace cobalt {
     namespace core {
         Scene::Scene() :
-            camera(glm::vec3(0.0, 0.0, 10.0),
-                   glm::vec2(90.0, 90.0),
+            camera(glm::vec3(-45.0, 15.0, 5.0),
+                   glm::vec2(180.0, 70.0),
+                   50.0f,
                    90.0f, 25.0f,
-                   1.0f, 1000.0f,
+                   5.0f, 1000.0f,
                    16.0f / 9.0f)
         {}
 

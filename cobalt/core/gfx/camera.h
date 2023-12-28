@@ -21,36 +21,44 @@ namespace cobalt {
             ~Camera() = default;
 
             /** Calculates the view matrix of the camera.
-             * @return The view matrix of the camera.
+             * @return: The view matrix of the camera.
              */
             const glm::mat4x4 getViewMatrix() const;
             /** Calculates the projection matrix of the camera.
-             * @return The projection matrix of the camera.
+             * @return: The projection matrix of the camera.
              */
             virtual const glm::mat4x4 getProjectionMatrix() const = 0;
 
+            /** Gets the position of the camera in world space.
+             * @return: The position of the camera in world space.
+             */
             const glm::vec3 getPosition() const;
 
             /** Rotates the camera horizontally by the given amount.
+             * The behaviour of this function is dependent on the specific type of camera.
              * @param amount: The amount to rotate by (degrees).
              */
-            void rotateHorizontal(const float amount);
+            virtual void rotateHorizontal(const float amount) = 0;
             /** Rotates the camera vertically by the given amount.
+             * The behaviour of this function is dependent on the specific type of camera.
              * @param amount: The amount to rotate by (degrees).
              */
-            void rotateVertical(const float amount);
+            virtual void rotateVertical(const float amount) = 0;
             /** Pans the camera by the given amount.
+             * The behaviour of this function is dependent on the specific type of camera.
              * @param amount: The amount to pan by.
              */
-            void panDepth(const float amount);
+            virtual void panDepth(const float amount) = 0;
             /** Pans the camera horizontally by the given amount.
+             * The behaviour of this function is dependent on the specific type of camera.
              * @param amount: The amount to pan by.
              */
-            void panHorizontal(const float amount);
+            virtual void panHorizontal(const float amount) = 0;
             /** Pans the camera vertically by the given amount.
+             * The behaviour of this function is dependent on the specific type of camera.
              * @param amount: The amount to pan by.
              */
-            void panVertical(const float amount);
+            virtual void panVertical(const float amount) = 0;
 
             protected:
             glm::vec3 position;     // The position of the camera in world space.
@@ -93,7 +101,7 @@ namespace cobalt {
             /** Zooms the camera by the given amount.
              * @param amount: The amount to zoom by (fov degrees).
              */
-            void zoom(const float amount);
+            virtual void zoom(const float amount) = 0;
 
             /** Resizes the camera.
              * @param aspectRatio: The new aspect ratio of the camera.
@@ -101,11 +109,11 @@ namespace cobalt {
             void resize(const float aspectRatio);
 
             /** Calculates the projection matrix of the camera.
-             * @return The projection matrix of the camera.
+             * @return: The projection matrix of the camera.
              */
             const glm::mat4x4 getProjectionMatrix() const override;
 
-            private:
+            protected:
             float fov;              // The field of view of the camera.
             float aspectRatio;      // The aspect ratio of the camera.
         };
@@ -145,15 +153,126 @@ namespace cobalt {
              * @param top: The top clipping plane.
              */
             void resize(const float left, const float right, const float bottom, const float top);
+
+            /** Rotates the camera horizontally by the given amount around the up vector.
+             * @param amount: The amount to rotate by (degrees).
+             */
+            void rotateHorizontal(const float amount) override;
+            /** Rotates the camera vertically by the given amount around the left vector.
+             * @param amount: The amount to rotate by (degrees).
+             */
+            void rotateVertical(const float amount) override;
+            /** Pans the camera by the given amount along the forward vector.
+             * @param amount: The amount to pan by.
+             */
+            void panDepth(const float amount) override;
+            /** Pans the camera horizontally by the given amount along the right vector.
+             * @param amount: The amount to pan by.
+             */
+            void panHorizontal(const float amount) override;
+            /** Pans the camera vertically by the given amount along the up vector.
+             * @param amount: The amount to pan by.
+             */
+            void panVertical(const float amount) override;
             
             /** Calculates the projection matrix of the camera.
-             * @return The projection matrix of the camera.
+             * @return: The projection matrix of the camera.
              */
             const glm::mat4x4 getProjectionMatrix() const override;
 
             private:
-            float left, right;      // The left and right clipping planes.
-            float bottom, top;      // The bottom and top clipping planes.
+            float left, right;  // The left and right clipping planes.
+            float bottom, top;  // The bottom and top clipping planes.
+        };
+
+        class FPSCamera : public PerspectiveCamera {
+            public:
+            /** Creates a new FPS camera: a perspective camera with a fixed up vector (0, 1, 0),
+             * where the direction is the direction the camera is facing (degrees).
+             * @param position: The position of the camera in world space.
+             * @param direction: The direction the camera is facing (degrees).
+             *                   x: 0 looking left (-x), 90 looking forward (-z), 180 looking right (+x)
+             *                   y: 0 looking down (-y), 90 looking forward (-z), 180 looking up (+y)
+             * @param fov: The field of view of the camera (degrees).
+             * @param angularSpeed: The angular speed of the camera.
+             * @param near: The near clipping plane.
+             * @param far: The far clipping plane.
+             * @param aspectRatio: The aspect ratio of the camera.
+             */
+            FPSCamera(const glm::vec3 position, const glm::vec2 direction, const float fov, const float angularSpeed, const float near, const float far, const float aspectRatio);
+            ~FPSCamera() = default;
+
+            /** Zooms the camera by the given amount.
+             * @param amount: The amount to zoom by (fov degrees).
+             */
+            void zoom(const float amount) override;
+            /** Rotates the camera horizontally by the given amount around the up vector.
+             * @param amount: The amount to rotate by (degrees).
+             */
+            void rotateHorizontal(const float amount) override;
+            /** Rotates the camera vertically by the given amount around the left vector.
+             * @param amount: The amount to rotate by (degrees).
+             */
+            void rotateVertical(const float amount) override;
+            /** Pans the camera by the given amount along the forward vector.
+             * @param amount: The amount to pan by.
+             */
+            void panDepth(const float amount) override;
+            /** Pans the camera horizontally by the given amount along the right vector.
+             * @param amount: The amount to pan by.
+             */
+            void panHorizontal(const float amount) override;
+            /** Pans the camera vertically by the given amount along the up vector.
+             * @param amount: The amount to pan by.
+             */
+            void panVertical(const float amount) override;
+        };
+
+        class PivotCamera : public PerspectiveCamera {
+            public:
+            /** Creates a new pivot camera: a perspective camera with a fixed up vector (0, 1, 0),
+             * where the direction is the direction the camera is facing (degrees).
+             * @param position: The position of the camera in world space.
+             * @param direction: The direction the camera is facing (degrees).
+             *                   x: 0 looking left (-x), 90 looking forward (-z), 180 looking right (+x)
+             *                   y: 0 looking down (-y), 90 looking forward (-z), 180 looking up (+y)
+             * @param distance: The distance from the position of the camera to the the center point. Zooming is done by changing this distance.
+             * @param fov: The field of view of the camera (degrees). In this camera, the FOV is fixed.
+             * @param angularSpeed: The angular speed of the camera.
+             * @param near: The near clipping plane.
+             * @param far: The far clipping plane.
+             * @param aspectRatio: The aspect ratio of the camera.
+             */
+            PivotCamera(const glm::vec3 position, const glm::vec2 direction, const float distance, const float fov, const float angularSpeed, const float near, const float far, const float aspectRatio);
+            ~PivotCamera() = default;
+
+            /** Zooms the camera by the given amount.
+             * @param amount: The amount to zoom by (fov degrees).
+             */
+            void zoom(const float amount) override;
+            /** Rotates the camera horizontally by the given amount around the center point.
+             * @param amount: The amount to rotate by (degrees).
+             */
+            void rotateHorizontal(const float amount) override;
+            /** Rotates the camera vertically by the given amount around the center point.
+             * @param amount: The amount to rotate by (degrees).
+             */
+            void rotateVertical(const float amount) override;
+            /** Pans the camera horizontally forward by the given amount.
+             * @param amount: The amount to pan by.
+             */
+            void panDepth(const float amount) override;
+            /** Pans the camera horizontally sideways by the given amount.
+             * @param amount: The amount to pan by.
+             */
+            void panHorizontal(const float amount) override;
+            /** Pans the camera vertically by the given amount along the up vector.
+             * @param amount: The amount to pan by.
+             */
+            void panVertical(const float amount) override;
+
+            private:
+            float distance; // The distance from the position of the camera to the the center point.
         };
     }
 }

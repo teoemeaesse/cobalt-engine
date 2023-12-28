@@ -21,6 +21,7 @@
 #include <vector>
 #include <stack>
 #include <queue>
+#include <algorithm>
 #include <signal.h>
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-volatile"

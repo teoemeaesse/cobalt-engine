@@ -55,7 +55,7 @@ namespace cobalt {
                                 // TODO: Add a proper scene graph.
             Opt<Skybox> skybox; // The skybox of the scene.
 
-            PerspectiveCamera camera;   // The camera used to render the scene.
+            PivotCamera camera; // The camera used to render the scene.
         };
     }
 }
