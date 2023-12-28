@@ -15,6 +15,7 @@ namespace cobalt {
         #define COLOR_WHITE COLOR(1.0f, 1.0f, 1.0f, 1.0f)
         #define COLOR_BLACK COLOR(0.0f, 0.0f, 0.0f, 1.0f)
         #define COLOR_RED COLOR(1.0f, 0.0f, 0.0f, 1.0f)
+        #define COLOR_ORANGE COLOR(1.0f, 0.5f, 0.0f, 1.0f)
         #define COLOR_GREEN COLOR(0.0f, 1.0f, 0.0f, 1.0f)
         #define COLOR_BLUE COLOR(0.0f, 0.0f, 1.0f, 1.0f)
         #define COLOR_YELLOW COLOR(1.0f, 1.0f, 0.0f, 1.0f)

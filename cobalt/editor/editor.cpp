@@ -48,6 +48,13 @@ namespace cobalt {
             getWindow().clear();
 
             scene.getMeshes()[0].rotate(glm::vec3(0.3f, 0.05f, 0.2f));
+            static float cubeXOffset = 0.0f;
+            static float cubeYOffset = 0.0f;
+            static float time = 0.0f;
+            time += delta;
+            cubeXOffset = sin(time) * 25.0f * delta;
+            cubeYOffset = cos(time) * 25.0f * delta;
+            scene.getMeshes()[4].translate(glm::vec3(cubeXOffset, 0.0f, cubeYOffset));
             renderGraph.execute();
 
             getWindow().swapBuffers();
@@ -113,16 +120,31 @@ namespace cobalt {
 
             core::Material& woodMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("wood", woodAlbedo, woodNormal, woodMrao));
             core::Material& steelMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("steel", steelAlbedo, steelNormal, steelMrao));
+            core::Material& whiteRough = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", COLOR_WHITE, 0.0f, 1.0f, 1.0f));
+            core::Material& whiteSmooth = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", COLOR_WHITE, 0.0f, 0.0f, 1.0f));
+            core::Material& orangeMedium = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("orange", COLOR_ORANGE, 0.0f, 0.5f, 1.0f));
             core::Mesh mesh = core::Mesh::createRectangle(10, 10, woodMaterial);
             core::Mesh ground = core::Mesh::createRectangle(100, 100, woodMaterial);
-            core::Mesh sphere = core::Mesh::createSphere(5.0f, woodMaterial);
+            core::Mesh sphere = core::Mesh::createSphere(5, woodMaterial);
+            core::Mesh cube0 = core::Mesh::createCube(10, whiteRough);
+            core::Mesh cube1 = core::Mesh::createCube(10, whiteSmooth);
+            core::Mesh cube2 = core::Mesh::createCube(10, orangeMedium);
             ground.translate(glm::vec3(0.0f, -50.0f, 0.0f));
             ground.rotate(glm::vec3(90.0f, 0.0f, 0.0f));
             sphere.translate(glm::vec3(10.0f, 0.0f, 0.0f));
             mesh.translate(glm::vec3(-10.0f, 0.0f, 0.0f));
+            cube0.translate(glm::vec3(0.0f, -45.0f, 25.0f));
+            cube1.translate(glm::vec3(-25.0f, -30.0f, 0.0f));
+            cube2.translate(glm::vec3(0.0f, -45.0f, -40.0f));
+            cube0.rotate(glm::vec3(0.0f, 30.0f, 0.0f));
+            cube1.rotate(glm::vec3(0.0f, 15.0f, 0.0f));
+            cube2.rotate(glm::vec3(0.0f, 45.0f, 0.0f));
             scene.addMesh(std::move(mesh));
             scene.addMesh(std::move(ground));
             scene.addMesh(std::move(sphere));
+            scene.addMesh(std::move(cube0));
+            scene.addMesh(std::move(cube1));
+            scene.addMesh(std::move(cube2));
         }
     }
 }

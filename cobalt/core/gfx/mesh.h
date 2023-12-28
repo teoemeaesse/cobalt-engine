@@ -94,6 +94,13 @@ namespace cobalt {
              */
             static Mesh createSphere(const uint radius, Material& material);
 
+            /** Create a cube-shaped mesh.
+             * @param side: The cube's side.
+             * @param material: The material.
+             * @return: The cube mesh.
+             */
+            static Mesh createCube(const uint side, Material& material);
+
             private:
             VAO vao;                    // Vertex array object.
             IBO ibo;                    // Index buffer object.

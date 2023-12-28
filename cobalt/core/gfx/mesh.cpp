@@ -145,5 +145,51 @@ namespace cobalt {
             layout.push(GLType::Float, 3, false);   // Normal.
             return Mesh(VAO(vbo, layout), IBO(GLUsage::StaticDraw, indices, 6 * stacks * slices), material);
         }
+
+        Mesh Mesh::createCube(const uint size, Material& material) {
+            const float s = size / 2.0f;
+
+            const float vertices[] = { // Position, texture coordinates, normal.
+                -s, -s, -s, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f,
+                 s, -s, -s, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f,
+                 s,  s, -s, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f,
+                -s,  s, -s, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f,
+
+                -s, -s,  s, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+                 s, -s,  s, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+                 s,  s,  s, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+                -s,  s,  s, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+
+                -s, -s, -s, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+                -s,  s, -s, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+                -s,  s,  s, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f,
+                -s, -s,  s, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f,
+
+                 s, -s, -s, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                 s,  s, -s, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                 s,  s,  s, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+                 s, -s,  s, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+
+                -s, -s, -s, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f,
+                -s, -s,  s, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f,
+                 s, -s,  s, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f,
+                 s, -s, -s, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f,
+
+                -s,  s, -s, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+                -s,  s,  s, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+                 s,  s,  s, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+                 s,  s, -s, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f
+            };
+
+            VBO vbo(GLUsage::StaticDraw);
+            vbo.bind();
+            vbo.load(vertices, sizeof(float) * 192);
+
+            VAOLayout layout;
+            layout.push(GLType::Float, 3, false);   // Position.
+            layout.push(GLType::Float, 2, false);   // Texture coordinates.
+            layout.push(GLType::Float, 3, false);   // Normal.
+            return Mesh(VAO(vbo, layout), IBO::fromQuads(GLUsage::StaticDraw, 6), material);
+        }
     }
 }
