@@ -183,13 +183,13 @@ namespace cobalt {
             const float theta = glm::radians(180.0f + direction.x);
             const float phi = glm::radians(180.0f - direction.y);
             direction.x += amount * angularSpeed;
-            const glm::vec3 center = position + (glm::vec3(cos(theta) * sin(phi), cos(phi), sin(theta) * sin(phi)) * distance);
+            const glm::vec3 center = position + (glm::vec3(cosf(theta) * sinf(phi), cosf(phi), sinf(theta) * sinf(phi)) * distance);
             float rot = glm::radians(-amount * angularSpeed);
             glm::vec3 pivotToCamera = position - center;
             glm::vec3 k = glm::vec3(0.0f, 1.0f, 0.0f);
-            glm::vec3 v_rot = pivotToCamera * cos(rot) +
-                            glm::cross(k, pivotToCamera) * sin(rot) +
-                            k * (glm::dot(k, pivotToCamera)) * (1 - cos(rot));
+            glm::vec3 v_rot = pivotToCamera * cosf(rot) +
+                            glm::cross(k, pivotToCamera) * sinf(rot) +
+                            k * (glm::dot(k, pivotToCamera)) * (1 - cosf(rot));
             position = center + v_rot;
         }
 
@@ -197,20 +197,20 @@ namespace cobalt {
             const float theta = glm::radians(180.0f + direction.x);
             const float phi = glm::radians(180.0f - direction.y);
             direction.y += amount * angularSpeed;
-            const glm::vec3 center = position + (glm::vec3(cos(theta) * sin(phi), cos(phi), sin(theta) * sin(phi)) * distance);
+            const glm::vec3 center = position + (glm::vec3(cosf(theta) * sinf(phi), cosf(phi), sinf(theta) * sinf(phi)) * distance);
             float rot = glm::radians(-amount * angularSpeed);
             glm::vec3 pivotToCamera = position - center;
             glm::vec3 k = glm::normalize(glm::cross(pivotToCamera, glm::vec3(0.0f, 1.0f, 0.0f)));
-            glm::vec3 v_rot = pivotToCamera * cos(rot) +
-                            glm::cross(k, pivotToCamera) * sin(rot) +
-                            k * (glm::dot(k, pivotToCamera)) * (1 - cos(rot));
+            glm::vec3 v_rot = pivotToCamera * cosf(rot) +
+                            glm::cross(k, pivotToCamera) * sinf(rot) +
+                            k * (glm::dot(k, pivotToCamera)) * (1 - cosf(rot));
             position = center + v_rot;
         }
 
         void PivotCamera::panDepth(const float amount) {
             const float theta = glm::radians(180.0f + direction.x);
             const float phi = glm::radians(180.0f - direction.y);
-            const glm::vec3 center = position + glm::vec3(cos(theta) * sin(phi), cos(phi), sin(theta) * sin(phi));
+            const glm::vec3 center = position + glm::vec3(cosf(theta) * sinf(phi), cosf(phi), sinf(theta) * sinf(phi));
             glm::vec3 forward = position - center; // vector from center to camera
             forward.y = 0.0f; // remove the vertical component
             forward = glm::normalize(forward); // normalize the vector
@@ -220,7 +220,7 @@ namespace cobalt {
         void PivotCamera::panHorizontal(const float amount) {
             const float theta = glm::radians(180.0f + direction.x);
             const float phi = glm::radians(180.0f - direction.y);
-            const glm::vec3 center = position + glm::vec3(cos(theta) * sin(phi), cos(phi), sin(theta) * sin(phi));
+            const glm::vec3 center = position + glm::vec3(cosf(theta) * sinf(phi), cosf(phi), sinf(theta) * sinf(phi));
             glm::vec3 pivotToCamera = position - center;
             glm::vec3 right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), pivotToCamera)); // right vector
             position += right * amount; // move position
