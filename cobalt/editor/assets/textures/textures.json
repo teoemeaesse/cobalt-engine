@@ -32,6 +32,6 @@
     "skybox" : {
         "type" : "3d",
         "srgb" : true,
-        "src" : "skybox"
+        "src" : "editor-skybox"
     }
 }
