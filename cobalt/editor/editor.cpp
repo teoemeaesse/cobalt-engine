@@ -68,30 +68,30 @@ namespace cobalt {
         void Editor::bindInput() {
             try {
                 core::Keyboard& keyboard = getInputManager().getPeripheral<core::Keyboard>(core::Keyboard::NAME);
-                keyboard.bind(core::KeyboardInputID::ESCAPE, std::make_unique<Quit>(this));
-                keyboard.bind(core::KeyboardInputID::F9, std::make_unique<Windowed>(this));
-                keyboard.bind(core::KeyboardInputID::F10, std::make_unique<Borderless>(this));
-                keyboard.bind(core::KeyboardInputID::F11, std::make_unique<Fullscreen>(this));
-                keyboard.bind(core::KeyboardInputID::W, std::make_unique<PanIn>(&scene.getCamera()));
-                keyboard.bind(core::KeyboardInputID::A, std::make_unique<PanLeft>(&scene.getCamera()));
-                keyboard.bind(core::KeyboardInputID::S, std::make_unique<PanOut>(&scene.getCamera()));
-                keyboard.bind(core::KeyboardInputID::D, std::make_unique<PanRight>(&scene.getCamera()));
-                keyboard.bind(core::KeyboardInputID::SPACE, std::make_unique<PanUp>(&scene.getCamera()));
-                keyboard.bind(core::KeyboardInputID::LCTRL, std::make_unique<PanDown>(&scene.getCamera()));
-                keyboard.bind(core::KeyboardInputID::UP, std::make_unique<PanUp>(&scene.getCamera()));
-                keyboard.bind(core::KeyboardInputID::LEFT, std::make_unique<PanLeft>(&scene.getCamera()));
-                keyboard.bind(core::KeyboardInputID::DOWN, std::make_unique<PanDown>(&scene.getCamera()));
-                keyboard.bind(core::KeyboardInputID::RIGHT, std::make_unique<PanRight>(&scene.getCamera()));
-                keyboard.bind(core::KeyboardInputID::P, std::make_unique<Spawn>(&scene));
+                keyboard.bind(core::KeyboardInputID::ESCAPE, createScope<Quit>(this));
+                keyboard.bind(core::KeyboardInputID::F9, createScope<Windowed>(this));
+                keyboard.bind(core::KeyboardInputID::F10, createScope<Borderless>(this));
+                keyboard.bind(core::KeyboardInputID::F11, createScope<Fullscreen>(this));
+                keyboard.bind(core::KeyboardInputID::W, createScope<PanIn>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::A, createScope<PanLeft>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::S, createScope<PanOut>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::D, createScope<PanRight>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::SPACE, createScope<PanUp>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::LCTRL, createScope<PanDown>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::UP, createScope<PanUp>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::LEFT, createScope<PanLeft>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::DOWN, createScope<PanDown>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::RIGHT, createScope<PanRight>(&scene.getCamera()));
+                keyboard.bind(core::KeyboardInputID::P, createScope<Spawn>(&scene));
             } catch (const core::PeripheralNotFoundException& e) {
                 CB_EDITOR_ERROR(e.what());
             }
 
             try {
                 core::Mouse& mouse = getInputManager().getPeripheral<core::Mouse>(core::Mouse::NAME);
-                mouse.bind(core::MouseInputID::RIGHT_X, std::make_unique<RotateX>(&scene.getCamera()));
-                mouse.bind(core::MouseInputID::RIGHT_Y, std::make_unique<RotateY>(&scene.getCamera()));
-                mouse.bind(core::MouseInputID::SCROLL_Y, std::make_unique<Zoom>(&scene.getCamera()));
+                mouse.bind(core::MouseInputID::RIGHT_X, createScope<RotateX>(&scene.getCamera()));
+                mouse.bind(core::MouseInputID::RIGHT_Y, createScope<RotateY>(&scene.getCamera()));
+                mouse.bind(core::MouseInputID::SCROLL_Y, createScope<Zoom>(&scene.getCamera()));
             } catch (const core::PeripheralNotFoundException& e) {
                 CB_EDITOR_ERROR(e.what());
             }

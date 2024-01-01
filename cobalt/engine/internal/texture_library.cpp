@@ -9,7 +9,7 @@
 
 namespace cobalt {
     namespace engine {
-        core::Scope<TextureLibrary> TextureLibrary::instance;
+        Scope<TextureLibrary> TextureLibrary::instance;
 
         TextureLibrary::TextureLibrary() {
             textures2D.emplace_back("null", std::move(core::TextureBuilder().setDimensions(1, 1).setIsColor(true).setChannels(4).buildEmpty2D()));
@@ -76,7 +76,7 @@ namespace cobalt {
         }
 
         void TextureLibrary::init() {
-            instance = std::make_unique<TextureLibrary>();
+            instance = createScope<TextureLibrary>();
         }
 
         TextureLibrary& TextureLibrary::getTextureLibrary() {

@@ -23,7 +23,7 @@ namespace cobalt {
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
             glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-            instance = std::make_shared<RenderContext>();
+            instance = createRef<RenderContext>();
             glewExperimental = GL_TRUE; // Needed for core profile
             CB_CORE_INFO("Initialized render context");
         }
@@ -32,7 +32,7 @@ namespace cobalt {
             if (instance) {
                 throw GFXException("Render context already initialized");
             }
-            instance = std::make_shared<RenderContext>(context);
+            instance = createRef<RenderContext>(context);
             CB_CORE_INFO("Initialized render context from GLFW context");
         }
 

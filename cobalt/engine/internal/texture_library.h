@@ -193,7 +193,7 @@ namespace cobalt {
             core::Deque<TextureEntry<core::Texture3D>> textures3D;  // The cubemap textures in the library.
             core::UMap<TextureCache, TextureID> cache;              // The cache of textures.
 
-            static core::Scope<TextureLibrary> instance;    // The singleton instance of the texture library.
+            static Scope<TextureLibrary> instance;    // The singleton instance of the texture library.
         };
     }
 }

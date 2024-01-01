@@ -12,13 +12,10 @@ namespace cobalt {
         /** A perspective or orthographic camera.
          */
         class Camera {
-            friend class PerspectiveCamera;
-            friend class OrthographicCamera;
-            
             public:
             /** Destroys the camera.
              */
-            ~Camera() = default;
+            virtual ~Camera() = default;
 
             /** Calculates the view matrix of the camera.
              * @return: The view matrix of the camera.
@@ -34,6 +31,17 @@ namespace cobalt {
              */
             const glm::vec3 getPosition() const;
 
+            /** Resizes the camera.
+             * @param left: The left plane of the viewport.
+             * @param right: The right plane of the viewport.
+             * @param bottom: The bottom plane of the viewport.
+             * @param top: The top plane of the viewport.
+             */
+            virtual void resize(const float left, const float right, const float bottom, const float top) = 0;
+            /** Zooms the camera by the given amount.
+             * @param amount: The amount to zoom by (fov degrees).
+             */
+            virtual void zoom(const float amount) = 0;
             /** Rotates the camera horizontally by the given amount.
              * The behaviour of this function is dependent on the specific type of camera.
              * @param amount: The amount to rotate by (degrees).
@@ -63,19 +71,15 @@ namespace cobalt {
             protected:
             glm::vec3 position;     // The position of the camera in world space.
             glm::vec2 direction;    // The direction the camera is facing (degrees).
-            float angularSpeed;     // The angular speed of the camera.
             float near, far;        // The near and far clipping planes.
-            float aspectRatio;      // The aspect ratio of the camera.
 
-            private:
             /** Creates a new camera.
              * @param position: The position of the camera in world space.
              * @param direction: The direction the camera is facing (degrees).
-             * @param angularSpeed: The angular speed of the camera.
              * @param near: The near clipping plane.
              * @param far: The far clipping plane.
              */
-            Camera(const glm::vec3 position, const glm::vec2 direction, const float angularSpeed, const float near, const float far);
+            Camera(const glm::vec3 position, const glm::vec2 direction, const float near, const float far);
         };
 
         /** A perspective camera.
@@ -88,20 +92,18 @@ namespace cobalt {
              *                   x: 0 looking left (-x), 90 looking forward (-z), 180 looking right (+x)
              *                   y: 0 looking down (-y), 90 looking forward (-z), 180 looking up (+y)
              * @param fov: The field of view of the camera (degrees).
-             * @param angularSpeed: The angular speed of the camera.
              * @param near: The near clipping plane.
              * @param far: The far clipping plane.
              * @param aspectRatio: The aspect ratio of the camera.
              */
-            PerspectiveCamera(const glm::vec3 position, const glm::vec2 direction, const float fov, const float angularSpeed, const float near, const float far, const float aspectRatio);
+            PerspectiveCamera(const glm::vec3 position,
+                              const glm::vec2 direction,
+                              const float fov,
+                              const float near, const float far,
+                              const float aspectRatio);
             /** Destroys the camera.
              */
             ~PerspectiveCamera() = default;
-
-            /** Zooms the camera by the given amount.
-             * @param amount: The amount to zoom by (fov degrees).
-             */
-            virtual void zoom(const float amount) = 0;
 
             /** Resizes the camera.
              * @param aspectRatio: The new aspect ratio of the camera.
@@ -114,8 +116,17 @@ namespace cobalt {
             const glm::mat4x4 getProjectionMatrix() const override;
 
             protected:
-            float fov;              // The field of view of the camera.
-            float aspectRatio;      // The aspect ratio of the camera.
+            float fov;          // The field of view of the camera.
+            float aspectRatio;  // The aspect ratio of the camera.
+
+            private:
+            /** Resizes the camera.
+             * @param left: The left plane of the viewport.
+             * @param right: The right plane of the viewport.
+             * @param bottom: The bottom plane of the viewport.
+             * @param top: The top plane of the viewport.
+             */
+            void resize(const float left, const float right, const float bottom, const float top) override;
         };
 
         /** An orthographic camera.
@@ -125,7 +136,6 @@ namespace cobalt {
             /** Creates a new orthographic camera.
              * @param position: The position of the camera in world space.
              * @param direction: The direction the camera is facing (degrees).
-             * @param angularSpeed: The angular speed of the camera.
              * @param left: The left clipping plane.
              * @param right: The right clipping plane.
              * @param bottom: The bottom clipping plane.
@@ -135,7 +145,6 @@ namespace cobalt {
              */
             OrthographicCamera(const glm::vec3 position,
                                const glm::vec2 direction,
-                               const float angularSpeed,
                                const float left,
                                const float right,
                                const float bottom,
@@ -154,6 +163,10 @@ namespace cobalt {
              */
             void resize(const float left, const float right, const float bottom, const float top);
 
+            /** Zooms the camera by the given amount.
+             * @param amount: The amount to zoom by (fov degrees).
+             */
+            void zoom(const float amount) override;
             /** Rotates the camera horizontally by the given amount around the up vector.
              * @param amount: The amount to rotate by (degrees).
              */
@@ -194,12 +207,17 @@ namespace cobalt {
              *                   x: 0 looking left (-x), 90 looking forward (-z), 180 looking right (+x)
              *                   y: 0 looking down (-y), 90 looking forward (-z), 180 looking up (+y)
              * @param fov: The field of view of the camera (degrees).
-             * @param angularSpeed: The angular speed of the camera.
              * @param near: The near clipping plane.
              * @param far: The far clipping plane.
              * @param aspectRatio: The aspect ratio of the camera.
              */
-            FPSCamera(const glm::vec3 position, const glm::vec2 direction, const float fov, const float angularSpeed, const float near, const float far, const float aspectRatio);
+            FPSCamera(const glm::vec3 position,
+                      const glm::vec2 direction,
+                      const float fov,
+                      const float near, const float far,
+                      const float aspectRatio);
+            /** Destroys the camera.
+             */
             ~FPSCamera() = default;
 
             /** Zooms the camera by the given amount.
@@ -238,12 +256,34 @@ namespace cobalt {
              *                   y: 0 looking down (-y), 90 looking forward (-z), 180 looking up (+y)
              * @param distance: The distance from the position of the camera to the the center point. Zooming is done by changing this distance.
              * @param fov: The field of view of the camera (degrees). In this camera, the FOV is fixed.
-             * @param angularSpeed: The angular speed of the camera.
              * @param near: The near clipping plane.
              * @param far: The far clipping plane.
              * @param aspectRatio: The aspect ratio of the camera.
              */
-            PivotCamera(const glm::vec3 position, const glm::vec2 direction, const float distance, const float fov, const float angularSpeed, const float near, const float far, const float aspectRatio);
+            PivotCamera(const glm::vec3 position,
+                        const glm::vec2 direction,
+                        const float distance,
+                        const float fov,
+                        const float near,
+                        const float far,
+                        const float aspectRatio);
+            /** Creates a new pivot camera: a perspective camera with a fixed up vector (0, 1, 0),
+             * pivoted on the center point.
+             * @param position: The position of the camera in world space.
+             * @param center: The center point the camera is pivoted around.
+             * @param fov: The field of view of the camera (degrees). In this camera, the FOV is fixed.
+             * @param near: The near clipping plane.
+             * @param far: The far clipping plane.
+             * @param aspectRatio: The aspect ratio of the camera.
+             */
+            PivotCamera(const glm::vec3 position,
+                        const glm::vec3 center,
+                        const float fov,
+                        const float near,
+                        const float far,
+                        const float aspectRatio);
+            /** Destroys the camera.
+             */
             ~PivotCamera() = default;
 
             /** Zooms the camera by the given amount.

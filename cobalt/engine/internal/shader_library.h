@@ -76,7 +76,7 @@ namespace cobalt {
             private:
             core::Deque<ShaderEntry> shaders;   // The shaders in the library.
 
-            static core::Scope<ShaderLibrary> instance; // The singleton instance of the shader library.
+            static Scope<ShaderLibrary> instance; // The singleton instance of the shader library.
         };
     }
 }

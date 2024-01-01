@@ -43,7 +43,7 @@ namespace cobalt {
             template<typename T, typename... Args>
             const DeviceID registerPeripheral(const std::string& name, Args&&... args) {
                 const DeviceID id = peripherals.size();
-                Scope<InputDevice> peripheral = std::make_unique<T>(id, std::forward<Args>(args)...);
+                Scope<InputDevice> peripheral = createScope<T>(id, std::forward<Args>(args)...);
                 peripherals[peripheral->getId()] = std::move(peripheral);
                 peripheralIDs[name] = id;
                 return id;

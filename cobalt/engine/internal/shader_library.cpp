@@ -10,7 +10,7 @@
 
 namespace cobalt {
     namespace engine {
-        core::Scope<ShaderLibrary> ShaderLibrary::instance;
+        Scope<ShaderLibrary> ShaderLibrary::instance;
 
         static core::RenderShader parseRenderShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
             core::ShaderBuilder builder;
@@ -84,7 +84,7 @@ namespace cobalt {
         }
         
         void ShaderLibrary::init() {
-            instance = std::make_unique<ShaderLibrary>();
+            instance = createScope<ShaderLibrary>();
         }
 
         ShaderLibrary& ShaderLibrary::getShaderLibrary() {

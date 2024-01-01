@@ -7,7 +7,7 @@
 
 namespace cobalt {
     namespace engine {
-        core::Scope<MaterialLibrary> MaterialLibrary::instance;
+        Scope<MaterialLibrary> MaterialLibrary::instance;
 
         MaterialLibrary::MaterialLibrary() {}
 
@@ -81,7 +81,7 @@ namespace cobalt {
         }
 
         void MaterialLibrary::init() {
-            instance = std::make_unique<MaterialLibrary>();
+            instance = createScope<MaterialLibrary>();
         }
 
         MaterialLibrary& MaterialLibrary::getMaterialLibrary() {

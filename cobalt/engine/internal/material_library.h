@@ -113,7 +113,7 @@ namespace cobalt {
             private:
             core::Deque<MaterialEntry> materials;   // The materials in the library.
 
-            static core::Scope<MaterialLibrary> instance;   // The singleton instance of the material library.
+            static Scope<MaterialLibrary> instance;   // The singleton instance of the material library.
         };
     }
 }

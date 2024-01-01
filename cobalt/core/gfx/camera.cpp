@@ -8,8 +8,8 @@
 
 namespace cobalt {
     namespace core {
-        Camera::Camera(const glm::vec3 position, const glm::vec2 direction, const float angularSpeed, const float near, const float far)
-            : position(position), direction(direction), angularSpeed(angularSpeed), near(near), far(far)
+        Camera::Camera(const glm::vec3 position, const glm::vec2 direction, const float near, const float far)
+            : position(position), direction(direction), near(near), far(far)
         {}
 
         const glm::mat4x4 Camera::getViewMatrix() const {
@@ -32,12 +32,16 @@ namespace cobalt {
             return position;
         }
 
-        PerspectiveCamera::PerspectiveCamera(glm::vec3 position, glm::vec2 direction, const float fov, const float angularSpeed, const float near, const float far, const float aspectRatio)
-            : Camera(position, direction, angularSpeed, near, far), fov(fov), aspectRatio(aspectRatio)
+        PerspectiveCamera::PerspectiveCamera(glm::vec3 position, glm::vec2 direction, const float fov, const float near, const float far, const float aspectRatio)
+            : Camera(position, direction, near, far), fov(fov), aspectRatio(aspectRatio)
         {}
 
         void PerspectiveCamera::resize(const float aspectRatio) {
             this->aspectRatio = aspectRatio;
+        }
+
+        void PerspectiveCamera::resize(const float left, const float right, const float bottom, const float top) {
+            resize((right - left) / (top - bottom));
         }
 
         const glm::mat4x4 PerspectiveCamera::getProjectionMatrix() const {
@@ -50,8 +54,8 @@ namespace cobalt {
             };
         }
 
-        OrthographicCamera::OrthographicCamera(const glm::vec3 position, const glm::vec2 direction, const float angularSpeed, const float left, const float right, const float bottom, const float top, const float near, const float far)
-            : Camera(position, direction, angularSpeed, near, far), left(left), right(right), bottom(bottom), top(top)
+        OrthographicCamera::OrthographicCamera(const glm::vec3 position, const glm::vec2 direction, const float left, const float right, const float bottom, const float top, const float near, const float far)
+            : Camera(position, direction, near, far), left(left), right(right), bottom(bottom), top(top)
         {}
 
         void OrthographicCamera::resize(const float left, const float right, const float bottom, const float top) {
@@ -71,11 +75,11 @@ namespace cobalt {
         }
 
         void OrthographicCamera::rotateHorizontal(const float amount) {
-            direction.x += amount * angularSpeed;
+            direction.x += amount;
         }
 
         void OrthographicCamera::rotateVertical(const float amount) {
-            const float newPhi = direction.y + amount * angularSpeed;
+            const float newPhi = direction.y + amount;
             if (0.0f < newPhi && newPhi < 180.0f) {
                 direction.y = newPhi;
             }
@@ -105,12 +109,11 @@ namespace cobalt {
         }
 
         FPSCamera::FPSCamera(
-                    const glm::vec3 position,
-                    const glm::vec2 direction,
-                    const float fov,
-                    const float angularSpeed,
-                    const float near, const float far,
-                    const float aspectRatio) : PerspectiveCamera(position, direction, fov, angularSpeed, near, far, aspectRatio) {
+            const glm::vec3 position,
+            const glm::vec2 direction,
+            const float fov,
+            const float near, const float far,
+            const float aspectRatio) : PerspectiveCamera(position, direction, fov, near, far, aspectRatio) {
             assert(fov > 30.0f && fov < 150.0f);
         }
 
@@ -122,11 +125,11 @@ namespace cobalt {
         }
 
         void FPSCamera::rotateHorizontal(const float amount) {
-            direction.x += amount * angularSpeed;
+            direction.x += amount;
         }
 
         void FPSCamera::rotateVertical(const float amount) {
-            const float newPhi = direction.y + amount * angularSpeed;
+            const float newPhi = direction.y + amount;
             if (0.0f < newPhi && newPhi < 180.0f) {
                 direction.y = newPhi;
             }
@@ -155,15 +158,34 @@ namespace cobalt {
             position += up * amount;
         }
 
+        static const glm::vec2 getSpherical(const glm::vec3& position, const glm::vec3& center) {
+            if (position == center) {
+                return glm::vec2(90.0f, 90.0f);
+            }
+            glm::vec3 diff = glm::normalize(position - center);
+            float theta = glm::degrees(std::atan2(diff.z, diff.x));
+            float phi = glm::degrees(std::asin(diff.y));
+            return glm::vec2(theta, phi);
+        }
+
         PivotCamera::PivotCamera(
-                    const glm::vec3 position,
-                    const glm::vec2 direction,
-                    const float distance,
-                    const float fov,
-                    const float angularSpeed,
-                    const float near, const float far,
-                    const float aspectRatio) : PerspectiveCamera(position, direction, fov, angularSpeed, near, far, aspectRatio),
-                    distance(distance) {
+            const glm::vec3 position,
+            const glm::vec2 direction,
+            const float distance,
+            const float fov,
+            const float near, const float far,
+            const float aspectRatio) : PerspectiveCamera(position, direction, fov, near, far, aspectRatio),
+            distance(distance) {
+            assert(distance > 0.0f);
+        }
+
+        PivotCamera::PivotCamera(
+            const glm::vec3 position,
+            const glm::vec3 center,
+            const float fov,
+            const float near, const float far,
+            const float aspectRatio) : PerspectiveCamera(position, getSpherical(position, center), fov, near, far, aspectRatio),
+            distance(glm::length(position - center)) {
             assert(distance > 0.0f);
         }
 
@@ -182,9 +204,9 @@ namespace cobalt {
         void PivotCamera::rotateHorizontal(const float amount) {
             const float theta = glm::radians(180.0f + direction.x);
             const float phi = glm::radians(180.0f - direction.y);
-            direction.x += amount * angularSpeed;
+            direction.x += amount;
             const glm::vec3 center = position + (glm::vec3(cosf(theta) * sinf(phi), cosf(phi), sinf(theta) * sinf(phi)) * distance);
-            float rot = glm::radians(-amount * angularSpeed);
+            float rot = glm::radians(-amount);
             glm::vec3 pivotToCamera = position - center;
             glm::vec3 k = glm::vec3(0.0f, 1.0f, 0.0f);
             glm::vec3 v_rot = pivotToCamera * cosf(rot) +
@@ -196,9 +218,9 @@ namespace cobalt {
         void PivotCamera::rotateVertical(const float amount) {
             const float theta = glm::radians(180.0f + direction.x);
             const float phi = glm::radians(180.0f - direction.y);
-            direction.y += amount * angularSpeed;
+            direction.y += amount;
             const glm::vec3 center = position + (glm::vec3(cosf(theta) * sinf(phi), cosf(phi), sinf(theta) * sinf(phi)) * distance);
-            float rot = glm::radians(-amount * angularSpeed);
+            float rot = glm::radians(-amount);
             glm::vec3 pivotToCamera = position - center;
             glm::vec3 k = glm::normalize(glm::cross(pivotToCamera, glm::vec3(0.0f, 1.0f, 0.0f)));
             glm::vec3 v_rot = pivotToCamera * cosf(rot) +
