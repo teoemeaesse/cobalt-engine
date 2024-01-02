@@ -8,7 +8,7 @@ project(cobalt-core-tests)
 set(CMAKE_CXX_STANDARD 20)
 set(SOURCEDIR ../cobalt)
 set(INCLUDEDIR ../include)
-set(LIBDIR lib)
+set(LIBDIR ../lib)
 set(TESTDIR .)
 
 if(TEST_ENVIRONMENT)
@@ -42,8 +42,8 @@ target_precompile_headers(cobalt_core PRIVATE ${SOURCEDIR}/core/pch.h)
 target_include_directories(cobalt_core PUBLIC ${SOURCEDIR} ${LIBDIR}/glew/include ${LIBDIR}/glfw/include)
 
 # Add the GLFW subdirectory
-add_subdirectory(${LIBDIR}/glfw)
-add_subdirectory(${LIBDIR}/glew/build/cmake)
+add_subdirectory(${LIBDIR}/glfw glfw_build)
+add_subdirectory(${LIBDIR}/glew/build/cmake glew_build)
 
 # Include the Unity test framework
 add_library(unity STATIC ${INCLUDEDIR}/unity/unity.c)
