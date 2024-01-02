@@ -43,23 +43,8 @@ jobs:
     - name: Clean project
       run: ./clean.sh
 
-    - name: Build GLEW
-      run: |
-        cd tests/lib/glew
-        sudo make
-        sudo make install
-        sudo make clean
-
-    - name: Build GLFW
-      run: |
-        cd tests/lib/glfw
-        cmake .
-        sudo make
+    - name: Build GLEW / GLFW
+      run: ./setup.sh
 
     - name: Build and run Tests
-      run: |
-        cd tests
-        mkdir -p build && cd build
-        cmake -DTEST_ENVIRONMENT=ON ..
-        cmake --build .
-        make test
+      run: ./build_tests.sh

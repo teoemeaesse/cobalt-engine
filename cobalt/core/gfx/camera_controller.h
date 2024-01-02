@@ -31,37 +31,7 @@ namespace cobalt {
              * @return: The camera.
              */
             template<typename T>
-            T getCamera() const {
-                CB_CORE_ERROR("Invalid camera mode");
-            }
-            
-            /** Create an orthographic camera from the properties.
-             * @return: The camera.
-             */
-            template<>
-            OrthographicCamera getCamera<OrthographicCamera>() const {
-                return OrthographicCamera(position, direction, left, right, top, bottom, near, far);
-            }
-
-            /** Create a first person perspective camera from the properties.
-             * @return: The camera.
-             */
-            template<>
-            FPSCamera getCamera<FPSCamera>() const {
-                return FPSCamera(position, direction, fov, near, far, aspectRatio);
-            }
-
-            /** Create a pivot camera from the properties.
-             * @return: The camera.
-             */
-            template<>
-            PivotCamera getCamera<PivotCamera>() const {
-                if (center.has_value()) {
-                    return PivotCamera(position, center.value(), fov, near, far, aspectRatio);
-                } else {
-                    return PivotCamera(position, direction, distance, fov, near, far, aspectRatio);
-                }
-            }
+            T getCamera() const;
 
             /** Set the type of camera movement.
              * Static: The camera stays in the same position. Shorthand for setting cling to 0.
@@ -333,5 +303,35 @@ namespace cobalt {
             UMap<std::string, CameraID> cameraNames;
             UMap<CameraID, CameraController> cameras;
         };
+    }
+}
+
+template<typename T>
+T cobalt::core::CameraProperties::getCamera() const {
+    CB_CORE_ERROR("Invalid camera mode");
+}
+/** Create an orthographic camera from the properties.
+ * @return: The camera.
+ */
+template<>
+cobalt::core::OrthographicCamera cobalt::core::CameraProperties::getCamera<cobalt::core::OrthographicCamera>() const {
+    return OrthographicCamera(position, direction, left, right, top, bottom, near, far);
+}
+/** Create a first person perspective camera from the properties.
+ * @return: The camera.
+ */
+template<>
+cobalt::core::FPSCamera cobalt::core::CameraProperties::getCamera<cobalt::core::FPSCamera>() const {
+    return cobalt::core::FPSCamera(position, direction, fov, near, far, aspectRatio);
+}
+/** Create a pivot camera from the properties.
+ * @return: The camera.
+ */
+template<>
+cobalt::core::PivotCamera cobalt::core::CameraProperties::getCamera<cobalt::core::PivotCamera>() const {
+    if (center.has_value()) {
+        return cobalt::core::PivotCamera(position, center.value(), fov, near, far, aspectRatio);
+    } else {
+        return cobalt::core::PivotCamera(position, direction, distance, fov, near, far, aspectRatio);
     }
 }

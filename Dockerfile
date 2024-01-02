@@ -20,9 +20,8 @@ COPY . /app
 # Clean up
 RUN ./clean.sh
 
-# Build GLEW && GLFW
-RUN cd /app/tests/lib/glew && make && make install && make clean
-RUN cd /app/tests/lib/glfw && cmake . && make
+# Setup
+RUN ./setup.sh
 
 # Default command to run when starting the container
 CMD ["./build_tests.sh"]
