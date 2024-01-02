@@ -8,11 +8,11 @@ To compile and run you need the following:
 - **CMake 3.10**
 
 ## Build
-Use the provided build scripts to build the tests, example and editor.
+Use the provided build scripts to build the tests and editor.
 
 ```
-chmod +x build_example.sh 
-./build_example.sh
+./setup.sh
+./build_editor.sh
 ```
 
 ## Tests
