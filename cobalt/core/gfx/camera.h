@@ -161,7 +161,7 @@ namespace cobalt {
              * @param bottom: The bottom clipping plane.
              * @param top: The top clipping plane.
              */
-            void resize(const float left, const float right, const float bottom, const float top);
+            void resize(const float left, const float right, const float bottom, const float top) override;
 
             /** Zooms the camera by the given amount.
              * @param amount: The amount to zoom by (fov degrees).
@@ -196,6 +196,7 @@ namespace cobalt {
             private:
             float left, right;  // The left and right clipping planes.
             float bottom, top;  // The bottom and top clipping planes.
+            float zoomFactor;   // The zoom factor of the camera.
         };
 
         class FPSCamera : public PerspectiveCamera {

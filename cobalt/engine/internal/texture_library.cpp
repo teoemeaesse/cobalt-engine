@@ -48,12 +48,12 @@ namespace cobalt {
         }
 
         const TextureID TextureLibrary::getTextureID(const std::string& name) {
-            for (core::uint i = 0; i < textures2D.size(); i++) {
+            for (uint i = 0; i < textures2D.size(); i++) {
                 if (textures2D[i].name == name) {
                     return {i, TextureID::Type::TEXTURE_2D};
                 }
             }
-            for (core::uint i = 0; i < textures3D.size(); i++) {
+            for (uint i = 0; i < textures3D.size(); i++) {
                 if (textures3D[i].name == name) {
                     return {i, TextureID::Type::TEXTURE_3D};
                 }
@@ -109,10 +109,10 @@ namespace cobalt {
             return getTexture2D(cache[entry]);
         }
 
-        const core::Texture2D& TextureLibrary::getTexture2D(const core::uchar red,
-                                                            const core::uchar green,
-                                                            const core::uchar blue,
-                                                            const core::uchar alpha,
+        const core::Texture2D& TextureLibrary::getTexture2D(const uchar red,
+                                                            const uchar green,
+                                                            const uchar blue,
+                                                            const uchar alpha,
                                                             const core::GLTextureFilter filter,
                                                             const core::GLTextureWrap wrap) {
             core::Color color = COLOR(red, green, blue, alpha);
@@ -150,10 +150,10 @@ namespace cobalt {
             return getTexture3D(cache[entry]);
         }
 
-        const core::Texture3D& TextureLibrary::getTexture3D(const core::uchar red,
-                                                            const core::uchar green,
-                                                            const core::uchar blue,
-                                                            const core::uchar alpha,
+        const core::Texture3D& TextureLibrary::getTexture3D(const uchar red,
+                                                            const uchar green,
+                                                            const uchar blue,
+                                                            const uchar alpha,
                                                             const core::GLTextureFilter filter,
                                                             const core::GLTextureWrap wrap) {
             core::Color color = COLOR(red, green, blue, alpha);

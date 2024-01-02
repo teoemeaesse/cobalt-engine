@@ -12,7 +12,7 @@ namespace cobalt {
         MaterialLibrary::MaterialLibrary() {}
 
         const MaterialID MaterialLibrary::getMaterialID(const std::string& name) {
-            for (core::uint64 i = 0; i < materials.size(); i++) {
+            for (uint64 i = 0; i < materials.size(); i++) {
                 if (materials[i].name == name) {
                     return i;
                 }
@@ -52,9 +52,9 @@ namespace cobalt {
                 CB_TEXTURE_LIBRARY.getTexture2D(albedo),
                 CB_TEXTURE_LIBRARY.getTexture2D(127, 127, 255),
                 CB_TEXTURE_LIBRARY.getTexture2D(
-                    (core::uchar) (metallic * 255.0f),
-                    (core::uchar) (roughness * 255.0f),
-                    (core::uchar) (ao * 255.0f))));
+                    (uchar) (metallic * 255.0f),
+                    (uchar) (roughness * 255.0f),
+                    (uchar) (ao * 255.0f))));
             return materials.size() - 1;
         }
 

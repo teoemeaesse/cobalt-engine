@@ -12,7 +12,7 @@
 
 namespace cobalt {
     namespace engine {
-        using MaterialID = core::uint;
+        using MaterialID = uint;
 
         class MaterialLibrary {
             public:

@@ -10,7 +10,7 @@
 
 namespace cobalt {
     namespace engine {
-        using ShaderID = core::uint;
+        using ShaderID = uint;
 
         class ShaderLibrary {
             public:

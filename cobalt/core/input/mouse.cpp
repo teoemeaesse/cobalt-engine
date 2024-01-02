@@ -26,7 +26,7 @@ namespace cobalt {
             x(0.0f), y(0.0f),
             dx(0.0f), dy(0.0f),
             dsx(0.0f), dsy(0.0f) {
-            for (size_t i = 0; i < static_cast<size_t>(MouseInputID::COUNT); i++) {
+            for (size_t i = 0; i < static_cast<size_t>(MouseInputID::MIDDLE); i++) {
                 buttonStates[i] = ButtonState();
             }
         }

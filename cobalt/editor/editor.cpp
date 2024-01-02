@@ -47,7 +47,7 @@ namespace cobalt {
             }
             getWindow().clear();
 
-            scene.getMeshes()[0].rotate(glm::vec3(0.3f, 0.05f, 0.2f));
+            scene.getMeshes()[0].rotate(glm::vec3(0.3f * delta, 0.05f * delta, 0.2f * delta));
             static float cubeXOffset = 0.0f;
             static float cubeYOffset = 0.0f;
             static float time = 0.0f;

@@ -11,7 +11,7 @@
 namespace cobalt {
     namespace engine {
         struct TextureID {
-            core::uint index;
+            uint index;
             enum class Type {
                 TEXTURE_2D,
                 TEXTURE_3D
@@ -121,10 +121,10 @@ namespace cobalt {
              * @param wrap: The wrap mode to use for the texture.
              * @return: The texture.
              */
-            const core::Texture2D& getTexture2D(const core::uchar red,
-                                                const core::uchar green,
-                                                const core::uchar blue,
-                                                const core::uchar alpha = 255,
+            const core::Texture2D& getTexture2D(const uchar red,
+                                                const uchar green,
+                                                const uchar blue,
+                                                const uchar alpha = 255,
                                                 const core::GLTextureFilter filter = core::GLTextureFilter::Linear,
                                                 const core::GLTextureWrap wrap = core::GLTextureWrap::Repeat);
 
@@ -160,10 +160,10 @@ namespace cobalt {
              * @param wrap: The wrap mode to use for the texture.
              * @return: The texture.
              */
-            const core::Texture3D& getTexture3D(const core::uchar red,
-                                                const core::uchar green,
-                                                const core::uchar blue,
-                                                const core::uchar alpha = 255,
+            const core::Texture3D& getTexture3D(const uchar red,
+                                                const uchar green,
+                                                const uchar blue,
+                                                const uchar alpha = 255,
                                                 const core::GLTextureFilter filter = core::GLTextureFilter::Linear,
                                                 const core::GLTextureWrap wrap = core::GLTextureWrap::Repeat);
 

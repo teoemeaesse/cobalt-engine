@@ -14,7 +14,6 @@ namespace cobalt {
         DefaultGraph::DefaultGraph(core::Scene& scene, core::DefaultFBO& defaultFBO) : core::RenderGraph(),
             outputCamera(glm::vec3(0.0, 0.0, 10.0),
                          glm::vec2(90.0, 90.0),
-                         0.0f,
                          -(float) defaultFBO.getWidth() / 2, (float) defaultFBO.getWidth() / 2,
                          -(float) defaultFBO.getHeight() / 2, (float) defaultFBO.getHeight() / 2,
                          1.0f, 100.0f),
@@ -35,7 +34,6 @@ namespace cobalt {
         }
 
         void DefaultGraph::onResize(const uint width, const uint height) {
-            outputCamera.rotateHorizontal(10.0f);
             outputCamera.resize(-(float) width / 2, (float) width / 2, -(float) height / 2, (float) height / 2);
             sceneFBO.resize(width, height);
             for (uint i = 0; i < nodes.size(); i++) {

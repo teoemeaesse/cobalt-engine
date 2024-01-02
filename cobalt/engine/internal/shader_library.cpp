@@ -66,7 +66,7 @@ namespace cobalt {
         }
 
         const ShaderID ShaderLibrary::getShaderID(const std::string& name) {
-            for (core::uint64 i = 0; i < shaders.size(); i++) {
+            for (uint64 i = 0; i < shaders.size(); i++) {
                 if (shaders[i].name == name) {
                     return i + 1;
                 }
