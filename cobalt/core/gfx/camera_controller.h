@@ -206,12 +206,11 @@ namespace cobalt {
 
         class CameraController {
             public:
-            /** Create a camera controller from the given properties.
-             * @param properties: The camera properties.
+            /** Create a camera controller for the given camera.
+             * @param camera: The camera to control.
              * @return: The camera controller.
              */
-            template<typename T>
-            CameraController(const CameraProperties& properties) : camera(std::move(createScope(properties.getCamera<T>()))) {}
+            CameraController(Scope<Camera> camera);
             /** Destroy the camera controller.
              */
             ~CameraController() = default;
@@ -284,7 +283,7 @@ namespace cobalt {
                 }
                 const CameraID id = cameras.size();
                 cameraNames[name] = id;
-                cameras[id] = CameraController(properties);
+                cameras[id](std::move(createScope(properties.getCamera<T>())));
                 return id;
             }
             

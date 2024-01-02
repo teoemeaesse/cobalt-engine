@@ -200,6 +200,9 @@ namespace cobalt {
             camera->panVertical(amount);
         }
 
+        CameraController::CameraController(Scope<Camera> camera) :
+            camera(std::move(camera)) {}
+
         CameraController& CameraManager::getCamera(const CameraID id) {
             try {
                 return cameras.at(id);
