@@ -16,6 +16,26 @@ namespace cobalt {
             /** Destroys the camera.
              */
             virtual ~Camera() = default;
+            /** Copy constructor.
+             * @param other: The camera to copy.
+             * @return: The newly created camera.
+             */
+            Camera(const Camera&) = default;
+            /** Move constructor.
+             * @param other: The camera to move.
+             * @return: The newly created camera.
+             */
+            Camera(Camera&&) = default;
+            /** Copy assignment operator.
+             * @param other: The camera to copy.
+             * @return: The newly created camera.
+             */
+            Camera& operator=(const Camera&) = default;
+            /** Move assignment operator.
+             * @param other: The camera to move.
+             * @return: The newly created camera.
+             */
+            Camera& operator=(Camera&&) = default;
 
             /** Calculates the view matrix of the camera.
              * @return: The view matrix of the camera.
