@@ -206,14 +206,21 @@ namespace cobalt {
 
         class CameraController {
             public:
-            /** Create a camera controller for the given camera.
-             * @param camera: The camera to control.
-             * @return: The camera controller.
-             */
-            CameraController(Scope<Camera> camera);
             /** Destroy the camera controller.
              */
             ~CameraController() = default;
+
+            /** Create a camera controller from the given properties.
+             * @param properties: Properties of the camera.
+             * @return: The camera controller.
+             */
+            template<typename T>
+            static CameraController create(const CameraProperties& properties);
+
+            /** Get the camera.
+             * @return: The camera.
+             */
+            Camera& getCamera() const;
 
             /** Resizes the camera.
              * @param left: The left plane of the viewport.
@@ -259,6 +266,12 @@ namespace cobalt {
             private:
             Scope<Camera> camera;
             glm::vec3 targetPosition;
+
+            /** Create a camera controller for the given camera.
+             * @param camera: The camera to control.
+             * @return: The camera controller.
+             */
+            CameraController(Scope<Camera> camera);
         };
 
         class CameraManager {
@@ -306,31 +319,61 @@ namespace cobalt {
 }
 
 template<typename T>
-T cobalt::core::CameraProperties::getCamera() const {
-    CB_CORE_ERROR("Invalid camera mode");
+T inline cobalt::core::CameraProperties::getCamera() const {
+    static_assert(std::is_base_of<Camera, T>::value, "T must be a camera type");
+    throw GFXException("Invalid camera mode");
 }
 /** Create an orthographic camera from the properties.
  * @return: The camera.
  */
 template<>
-cobalt::core::OrthographicCamera cobalt::core::CameraProperties::getCamera<cobalt::core::OrthographicCamera>() const {
+cobalt::core::OrthographicCamera inline cobalt::core::CameraProperties::getCamera<cobalt::core::OrthographicCamera>() const {
     return OrthographicCamera(position, direction, left, right, top, bottom, near, far);
 }
 /** Create a first person perspective camera from the properties.
  * @return: The camera.
  */
 template<>
-cobalt::core::FPSCamera cobalt::core::CameraProperties::getCamera<cobalt::core::FPSCamera>() const {
+cobalt::core::FPSCamera inline cobalt::core::CameraProperties::getCamera<cobalt::core::FPSCamera>() const {
     return cobalt::core::FPSCamera(position, direction, fov, near, far, aspectRatio);
 }
 /** Create a pivot camera from the properties.
  * @return: The camera.
  */
 template<>
-cobalt::core::PivotCamera cobalt::core::CameraProperties::getCamera<cobalt::core::PivotCamera>() const {
+cobalt::core::PivotCamera inline cobalt::core::CameraProperties::getCamera<cobalt::core::PivotCamera>() const {
     if (center.has_value()) {
         return cobalt::core::PivotCamera(position, center.value(), fov, near, far, aspectRatio);
     } else {
         return cobalt::core::PivotCamera(position, direction, distance, fov, near, far, aspectRatio);
     }
+}
+template<typename T>
+cobalt::core::CameraController inline cobalt::core::CameraController::create(const cobalt::core::CameraProperties& properties) {
+    static_assert(std::is_base_of<Camera, T>::value, "T must be a camera type");
+    throw GFXException("Invalid camera mode");
+}
+/** Create an orthographic camera controller from the given properties.
+ * @param properties: Properties of the camera.
+ * @return: The camera controller.
+ */
+template<>
+cobalt::core::CameraController inline cobalt::core::CameraController::create<cobalt::core::OrthographicCamera>(const cobalt::core::CameraProperties& properties) {
+    return CameraController(std::move(cobalt::createScope<OrthographicCamera>(properties.getCamera<OrthographicCamera>())));
+}
+/** Create a first person perspective camera controller from the given properties.
+ * @param properties: Properties of the camera.
+ * @return: The camera controller.
+ */
+template<>
+cobalt::core::CameraController inline cobalt::core::CameraController::create<cobalt::core::FPSCamera>(const cobalt::core::CameraProperties& properties) {
+    return CameraController(std::move(cobalt::createScope<FPSCamera>(properties.getCamera<FPSCamera>())));
+}
+/** Create a pivot camera controller from the given properties.
+ * @param properties: Properties of the camera.
+ * @return: The camera controller.
+ */
+template<>
+cobalt::core::CameraController inline cobalt::core::CameraController::create<cobalt::core::PivotCamera>(const cobalt::core::CameraProperties& properties) {
+    return CameraController(std::move(cobalt::createScope<PivotCamera>(properties.getCamera<PivotCamera>())));
 }

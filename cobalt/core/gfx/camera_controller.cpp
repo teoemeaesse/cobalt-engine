@@ -168,12 +168,16 @@ namespace cobalt {
             return bottom;
         }
 
+        Camera& CameraController::getCamera() const {
+            return *camera;
+        }
+
         void CameraController::resize(const float left, const float right, const float bottom, const float top) {
             camera->resize(left, right, bottom, top);
         }
 
         void CameraController::resize(const float aspectRatio) {
-            camera->resize(0.0f, 0.0f, aspectRatio, 1.0f);
+            camera->resize(0.0f, aspectRatio, 0.0f, 1.0f);
         }
         
         void CameraController::zoom(const float amount) {

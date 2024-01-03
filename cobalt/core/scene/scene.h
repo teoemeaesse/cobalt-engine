@@ -5,7 +5,7 @@
 #pragma once
 
 #include "core/gfx/mesh.h"
-#include "core/gfx/camera.h"
+#include "core/gfx/camera_controller.h"
 #include "core/gfx/skybox.h"
 #include "core/pch.h"
 
@@ -44,10 +44,10 @@ namespace cobalt {
              * @return: The skybox of the scene.
              */
             Opt<Skybox>& getSkybox();
-            /** Gets the camera used to render the scene.
-             * @return: The camera used to render the scene.
+            /** Gets the camera controller used to render the scene.
+             * @return: The camera controller used to render the scene.
              */
-            PerspectiveCamera& getCamera();
+            CameraController& getCameraController();
 
             private:
             Vec<Mesh> meshes;   // All the meshes in the scene.
@@ -55,7 +55,7 @@ namespace cobalt {
                                 // TODO: Add a proper scene graph.
             Opt<Skybox> skybox; // The skybox of the scene.
 
-            PivotCamera camera; // The camera used to render the scene.
+            CameraController camera; // The camera used to render the scene.
         };
     }
 }

@@ -8,12 +8,15 @@
 namespace cobalt {
     namespace core {
         Scene::Scene() :
-            camera(glm::vec3(-45.0, 15.0, 5.0),
-                   glm::vec2(180.0, 70.0),
-                   50.0f,
-                   90.0f,
-                   5.0f, 1000.0f,
-                   16.0f / 9.0f)
+            camera(CameraController::create<PivotCamera>(
+                core::CameraProperties().
+                    setPosition(glm::vec3(-45.0, 15.0, 5.0)).
+                    setDirection(glm::vec2(180.0, 70.0)).
+                    setDistance(50.0f).
+                    setFOV(90.0f).
+                    setClippingPlanes(5.0f, 1000.0f).
+                    setAspectRatio(16.0f / 9.0f)
+            ))
         {}
 
         const uint Scene::addMesh(Mesh&& mesh) {
@@ -38,7 +41,7 @@ namespace cobalt {
             return skybox;
         }
 
-        PerspectiveCamera& Scene::getCamera() {
+        CameraController& Scene::getCameraController() {
             return camera;
         }
     }

@@ -145,9 +145,9 @@ namespace cobalt {
             }
         };
 
-        class Zoom : public core::ConcreteInputCommand<core::PerspectiveCamera> {
+        class Zoom : public core::ConcreteInputCommand<core::Camera> {
             public:
-            Zoom(core::PerspectiveCamera* target) : core::ConcreteInputCommand<core::PerspectiveCamera>(target) {
+            Zoom(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
             }
             void execute() const override {
                 getTarget()->zoom(-getInput().value * 5.0f);

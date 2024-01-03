@@ -32,11 +32,11 @@ namespace cobalt {
             void onResize(const uint width, const uint height) override;
 
             private:
-            core::OrthographicCamera outputCamera;  // The camera used to render the final image.
-            core::Renderer renderer;                // The renderer used to render the scene.
-            core::DefaultFBO& defaultFBO;           // The default FBO to render the final image to.
-            core::TargetFBO sceneFBO;               // The FBO to render the scene to.
-            core::Scene& scene;                     // The scene to render.
+            core::CameraController output;  // The camera used to render the final image.
+            core::Renderer renderer;        // The renderer used to render the scene.
+            core::DefaultFBO& defaultFBO;   // The default FBO to render the final image to.
+            core::TargetFBO sceneFBO;       // The FBO to render the scene to.
+            core::Scene& scene;             // The scene to render.
         };
     }
 }
