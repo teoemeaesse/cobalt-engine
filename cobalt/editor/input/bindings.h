@@ -73,81 +73,81 @@ namespace cobalt {
             }
         };
 
-        class PanLeft : public core::ConcreteInputCommand<core::Camera> {
+        class PanLeft : public core::ConcreteInputCommand<core::CameraController> {
             public:
-            PanLeft(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
+            PanLeft(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {
             }
             void execute() const override {
                 getTarget()->panHorizontal(-1.0f);
             }
         };
 
-        class PanRight : public core::ConcreteInputCommand<core::Camera> {
+        class PanRight : public core::ConcreteInputCommand<core::CameraController> {
             public:
-            PanRight(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
+            PanRight(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {
             }
             void execute() const override {
                 getTarget()->panHorizontal(1.0f);
             }
         };
 
-        class PanUp : public core::ConcreteInputCommand<core::Camera> {
+        class PanUp : public core::ConcreteInputCommand<core::CameraController> {
             public:
-            PanUp(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
+            PanUp(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {
             }
             void execute() const override {
                 getTarget()->panVertical(1.0f);
             }
         };
 
-        class PanDown : public core::ConcreteInputCommand<core::Camera> {
+        class PanDown : public core::ConcreteInputCommand<core::CameraController> {
             public:
-            PanDown(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
+            PanDown(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {
             }
             void execute() const override {
                 getTarget()->panVertical(-1.0f);
             }
         };
 
-        class PanIn : public core::ConcreteInputCommand<core::Camera> {
+        class PanIn : public core::ConcreteInputCommand<core::CameraController> {
             public:
-            PanIn(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
+            PanIn(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {
             }
             void execute() const override {
                 getTarget()->panDepth(-1.0f);
             }
         };
 
-        class PanOut : public core::ConcreteInputCommand<core::Camera> {
+        class PanOut : public core::ConcreteInputCommand<core::CameraController> {
             public:
-            PanOut(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
+            PanOut(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {
             }
             void execute() const override {
                 getTarget()->panDepth(1.0f);
             }
         };
 
-        class RotateY : public core::ConcreteInputCommand<core::Camera> {
+        class RotateY : public core::ConcreteInputCommand<core::CameraController> {
             public:
-            RotateY(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
+            RotateY(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {
             }
             void execute() const override {
                 getTarget()->rotateVertical(-getInput().value * 0.005f);
             }
         };
 
-        class RotateX : public core::ConcreteInputCommand<core::Camera> {
+        class RotateX : public core::ConcreteInputCommand<core::CameraController> {
             public:
-            RotateX(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
+            RotateX(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {
             }
             void execute() const override {
                 getTarget()->rotateHorizontal(getInput().value * 0.005f);
             }
         };
 
-        class Zoom : public core::ConcreteInputCommand<core::Camera> {
+        class Zoom : public core::ConcreteInputCommand<core::CameraController> {
             public:
-            Zoom(core::Camera* target) : core::ConcreteInputCommand<core::Camera>(target) {
+            Zoom(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {
             }
             void execute() const override {
                 getTarget()->zoom(-getInput().value * 5.0f);

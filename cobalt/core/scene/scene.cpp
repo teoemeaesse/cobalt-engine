@@ -15,7 +15,10 @@ namespace cobalt {
                     setDistance(50.0f).
                     setFOV(90.0f).
                     setClippingPlanes(5.0f, 1000.0f).
-                    setAspectRatio(16.0f / 9.0f)
+                    setAspectRatio(16.0f / 9.0f).
+                    setLinearCling(0.3f).
+                    setAngularCling(0.8f).
+                    setZoomCling(0.4f)
             ))
         {}
 

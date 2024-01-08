@@ -59,22 +59,34 @@ namespace cobalt {
              * @return: Reference to this object.
              */
             CameraProperties& setDirection(const glm::vec2& direction);
-            /** Set how much the camera sticks to the target position.
+            /** Set how fast the camera reacts to a change in position.
              * 0 is static, 1 is fully attached.
-             * @param cling: Cling value.
+             * @param linearCling: Cling value.
              * @return: Reference to this object.
              */
-            CameraProperties& setCling(const float cling);
+            CameraProperties& setLinearCling(const float linearCling);
             /** Set how fast the camera moves.
              * @param linearVelocity: Linear velocity.
              * @return: Reference to this object.
              */
             CameraProperties& setLinearVelocity(const float linearVelocity);
+            /** Set how fast the camera reacts to a change in direction.
+             * 0 is static, 1 is fully attached.
+             * @param angularCling: Cling value.
+             * @return: Reference to this object.
+             */
+            CameraProperties& setAngularCling(const float angularCling);
             /** Set how fast the camera rotates.
              * @param angularVelocity: Angular velocity.
              * @return: Reference to this object.
              */
             CameraProperties& setAngularVelocity(const float angularVelocity);
+            /** Set how fast the camera reacts to a change in zoom.
+             * 0 is static, 1 is fully attached.
+             * @param zoomCling: Cling value.
+             * @return: Reference to this object.
+             */
+            CameraProperties& setZoomCling(const float zoomCling);
             /** Set how fast the camera zooms.
              * @param zoomVelocity: Zoom velocity.
              * @return: Reference to this object.
@@ -129,18 +141,26 @@ namespace cobalt {
              * @return: Direction of the camera (degrees).
              */
             const glm::vec2& getDirection() const;
-            /** Get how much the camera sticks to the target position.
+            /** Get how fast the camera reacts to a change in position.
              * @return: Cling value.
              */
-            const float getCling() const;
+            const float getLinearCling() const;
             /** Get how fast the camera moves.
              * @return: Linear velocity.
              */
             const float getLinearVelocity() const;
+            /** Get how fast the camera reacts to a change in direction.
+             * @return: Cling value.
+             */
+            const float getAngularCling() const;
             /** Get how fast the camera rotates.
              * @return: Angular velocity.
              */
             const float getAngularVelocity() const;
+            /** Get how fast the camera reacts to a change in zoom.
+             * @return: Cling value.
+             */
+            const float getZoomCling() const;
             /** Get how fast the camera zooms.
              * @return: Zoom velocity.
              */
@@ -192,9 +212,11 @@ namespace cobalt {
             glm::vec3 position;     // Position of the camera.
             Opt<glm::vec3> center;  // Center position of the camera (for pivot mode).
             glm::vec2 direction;    // Direction of the camera.
-            float cling;            // How much the camera sticks to the target position.
+            float linearCling;      // How fast the camera reacts to a change in position.
             float linearVelocity;   // How fast the camera moves.
+            float angularCling;     // How much the camera reacts to a change in direction.
             float angularVelocity;  // How fast the camera rotates.
+            float zoomCling;        // How much the camera reacts to a change in zoom.
             float zoomVelocity;     // How fast the camera zooms.
             float fov;              // Field of view.
             float aspectRatio;      // Aspect ratio.
@@ -221,6 +243,10 @@ namespace cobalt {
              * @return: The camera.
              */
             Camera& getCamera() const;
+
+            /** Update the camera.
+             */
+            void update();
 
             /** Resizes the camera.
              * @param left: The left plane of the viewport.
@@ -265,13 +291,23 @@ namespace cobalt {
 
             private:
             Scope<Camera> camera;
-            glm::vec3 targetPosition;
+
+            glm::vec3 deltaLinear;
+            glm::vec2 deltaAngular;
+            float deltaZoom;
+
+            const float linearCling;
+            const float angularCling;
+            const float zoomCling;
 
             /** Create a camera controller for the given camera.
              * @param camera: The camera to control.
+             * @param linearCling: How fast the camera reacts to a change in position.
+             * @param angularCling: How much the camera reacts to a change in direction.
+             * @param zoomCling: How much the camera reacts to a change in zoom.
              * @return: The camera controller.
              */
-            CameraController(Scope<Camera> camera);
+            CameraController(Scope<Camera> camera, float linearCling, float angularCling, float zoomCling);
         };
 
         class CameraManager {
@@ -359,7 +395,7 @@ cobalt::core::CameraController inline cobalt::core::CameraController::create(con
  */
 template<>
 cobalt::core::CameraController inline cobalt::core::CameraController::create<cobalt::core::OrthographicCamera>(const cobalt::core::CameraProperties& properties) {
-    return CameraController(std::move(cobalt::createScope<OrthographicCamera>(properties.getCamera<OrthographicCamera>())));
+    return CameraController(std::move(cobalt::createScope<OrthographicCamera>(properties.getCamera<OrthographicCamera>())), properties.getLinearCling(), properties.getAngularCling(), properties.getZoomCling());
 }
 /** Create a first person perspective camera controller from the given properties.
  * @param properties: Properties of the camera.
@@ -367,7 +403,7 @@ cobalt::core::CameraController inline cobalt::core::CameraController::create<cob
  */
 template<>
 cobalt::core::CameraController inline cobalt::core::CameraController::create<cobalt::core::FPSCamera>(const cobalt::core::CameraProperties& properties) {
-    return CameraController(std::move(cobalt::createScope<FPSCamera>(properties.getCamera<FPSCamera>())));
+    return CameraController(std::move(cobalt::createScope<FPSCamera>(properties.getCamera<FPSCamera>())), properties.getLinearCling(), properties.getAngularCling(), properties.getZoomCling());
 }
 /** Create a pivot camera controller from the given properties.
  * @param properties: Properties of the camera.
@@ -375,5 +411,5 @@ cobalt::core::CameraController inline cobalt::core::CameraController::create<cob
  */
 template<>
 cobalt::core::CameraController inline cobalt::core::CameraController::create<cobalt::core::PivotCamera>(const cobalt::core::CameraProperties& properties) {
-    return CameraController(std::move(cobalt::createScope<PivotCamera>(properties.getCamera<PivotCamera>())));
+    return CameraController(std::move(cobalt::createScope<PivotCamera>(properties.getCamera<PivotCamera>())), properties.getLinearCling(), properties.getAngularCling(), properties.getZoomCling());
 }

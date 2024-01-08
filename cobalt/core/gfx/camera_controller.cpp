@@ -11,9 +11,11 @@ namespace cobalt {
             type(Type::Free),
             position(glm::vec3(0.0f)),
             direction(glm::vec2(90.0f, 90.0f)),
-            cling(1.0f),
+            linearCling(1.0f),
             linearVelocity(25.0f),
+            angularCling(1.0f),
             angularVelocity(5.0f),
+            zoomCling(1.0f),
             zoomVelocity(1.0f),
             fov(90.0f),
             aspectRatio(16.0f / 9.0f),
@@ -46,8 +48,8 @@ namespace cobalt {
             return *this;
         }
 
-        CameraProperties& CameraProperties::setCling(const float cling) {
-            this->cling = cling;
+        CameraProperties& CameraProperties::setLinearCling(const float linearCling) {
+            this->linearCling = linearCling;
             return *this;
         }
 
@@ -56,8 +58,18 @@ namespace cobalt {
             return *this;
         }
 
+        CameraProperties& CameraProperties::setAngularCling(const float angularCling) {
+            this->angularCling = angularCling;
+            return *this;
+        }
+
         CameraProperties& CameraProperties::setAngularVelocity(const float angularVelocity) {
             this->angularVelocity = angularVelocity;
+            return *this;
+        }
+
+        CameraProperties& CameraProperties::setZoomCling(const float zoomCling) {
+            this->zoomCling = zoomCling;
             return *this;
         }
 
@@ -116,16 +128,24 @@ namespace cobalt {
             return direction;
         }
 
-        const float CameraProperties::getCling() const {
-            return cling;
+        const float CameraProperties::getLinearCling() const {
+            return linearCling;
         }
 
         const float CameraProperties::getLinearVelocity() const {
             return linearVelocity;
         }
 
+        const float CameraProperties::getAngularCling() const {
+            return angularCling;
+        }
+
         const float CameraProperties::getAngularVelocity() const {
             return angularVelocity;
+        }
+
+        const float CameraProperties::getZoomCling() const {
+            return zoomCling;
         }
 
         const float CameraProperties::getZoomVelocity() const {
@@ -172,6 +192,18 @@ namespace cobalt {
             return *camera;
         }
 
+        void CameraController::update() {
+            camera->zoom(deltaZoom * zoomCling);
+            camera->rotateHorizontal(deltaAngular.x * angularCling);
+            camera->rotateVertical(deltaAngular.y * angularCling);
+            camera->panDepth(deltaLinear.z * linearCling);
+            camera->panHorizontal(deltaLinear.x * linearCling);
+            camera->panVertical(deltaLinear.y * linearCling);
+            deltaZoom *= 1.0f - zoomCling;
+            deltaAngular *= 1.0f - angularCling;
+            deltaLinear *= 1.0f - linearCling;
+        }
+
         void CameraController::resize(const float left, const float right, const float bottom, const float top) {
             camera->resize(left, right, bottom, top);
         }
@@ -181,31 +213,37 @@ namespace cobalt {
         }
         
         void CameraController::zoom(const float amount) {
-            camera->zoom(amount);
+            deltaZoom += amount;
         }
         
         void CameraController::rotateHorizontal(const float amount) {
-            camera->rotateHorizontal(amount);
+            deltaAngular.x += amount;
         }
 
         void CameraController::rotateVertical(const float amount) {
-            camera->rotateVertical(amount);
+            deltaAngular.y += amount;
         }
         
         void CameraController::panDepth(const float amount) {
-            camera->panDepth(amount);
+            deltaLinear.z += amount;
         }
         
         void CameraController::panHorizontal(const float amount) {
-            camera->panHorizontal(amount);
+            deltaLinear.x += amount;
         }
         
         void CameraController::panVertical(const float amount) {
-            camera->panVertical(amount);
+            deltaLinear.y += amount;
         }
 
-        CameraController::CameraController(Scope<Camera> camera) :
-            camera(std::move(camera)) {}
+        CameraController::CameraController(Scope<Camera> camera, const float linearCling, const float angularCling, const float zoomCling) :
+            camera(std::move(camera)),
+            deltaLinear(glm::vec3(0.0f)),
+            deltaAngular(glm::vec2(0.0f)),
+            deltaZoom(0.0f),
+            linearCling(linearCling * linearCling),
+            angularCling(angularCling * angularCling),
+            zoomCling(zoomCling * zoomCling) {}
 
         CameraController& CameraManager::getCamera(const CameraID id) {
             try {
