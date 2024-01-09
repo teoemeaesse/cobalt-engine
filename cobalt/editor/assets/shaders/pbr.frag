@@ -8,13 +8,34 @@ uniform sampler2D u_mrao;
 
 uniform vec3 lightPosition;
 uniform vec3 lightColor;
-uniform vec3 camPos;
 
 in vec3 v_world_position;
 in vec2 v_tex_coords;
 in vec3 v_normal;
 
 const float PI = 3.14159265359;
+
+struct CameraStruct {
+    mat4 u_view;
+    mat4 u_projection;
+    vec3 u_cameraPosition;
+    int u_targetWidth;
+    int u_targetHeight;
+    vec2 padding;
+};
+layout (std140) uniform Camera {  
+    CameraStruct u_camera;
+};
+
+struct LightStruct {
+    vec3 u_light_position;
+    float u_light_intensity;
+    vec3 u_light_color;
+    float padding;
+};
+layout (std140) uniform Light {  
+    LightStruct u_light;
+};
 
 /** Get normal from normal map.
  * https://learnopengl.com/#!PBR/Lighting
@@ -95,7 +116,7 @@ void main() {
     float ao        = mrao.b;
 
     vec3 n = getNormalFromMap();
-    vec3 v = normalize(camPos - v_world_position);
+    vec3 v = normalize(u_camera.u_cameraPosition - v_world_position);
 
     vec3 f0 = vec3(0.04);
     f0 = mix(f0, albedo, metallic);

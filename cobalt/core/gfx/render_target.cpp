@@ -11,9 +11,10 @@ namespace cobalt {
         struct CameraUBO {
             glm::mat4 view;
             glm::mat4 projection;
+            glm::vec3 position;
             int targetWidth;
             int targetHeight;
-            glm::vec2 padding;
+            glm::vec3 padding;
         };
 
         RenderTarget::RenderTarget(const FBO& fbo,
@@ -52,12 +53,12 @@ namespace cobalt {
             CameraUBO cameraUBO = {
                 camera.getViewMatrix(),
                 camera.getProjectionMatrix(),
+                camera.getPosition(),
                 (int) fbo.getWidth(),
                 (int) fbo.getHeight(),
-                glm::vec2(0.0)
+                glm::vec3(0.0)
             };
             ubo.load(&cameraUBO, sizeof(CameraUBO), 0);
-            fbo.bind();
         }
 
         const Texture& RenderTarget::getColorBuffer() const {

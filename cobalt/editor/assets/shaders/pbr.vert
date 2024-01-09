@@ -14,6 +14,7 @@ out vec3 v_normal;
 struct CameraStruct {
     mat4 u_view;
     mat4 u_projection;
+    vec3 u_cameraPosition;
     int u_targetWidth;
     int u_targetHeight;
     vec2 padding;
