@@ -1,10 +1,14 @@
 //
-// Created by tomas on 08-12-2023.
+// Created
+// by
+// tomas
+// on
+// 08-12-2023.
 //
 
 #include "core/gfx/render_graph.h"
-#include "core/gfx/render_context.h"
 
+#include "core/gfx/render_context.h"
 
 namespace cobalt {
     namespace core {
@@ -23,5 +27,6 @@ namespace cobalt {
                 nodes[i]->render();
             }
         }
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

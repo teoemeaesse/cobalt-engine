@@ -1,10 +1,14 @@
 //
-// Created by tomas on 10-12-2023.
+// Created
+// by
+// tomas
+// on
+// 10-12-2023.
 //
 
 #include "engine/gfx/scene_node.h"
-#include "core/gfx/render_context.h"
 
+#include "core/gfx/render_context.h"
 
 namespace cobalt {
     namespace engine {
@@ -21,5 +25,6 @@ namespace cobalt {
         void SceneNode::onResize(const float width, const float height) {
             // Empty
         }
-    }
-}
+    }  // namespace engine
+}  // namespace
+   // cobalt

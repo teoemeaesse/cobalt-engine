@@ -1,17 +1,19 @@
 //
-// Created by tomas on 08-12-2023.
+// Created
+// by
+// tomas
+// on
+// 08-12-2023.
 //
 
 #include "core/gfx/renderer.h"
+
 #include "core/gfx/render_context.h"
 #include "core/pch.h"
 
-
 namespace cobalt {
     namespace core {
-        Renderer::Renderer() :
-            textureUnits(1),
-            currentUnit(0) {}
+        Renderer::Renderer() : textureUnits(1), currentUnit(0) {}
 
         void Renderer::renderMesh(Mesh& mesh, RenderTarget& target) const {
             mesh.bind();
@@ -34,7 +36,7 @@ namespace cobalt {
             // TODO: inject uniforms into shader. use UBOs.
             mesh.render();
         }
-        
+
         void Renderer::renderSkybox(Skybox& skybox, RenderTarget& target) const {
             skybox.bind();
             target.bind();
@@ -80,5 +82,6 @@ namespace cobalt {
                 shader.setUniformInt("u_" + it->first, it->second);
             }
         }
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

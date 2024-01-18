@@ -1,16 +1,18 @@
 //
-// Created by tomas on 30-11-2023.
+// Created
+// by
+// tomas
+// on
+// 30-11-2023.
 //
 
-#include "core/gl/render_shader.h"
 #include "core/gl/compute_shader.h"
+#include "core/gl/render_shader.h"
 #include "core/pch.h"
-
 
 namespace cobalt {
     namespace core {
-        Shader::Shader(GLHandle handle) : program(handle) {
-        }
+        Shader::Shader(GL::Handle handle) : program(handle) {}
 
         Shader::~Shader() {
             if (program != 0) {
@@ -18,12 +20,7 @@ namespace cobalt {
             }
         }
 
-        Shader::Shader(Shader&& other) noexcept :
-            program(other.program),
-            uniformLocations(other.uniformLocations)
-        {
-            other.program = 0;
-        }
+        Shader::Shader(Shader&& other) noexcept : program(other.program), uniformLocations(other.uniformLocations) { other.program = 0; }
 
         Shader& Shader::operator=(Shader&& other) noexcept {
             program = other.program;
@@ -32,9 +29,7 @@ namespace cobalt {
             return *this;
         }
 
-        void Shader::use() const {
-            glUseProgram(program);
-        }
+        void Shader::use() const { glUseProgram(program); }
 
         const GLuint Shader::getUBIndex(const std::string& name) const {
             GLuint index = glGetUniformBlockIndex(program, name.c_str());
@@ -44,10 +39,8 @@ namespace cobalt {
             return index;
         }
 
-        const GLHandle Shader::getGLHandle() const {
-            return program;
-        }
-        
+        const GL::Handle Shader::getGLHandle() const { return program; }
+
         const GLuint Shader::getUniformLocation(const std::string& name) {
             GLint linkStatus;
             try {
@@ -70,17 +63,11 @@ namespace cobalt {
             glUniform1fv(getUniformLocation(name), count, value);
         }
 
-        void Shader::setUniformInt(const std::string& name, const GLint value) {
-            glUniform1i(getUniformLocation(name), value);
-        }
+        void Shader::setUniformInt(const std::string& name, const GLint value) { glUniform1i(getUniformLocation(name), value); }
 
-        void Shader::setUniformFloat(const std::string& name, const GLfloat value) {
-            glUniform1f(getUniformLocation(name), value);
-        }
+        void Shader::setUniformFloat(const std::string& name, const GLfloat value) { glUniform1f(getUniformLocation(name), value); }
 
-        void Shader::setUniformVec2(const std::string& name, const glm::vec2& value) {
-            glUniform2f(getUniformLocation(name), value.x, value.y);
-        }
+        void Shader::setUniformVec2(const std::string& name, const glm::vec2& value) { glUniform2f(getUniformLocation(name), value.x, value.y); }
 
         void Shader::setUniformVec3(const std::string& name, const glm::vec3& value) {
             glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
@@ -91,42 +78,42 @@ namespace cobalt {
         }
 
         void Shader::setUniformVec2v(const std::string& name, const GLsizei count, const glm::vec2* value) {
-            glUniform2fv(getUniformLocation(name), count, (GLfloat*) value);
+            glUniform2fv(getUniformLocation(name), count, (GLfloat*)value);
         }
 
         void Shader::setUniformVec3v(const std::string& name, const GLsizei count, const glm::vec3* value) {
-            glUniform3fv(getUniformLocation(name), count, (GLfloat*) value);
+            glUniform3fv(getUniformLocation(name), count, (GLfloat*)value);
         }
 
         void Shader::setUniformVec4v(const std::string& name, const GLsizei count, const glm::vec4* value) {
-            glUniform4fv(getUniformLocation(name), count, (GLfloat*) value);
+            glUniform4fv(getUniformLocation(name), count, (GLfloat*)value);
         }
 
         void Shader::setUniformMat2(const std::string& name, const glm::mat2& value) {
-            glUniformMatrix2fv(getUniformLocation(name), 1, GL_FALSE, (GLfloat*) &value);
+            glUniformMatrix2fv(getUniformLocation(name), 1, GL_FALSE, (GLfloat*)&value);
         }
 
         void Shader::setUniformMat3(const std::string& name, const glm::mat3& value) {
-            glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, (GLfloat*) &value);
+            glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, (GLfloat*)&value);
         }
 
         void Shader::setUniformMat4(const std::string& name, const glm::mat4& value) {
-            glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, (GLfloat*) &value);
+            glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, (GLfloat*)&value);
         }
 
         void Shader::setUniformMat2v(const std::string& name, const GLsizei count, const glm::mat2* value) {
-            glUniformMatrix2fv(getUniformLocation(name), count, GL_FALSE, (GLfloat*) value);
+            glUniformMatrix2fv(getUniformLocation(name), count, GL_FALSE, (GLfloat*)value);
         }
 
         void Shader::setUniformMat3v(const std::string& name, const GLsizei count, const glm::mat3* value) {
-            glUniformMatrix3fv(getUniformLocation(name), count, GL_FALSE, (GLfloat*) value);
+            glUniformMatrix3fv(getUniformLocation(name), count, GL_FALSE, (GLfloat*)value);
         }
 
         void Shader::setUniformMat4v(const std::string& name, const GLsizei count, const glm::mat4* value) {
-            glUniformMatrix4fv(getUniformLocation(name), count, GL_FALSE, (GLfloat*) value);
+            glUniformMatrix4fv(getUniformLocation(name), count, GL_FALSE, (GLfloat*)value);
         }
 
-        void Shader::compileShader(const GLHandle shader, const std::string& source) {
+        void Shader::compileShader(const GL::Handle shader, const std::string& source) {
             const char* sourcePtr = source.c_str();
             glShaderSource(shader, 1, &sourcePtr, nullptr);
             glCompileShader(shader);
@@ -142,7 +129,7 @@ namespace cobalt {
             }
         }
 
-        void Shader::linkShader(const GLHandle shader) {
+        void Shader::linkShader(const GL::Handle shader) {
             glLinkProgram(shader);
             GLint success;
             glGetProgramiv(shader, GL_LINK_STATUS, &success);
@@ -168,7 +155,9 @@ namespace cobalt {
                 vertexSource = sources.at(ShaderStep::Vertex);
                 fragmentSource = sources.at(ShaderStep::Fragment);
             } catch (std::out_of_range& e) {
-                throw GLException("A render shader must have at least a vertex and a fragment shader source");
+                throw GLException(
+                    "A render shader must have at least a vertex and a "
+                    "fragment shader source");
             }
             try {
                 std::string geometrySource = sources.at(ShaderStep::Geometry);
@@ -182,10 +171,10 @@ namespace cobalt {
             try {
                 std::string computeSource = sources.at(ShaderStep::Compute);
                 return ComputeShader(computeSource);
-            }
-            catch (std::out_of_range& e) {
+            } catch (std::out_of_range& e) {
                 throw GLException("A compute shader must have a compute shader source");
             }
         }
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

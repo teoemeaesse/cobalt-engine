@@ -1,32 +1,34 @@
 //
-// Created by tomas on 28-12-2023.
+// Created
+// by
+// tomas
+// on
+// 28-12-2023.
 //
 
 #include "core/gfx/camera_controller.h"
 
-
 namespace cobalt {
     namespace core {
-        CameraProperties::CameraProperties() :
-            type(Type::Free),
-            position(glm::vec3(0.0f)),
-            direction(glm::vec2(90.0f, 90.0f)),
-            linearCling(1.0f),
-            linearVelocity(25.0f),
-            angularCling(1.0f),
-            angularVelocity(5.0f),
-            zoomCling(1.0f),
-            zoomVelocity(1.0f),
-            fov(90.0f),
-            aspectRatio(16.0f / 9.0f),
-            distance(50.0f),
-            near(1.0f),
-            far(1000.0f),
-            left(-100.0f),
-            right(100.0f),
-            top(100.0f),
-            bottom(-100.0f) {
-        }
+        CameraProperties::CameraProperties()
+            : type(Type::Free),
+              position(glm::vec3(0.0f)),
+              direction(glm::vec2(90.0f, 90.0f)),
+              linearCling(1.0f),
+              linearVelocity(25.0f),
+              angularCling(1.0f),
+              angularVelocity(5.0f),
+              zoomCling(1.0f),
+              zoomVelocity(1.0f),
+              fov(90.0f),
+              aspectRatio(16.0f / 9.0f),
+              distance(50.0f),
+              near(1.0f),
+              far(1000.0f),
+              left(-100.0f),
+              right(100.0f),
+              top(100.0f),
+              bottom(-100.0f) {}
 
         CameraProperties& CameraProperties::setType(const Type type) {
             this->type = type;
@@ -107,13 +109,9 @@ namespace cobalt {
             return *this;
         }
 
-        const CameraProperties::Type CameraProperties::getType() const {
-            return type;
-        }
+        const CameraProperties::Type CameraProperties::getType() const { return type; }
 
-        const glm::vec3& CameraProperties::getPosition() const {
-            return position;
-        }
+        const glm::vec3& CameraProperties::getPosition() const { return position; }
 
         const glm::vec3& CameraProperties::getCenter() {
             if (!center.has_value()) {
@@ -124,73 +122,39 @@ namespace cobalt {
             return center.value();
         }
 
-        const glm::vec2& CameraProperties::getDirection() const {
-            return direction;
-        }
+        const glm::vec2& CameraProperties::getDirection() const { return direction; }
 
-        const float CameraProperties::getLinearCling() const {
-            return linearCling;
-        }
+        const float CameraProperties::getLinearCling() const { return linearCling; }
 
-        const float CameraProperties::getLinearVelocity() const {
-            return linearVelocity;
-        }
+        const float CameraProperties::getLinearVelocity() const { return linearVelocity; }
 
-        const float CameraProperties::getAngularCling() const {
-            return angularCling;
-        }
+        const float CameraProperties::getAngularCling() const { return angularCling; }
 
-        const float CameraProperties::getAngularVelocity() const {
-            return angularVelocity;
-        }
+        const float CameraProperties::getAngularVelocity() const { return angularVelocity; }
 
-        const float CameraProperties::getZoomCling() const {
-            return zoomCling;
-        }
+        const float CameraProperties::getZoomCling() const { return zoomCling; }
 
-        const float CameraProperties::getZoomVelocity() const {
-            return zoomVelocity;
-        }
+        const float CameraProperties::getZoomVelocity() const { return zoomVelocity; }
 
-        const float CameraProperties::getFOV() const {
-            return fov;
-        }
+        const float CameraProperties::getFOV() const { return fov; }
 
-        const float CameraProperties::getAspectRatio() const {
-            return aspectRatio;
-        }
+        const float CameraProperties::getAspectRatio() const { return aspectRatio; }
 
-        const float CameraProperties::getDistance() const {
-            return distance;
-        }
+        const float CameraProperties::getDistance() const { return distance; }
 
-        const float CameraProperties::getNear() const {
-            return near;
-        }
+        const float CameraProperties::getNear() const { return near; }
 
-        const float CameraProperties::getFar() const {
-            return far;
-        }
+        const float CameraProperties::getFar() const { return far; }
 
-        const float CameraProperties::getLeft() const {
-            return left;
-        }
+        const float CameraProperties::getLeft() const { return left; }
 
-        const float CameraProperties::getRight() const {
-            return right;
-        }
+        const float CameraProperties::getRight() const { return right; }
 
-        const float CameraProperties::getTop() const {
-            return top;
-        }
+        const float CameraProperties::getTop() const { return top; }
 
-        const float CameraProperties::getBottom() const {
-            return bottom;
-        }
+        const float CameraProperties::getBottom() const { return bottom; }
 
-        Camera& CameraController::getCamera() const {
-            return *camera;
-        }
+        Camera& CameraController::getCamera() const { return *camera; }
 
         void CameraController::update() {
             camera->zoom(deltaZoom * zoomCling);
@@ -208,42 +172,28 @@ namespace cobalt {
             camera->resize(left, right, bottom, top);
         }
 
-        void CameraController::resize(const float aspectRatio) {
-            camera->resize(0.0f, aspectRatio, 0.0f, 1.0f);
-        }
-        
-        void CameraController::zoom(const float amount) {
-            deltaZoom += amount;
-        }
-        
-        void CameraController::rotateHorizontal(const float amount) {
-            deltaAngular.x += amount;
-        }
+        void CameraController::resize(const float aspectRatio) { camera->resize(0.0f, aspectRatio, 0.0f, 1.0f); }
 
-        void CameraController::rotateVertical(const float amount) {
-            deltaAngular.y += amount;
-        }
-        
-        void CameraController::panDepth(const float amount) {
-            deltaLinear.z += amount;
-        }
-        
-        void CameraController::panHorizontal(const float amount) {
-            deltaLinear.x += amount;
-        }
-        
-        void CameraController::panVertical(const float amount) {
-            deltaLinear.y += amount;
-        }
+        void CameraController::zoom(const float amount) { deltaZoom += amount; }
 
-        CameraController::CameraController(Scope<Camera> camera, const float linearCling, const float angularCling, const float zoomCling) :
-            camera(std::move(camera)),
-            deltaLinear(glm::vec3(0.0f)),
-            deltaAngular(glm::vec2(0.0f)),
-            deltaZoom(0.0f),
-            linearCling(linearCling * linearCling),
-            angularCling(angularCling * angularCling),
-            zoomCling(zoomCling * zoomCling) {}
+        void CameraController::rotateHorizontal(const float amount) { deltaAngular.x += amount; }
+
+        void CameraController::rotateVertical(const float amount) { deltaAngular.y += amount; }
+
+        void CameraController::panDepth(const float amount) { deltaLinear.z += amount; }
+
+        void CameraController::panHorizontal(const float amount) { deltaLinear.x += amount; }
+
+        void CameraController::panVertical(const float amount) { deltaLinear.y += amount; }
+
+        CameraController::CameraController(Scope<Camera> camera, const float linearCling, const float angularCling, const float zoomCling)
+            : camera(std::move(camera)),
+              deltaLinear(glm::vec3(0.0f)),
+              deltaAngular(glm::vec2(0.0f)),
+              deltaZoom(0.0f),
+              linearCling(linearCling * linearCling),
+              angularCling(angularCling * angularCling),
+              zoomCling(zoomCling * zoomCling) {}
 
         CameraController& CameraManager::getCamera(const CameraID id) {
             try {
@@ -260,5 +210,6 @@ namespace cobalt {
                 throw GFXException("Camera with name " + name + " does not exist");
             }
         }
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

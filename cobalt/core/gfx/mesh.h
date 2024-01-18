@@ -1,85 +1,85 @@
 //
-// Created by tomas on 08-12-2023.
+// Created
+// by
+// tomas
+// on
+// 08-12-2023.
 //
 
 #pragma once
 
-#include "core/gl/vao.h"
-#include "core/gl/ibo.h"
 #include "core/gfx/material.h"
-
+#include "core/gl/ibo.h"
+#include "core/gl/vao.h"
 
 namespace cobalt {
     namespace core {
         class Mesh {
             public:
-            /** Create a mesh.
+            /** @brief: Create a mesh.
              * @param vao: Vertex array object.
              * @param ibo: Index buffer object.
              * @param material: Material.
              * @param primitives: Primitive type.
              * @return: The mesh.
              */
-            Mesh(VAO&& vao,
-                 IBO&& ibo,
-                Material& material,
-                 const GLPrimitive& primitive = GLPrimitive::Triangles);
-            /** Destroy the mesh.
+            Mesh(VAO&& vao, IBO&& ibo, Material& material, const GL::Primitive& primitive = GL::Primitive::Triangles);
+            /** @brief: Destroy the mesh.
              */
             ~Mesh() = default;
-            /** Copy constructor.
+            /** @brief: Copy constructor.
              * @param other: The other mesh.
              */
             Mesh(const Mesh& other) = delete;
-            /** Move constructor.
+            /** @brief: Move constructor.
              * @param other: The other mesh.
              */
             Mesh(Mesh&& other) noexcept;
-            /** Copy assignment operator.
+            /** @brief: Copy assignment operator.
              * @param other: The other mesh.
              * @return: The mesh.
              */
             Mesh& operator=(const Mesh& other) = delete;
-            /** Move assignment operator.
+            /** @brief: Move assignment operator.
              * @param other: The other mesh.
              * @return: The mesh.
              */
             Mesh& operator=(Mesh&& other) = delete;
 
-            /** Offset the mesh world position by a translation vector.
+            /** @brief: Offset the mesh world position by a translation vector.
              * @param translation: Translation vector.
              */
             void translate(const glm::vec3& translation);
-            /** Rotate the mesh around the world axes by a rotation vector (degrees).
+            /** @brief: Rotate the mesh around the world axes by a rotation vector (degrees).
              * @param rotation: Rotation vector (degrees).
              */
             void rotate(const glm::vec3& rotation);
-            /** Scale the mesh by a scale vector.
+            /** @brief: Scale the mesh by a scale vector.
              * @param scale: Scale vector.
              */
             void scale(const glm::vec3& scale);
 
-            /** Get the mesh model matrix.
+            /** @brief: Get the mesh model matrix.
              * @return: The model matrix.
              */
             glm::mat4x4 getModelMatrix() const;
 
-            /** Bind the mesh.
+            /** @brief: Bind the mesh.
              */
             void bind() const;
-            /** Render the mesh.
+            /** @brief: Render the mesh.
              */
             void render() const;
-            /** Get the mesh material.
+            /** @brief: Get the mesh material.
              * @return: The material.
              */
             Material& getMaterial();
-            /** Get the mesh primitive type.
+            /** @brief: Get the mesh primitive type.
              * @return: The primitive type.
              */
-            GLPrimitive getPrimitive() const;
+            GL::Primitive getPrimitive() const;
 
-            /** Create a rectangle-shaped mesh.
+            /** @brief: Create a rectangle-shaped mesh.
              * @param width: The width.
              * @param height: The height.
              * @param material: The material.
@@ -87,14 +87,14 @@ namespace cobalt {
              */
             static Mesh createRectangle(const uint width, const uint height, Material& material);
 
-            /** Create a circle-shaped mesh.
+            /** @brief: Create a circle-shaped mesh.
              * @param radius: The radius.
              * @param material: The material.
              * @return: The circle mesh.
              */
             static Mesh createSphere(const uint radius, Material& material);
 
-            /** Create a cube-shaped mesh.
+            /** @brief: Create a cube-shaped mesh.
              * @param side: The cube's side.
              * @param material: The material.
              * @return: The cube mesh.
@@ -102,13 +102,14 @@ namespace cobalt {
             static Mesh createCube(const uint side, Material& material);
 
             private:
-            VAO vao;                    // Vertex array object.
-            IBO ibo;                    // Index buffer object.
-            Material& material;         // Material.
-            GLPrimitive primitive;      // Primitive type.
-            glm::vec3 worldTranslate;   // World position.
-            glm::vec3 worldRotate;      // World rotation (degrees).
-            glm::vec3 worldScale;       // World scale.
+            VAO vao;                   // Vertex array object.
+            IBO ibo;                   // Index buffer object.
+            Material& material;        // Material.
+            GL::Primitive primitive;   // Primitive type.
+            glm::vec3 worldTranslate;  // World position.
+            glm::vec3 worldRotate;     // World rotation (degrees).
+            glm::vec3 worldScale;      // World scale.
         };
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

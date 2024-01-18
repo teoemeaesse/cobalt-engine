@@ -1,46 +1,49 @@
 //
-// Created by tomas on 03-12-2023.
+// Created
+// by
+// tomas
+// on
+// 03-12-2023.
 //
 
 #pragma once
 
+#include "core/exceptions/input_exception.h"
 #include "core/input/input_command.h"
 #include "core/input/keyboard.h"
 #include "core/input/mouse.h"
-#include "core/exceptions/input_exception.h"
 #include "core/pch.h"
-
 
 namespace cobalt {
     namespace core {
-        /** The input manager. Handles all input from peripherals such as the keyboard and mouse.
-         * It then dispatches events to the appropriate listeners.
+        /** @brief: The input manager. Handles all input from peripherals such as the keyboard
+         * and mouse. It then dispatches events to the appropriate listeners.
          */
         class InputManager {
             public:
-            /** Create a new input manager.
+            /** @brief: Create a new input manager.
              * @param mouseSensitivity: The mouse sensitivity.
              * @return: The new input manager.
              */
             InputManager();
-            /** Destroy the input manager.
+            /** @brief: Destroy the input manager.
              */
             ~InputManager() = default;
 
-            /** Poll all events from the peripherals.
+            /** @brief: Poll all events from the peripherals.
              */
             void pollEvents();
-            /** Clear all events from the peripherals.
+            /** @brief: Clear all events from the peripherals.
              */
             void clearEvents();
 
-            /** Register a peripheral to the input manager.
+            /** @brief: Register a peripheral to the input manager.
              * @param name: The name of the peripheral.
              * @tparam T: The type of the peripheral.
              * @tparam Args: The arguments to pass to the constructor of the peripheral.
              * @return: The new peripheral's device id.
              */
-            template<typename T, typename... Args>
+            template <typename T, typename... Args>
             const DeviceID registerPeripheral(const std::string& name, Args&&... args) {
                 const DeviceID id = peripherals.size();
                 Scope<InputDevice> peripheral = createScope<T>(id, std::forward<Args>(args)...);
@@ -48,18 +51,18 @@ namespace cobalt {
                 peripheralIDs[name] = id;
                 return id;
             }
-            
-            /** Get the name of a peripheral, given its registered handle.
+
+            /** @brief: Get the name of a peripheral, given its registered handle.
              * @param id: The peripheral's device id.
              * @return: The name of the peripheral.
              */
             const std::string& peripheralToString(const DeviceID id);
 
-            /** Get a peripheral, given its handle.
+            /** @brief: Get a peripheral, given its handle.
              * @param id: The peripheral's device id.
              * @return: The peripheral.
              */
-            template<typename T>
+            template <typename T>
             T& getPeripheral(const DeviceID id) {
                 static_assert(std::is_base_of_v<InputDevice, T>, "T must be derived from an InputDevice");
                 if (peripherals.find(id) == peripherals.end()) {
@@ -67,10 +70,10 @@ namespace cobalt {
                 }
                 return *static_cast<T*>(peripherals[id].get());
             }
-            /** Get a peripheral, given its name.
+            /** @brief: Get a peripheral, given its name.
              * @return: The peripheral.
              */
-            template<typename T>
+            template <typename T>
             T& getPeripheral(const std::string& name) {
                 static_assert(std::is_base_of_v<InputDevice, T>, "T must be derived from an InputDevice");
                 if (peripheralIDs.find(name) == peripheralIDs.end()) {
@@ -80,8 +83,13 @@ namespace cobalt {
             }
 
             private:
-            UMap<std::string, DeviceID> peripheralIDs;      // Map from peripheral names to peripheral ids for easy lookup.
-            UMap<DeviceID, Scope<InputDevice>> peripherals; // The peripherals.
+            UMap<std::string,
+                 DeviceID>
+                peripheralIDs;  // Map from peripheral names to
+                                // peripheral ids for easy lookup.
+            UMap<DeviceID,
+                 Scope<InputDevice>> peripherals;  // The peripherals.
         };
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

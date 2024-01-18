@@ -1,12 +1,16 @@
 //
-// Created by tomas on 06-12-2023.
+// Created
+// by
+// tomas
+// on
+// 06-12-2023.
 //
 
 #include "engine/internal/shader_library.h"
-#include "core/gl/render_shader.h"
-#include "core/gl/compute_shader.h"
-#include "core/pch.h"
 
+#include "core/gl/compute_shader.h"
+#include "core/gl/render_shader.h"
+#include "core/pch.h"
 
 namespace cobalt {
     namespace engine {
@@ -57,8 +61,7 @@ namespace cobalt {
                 if (shaderJson["type"].get<std::string>() == "render") {
                     CB_INFO("Loading render shader: {}", shaderName);
                     shaders.emplace_back(shaderName, std::move(parseRenderShader(shaderJson, shadersDirectory)));
-                }
-                else if (shaderJson["type"].get<std::string>() == "compute") {
+                } else if (shaderJson["type"].get<std::string>() == "compute") {
                     CB_INFO("Loading compute shader: {}", shaderName);
                     shaders.emplace_back(shaderName, std::move(parseComputeShader(shaderJson, shadersDirectory)));
                 }
@@ -75,20 +78,13 @@ namespace cobalt {
             return 0;
         }
 
-        core::Shader& ShaderLibrary::getShader(const ShaderID id) {
-            return shaders[id - 1].shader;
-        }
+        core::Shader& ShaderLibrary::getShader(const ShaderID id) { return shaders[id - 1].shader; }
 
-        core::Shader& ShaderLibrary::getShader(const std::string& name) {
-            return getShader(getShaderID(name));
-        }
-        
-        void ShaderLibrary::init() {
-            instance = createScope<ShaderLibrary>();
-        }
+        core::Shader& ShaderLibrary::getShader(const std::string& name) { return getShader(getShaderID(name)); }
 
-        ShaderLibrary& ShaderLibrary::getShaderLibrary() {
-            return *instance;
-        }
-    }
-}
+        void ShaderLibrary::init() { instance = createScope<ShaderLibrary>(); }
+
+        ShaderLibrary& ShaderLibrary::getShaderLibrary() { return *instance; }
+    }  // namespace engine
+}  // namespace
+   // cobalt

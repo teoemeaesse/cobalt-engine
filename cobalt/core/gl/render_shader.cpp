@@ -1,17 +1,21 @@
 //
-// Created by tomas on 30-11-2023.
+// Created
+// by
+// tomas
+// on
+// 30-11-2023.
 //
 
 #include "core/gl/render_shader.h"
-#include "core/pch.h"
 
+#include "core/pch.h"
 
 namespace cobalt {
     namespace core {
         RenderShader::RenderShader(std::string& vertexSource, std::string& fragmentSource) : Shader(glCreateProgram()) {
             CB_CORE_INFO("Compiling render shader...");
-            GLHandle vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            GLHandle fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+            GL::Handle vertexShader = glCreateShader(GL_VERTEX_SHADER);
+            GL::Handle fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
             const char* vertexSourcePtr = vertexSource.c_str();
             const char* fragmentSourcePtr = fragmentSource.c_str();
             glShaderSource(vertexShader, 1, &vertexSourcePtr, NULL);
@@ -29,9 +33,9 @@ namespace cobalt {
 
         RenderShader::RenderShader(std::string& vertexSource, std::string& fragmentSource, std::string& geometrySource) : Shader(glCreateProgram()) {
             CB_CORE_INFO("Compiling render shader...");
-            GLHandle vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            GLHandle fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            GLHandle geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+            GL::Handle vertexShader = glCreateShader(GL_VERTEX_SHADER);
+            GL::Handle fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+            GL::Handle geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
             const char* vertexSourcePtr = vertexSource.c_str();
             const char* fragmentSourcePtr = fragmentSource.c_str();
             const char* geometrySourcePtr = geometrySource.c_str();
@@ -51,5 +55,6 @@ namespace cobalt {
             glDeleteShader(fragmentShader);
             glDeleteShader(geometryShader);
         }
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

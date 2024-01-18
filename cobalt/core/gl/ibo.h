@@ -1,79 +1,83 @@
 //
-// Created by tomas on 30-11-2023.
+// Created
+// by
+// tomas
+// on
+// 30-11-2023.
 //
 
 #pragma once
 
 #include "core/pch.h"
 
-
 namespace cobalt {
     namespace core {
-        /** Index buffer object, used for indexed rendering.
+        /** @brief: Index buffer object, used for indexed rendering.
          */
         class IBO {
             public:
-            /** Creates an index buffer object.
+            /** @brief: Creates an index buffer object.
              * @param usage: GL_STATIC_DRAW, GL_DYNAMIC_DRAW, GL_STREAM_DRAW.
              * @param indexCount: The number of indices.
              * @return: IBO.
              */
-            IBO(const GLUsage usage, const uint indexCount);
-            /** Creates an index buffer object with the given data.
+            IBO(const GL::Usage usage, const uint indexCount);
+            /** @brief: Creates an index buffer object with the given data.
              * @param usage: GL_STATIC_DRAW, GL_DYNAMIC_DRAW, GL_STREAM_DRAW.
              * @param data: The data.
              * @param indexCount: The number of indices.
              */
-            IBO(const GLUsage usage, const uint* data, const uint indexCount);
-            /** Destroys the IBO.
+            IBO(const GL::Usage usage, const uint* data, const uint indexCount);
+            /** @brief: Destroys the IBO.
              */
             ~IBO();
-            /** Copy constructor.
+            /** @brief: Copy constructor.
              * @param other: The IBO to copy.
              * @return: IBO.
              */
             IBO(const IBO&) = delete;
-            /** Move constructor.
+            /** @brief: Move constructor.
              * @param ibo: The IBO to move.
              * @return: IBO.
              */
             IBO(IBO&&) noexcept;
-            /** Copy assignment operator.
+            /** @brief: Copy assignment operator.
              * @param other: The IBO to copy.
              * @return: IBO.
              */
             IBO& operator=(const IBO&) = delete;
-            /** Move assignment operator.
+            /** @brief: Move assignment operator.
              * @param other: The IBO to move.
              * @return: IBO.
              */
             IBO& operator=(IBO&&) noexcept;
 
-            /** Binds the IBO to the current context.
+            /** @brief: Binds the IBO to the current context.
              */
             void bind() const;
-            /** Unbinds the IBO from the current context.
+            /** @brief: Unbinds the IBO from the current context.
              */
             void unbind() const;
-            /** Get the number of indices.
+            /** @brief: Get the number of indices.
              * @return: The number of indices.
              */
             const uint getCount() const;
 
-            /** Create an IBO for n quads.
+            /** @brief: Create an IBO for n quads.
              * @param usage: The usage of the buffer.
              * @param count: The number of quads.
              */
-            static IBO fromQuads(const GLUsage usage, const uint count);
-            /** Create an IBO for a cube.
+            static IBO fromQuads(const GL::Usage usage, const uint count);
+            /** @brief: Create an IBO for a cube.
              * @param usage: The usage of the buffer.
              */
-            static IBO fromCube(const GLUsage usage);
+            static IBO fromCube(const GL::Usage usage);
 
             private:
-            GLHandle buffer;        // The opengl buffer handle.
-            GLUsage usage;          // The usage of the buffer.
-            uint indexCount;        // The number of indices.
+            GL::Handle buffer;  // The OpenGL buffer handle.
+            GL::Usage usage;    // The usage of the buffer.
+            uint indexCount;    // The number of indices.
         };
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

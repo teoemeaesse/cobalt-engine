@@ -1,23 +1,26 @@
 //
-// Created by tomas on 30-11-2023.
+// Created
+// by
+// tomas
+// on
+// 30-11-2023.
 //
 
 #pragma once
 
 #include "core/gl/shader.h"
 
-
 namespace cobalt {
     namespace core {
-        /** A compute shader program.
+        /** @brief: A compute shader program.
          */
         class ComputeShader : public Shader {
             public:
-            /** Creates a new compute shader.
+            /** @brief: Creates a new compute shader.
              * @param computeSource: The source code of the compute shader.
              * @return: The compute shader.
              */
             ComputeShader(std::string& computeSource);
         };
-    }
-}
+    }  // namespace core
+}  // namespace cobalt

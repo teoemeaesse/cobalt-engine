@@ -1,9 +1,12 @@
 //
-// Created by tomas on 24-12-2023.
+// Created
+// by
+// tomas
+// on
+// 24-12-2023.
 //
 
 #include "engine/internal/material_library.h"
-
 
 namespace cobalt {
     namespace engine {
@@ -28,64 +31,38 @@ namespace cobalt {
             return materials[id].material;
         }
 
-        const MaterialID MaterialLibrary::makePBR(
-            const std::string& name,
-            const TextureID& albedo,
-            const TextureID& normal,
-            const TextureID& mrao) {
-            materials.emplace_back(name, core::Material(
-                CB_SHADER_LIBRARY.getShader("pbr"),
-                CB_TEXTURE_LIBRARY.getTexture2D(albedo),
-                CB_TEXTURE_LIBRARY.getTexture2D(normal),
-                CB_TEXTURE_LIBRARY.getTexture2D(mrao)));
+        const MaterialID MaterialLibrary::makePBR(const std::string& name, const TextureID& albedo, const TextureID& normal, const TextureID& mrao) {
+            materials.emplace_back(name, core::Material(CB_SHADER_LIBRARY.getShader("pbr"), CB_TEXTURE_LIBRARY.getTexture2D(albedo),
+                                                        CB_TEXTURE_LIBRARY.getTexture2D(normal), CB_TEXTURE_LIBRARY.getTexture2D(mrao)));
             return materials.size() - 1;
         }
 
-        const MaterialID MaterialLibrary::makePBR(
-            const std::string& name,
-            const core::Color albedo,
-            const float metallic,
-            const float roughness,
-            const float ao) {
-            materials.emplace_back(name, core::Material(
-                CB_SHADER_LIBRARY.getShader("pbr"),
-                CB_TEXTURE_LIBRARY.getTexture2D(albedo),
-                CB_TEXTURE_LIBRARY.getTexture2D(127, 127, 255),
-                CB_TEXTURE_LIBRARY.getTexture2D(
-                    (uchar) (metallic * 255.0f),
-                    (uchar) (roughness * 255.0f),
-                    (uchar) (ao * 255.0f))));
+        const MaterialID MaterialLibrary::makePBR(const std::string& name, const core::Color albedo, const float metallic, const float roughness,
+                                                  const float ao) {
+            materials.emplace_back(
+                name, core::Material(CB_SHADER_LIBRARY.getShader("pbr"), CB_TEXTURE_LIBRARY.getTexture2D(albedo),
+                                     CB_TEXTURE_LIBRARY.getTexture2D(127, 127, 255),
+                                     CB_TEXTURE_LIBRARY.getTexture2D((uchar)(metallic * 255.0f), (uchar)(roughness * 255.0f), (uchar)(ao * 255.0f))));
             return materials.size() - 1;
         }
 
-        const MaterialID MaterialLibrary::makeFromShader(
-            const std::string& name,
-            const ShaderID& shader) {
-            materials.emplace_back(name, core::Material(
-                CB_SHADER_LIBRARY.getShader(shader),
-                CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255),
-                CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255),
-                CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255)));
+        const MaterialID MaterialLibrary::makeFromShader(const std::string& name, const ShaderID& shader) {
+            materials.emplace_back(name,
+                                   core::Material(CB_SHADER_LIBRARY.getShader(shader), CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255),
+                                                  CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255), CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255)));
             return materials.size() - 1;
         }
 
-        const MaterialID MaterialLibrary::makeFromShader(
-            const std::string& name,
-            const std::string& shader) {
-            materials.emplace_back(name, core::Material(
-                CB_SHADER_LIBRARY.getShader(shader),
-                CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255),
-                CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255),
-                CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255)));
+        const MaterialID MaterialLibrary::makeFromShader(const std::string& name, const std::string& shader) {
+            materials.emplace_back(name,
+                                   core::Material(CB_SHADER_LIBRARY.getShader(shader), CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255),
+                                                  CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255), CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255)));
             return materials.size() - 1;
         }
 
-        void MaterialLibrary::init() {
-            instance = createScope<MaterialLibrary>();
-        }
+        void MaterialLibrary::init() { instance = createScope<MaterialLibrary>(); }
 
-        MaterialLibrary& MaterialLibrary::getMaterialLibrary() {
-            return *instance;
-        }
-    }
-}
+        MaterialLibrary& MaterialLibrary::getMaterialLibrary() { return *instance; }
+    }  // namespace engine
+}  // namespace
+   // cobalt

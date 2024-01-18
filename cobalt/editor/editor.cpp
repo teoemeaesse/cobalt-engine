@@ -1,18 +1,18 @@
 //
-// Created by tomas on 07-12-2023.
+// Created
+// by
+// tomas
+// on
+// 07-12-2023.
 //
 
-#include "editor/input/bindings.h"
 #include "editor/editor.h"
 
+#include "editor/input/bindings.h"
 
 namespace cobalt {
     namespace editor {
-        Editor::Editor() :
-            engine::Application(144),
-            configuration(CobaltConfiguration()),
-            renderGraph(scene, getWindow().getDefaultFBO())
-        {
+        Editor::Editor() : engine::Application(144), configuration(CobaltConfiguration()), renderGraph(scene, getWindow().getDefaultFBO()) {
             configuration.configureWindow(getWindow());
             getWindow().setClearColor(COLOR(0.2f, 0.2f, 0.2f, 1.0f));
             getWindow().show();
@@ -37,7 +37,7 @@ namespace cobalt {
         void Editor::fixedTimeStep() {
             getInputManager().pollEvents();
             getInputManager().clearEvents();
-            
+
             scene.getCameraController().update();
 
             getWindow().setTitle("Cobalt Editor - " + std::to_string(getFramerate()) + " FPS");
@@ -58,13 +58,13 @@ namespace cobalt {
             cubeYOffset = cos(time) * 25.0f * delta;
             scene.getMeshes()[4].translate(glm::vec3(cubeXOffset, 0.0f, cubeYOffset));
             renderGraph.execute();
-        
+
             getWindow().swapBuffers();
         }
 
         void Editor::onResize(const uint width, const uint height) {
             renderGraph.onResize(width, height);
-            scene.getCameraController().resize((float) width / (float) height);
+            scene.getCameraController().resize((float)width / (float)height);
         }
 
         void Editor::bindInput() {
@@ -101,12 +101,7 @@ namespace cobalt {
 
         void Editor::createScene() {
             scene.clear();
-            scene.setSkybox(
-                core::Skybox::create(
-                    CB_TEXTURE_LIBRARY.getTexture3D("skybox"),
-                    CB_SHADER_LIBRARY.getShader("skybox")
-                )
-            );
+            scene.setSkybox(core::Skybox::create(CB_TEXTURE_LIBRARY.getTexture3D("skybox"), CB_SHADER_LIBRARY.getShader("skybox")));
             const engine::TextureID woodAlbedo = CB_TEXTURE_LIBRARY.getTextureID("wood-albedo");
             const engine::TextureID woodNormal = CB_TEXTURE_LIBRARY.getTextureID("wood-normal");
             const engine::TextureID woodMrao = CB_TEXTURE_LIBRARY.getTextureID("wood-mrao");
@@ -121,7 +116,8 @@ namespace cobalt {
             const core::Texture2D& steelMraoTexture = CB_TEXTURE_LIBRARY.getTexture2D(steelMrao);
 
             core::Material& woodMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("wood", woodAlbedo, woodNormal, woodMrao));
-            core::Material& steelMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("steel", steelAlbedo, steelNormal, steelMrao));
+            core::Material& steelMaterial =
+                CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("steel", steelAlbedo, steelNormal, steelMrao));
             core::Material& whiteRough = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", COLOR_WHITE, 0.0f, 1.0f, 1.0f));
             core::Material& whiteSmooth = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", COLOR_WHITE, 0.0f, 0.0f, 1.0f));
             core::Material& orangeMedium = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("orange", COLOR_ORANGE, 0.0f, 0.5f, 1.0f));
@@ -148,9 +144,8 @@ namespace cobalt {
             scene.addMesh(std::move(cube1));
             scene.addMesh(std::move(cube2));
         }
-    }
-}
+    }  // namespace editor
+}  // namespace
+   // cobalt
 
-cobalt::engine::Application *cobalt::engine::createApplication() {
-    return new cobalt::editor::Editor();
-}
+cobalt::engine::Application* cobalt::engine::createApplication() { return new cobalt::editor::Editor(); }

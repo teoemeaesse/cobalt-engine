@@ -1,10 +1,14 @@
 //
-// Created by tomas on 03-12-2023.
+// Created
+// by
+// tomas
+// on
+// 03-12-2023.
 //
 
 #include "core/input/input_manager.h"
-#include "core/gfx/render_context.h"
 
+#include "core/gfx/render_context.h"
 
 namespace cobalt {
     namespace core {
@@ -28,7 +32,7 @@ namespace cobalt {
         }
 
         InputManager::InputManager() {
-            unknownPeripheral = registerPeripheral<Keyboard>("Unknown"); // TODO: Create NULL peripheral type
+            unknownPeripheral = registerPeripheral<Keyboard>("Unknown");  // TODO: Create NULL peripheral type
         }
 
         const std::string& InputManager::peripheralToString(const DeviceID peripheral) {
@@ -39,5 +43,6 @@ namespace cobalt {
             }
             return peripheralToString(unknownPeripheral);
         }
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

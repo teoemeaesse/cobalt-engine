@@ -1,20 +1,21 @@
 //
-// Created by tomas on 30-11-2023.
+// Created
+// by
+// tomas
+// on
+// 30-11-2023.
 //
 
 #include "core/gl/ibo.h"
 
-
 namespace cobalt {
     namespace core {
-        IBO::IBO(const GLUsage usage, const uint indexCount) : usage(usage), indexCount(indexCount) {
-            glGenBuffers(1, &buffer);
-        }
+        IBO::IBO(const GL::Usage usage, const uint indexCount) : usage(usage), indexCount(indexCount) { glGenBuffers(1, &buffer); }
 
-        IBO::IBO(const GLUsage usage, const uint* data, const uint indexCount) : usage(usage), indexCount(indexCount) {
+        IBO::IBO(const GL::Usage usage, const uint* data, const uint indexCount) : usage(usage), indexCount(indexCount) {
             glGenBuffers(1, &buffer);
             bind();
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(uint), data, (GLenum) usage);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(uint), data, (GLenum)usage);
         }
 
         IBO::~IBO() {
@@ -38,15 +39,11 @@ namespace cobalt {
             return *this;
         }
 
-        void IBO::bind() const {
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
-        }
+        void IBO::bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer); }
 
-        void IBO::unbind() const {
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        }
+        void IBO::unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
 
-        IBO IBO::fromQuads(const GLUsage usage, const uint count) {
+        IBO IBO::fromQuads(const GL::Usage usage, const uint count) {
             IBO ibo(usage, count * 6);
             ibo.bind();
             uint pattern[6] = {0, 1, 2, 2, 3, 0};
@@ -54,27 +51,32 @@ namespace cobalt {
             for (int i = 0; i < count * 6; i++) {
                 indices[i] = pattern[i % 6] + (i / 6) * 4;
             }
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * 6 * sizeof(uint), indices, (GLenum) usage);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * 6 * sizeof(uint), indices, (GLenum)usage);
             return ibo;
         }
 
-        IBO IBO::fromCube(const GLUsage usage) {
+        IBO IBO::fromCube(const GL::Usage usage) {
             IBO ibo(usage, 36);
             ibo.bind();
             uint indices[36] = {
-                3, 0, 2, 1, 2, 0, // Front.
-                1, 2, 6, 6, 5, 1, // Right.
-                5, 6, 7, 7, 4, 5, // Back.
-                3, 0, 4, 4, 7, 3, // Left.
-                4, 5, 1, 1, 0, 4, // Top.
-                3, 2, 6, 6, 7, 3  // Bottom.
+                3, 0, 2, 1, 2,
+                0,  // Front.
+                1, 2, 6, 6, 5,
+                1,  // Right.
+                5, 6, 7, 7, 4,
+                5,  // Back.
+                3, 0, 4, 4, 7,
+                3,  // Left.
+                4, 5, 1, 1, 0,
+                4,  // Top.
+                3, 2, 6, 6, 7,
+                3  // Bottom.
             };
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, 36 * sizeof(uint), indices, (GLenum) usage);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, 36 * sizeof(uint), indices, (GLenum)usage);
             return ibo;
         }
 
-        const uint IBO::getCount() const {
-            return this->indexCount;
-        }
-    }
-}
+        const uint IBO::getCount() const { return this->indexCount; }
+    }  // namespace core
+}  // namespace
+   // cobalt

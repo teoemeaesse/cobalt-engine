@@ -1,20 +1,23 @@
 //
-// Created by tomas on 19-11-2023.
+// Created
+// by
+// tomas
+// on
+// 19-11-2023.
 //
 
-#include "unity/unity.h"
-
 #include "core/io/path.h"
-
+#include "unity/unity.h"
 
 std::string curPath;
 
-void setUp(void) {
-    curPath = std::filesystem::current_path().string();
-}
+void setUp(void) { curPath = std::filesystem::current_path().string(); }
 
 void tearDown(void) {
-    // clean stuff up here
+    // clean
+    // stuff
+    // up
+    // here
 }
 
 void test_path_create() {
@@ -32,8 +35,28 @@ void test_path_create() {
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_path_create);
-    // TODO: Add more tests
-    // Path is just a wrapper around std::filesystem::path
-    // so it should be enough to test that it works as expected
+    // TODO:
+    // Add
+    // more
+    // tests
+    // Path
+    // is
+    // just
+    // a
+    // wrapper
+    // around
+    // std::filesystem::path
+    // so
+    // it
+    // should
+    // be
+    // enough
+    // to
+    // test
+    // that
+    // it
+    // works
+    // as
+    // expected
     return UNITY_END();
 }

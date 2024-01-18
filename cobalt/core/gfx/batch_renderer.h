@@ -1,13 +1,16 @@
 //
-// Created by tomas on 23-12-2023.
+// Created
+// by
+// tomas
+// on
+// 23-12-2023.
 //
 
 #pragma once
 
-#include "core/pch.h"
-#include "core/gfx/renderer.h"
 #include "core/gfx/batch_mesh.h"
-
+#include "core/gfx/renderer.h"
+#include "core/pch.h"
 
 namespace cobalt {
     namespace core {
@@ -16,7 +19,7 @@ namespace cobalt {
             Batch();
             ~Batch();
 
-            /** Add a mesh to the batch.
+            /** @brief: Add a mesh to the batch.
              * @param mesh: The mesh to add.
              */
             void add(BatchMesh& mesh);
@@ -28,27 +31,29 @@ namespace cobalt {
 
         class BatchRenderer {
             public:
-            /** Create a batch renderer.
+            /** @brief: Create a batch renderer.
              * @param layout: The layout of the vertices. The shaders for the
              *                materials rendered must be compatible with this layout.
              * @return: The batch renderer.
              */
             BatchRenderer(VAOLayout layout);
-            /** Destroy the batch renderer.
+            /** @brief: Destroy the batch renderer.
              */
             ~BatchRenderer();
-            
-            /** Batch a mesh.
+
+            /** @brief: Batch a mesh.
              * @param mesh: The mesh to batch.
              */
             void batch(BatchMesh& mesh);
-            /** Render all the batched vertices.
+            /** @brief: Render all the batched vertices.
              */
             void flush();
-            
+
             private:
-            const Renderer renderer;                // The renderer used to render the batches.
-            const UMap<Material, Batch> batches;    // The batches.
+            const Renderer renderer;  // The renderer used to render the batches.
+            const UMap<Material,
+                       Batch> batches;  // The batches.
         };
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

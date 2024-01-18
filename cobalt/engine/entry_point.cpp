@@ -1,11 +1,15 @@
 //
-// Created by tomas on 03-12-2023.
+// Created
+// by
+// tomas
+// on
+// 03-12-2023.
 //
+
+#include "engine/entry_point.h"
 
 #include "core/exceptions/gfx_exception.h"
 #include "core/exceptions/input_exception.h"
-#include "engine/entry_point.h"
-
 
 namespace cobalt {
     namespace engine {
@@ -18,11 +22,14 @@ namespace cobalt {
                 cobalt::engine::shutdownInterrupt = true;
             }
         }
-    }
-}
+    }  // namespace engine
+}  // namespace
+   // cobalt
 
 int main(int argc, char** argv) {
-    // Initialize the engine.
+    // Initialize
+    // the
+    // engine.
     cobalt::core::Log::init();
     cobalt::core::RenderContext::init();
     cobalt::core::Platform::log();
@@ -30,17 +37,22 @@ int main(int argc, char** argv) {
     cobalt::engine::ShaderLibrary::init();
     cobalt::engine::MaterialLibrary::init();
 
-    // Create the application.
+    // Create
+    // the
+    // application.
     auto app = cobalt::engine::createApplication();
 
-    // Handle interrupts.
+    // Handle
+    // interrupts.
     struct sigaction sigIntHandler;
     sigIntHandler.sa_handler = cobalt::engine::handleCtrlC;
     sigemptyset(&sigIntHandler.sa_mask);
     sigIntHandler.sa_flags = 0;
     sigaction(SIGINT, &sigIntHandler, NULL);
-    
-    // Run the application.
+
+    // Run
+    // the
+    // application.
     try {
         app->run();
     } catch (const cobalt::core::GLException& e) {

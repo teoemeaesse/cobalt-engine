@@ -1,5 +1,9 @@
 //
-// Created by tomas on 08-12-2023.
+// Created
+// by
+// tomas
+// on
+// 08-12-2023.
 //
 
 #pragma once
@@ -9,38 +13,37 @@
 #include "core/gfx/skybox.h"
 #include "core/pch.h"
 
-
 namespace cobalt {
     namespace core {
         class Renderer {
             public:
-            /** Create a renderer.
+            /** @brief: Create a renderer.
              * @return: The renderer.
              */
             Renderer();
-            /** Destroy the renderer.
+            /** @brief: Destroy the renderer.
              */
             ~Renderer() = default;
 
-            /** Render a mesh.
+            /** @brief: Render a mesh.
              * @param mesh: The mesh to render.
              * @param target: The render target to render to.
              */
             void renderMesh(Mesh& mesh, RenderTarget& target) const;
 
-            /** Render a skybox.
+            /** @brief: Render a skybox.
              * @param skybox: The skybox to render.
              * @param target: The render target to render to.
              */
             void renderSkybox(Skybox& skybox, RenderTarget& target) const;
 
-            /** Get the bound texture unit of a given named texture.
+            /** @brief: Get the bound texture unit of a given named texture.
              * @param name: The name of the texture.
              * @return: The texture unit it is bound to.
              */
             uint getTextureUnit(const std::string& name) const;
 
-            /** Bind a texture to the next available texture unit.
+            /** @brief: Bind a texture to the next available texture unit.
              * Throws an exception if there are no more available texture units.
              * @param name: The name of the texture.
              * @param texture: The texture.
@@ -48,18 +51,20 @@ namespace cobalt {
              */
             uint bindTexture(const std::string& name, const Texture& texture);
 
-            /** Send all the bound textures to the shader.
+            /** @brief: Send all the bound textures to the shader.
              * @param shader: The shader to send the uniforms to.
              */
             void sendUniforms(Shader& shader) const;
 
-            /** Unbind all texture units.
+            /** @brief: Unbind all texture units.
              */
             void clearTextureUnits();
 
             private:
-            UMap<std::string, uint> textureUnits;   // Map of bound textures.
-            uint currentUnit;                       // Current texture unit.
+            UMap<std::string,
+                 uint> textureUnits;  // Map of bound textures.
+            uint currentUnit;         // Current texture unit.
         };
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

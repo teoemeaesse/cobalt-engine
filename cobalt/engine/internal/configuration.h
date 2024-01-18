@@ -1,42 +1,44 @@
 //
-// Created by tomas on 07-12-2023.
+// Created
+// by
+// tomas
+// on
+// 07-12-2023.
 //
 
 #pragma once
 
 #include "core/pch.h"
 
-
 namespace cobalt {
     namespace engine {
         class ConfigurationException : public std::exception {
-        public:
+            public:
             ConfigurationException(const std::string& key, const std::string& typeName) {
                 message = std::string("Failed to cast value of key '" + key + "' to type '" + typeName + "'");
             }
-            const char* what() const noexcept override {
-                return message.c_str();
-            }
-        private:
+            const char* what() const noexcept override { return message.c_str(); }
+
+            private:
             std::string message;
         };
 
         class Configuration {
             public:
-            /** Create a configuration from a file.
+            /** @brief: Create a configuration from a file.
              * @param path: The path to the file.
              * @return: The configuration.
              */
             explicit Configuration(const core::Path& path);
-            /** Create an empty configuration.
+            /** @brief: Create an empty configuration.
              * @return: The configuration.
              */
             Configuration() = default;
-            /** Destroy the configuration.
+            /** @brief: Destroy the configuration.
              */
             ~Configuration() = default;
 
-            /** Set a value in the configuration.
+            /** @brief: Set a value in the configuration.
              * @param key: The key to set the value for.
              * @param value: The value to set.
              */
@@ -45,7 +47,7 @@ namespace cobalt {
                 checkType<T>();
                 entries[key] = value;
             }
-            /** Get a value from the configuration.
+            /** @brief: Get a value from the configuration.
              * @param key: The key to get the value for.
              * @return: The value.
              */
@@ -63,55 +65,51 @@ namespace cobalt {
                     throw ConfigurationException(key, typeid(T).name());
                 }
             }
-            /** Get a value from the configuration.
+            /** @brief: Get a value from the configuration.
              * @param key: The key to get the value for.
              * @return: The value.
              */
             template <typename T>
-            const T get(const char *key) const {
+            const T get(const char* key) const {
                 std::string keyString(key);
                 return get<T>(keyString);
             }
-            /** Check if the configuration has a value for a key.
+            /** @brief: Check if the configuration has a value for a key.
              * @param key: The key to check.
-             * @return: True if the configuration has a value for the key, false otherwise.
+             * @return: True if the configuration has a value for the key, false
+             * otherwise.
              */
             const bool has(const std::string& key) const;
 
-            /** Write the configuration to a file as JSON.
+            /** @brief: Write the configuration to a file as JSON.
              * @param path: The path to write the configuration to.
              */
             void serialize(const core::Path& path) const;
-            /** Merge another configuration into this one.
-             * Overrides values in this configuration with values from the other configuration.
+            /** @brief: Merge another configuration into this one.
+             * Overrides values in this configuration with values from the other
+             * configuration.
              * @param other: The other configuration.
              */
             void merge(const Configuration& other);
-            /** Log the configuration to the console.
+            /** @brief: Log the configuration to the console.
              */
             void log() const;
 
             private:
             core::UMap<std::string, std::any> entries;
 
-            /** Check if a type is supported.
+            /** @brief: Check if a type is supported.
              * @param T: The type to check.
              */
             template <typename T>
             static void checkType() {
-                static_assert(std::is_same<T, int>::value || 
-                              std::is_same<T, float>::value || 
-                              std::is_same<T, double>::value || 
-                              std::is_same<T, long>::value ||
-                              std::is_same<T, long long>::value ||
-                              std::is_same<T, uint>::value || 
-                              std::is_same<T, unsigned long>::value ||
-                              std::is_same<T, unsigned long long>::value ||
-                              std::is_same<T, bool>::value ||
-                              std::is_same<T, std::string>::value ||
-                              std::is_same<T, std::any>::value,
+                static_assert(std::is_same<T, int>::value || std::is_same<T, float>::value || std::is_same<T, double>::value ||
+                                  std::is_same<T, long>::value || std::is_same<T, long long>::value || std::is_same<T, uint>::value ||
+                                  std::is_same<T, unsigned long>::value || std::is_same<T, unsigned long long>::value ||
+                                  std::is_same<T, bool>::value || std::is_same<T, std::string>::value || std::is_same<T, std::any>::value,
                               "Unsupported type");
             }
         };
-    }
-}
+    }  // namespace engine
+}  // namespace
+   // cobalt

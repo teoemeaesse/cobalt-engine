@@ -1,100 +1,98 @@
 //
-// Created by tomas on 01-12-2023.
+// Created
+// by
+// tomas
+// on
+// 01-12-2023.
 //
 
 #pragma once
 
 #include "core/pch.h"
 
-
 namespace cobalt {
     namespace core {
         class Texture {
             public:
-            /** Destroys the texture and frees the memory.
+            /** @brief: Destroys the texture and frees the memory.
              */
             ~Texture();
-            /** Copy constructor.
+            /** @brief: Copy constructor.
              * @param other: The other texture.
              * @return: The copied texture.
              */
             Texture(const Texture& other) = delete;
-            /** Move constructor.
+            /** @brief: Move constructor.
              * @param other: The other texture.
              * @return: The moved texture.
              */
             Texture(Texture&& other) noexcept;
-            /** Copy assignment operator.
+            /** @brief: Copy assignment operator.
              * @param other: The other texture.
              * @return: The copied texture.
              */
             Texture& operator=(const Texture& other) = delete;
-            /** Move assignment operator.
+            /** @brief: Move assignment operator.
              * @param other: The other texture.
              * @return: The moved texture.
              */
             Texture& operator=(Texture&& other) noexcept;
 
-            /** Reserves the memory for the texture.
+            /** @brief: Reserves the memory for the texture.
              * @param width: The width of the texture. 0 will use the current width.
              * @param height: The height of the texture. 0 will use the current height.
              */
             virtual void reserve(const uint width, const uint height) = 0;
-            /** Binds the texture to the current opengl rendering context.
+            /** @brief: Binds the texture to the current OpenGL rendering context.
              */
             virtual void bind() const = 0;
-            /** Binds the texture to the given texture unit.
+            /** @brief: Binds the texture to the given texture unit.
              * @param unit: The texture unit to bind the texture to.
              */
             virtual void bindToUnit(const GLuint unit) const = 0;
-            /** Sets the wrap mode of the texture.
+            /** @brief: Sets the wrap mode of the texture.
              * @param wrap: The wrap mode.
              */
-            virtual void setWrap(const GLTextureWrap wrap) = 0;
-            /** Sets the filter mode of the texture.
+            virtual void setWrap(const GL::TextureWrap wrap) = 0;
+            /** @brief: Sets the filter mode of the texture.
              * @param filter: The filter mode.
              */
-            virtual void setFilter(const GLTextureFilter filter) = 0;
+            virtual void setFilter(const GL::TextureFilter filter) = 0;
 
-            /** Returns the GL handle to the texture.
+            /** @brief: Returns the GL handle to the texture.
              * @return: The GL handle to the texture.
              */
-            inline GLHandle getGLHandle() const { return texture; }
-            /** Returns the width of the texture.
+            inline GL::Handle getGLHandle() const { return texture; }
+            /** @brief: Returns the width of the texture.
              * @return: The width of the texture.
              */
             inline uint getWidth() const { return width; }
-            /** Returns the height of the texture.
+            /** @brief: Returns the height of the texture.
              * @return: The height of the texture.
              */
             inline uint getHeight() const { return height; }
-            /** Returns the pixel encoding of the texture.
+            /** @brief: Returns the pixel encoding of the texture.
              * @return: The pixel encoding of the texture.
              */
-            inline GLTextureEncoding getEncoding() const { return encoding; }
+            inline GL::TextureEncoding getEncoding() const { return encoding; }
 
             protected:
-            GLHandle texture;           // The OpenGL handle to the texture.
-            std::string source;         // The source of the texture.
-            GLTextureFormat format;     // The pixel format of the texture.
-            GLTextureEncoding encoding; // The internal format of the texture.
-            uint width, height;         // The width and height of the texture.
+            GL::Handle texture;            // The OpenGL handle to the texture.
+            std::string source;            // The source of the texture.
+            GL::TextureFormat format;      // The pixel format of the texture.
+            GL::TextureEncoding encoding;  // The internal format of the texture.
+            uint width, height;            // The width and height of the texture.
 
-            /** Creates an opengl texture.
-             * @param texture: The OpenGL handle to the texture.
-             * @param format: The pixel format of the texture.
+            /** @brief: Creates an OpenGL texture.
              * @param encoding: The internal format of the texture.
              * @return: The created texture.
              */
-            Texture(const GLTextureFormat format,
-                    const GLTextureEncoding encoding);
+            Texture(const GL::TextureEncoding encoding);
         };
 
         class Texture2D : public Texture {
-            friend class TextureBuilder;
-
             public:
-            /** Creates a 1x1 texture from the given color.
+            /** @brief: Creates a 1x1 texture from the given color.
              * @param red: The red component of the color (0-255).
              * @param green: The green component of the color (0-255).
              * @param blue: The blue component of the color (0-255).
@@ -103,78 +101,86 @@ namespace cobalt {
              * @param wrap: The wrap mode of the texture.
              * @return: The created texture.
              */
-            Texture2D(const uchar red,
-                      const uchar green,
-                      const uchar blue,
-                      const uchar alpha = 255,
-                      const GLTextureFilter filter = GLTextureFilter::Linear,
-                      const GLTextureWrap wrap = GLTextureWrap::Repeat);
-            
-            /** Creates a 1x1 texture from the given color.
+            Texture2D(const uchar red, const uchar green, const uchar blue, const uchar alpha = 255,
+                      const GL::TextureFilter filter = GL::TextureFilters::Linear, const GL::TextureWrap wrap = GL::TextureWraps::Repeat);
+
+            /** @brief: Creates a 1x1 texture from the given color.
              * @param color: The color of the texture.
              * @param filter: The filter mode of the texture.
              * @param wrap: The wrap mode of the texture.
              * @return: The created texture.
              */
-            Texture2D(const Color& color,
-                      const GLTextureFilter filter = GLTextureFilter::Linear,
-                      const GLTextureWrap wrap = GLTextureWrap::Repeat);
+            Texture2D(const Color& color, const GL::TextureFilter filter = GL::TextureFilters::Linear,
+                      const GL::TextureWrap wrap = GL::TextureWraps::Repeat);
 
-            /** Reserves the memory for the texture.
-             * @param width: The width of the texture. 0 will use the current width.
-             * @param height: The height of the texture. 0 will use the current height.
-             */
-            void reserve(const uint width, const uint height) override;
-            /** Binds the texture to the current opengl rendering context.
-             */
-            void bind() const override;
-            /** Binds the texture to the given texture unit.
-             * @param unit: The texture unit to bind the texture to.
-             */
-            void bindToUnit(const GLuint unit) const override;
-            /** Sets the wrap mode of the texture.
-             * @param wrap: The wrap mode.
-             */
-            void setWrap(const GLTextureWrap wrap) override;
-            /** Sets the filter mode of the texture.
-             * @param filter: The filter mode.
-             */
-            void setFilter(const GLTextureFilter filter) override;
-
-            private:
-            /** Creates an empty 2d texture with the given width and height
+            /** @brief: Creates an empty 2d texture with the given width and height
              * and reserves the memory for it.
              * @param width: The width of the texture.
              * @param height: The height of the texture.
-             * @param format: The pixel format of the texture.
              * @param encoding: The internal format of the texture.
              * @param filter: The filter mode of the texture.
              * @param wrap: The wrap mode of the texture.
              * @return: The created texture.
              */
-            Texture2D(const uint width, const uint height,
-                      const GLTextureFormat format = GLTextureFormat::RGBA,
-                      const GLTextureEncoding encoding = GLTextureEncoding::SRGBA,
-                      const GLTextureFilter filter = GLTextureFilter::Linear,
-                      const GLTextureWrap wrap = GLTextureWrap::Repeat);
-            /** Creates a 2d texture from the given path to a file.
+            Texture2D(const uint width, const uint height, const GL::TextureEncoding encoding = GL::TextureEncodings::RGBA::Bits8,
+                      const GL::TextureFilter filter = GL::TextureFilters::Linear, const GL::TextureWrap wrap = GL::TextureWraps::Repeat);
+
+            /** @brief: Creates a 2d texture from the given path to a file.
              * @param path: The path to the texture.
+             * @param srgb: Whether the texture should be interpreted as srgb.
              * @param filter: The filter mode of the texture.
              * @param wrap: The wrap mode of the texture.
-             * @param isSrgb: Whether the texture is in srgb color space.
              * @return: The created texture.
              */
-            Texture2D(const Path& path,
-                      const GLTextureFilter filter = GLTextureFilter::Linear,
-                      const GLTextureWrap wrap = GLTextureWrap::Repeat,
-                      const bool isSrgb = false);
+            Texture2D(const Path& path, const bool srgb, const GL::TextureFilter filter = GL::TextureFilters::Linear,
+                      const GL::TextureWrap wrap = GL::TextureWraps::Repeat);
+
+            /** @brief: Copy constructor.
+             * @param other: The other texture.
+             * @return: The copied texture.
+             */
+            Texture2D(const Texture2D&) = delete;
+            /** @brief: Move constructor.
+             * @param other: The other texture.
+             * @return: The moved texture.
+             */
+            Texture2D(Texture2D&&) noexcept;
+            /** @brief: Copy assignment operator.
+             * @param other: The other texture.
+             * @return: The copied texture.
+             */
+            Texture2D& operator=(const Texture2D&) = delete;
+            /** @brief: Move assignment operator.
+             * @param other: The other texture.
+             * @return: The moved texture.
+             */
+            Texture2D& operator=(Texture2D&&) noexcept;
+
+            /** @brief: Reserves the memory for the texture.
+             * @param width: The width of the texture. 0 will use the current width.
+             * @param height: The height of the texture. 0 will use the current height.
+             */
+            void reserve(const uint width, const uint height) override;
+            /** @brief: Binds the texture to the current OpenGL rendering context.
+             */
+            void bind() const override;
+            /** @brief: Binds the texture to the given texture unit.
+             * @param unit: The texture unit to bind the texture to.
+             */
+            void bindToUnit(const GLuint unit) const override;
+            /** @brief: Sets the wrap mode of the texture.
+             * @param wrap: The wrap mode.
+             */
+            void setWrap(const GL::TextureWrap wrap) override;
+            /** @brief: Sets the filter mode of the texture.
+             * @param filter: The filter mode.
+             */
+            void setFilter(const GL::TextureFilter filter) override;
         };
 
         class Texture3D : public Texture {
-            friend class TextureBuilder;
-
             public:
-            /** Creates a 1x1x1 texture from the given color.
+            /** @brief: Creates a cubemap texture from the given color.
              * @param red: The red component of the color (0-255).
              * @param green: The green component of the color (0-255).
              * @param blue: The blue component of the color (0-255).
@@ -183,165 +189,85 @@ namespace cobalt {
              * @param wrap: The wrap mode of the texture.
              * @return: The created texture.
              */
-            Texture3D(const uchar red,
-                      const uchar green,
-                      const uchar blue,
-                      const uchar alpha = 255,
-                      const GLTextureFilter filter = GLTextureFilter::Linear,
-                      const GLTextureWrap wrap = GLTextureWrap::Repeat);
-            
-            /** Creates a 1x1x1 texture from the given color.
+            Texture3D(const uchar red, const uchar green, const uchar blue, const uchar alpha = 255,
+                      const GL::TextureFilter filter = GL::TextureFilters::Linear, const GL::TextureWrap wrap = GL::TextureWraps::Repeat);
+
+            /** @brief: Creates a cubemap texture from the given color.
              * @param color: The color of the texture.
              * @param filter: The filter mode of the texture.
              * @param wrap: The wrap mode of the texture.
              * @return: The created texture.
              */
-            Texture3D(const Color& color,
-                      const GLTextureFilter filter = GLTextureFilter::Linear,
-                      const GLTextureWrap wrap = GLTextureWrap::Repeat);
+            Texture3D(const Color& color, const GL::TextureFilter filter = GL::TextureFilters::Linear,
+                      const GL::TextureWrap wrap = GL::TextureWraps::Repeat);
 
-            /** Reserves the memory for the texture.
-             * @param width: The width of the texture. 0 will use the current width.
-             * @param height: The height of the texture. 0 will use the current height.
-             */
-            void reserve(const uint width, const uint height) override;
-            /** Binds the texture to the current opengl rendering context.
-             */
-            void bind() const override;
-            /** Binds the texture to the given texture unit.
-             * @param unit: The texture unit to bind the texture to.
-             */
-            void bindToUnit(const GLuint unit) const override;
-            /** Sets the wrap mode of the texture.
-             * @param wrap: The wrap mode.
-             */
-            void setWrap(const GLTextureWrap wrap) override;
-            /** Sets the filter mode of the texture.
-             * @param filter: The filter mode.
-             */
-            void setFilter(const GLTextureFilter filter) override;
-
-            private:
-            /** Creates an empty cubemap with the given width and height 
+            /** @brief: Creates an empty cubemap with the given width and height
              * for the faces and reserves the memory for it.
              * The format is the internal format of the texture.
              * @param width: The width of the texture.
              * @param height: The height of the texture.
-             * @param format: The pixel format of the texture.
              * @param encoding: The internal format of the texture.
              * @param filter: The filter mode of the texture.
              * @param wrap: The wrap mode of the texture.
              * @return: The created texture.
              */
-            Texture3D(const uint width, const uint height,
-                      const GLTextureFormat format = GLTextureFormat::RGBA,
-                      const GLTextureEncoding encoding = GLTextureEncoding::SRGBA,
-                      const GLTextureFilter filter = GLTextureFilter::Linear,
-                      const GLTextureWrap wrap = GLTextureWrap::Repeat);
-            /** Creates a cubemap from the given path to a directory containing the faces
-             * in 6 distinct png files: right.png, left.png, top.png, bottom.png, front.png, back.png.
+            Texture3D(const uint width, const uint height, const GL::TextureEncoding encoding = GL::TextureEncodings::RGBA::Bits8,
+                      const GL::TextureFilter filter = GL::TextureFilters::Linear, const GL::TextureWrap wrap = GL::TextureWraps::Repeat);
+
+            /** @brief: Creates a cubemap from the given path to a directory containing the faces
+             * in 6 distinct png files: right.png, left.png, top.png, bottom.png,
+             * front.png, back.png.
              * @param path: The path to the texture.
+             * @param srgb: Whether the texture should be interpreted as srgb.
              * @param filter: The filter mode of the texture.
              * @param wrap: The wrap mode of the texture.
-             * @param isSrgb: Whether the texture is in srgb color space.
              * @return: The created texture.
              */
-            Texture3D(const Path& path,
-                      const GLTextureFilter filter = GLTextureFilter::Linear,
-                      const GLTextureWrap wrap = GLTextureWrap::Repeat,
-                      const bool isSrgb = false);
+            Texture3D(const Path& path, const bool srgb, const GL::TextureFilter filter = GL::TextureFilters::Linear,
+                      const GL::TextureWrap wrap = GL::TextureWraps::Repeat);
+
+            /** @brief: Copy constructor.
+             * @param other: The other texture.
+             * @return: The copied texture.
+             */
+            Texture3D(const Texture3D&) = delete;
+            /** @brief: Move constructor.
+             * @param other: The other texture.
+             * @return: The moved texture.
+             */
+            Texture3D(Texture3D&&) noexcept;
+            /** @brief: Copy assignment operator.
+             * @param other: The other texture.
+             * @return: The copied texture.
+             */
+            Texture3D& operator=(const Texture3D&) = delete;
+            /** @brief: Move assignment operator.
+             * @param other: The other texture.
+             * @return: The moved texture.
+             */
+            Texture3D& operator=(Texture3D&&) noexcept;
+
+            /** @brief: Reserves the memory for the texture.
+             * @param width: The width of the texture. 0 will use the current width.
+             * @param height: The height of the texture. 0 will use the current height.
+             */
+            void reserve(const uint width, const uint height) override;
+            /** @brief: Binds the texture to the current OpenGL rendering context.
+             */
+            void bind() const override;
+            /** @brief: Binds the texture to the given texture unit.
+             * @param unit: The texture unit to bind the texture to.
+             */
+            void bindToUnit(const GLuint unit) const override;
+            /** @brief: Sets the wrap mode of the texture.
+             * @param wrap: The wrap mode.
+             */
+            void setWrap(const GL::TextureWrap wrap) override;
+            /** @brief: Sets the filter mode of the texture.
+             * @param filter: The filter mode.
+             */
+            void setFilter(const GL::TextureFilter filter) override;
         };
-
-        class TextureBuilder {
-            public:
-            /** Constructs a TextureBuilder object with the default configuration.
-             * @return: The constructed TextureBuilder object.
-             */
-            TextureBuilder();
-            /** Destroys the TextureBuilder object.
-             */
-            ~TextureBuilder() = default;
-
-            /** Constructs an empty Texture2D object based on the current configuration.
-             * @return: The constructed Texture2D object.
-             */
-            Texture2D buildEmpty2D() const;
-            /** Constructs a Texture2D object from a source based on the current configuration.
-             * @return: The constructed Texture2D object.
-             */
-            Texture2D buildFromSource2D(const Path& path) const;
-
-            /** Constructs an empty Texture3D object based on the current configuration.
-             * @return: The constructed Texture2D object.
-             */
-            Texture3D buildEmpty3D() const;
-            /** Constructs a Texture3D object from a source based on the current configuration.
-             * @return: The constructed Texture3D object.
-             */
-            Texture3D buildFromSource3D(const Path& path) const;
-
-            /** Sets the dimensions of the texture.
-             * @param width: The width of the texture in pixels.
-             * @param height: The height of the texture in pixels.
-             * @return: Reference to the current TextureBuilder instance.
-             */
-            TextureBuilder& setDimensions(const uint width, const uint height);
-            /** Sets the wrapping mode of the texture.
-             * @param wrap: The GLTextureWrap enum specifying the wrap mode.
-             * @return: Reference to the current TextureBuilder instance.
-             */
-            TextureBuilder& setWrap(const GLTextureWrap wrap);
-            /** Sets the filtering mode of the texture.
-             * @param filter: The GLTextureFilter enum specifying the filter mode.
-             * @return: Reference to the current TextureBuilder instance.
-             */
-            TextureBuilder& setFilter(const GLTextureFilter filter);
-            /** Sets the number of channels of the texture.
-             * This is irrelevant if the texture is a depth or stencil buffer.
-             * @param channels: The number of channels.
-             * @return: Reference to the current TextureBuilder instance.
-             */
-            TextureBuilder& setChannels(const uint channels);
-            /** Sets whether the texture is a color buffer.
-             * Mutually exclusive with setIsDepth and setIsStencil.
-             * @param isColor: Whether the texture is a color texture.
-             * @return: Reference to the current TextureBuilder instance.
-             */
-            TextureBuilder& setIsColor(const bool isColor);
-            /** Sets whether the texture is a depth buffer.
-             * Mutually exclusive with setIsColor.
-             * @param isDepth: Whether the texture is a depth texture.
-             * @return: Reference to the current TextureBuilder instance.
-             */
-            TextureBuilder& setIsDepth(const bool isDepth);
-            /** Sets whether the texture is a stencil buffer.
-             * Mutually exclusive with setIsColor.
-             * Assumes that the texture is a depth buffer as well.
-             * @param isStencil: Whether the texture is a stencil texture.
-             * @return: Reference to the current TextureBuilder instance.
-             */
-            TextureBuilder& setIsStencil(const bool isStencil);
-            /** Sets whether the texture is in srgb color space.
-             * @param isSrgb: Whether the texture is in srgb color space.
-             * @return: Reference to the current TextureBuilder instance.
-             */
-            TextureBuilder& setIsSrgb(const bool isSrgb);
-            /** Sets whether the texture is hdr.
-             * @param isHdr: Whether the texture is hdr.
-             * @return: Reference to the current TextureBuilder instance.
-             */
-            TextureBuilder& setIsHdr(const bool isHdr);
-
-            private:
-            uint channels;
-            uint width, height;
-            bool isColor;
-            bool isDepth;
-            bool isStencil;
-            bool isSrgb;
-            bool isHdr;
-            GLTextureWrap wrap;
-            GLTextureFilter filter;
-        };
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

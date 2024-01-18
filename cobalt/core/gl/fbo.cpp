@@ -1,141 +1,177 @@
 //
-// Created by tomas on 02-12-2023.
+// Created
+// by
+// tomas
+// on
+// 02-12-2023.
 //
 
 #include "core/gl/fbo.h"
-#include "core/pch.h"
 
+#include "core/gfx/render_context.h"
+#include "core/pch.h"
 
 namespace cobalt {
     namespace core {
-        FBO::FBO(const GLFramebufferAttachment type)
-            : type(type) {}
-        
+        FBO::FBO(const uint width, const uint height, const Vec<Attachment>& attachments) : width(width), height(height), clearColor(COLOR_BLACK) {
+            glGenFramebuffers(1, &buffer);
+            glBindFramebuffer(GL_FRAMEBUFFER, buffer);
+            for (auto& attachment : attachments) {
+                CB_CORE_WARN("Creating FBO attachment: {0}", attachment.encoding);
+                GL::TextureFormat type = GL::getTextureFormat(attachment.encoding);
+                CB_CORE_WARN("Attachment type: {0}", type);
+                switch (type) {
+                    case GL::TextureFormats::Stencil:
+                        stencil.emplace(width, height, attachment.encoding, attachment.filter, attachment.wrap);
+                        stencil.value().bind();
+                        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, stencil.value().getGLHandle(), 0);
+                        break;
+                    case GL::TextureFormats::Depth:
+                        depth.emplace(width, height, attachment.encoding, attachment.filter, attachment.wrap);
+                        depth.value().bind();
+                        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth.value().getGLHandle(), 0);
+                        break;
+                    case GL::TextureFormats::DepthStencil:
+                        depthStencil.emplace(width, height, attachment.encoding, attachment.filter, attachment.wrap);
+                        depthStencil.value().bind();
+                        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthStencil.value().getGLHandle(), 0);
+                        break;
+                    case GL::TextureFormats::R:
+                    case GL::TextureFormats::RG:
+                    case GL::TextureFormats::RGB:
+                    case GL::TextureFormats::RGBA: {
+                        const uint maxColorAttachments = RenderContext::queryMaxColorAttachments();
+                        if (colors.size() > maxColorAttachments) {
+                            CB_CORE_WARN("Attempting to add more color attachments to FBO ({0}) than the maximum supported ({1}).",
+                                         maxColorAttachments);
+                        }
+                        const uint id = colors.size();
+                        colors.emplace_back(width, height, attachment.encoding, attachment.filter, attachment.wrap);
+                        colors[id].bind();
+                        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + id, GL_TEXTURE_2D, colors[id].getGLHandle(), 0);
+                    }
+                        continue;
+                    case GL::TextureFormats::Unknown:
+                    default:
+                        CB_CORE_WARN("Attempting to add an unknown attachment type to FBO.");
+                        break;
+                }
+                if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+                    throw GLException("Failed to create FBO");
+                }
+                CB_CORE_INFO("Created a {0}x{1} px FBO", width, height);
+            }
+        }
+
+        FBO::FBO() : buffer(0), clearColor(COLOR_GREEN) {
+            int width, height;
+            glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+            this->width = (uint)width;
+            this->height = (uint)height;
+        }
+
+        FBO::FBO(FBO&& other) noexcept
+            : buffer(other.buffer),
+              width(other.width),
+              height(other.height),
+              clearColor(other.clearColor),
+              colors(std::move(other.colors)),
+              depth(std::move(other.depth)),
+              stencil(std::move(other.stencil)),
+              depthStencil(std::move(other.depthStencil)) {
+            other.buffer = 0;
+        }
+
+        FBO& FBO::operator=(FBO&& other) noexcept {
+            if (buffer != 0) {
+                glDeleteFramebuffers(1, &buffer);
+            }
+            buffer = other.buffer;
+            width = other.width;
+            height = other.height;
+            clearColor = other.clearColor;
+            colors = std::move(other.colors);
+            depth = std::move(other.depth);
+            stencil = std::move(other.stencil);
+            depthStencil = std::move(other.depthStencil);
+            other.buffer = 0;
+            return *this;
+        }
+
+        FBO::~FBO() {
+            if (buffer != 0) {
+                glDeleteFramebuffers(1, &buffer);
+            }
+        }
+
+        void FBO::resize(const uint width, const uint height) {
+            this->width = width;
+            this->height = height;
+            if (buffer == 0) {
+                glViewport(0, 0, width, height);
+                CB_CORE_INFO("Resized default FBO to {0}x{1} px", width, height);
+            } else {
+                for (uint i = 0; i < colors.size(); i++) {
+                    colors[i].reserve(width, height);
+                }
+                if (depth.has_value()) depth.value().reserve(width, height);
+                if (stencil.has_value()) stencil.value().reserve(width, height);
+                if (depthStencil.has_value()) depthStencil.value().reserve(width, height);
+                CB_CORE_INFO("Resized FBO to {0}x{1} px (GL: {2})", width, height, buffer);
+            }
+        }
+
+        void FBO::bind() const { glBindFramebuffer(GL_FRAMEBUFFER, buffer); }
+
         void FBO::clear() const {
             bind();
             glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
             int mask = 0;
-            if (static_cast<int>(type) & static_cast<int>(GLFramebufferAttachment::Color)) {
+            if (!colors.empty()) {
                 mask |= GL_COLOR_BUFFER_BIT;
             }
-            if (static_cast<int>(type) & static_cast<int>(GLFramebufferAttachment::Depth)) {
+            if (depth.has_value() || depthStencil.has_value()) {
                 mask |= GL_DEPTH_BUFFER_BIT;
             }
-            if (static_cast<int>(type) & static_cast<int>(GLFramebufferAttachment::Stencil)) {
+            if (stencil.has_value() || depthStencil.has_value()) {
                 mask |= GL_STENCIL_BUFFER_BIT;
             }
             glClear(mask);
         }
 
-        void FBO::setClearColor(const Color& color) {
-            clearColor = color;
-        }
+        void FBO::setClearColor(const Color& color) { clearColor = color; }
 
-        const uint FBO::getWidth() const {
-            return width;
-        }
-
-        const uint FBO::getHeight() const {
-            return height;
-        }
-
-        DefaultFBO::DefaultFBO(const GLFramebufferAttachment type)
-            : FBO(type) {
-            int width, height;
-            glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
-            this->width = (uint) width;
-            this->height = (uint) height;
-        }
-
-        void DefaultFBO::resize(const uint width, const uint height) {
-            glViewport(0, 0, width, height);
-            this->width = width;
-            this->height = height;
-        }
-
-        void DefaultFBO::bind() const {
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        }
-
-        TargetFBO::TargetFBO(const uint width, const uint height, 
-                             const GLFramebufferAttachment type,
-                             const GLTextureFilter filter,
-                             const GLTextureWrap wrap,
-                             const bool srgb) : FBO(type) {
-            glGenFramebuffers(1, &buffer);
-            glBindFramebuffer(GL_FRAMEBUFFER, buffer);
-            if (static_cast<int>(type) & static_cast<int>(GLFramebufferAttachment::Color)) {\
-                TextureBuilder builder = TextureBuilder().setDimensions(width, height)
-                                                         .setFilter(filter)
-                                                         .setWrap(wrap)
-                                                         .setIsSrgb(srgb)
-                                                         .setIsHdr(true);
-                color = builder.setChannels(4).setIsColor(true).buildEmpty2D();
-                color.value().bind();
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color.value().getGLHandle(), 0);
+        const Opt<Wrap<const Texture2D>> FBO::getColorBuffer(const uint i) const {
+            if (i >= colors.size() || colors.empty()) {
+                return None;
             }
-            if (static_cast<int>(type) & static_cast<int>(GLFramebufferAttachment::Depth)) {
-                TextureBuilder builder = TextureBuilder().setDimensions(width, height)
-                                                         .setFilter(filter)
-                                                         .setWrap(wrap)
-                                                         .setIsSrgb(srgb)
-                                                         .setIsHdr(false);
-                builder.setIsDepth(true);
-                if (static_cast<int>(type) & static_cast<int>(GLFramebufferAttachment::Stencil)) {
-                    builder.setIsStencil(true);
+            return createWrap(colors[i]);
+        }
+
+        const Opt<Wrap<const Texture2D>> FBO::getColorBuffer() const { return getColorBuffer(0); }
+
+        const Opt<Wrap<const Texture2D>> FBO::getDepthBuffer() const {
+            if (!depth.has_value()) {
+                if (!depthStencil.has_value()) {
+                    return None;
                 }
-                depthStencil = builder.buildEmpty2D();
-                depthStencil.value().bind();
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthStencil.value().getGLHandle(), 0);
-                if (static_cast<int>(type) & static_cast<int>(GLFramebufferAttachment::Stencil)) {
-                    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthStencil.value().getGLHandle(), 0);
+                return createWrap(depthStencil.value());
+            }
+            return createWrap(depth.value());
+        }
+
+        const Opt<Wrap<const Texture2D>> FBO::getStencilBuffer() const {
+            if (!stencil.has_value()) {
+                if (!depthStencil.has_value()) {
+                    return None;
                 }
+                return createWrap(depthStencil.value());
             }
-            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-                throw GLException("Failed to create FBO");
-            }
-            CB_CORE_INFO("Created a {0}x{1} px FBO", width, height);
+            return createWrap(stencil.value());
         }
 
-        TargetFBO::~TargetFBO() {
-            glDeleteFramebuffers(1, &buffer);
-        }
+        const uint FBO::getWidth() const { return width; }
 
-        void TargetFBO::resize(const uint width, const uint height) {
-            this->width = width;
-            this->height = height;
-            if (color.has_value()) color.value().reserve(width, height);
-            if (depthStencil.has_value()) depthStencil.value().reserve(width, height);
-            CB_CORE_INFO("Resized FBO to {0}x{1} px (GL: {2})", width, height, buffer);
-        }
-
-        void TargetFBO::bind() const {
-            glBindFramebuffer(GL_FRAMEBUFFER, buffer);
-        }
-
-        const bool TargetFBO::hasAttachment(const GLFramebufferAttachment attachment) const {
-            return static_cast<int>(type) & static_cast<int>(attachment);
-        }
-
-        const Texture& TargetFBO::getColorBuffer() const {
-            if (!hasAttachment(GLFramebufferAttachment::Color)) {
-                throw GLException("FBO does not have a color buffer attachment");
-            }
-            return color.value();
-        }
-
-        const Texture& TargetFBO::getDepthBuffer() const {
-            if (!hasAttachment(GLFramebufferAttachment::Depth)) {
-                throw GLException("FBO does not have a depth buffer attachment");
-            }
-            return depthStencil.value();
-        }
-        
-        const Texture& TargetFBO::getStencilBuffer() const {
-            if (!hasAttachment(GLFramebufferAttachment::Stencil)) {
-                throw GLException("FBO does not have a stencil buffer attachment");
-            }
-            return depthStencil.value();
-        }
-    }
-}
+        const uint FBO::getHeight() const { return height; }
+    }  // namespace core
+}  // namespace cobalt

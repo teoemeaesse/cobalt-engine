@@ -1,10 +1,14 @@
 //
-// Created by tomas on 07-12-2023.
+// Created
+// by
+// tomas
+// on
+// 07-12-2023.
 //
 
-#include "core/pch.h"
 #include "engine/internal/configuration.h"
 
+#include "core/pch.h"
 
 namespace cobalt {
     namespace engine {
@@ -37,9 +41,7 @@ namespace cobalt {
             log();
         }
 
-        const bool Configuration::has(const std::string& key) const {
-            return entries.find(key) != entries.end();
-        }
+        const bool Configuration::has(const std::string& key) const { return entries.find(key) != entries.end(); }
 
         void Configuration::serialize(const core::Path& path) const {
             CB_INFO("Serializing configuration to '{}'", path.getPath());
@@ -114,5 +116,6 @@ namespace cobalt {
                 }
             }
         }
-    }
-}
+    }  // namespace engine
+}  // namespace
+   // cobalt

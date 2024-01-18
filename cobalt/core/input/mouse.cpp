@@ -1,31 +1,27 @@
 //
-// Created by tomas on 03-12-2023.
+// Created
+// by
+// tomas
+// on
+// 03-12-2023.
 //
 
 #include "core/input/mouse.h"
-#include "core/exceptions/input_exception.h"
 
+#include "core/exceptions/input_exception.h"
 
 namespace cobalt {
     namespace core {
         const std::string Mouse::NAME = "Mouse";
 
-        ButtonState::ButtonState() : down(false), polled(false) {
-        }
+        ButtonState::ButtonState() : down(false), polled(false) {}
 
-        bool ButtonState::isDown() const {
-            return down;
-        }
+        bool ButtonState::isDown() const { return down; }
 
-        bool ButtonState::isPolled() const {
-            return polled;
-        }
+        bool ButtonState::isPolled() const { return polled; }
 
-        Mouse::Mouse(const DeviceID id, const float sensitivity) : Peripheral(id),
-            sensitivity(sensitivity),
-            x(0.0f), y(0.0f),
-            dx(0.0f), dy(0.0f),
-            dsx(0.0f), dsy(0.0f) {
+        Mouse::Mouse(const DeviceID id, const float sensitivity)
+            : Peripheral(id), sensitivity(sensitivity), x(0.0f), y(0.0f), dx(0.0f), dy(0.0f), dsx(0.0f), dsy(0.0f) {
             for (size_t i = 0; i < static_cast<size_t>(MouseInputID::MIDDLE); i++) {
                 buttonStates[i] = ButtonState();
             }
@@ -46,7 +42,7 @@ namespace cobalt {
         void Mouse::onButtonPress(const int button, const int action) {
             MouseInputID id = glfwToCobalt(button);
             if (id == MouseInputID::UNKNOWN) {
-                throw InvalidInputException<MouseInputID>("Invalid button", button, this);    
+                throw InvalidInputException<MouseInputID>("Invalid button", button, this);
             }
             buttonStates[static_cast<size_t>(id)].down = action == GLFW_PRESS;
         }
@@ -61,7 +57,7 @@ namespace cobalt {
         void Mouse::pollEvents() {
             // Buttons
             for (size_t i = 0; i < 3; i++) {
-                ButtonState &state = buttonStates[i];
+                ButtonState& state = buttonStates[i];
                 if (state.down) {
                     queueEvent(static_cast<MouseInputID>(i), {state.down, state.polled, 1.0f});
                     if (!state.polled) {
@@ -75,19 +71,19 @@ namespace cobalt {
 
             // Axes
             if (dx != 0.0f) {
-                queueEvent(MouseInputID::AXIS_X, { true, false, dx});
+                queueEvent(MouseInputID::AXIS_X, {true, false, dx});
                 for (size_t i = 0; i < 3; i++) {
-                    if(buttonStates[i].down) {
-                        queueEvent(static_cast<MouseInputID>(i + 3), { true, false, dx});
+                    if (buttonStates[i].down) {
+                        queueEvent(static_cast<MouseInputID>(i + 3), {true, false, dx});
                     }
                 }
                 dx = 0.0f;
             }
             if (dy != 0.0f) {
-                queueEvent(MouseInputID::AXIS_Y, { true, false, dy});
+                queueEvent(MouseInputID::AXIS_Y, {true, false, dy});
                 for (size_t i = 0; i < 3; i++) {
-                    if(buttonStates[i].down) {
-                        queueEvent(static_cast<MouseInputID>(i + 6), { true, false, dy});
+                    if (buttonStates[i].down) {
+                        queueEvent(static_cast<MouseInputID>(i + 6), {true, false, dy});
                     }
                 }
                 dy = 0.0f;
@@ -95,11 +91,11 @@ namespace cobalt {
 
             // Scroll
             if (dsx != 0.0f) {
-                queueEvent(MouseInputID::SCROLL_X, { true, false, dsx});
+                queueEvent(MouseInputID::SCROLL_X, {true, false, dsx});
                 dsx = 0.0f;
             }
             if (dsy != 0.0f) {
-                queueEvent(MouseInputID::SCROLL_Y, { true, false, dsy});
+                queueEvent(MouseInputID::SCROLL_Y, {true, false, dsy});
                 dsy = 0.0f;
             }
         }
@@ -111,62 +107,36 @@ namespace cobalt {
             }
         }
 
-        ButtonState& Mouse::getButton(const MouseInputID button) {
-            return buttonStates[static_cast<size_t>(button)];
-        }
+        ButtonState& Mouse::getButton(const MouseInputID button) { return buttonStates[static_cast<size_t>(button)]; }
 
-        float Mouse::getX() const {
-            return x;
-        }
+        float Mouse::getX() const { return x; }
 
-        float Mouse::getY() const {
-            return y;
-        }
+        float Mouse::getY() const { return y; }
 
-        float Mouse::getDX() const {
-            return dx;
-        }
+        float Mouse::getDX() const { return dx; }
 
-        float Mouse::getDY() const {
-            return dy;
-        }
+        float Mouse::getDY() const { return dy; }
 
-        float Mouse::getDSX() const {
-            return dsx;
-        }
+        float Mouse::getDSX() const { return dsx; }
 
-        float Mouse::getDSY() const {
-            return dsy;
-        }
+        float Mouse::getDSY() const { return dsy; }
 
-        float Mouse::getSensitivity() const {
-            return sensitivity;
-        }
+        float Mouse::getSensitivity() const { return sensitivity; }
 
-        void Mouse::setSensitivity(const float sensitivity) {
-            this->sensitivity = sensitivity;
-        }
+        void Mouse::setSensitivity(const float sensitivity) { this->sensitivity = sensitivity; }
 
-
-        const static UMap<int, MouseInputID> GLFW_TO_CB = {
-            { GLFW_MOUSE_BUTTON_LEFT, MouseInputID::LEFT },
-            { GLFW_MOUSE_BUTTON_RIGHT, MouseInputID::RIGHT },
-            { GLFW_MOUSE_BUTTON_MIDDLE, MouseInputID::MIDDLE }
-        };
+        const static UMap<int, MouseInputID> GLFW_TO_CB = {{GLFW_MOUSE_BUTTON_LEFT, MouseInputID::LEFT},
+                                                           {GLFW_MOUSE_BUTTON_RIGHT, MouseInputID::RIGHT},
+                                                           {GLFW_MOUSE_BUTTON_MIDDLE, MouseInputID::MIDDLE}};
 
         const static UMap<MouseInputID, std::string> CB_TO_STR = {
-            { MouseInputID::LEFT, "Left" }, { MouseInputID::RIGHT, "Right" }, { MouseInputID::MIDDLE, "Middle" },
-            { MouseInputID::AXIS_X, "X" }, { MouseInputID::AXIS_Y, "Y" },
-            { MouseInputID::LEFT_X, "Left X" }, { MouseInputID::LEFT_Y, "Left Y" },
-            { MouseInputID::RIGHT_X, "Right X" }, { MouseInputID::RIGHT_Y, "Right Y" },
-            { MouseInputID::MIDDLE_X, "Middle X" }, { MouseInputID::MIDDLE_Y, "Middle Y" },
-            { MouseInputID::SCROLL_X, "Scroll X" }, { MouseInputID::SCROLL_Y, "Scroll Y" },
-            { MouseInputID::COUNT, "Count" }, { MouseInputID::UNKNOWN, "Unknown" }
-        };
+            {MouseInputID::LEFT, "Left"},         {MouseInputID::RIGHT, "Right"},       {MouseInputID::MIDDLE, "Middle"},
+            {MouseInputID::AXIS_X, "X"},          {MouseInputID::AXIS_Y, "Y"},          {MouseInputID::LEFT_X, "Left X"},
+            {MouseInputID::LEFT_Y, "Left Y"},     {MouseInputID::RIGHT_X, "Right X"},   {MouseInputID::RIGHT_Y, "Right Y"},
+            {MouseInputID::MIDDLE_X, "Middle X"}, {MouseInputID::MIDDLE_Y, "Middle Y"}, {MouseInputID::SCROLL_X, "Scroll X"},
+            {MouseInputID::SCROLL_Y, "Scroll Y"}, {MouseInputID::COUNT, "Count"},       {MouseInputID::UNKNOWN, "Unknown"}};
 
-        const std::string& Mouse::toString() const {
-            return NAME;
-        }
+        const std::string& Mouse::toString() const { return NAME; }
 
         const MouseInputID Mouse::glfwToCobalt(const int glfwCode) const {
             auto it = GLFW_TO_CB.find(glfwCode);
@@ -192,5 +162,6 @@ namespace cobalt {
             }
             return CB_TO_STR.at(MouseInputID::UNKNOWN);
         }
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

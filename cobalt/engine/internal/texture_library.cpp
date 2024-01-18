@@ -1,20 +1,22 @@
 //
-// Created by tomas on 06-12-2023.
+// Created
+// by
+// tomas
+// on
+// 06-12-2023.
 //
 
 #include "engine/internal/texture_library.h"
-#include "engine/internal/internal_exception.h"
-#include "core/pch.h"
 
+#include "core/pch.h"
+#include "engine/internal/internal_exception.h"
 
 namespace cobalt {
     namespace engine {
         Scope<TextureLibrary> TextureLibrary::instance;
 
-        TextureLibrary::TextureLibrary() {
-            textures2D.emplace_back("null", std::move(core::TextureBuilder().setDimensions(1, 1).setIsColor(true).setChannels(4).buildEmpty2D()));
-        }
-        
+        TextureLibrary::TextureLibrary() { textures2D.emplace_back("null", std::move(core::Texture2D(1, 1))); }
+
         void TextureLibrary::loadTextures(const core::Path& texturesDirectory) {
             core::Path texturesJsonPath = texturesDirectory;
             texturesJsonPath += "textures.json";
@@ -35,13 +37,12 @@ namespace cobalt {
                 if (textureType == "2d") {
                     CB_INFO("Loading 2D texture: {}", textureName);
                     CB_INFO("From source file: {}", texturePath.getFileName());
-                    textures2D.emplace_back(textureName, std::move(core::TextureBuilder().setIsSrgb(isSrgb).buildFromSource2D(texturePath)));
+                    textures2D.emplace_back(textureName, core::Texture2D(texturePath, isSrgb));
                     continue;
-                }
-                else if (textureType == "3d") {
-                    CB_INFO("Loading cubemap: {}", textureName);
+                } else if (textureType == "3d") {
+                    CB_INFO("Loading 3D texture: {}", textureName);
                     CB_INFO("From source directory: {}", texturePath.getFileName());
-                    textures3D.emplace_back(textureName, std::move(core::TextureBuilder().setIsSrgb(isSrgb).buildFromSource3D(texturePath)));
+                    textures3D.emplace_back(textureName, core::Texture3D(texturePath, isSrgb));
                     continue;
                 }
             }
@@ -71,20 +72,14 @@ namespace cobalt {
             return textures2D[0].texture;
         }
 
-        const core::Texture& TextureLibrary::getTexture(const std::string& name) {
-            return getTexture(getTextureID(name));
-        }
+        const core::Texture& TextureLibrary::getTexture(const std::string& name) { return getTexture(getTextureID(name)); }
 
-        void TextureLibrary::init() {
-            instance = createScope<TextureLibrary>();
-        }
+        void TextureLibrary::init() { instance = createScope<TextureLibrary>(); }
 
-        TextureLibrary& TextureLibrary::getTextureLibrary() {
-            return *instance;
-        }
+        TextureLibrary& TextureLibrary::getTextureLibrary() { return *instance; }
 
         const core::Texture2D& TextureLibrary::getTexture2D(const TextureID id) {
-            if(id.type == TextureID::Type::TEXTURE_2D) {
+            if (id.type == TextureID::Type::TEXTURE_2D) {
                 if (id.index >= textures2D.size() || id.index < 0) {
                     CB_WARN("Texture ID {} is out of bounds", id.index);
                     return textures2D[0].texture;
@@ -94,38 +89,31 @@ namespace cobalt {
             throw InternalException("Texture ID is not a 2D texture");
         }
 
-        const core::Texture2D& TextureLibrary::getTexture2D(const std::string& name) {
-            return getTexture2D(getTextureID(name));
-        }
+        const core::Texture2D& TextureLibrary::getTexture2D(const std::string& name) { return getTexture2D(getTextureID(name)); }
 
-        const core::Texture2D& TextureLibrary::getTexture2D(const core::Color color,
-                                                            const core::GLTextureFilter filter,
-                                                            const core::GLTextureWrap wrap) {
+        const core::Texture2D& TextureLibrary::getTexture2D(const core::Color color, const core::GL::TextureFilter filter,
+                                                            const core::GL::TextureWrap wrap) {
             TextureCache entry = {TextureID::Type::TEXTURE_2D, color};
             if (cache.find(entry) == cache.end()) {
                 textures2D.emplace_back(core::colorToString(color), std::move(core::Texture2D(color, filter, wrap)));
-                cache[entry] = {(uint) textures2D.size() - 1, TextureID::Type::TEXTURE_2D};
+                cache[entry] = {(uint)textures2D.size() - 1, TextureID::Type::TEXTURE_2D};
             }
             return getTexture2D(cache[entry]);
         }
 
-        const core::Texture2D& TextureLibrary::getTexture2D(const uchar red,
-                                                            const uchar green,
-                                                            const uchar blue,
-                                                            const uchar alpha,
-                                                            const core::GLTextureFilter filter,
-                                                            const core::GLTextureWrap wrap) {
+        const core::Texture2D& TextureLibrary::getTexture2D(const uchar red, const uchar green, const uchar blue, const uchar alpha,
+                                                            const core::GL::TextureFilter filter, const core::GL::TextureWrap wrap) {
             core::Color color = COLOR(red, green, blue, alpha);
             TextureCache entry = {TextureID::Type::TEXTURE_2D, color};
             if (cache.find(entry) == cache.end()) {
                 textures2D.emplace_back(core::colorToString(color), std::move(core::Texture2D(red, green, blue, alpha, filter, wrap)));
-                cache[entry] = {(uint) textures2D.size() - 1, TextureID::Type::TEXTURE_2D};
+                cache[entry] = {(uint)textures2D.size() - 1, TextureID::Type::TEXTURE_2D};
             }
             return getTexture2D(cache[entry]);
         }
 
         const core::Texture3D& TextureLibrary::getTexture3D(const TextureID id) {
-            if(id.type == TextureID::Type::TEXTURE_3D) {
+            if (id.type == TextureID::Type::TEXTURE_3D) {
                 if (id.index >= textures3D.size() || id.index < 0) {
                     CB_WARN("Texture ID {} is out of bounds", id.index);
                     return textures3D[0].texture;
@@ -135,34 +123,28 @@ namespace cobalt {
             throw InternalException("Texture ID is not a 3D texture");
         }
 
-        const core::Texture3D& TextureLibrary::getTexture3D(const std::string& name) {
-            return getTexture3D(getTextureID(name));
-        }
+        const core::Texture3D& TextureLibrary::getTexture3D(const std::string& name) { return getTexture3D(getTextureID(name)); }
 
-        const core::Texture3D& TextureLibrary::getTexture3D(const core::Color color,
-                                                            const core::GLTextureFilter filter,
-                                                            const core::GLTextureWrap wrap) {
+        const core::Texture3D& TextureLibrary::getTexture3D(const core::Color color, const core::GL::TextureFilter filter,
+                                                            const core::GL::TextureWrap wrap) {
             TextureCache entry = {TextureID::Type::TEXTURE_3D, color};
             if (cache.find(entry) == cache.end()) {
                 textures3D.emplace_back(core::colorToString(color), std::move(core::Texture3D(color, filter, wrap)));
-                cache[entry] = {(uint) textures3D.size() - 1, TextureID::Type::TEXTURE_3D};
+                cache[entry] = {(uint)textures3D.size() - 1, TextureID::Type::TEXTURE_3D};
             }
             return getTexture3D(cache[entry]);
         }
 
-        const core::Texture3D& TextureLibrary::getTexture3D(const uchar red,
-                                                            const uchar green,
-                                                            const uchar blue,
-                                                            const uchar alpha,
-                                                            const core::GLTextureFilter filter,
-                                                            const core::GLTextureWrap wrap) {
+        const core::Texture3D& TextureLibrary::getTexture3D(const uchar red, const uchar green, const uchar blue, const uchar alpha,
+                                                            const core::GL::TextureFilter filter, const core::GL::TextureWrap wrap) {
             core::Color color = COLOR(red, green, blue, alpha);
             TextureCache entry = {TextureID::Type::TEXTURE_3D, color};
             if (cache.find(entry) == cache.end()) {
                 textures3D.emplace_back(core::colorToString(color), std::move(core::Texture3D(red, green, blue, alpha, filter, wrap)));
-                cache[entry] = {(uint) textures3D.size() - 1, TextureID::Type::TEXTURE_3D};
+                cache[entry] = {(uint)textures3D.size() - 1, TextureID::Type::TEXTURE_3D};
             }
             return getTexture3D(cache[entry]);
         }
-    }
-}
+    }  // namespace engine
+}  // namespace
+   // cobalt

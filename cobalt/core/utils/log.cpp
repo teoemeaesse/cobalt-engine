@@ -1,11 +1,14 @@
 //
-// Created by tomas on 29-11-2023.
+// Created
+// by
+// tomas
+// on
+// 29-11-2023.
 //
 
 #include "core/utils/log.h"
 
 #include "spdlog/sinks/stdout_color_sinks.h"
-
 
 namespace cobalt {
     namespace core {
@@ -22,5 +25,6 @@ namespace cobalt {
             editorLogger = spdlog::stdout_color_mt("EDITOR");
             editorLogger->set_level(spdlog::level::trace);
         }
-    }
-}
+    }  // namespace core
+}  // namespace
+   // cobalt

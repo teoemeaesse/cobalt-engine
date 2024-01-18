@@ -1,14 +1,17 @@
 //
-// Created by tomas on 24-12-2023.
+// Created
+// by
+// tomas
+// on
+// 24-12-2023.
 //
 
 #pragma once
 
-#include "core/pch.h"
 #include "core/gfx/material.h"
-#include "engine/internal/texture_library.h"
+#include "core/pch.h"
 #include "engine/internal/shader_library.h"
-
+#include "engine/internal/texture_library.h"
 
 namespace cobalt {
     namespace engine {
@@ -20,39 +23,36 @@ namespace cobalt {
                 std::string name;
                 core::Material material;
 
-                /** Creates a new material entry.
+                /** @brief: Creates a new material entry.
                  * @param name: The name of the material.
                  * @param material: The material.
                  * @return: The material entry.
                  */
-                MaterialEntry(const std::string& name, const core::Material& material) :
-                    name(name),
-                    material(material)
-                {}
+                MaterialEntry(const std::string& name, const core::Material& material) : name(name), material(material) {}
             };
 
-            /** Creates an empty material library.
+            /** @brief: Creates an empty material library.
              * @return: The material library.
              */
             MaterialLibrary();
-            /** Destroys the material library and all materials it contains.
+            /** @brief: Destroys the material library and all materials it contains.
              */
             ~MaterialLibrary() = default;
 
-            /** Returns the material ID of the material with the given name.
+            /** @brief: Returns the material ID of the material with the given name.
              * If the material does not exist, returns 0.
              * @param name: The name of the material.
              */
             const MaterialID getMaterialID(const std::string& name);
 
-            /** Returns the material with the given ID.
+            /** @brief: Returns the material with the given ID.
              * If the material does not exist, returns a null material.
              * @param id: The ID of the material.
              * @return: The material.
              */
             core::Material& getMaterial(const MaterialID id);
 
-            /** Creates a new PBR material.
+            /** @brief: Creates a new PBR material.
              * @param name: The name of the material.
              * @param shader: The shader program.
              * @param albedoMap: The surface albedo map.
@@ -60,13 +60,9 @@ namespace cobalt {
              * @param mraoMap: The metallic (R), roughness (G) and AO (B) map.
              * @return: The material.
              */
-            const MaterialID makePBR(
-                const std::string& name,
-                const TextureID& albedo,
-                const TextureID& normal,
-                const TextureID& mrao);
-            
-            /** Creates a new PBR material.
+            const MaterialID makePBR(const std::string& name, const TextureID& albedo, const TextureID& normal, const TextureID& mrao);
+
+            /** @brief: Creates a new PBR material.
              * @param name: The name of the material.
              * @param shader: The shader program.
              * @param albedo: The surface albedo.
@@ -75,47 +71,41 @@ namespace cobalt {
              * @param ao: The surface ambient occlusion value (0.0f - 1.0f).
              * @return: The material.
              */
-            const MaterialID makePBR(
-                const std::string& name,
-                const core::Color albedo,
-                const float metallic,
-                const float roughness,
-                const float ao);
+            const MaterialID makePBR(const std::string& name, const core::Color albedo, const float metallic, const float roughness, const float ao);
 
-            /** Creates a new material from the given shader.
+            /** @brief: Creates a new material from the given shader.
              * @param name: The name of the material.
              * @param shader: The shader program.
-             * @return: The material. TODO: Variadic template for different material types.
+             * @return: The material. TODO: Variadic template for different material
+             * types.
              */
-            const MaterialID makeFromShader(
-                const std::string& name,
-                const ShaderID& shader);
-            
-            /** Creates a new material from the given shader.
+            const MaterialID makeFromShader(const std::string& name, const ShaderID& shader);
+
+            /** @brief: Creates a new material from the given shader.
              * @param name: The name of the material.
              * @param shader: The name of shader program.
-             * @return: The material. TODO: Variadic template for different material types.
+             * @return: The material. TODO: Variadic template for different material
+             * types.
              */
-            const MaterialID makeFromShader(
-                const std::string& name,
-                const std::string& shader);
+            const MaterialID makeFromShader(const std::string& name, const std::string& shader);
 
-            /** Initializes the singleton instance of the material library.
+            /** @brief: Initializes the singleton instance of the material library.
              * This loads the default materials, so it needs to be called after
              * the texture and shader libraries have been initialized!
              */
             static void init();
-            /** Returns the singleton instance of the material library.
+            /** @brief: Returns the singleton instance of the material library.
              * @return: The material library.
              */
             static MaterialLibrary& getMaterialLibrary();
 
             private:
-            core::Deque<MaterialEntry> materials;   // The materials in the library.
+            core::Deque<MaterialEntry> materials;  // The materials in the library.
 
-            static Scope<MaterialLibrary> instance;   // The singleton instance of the material library.
+            static Scope<MaterialLibrary> instance;  // The singleton instance of the material library.
         };
-    }
-}
+    }  // namespace engine
+}  // namespace
+   // cobalt
 
 #define CB_MATERIAL_LIBRARY ::cobalt::engine::MaterialLibrary::getMaterialLibrary()

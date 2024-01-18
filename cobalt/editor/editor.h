@@ -1,11 +1,14 @@
 //
-// Created by tomas on 17-12-2023.
+// Created
+// by
+// tomas
+// on
+// 17-12-2023.
 //
 
 #pragma once
 
 #include "editor/persistency/cobalt_configuration.h"
-
 
 namespace cobalt {
     namespace editor {
@@ -19,11 +22,12 @@ namespace cobalt {
             void onResize(const uint width, const uint height) override;
             void bindInput();
             void createScene();
-            
+
             private:
             CobaltConfiguration configuration;
             engine::DefaultGraph renderGraph;
             core::Scene scene;
         };
-    }
-}
+    }  // namespace editor
+}  // namespace
+   // cobalt
