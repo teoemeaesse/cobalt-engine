@@ -17,9 +17,7 @@ namespace cobalt {
             glGenFramebuffers(1, &buffer);
             glBindFramebuffer(GL_FRAMEBUFFER, buffer);
             for (auto& attachment : attachments) {
-                CB_CORE_WARN("Creating FBO attachment: {0}", attachment.encoding);
                 GL::TextureFormat type = GL::getTextureFormat(attachment.encoding);
-                CB_CORE_WARN("Attachment type: {0}", type);
                 switch (type) {
                     case GL::TextureFormats::Stencil:
                         stencil.emplace(width, height, attachment.encoding, attachment.filter, attachment.wrap);
@@ -42,8 +40,7 @@ namespace cobalt {
                     case GL::TextureFormats::RGBA: {
                         const uint maxColorAttachments = RenderContext::queryMaxColorAttachments();
                         if (colors.size() > maxColorAttachments) {
-                            CB_CORE_WARN("Attempting to add more color attachments to FBO ({0}) than the maximum supported ({1}).",
-                                         maxColorAttachments);
+                            CB_CORE_WARN("Attempting to add more color attachments to FBO than the maximum supported ({0}).", maxColorAttachments);
                         }
                         const uint id = colors.size();
                         colors.emplace_back(width, height, attachment.encoding, attachment.filter, attachment.wrap);
