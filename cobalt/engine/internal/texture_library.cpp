@@ -15,7 +15,7 @@ namespace cobalt {
     namespace engine {
         Scope<TextureLibrary> TextureLibrary::instance;
 
-        TextureLibrary::TextureLibrary() { textures2D.emplace_back("null", std::move(core::Texture2D(1, 1))); }
+        TextureLibrary::TextureLibrary() { textures2D.emplace_back("null", core::Texture2D(1, 1)); }
 
         void TextureLibrary::loadTextures(const core::Path& texturesDirectory) {
             core::Path texturesJsonPath = texturesDirectory;
@@ -95,7 +95,7 @@ namespace cobalt {
                                                             const core::GL::TextureWrap wrap) {
             TextureCache entry = {TextureID::Type::TEXTURE_2D, color};
             if (cache.find(entry) == cache.end()) {
-                textures2D.emplace_back(core::colorToString(color), std::move(core::Texture2D(color, filter, wrap)));
+                textures2D.emplace_back(core::colorToString(color), core::Texture2D(color, filter, wrap));
                 cache[entry] = {(uint)textures2D.size() - 1, TextureID::Type::TEXTURE_2D};
             }
             return getTexture2D(cache[entry]);
@@ -106,7 +106,7 @@ namespace cobalt {
             core::Color color = COLOR(red, green, blue, alpha);
             TextureCache entry = {TextureID::Type::TEXTURE_2D, color};
             if (cache.find(entry) == cache.end()) {
-                textures2D.emplace_back(core::colorToString(color), std::move(core::Texture2D(red, green, blue, alpha, filter, wrap)));
+                textures2D.emplace_back(core::colorToString(color), core::Texture2D(red, green, blue, alpha, filter, wrap));
                 cache[entry] = {(uint)textures2D.size() - 1, TextureID::Type::TEXTURE_2D};
             }
             return getTexture2D(cache[entry]);
@@ -129,7 +129,7 @@ namespace cobalt {
                                                             const core::GL::TextureWrap wrap) {
             TextureCache entry = {TextureID::Type::TEXTURE_3D, color};
             if (cache.find(entry) == cache.end()) {
-                textures3D.emplace_back(core::colorToString(color), std::move(core::Texture3D(color, filter, wrap)));
+                textures3D.emplace_back(core::colorToString(color), core::Texture3D(color, filter, wrap));
                 cache[entry] = {(uint)textures3D.size() - 1, TextureID::Type::TEXTURE_3D};
             }
             return getTexture3D(cache[entry]);
@@ -140,7 +140,7 @@ namespace cobalt {
             core::Color color = COLOR(red, green, blue, alpha);
             TextureCache entry = {TextureID::Type::TEXTURE_3D, color};
             if (cache.find(entry) == cache.end()) {
-                textures3D.emplace_back(core::colorToString(color), std::move(core::Texture3D(red, green, blue, alpha, filter, wrap)));
+                textures3D.emplace_back(core::colorToString(color), core::Texture3D(red, green, blue, alpha, filter, wrap));
                 cache[entry] = {(uint)textures3D.size() - 1, TextureID::Type::TEXTURE_3D};
             }
             return getTexture3D(cache[entry]);
