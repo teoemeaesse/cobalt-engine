@@ -13,7 +13,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         /** @brief: A render node is a node in a graph that connects
          * source render targets to output render targets
          * using a single renderer.
@@ -101,5 +101,4 @@ namespace cobalt {
             void renderSkybox(Skybox& skybox);
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

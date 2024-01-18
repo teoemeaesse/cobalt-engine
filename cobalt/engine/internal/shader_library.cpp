@@ -16,36 +16,36 @@ namespace cobalt {
     namespace engine {
         Scope<ShaderLibrary> ShaderLibrary::instance;
 
-        static core::RenderShader parseRenderShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
-            core::ShaderBuilder builder;
+        static core::gl::RenderShader parseRenderShader(nlohmann::json& shaderJson, const core::io::Path& shadersDirectory) {
+            core::gl::ShaderBuilder builder;
             std::string vertexName = shaderJson["vertex"].get<std::string>();
             std::string fragmentName = shaderJson["fragment"].get<std::string>();
-            core::File vertexFile(shadersDirectory + vertexName);
-            core::File fragmentFile(shadersDirectory + fragmentName);
+            core::io::File vertexFile(shadersDirectory + vertexName);
+            core::io::File fragmentFile(shadersDirectory + fragmentName);
             CB_INFO("From vertex source: {}", vertexName);
             CB_INFO("From fragment source: {}", fragmentName);
-            builder.addShaderStep(core::ShaderStep::Vertex, vertexFile.read());
-            builder.addShaderStep(core::ShaderStep::Fragment, fragmentFile.read());
+            builder.addShaderStep(core::gl::ShaderStep::Vertex, vertexFile.read());
+            builder.addShaderStep(core::gl::ShaderStep::Fragment, fragmentFile.read());
             if (shaderJson.contains("geometry")) {
                 std::string geometryName = shaderJson["geometry"].get<std::string>();
-                core::File geometryFile(shadersDirectory + geometryName);
+                core::io::File geometryFile(shadersDirectory + geometryName);
                 CB_INFO("From geometry source: {}", geometryName);
-                builder.addShaderStep(core::ShaderStep::Geometry, geometryFile.read());
+                builder.addShaderStep(core::gl::ShaderStep::Geometry, geometryFile.read());
             }
             return builder.buildRenderShader();
         }
 
-        static core::ComputeShader parseComputeShader(nlohmann::json& shaderJson, const core::Path& shadersDirectory) {
-            core::ShaderBuilder builder;
+        static core::gl::ComputeShader parseComputeShader(nlohmann::json& shaderJson, const core::io::Path& shadersDirectory) {
+            core::gl::ShaderBuilder builder;
             std::string computeName = shaderJson["compute"].get<std::string>();
-            core::File computeFile(shadersDirectory + computeName);
+            core::io::File computeFile(shadersDirectory + computeName);
             CB_INFO("From source: {}", computeName);
-            builder.addShaderStep(core::ShaderStep::Compute, computeFile.read());
+            builder.addShaderStep(core::gl::ShaderStep::Compute, computeFile.read());
             return builder.buildComputeShader();
         }
 
-        void ShaderLibrary::loadShaders(const core::Path& shadersDirectory) {
-            core::Path shadersJsonPath = shadersDirectory;
+        void ShaderLibrary::loadShaders(const core::io::Path& shadersDirectory) {
+            core::io::Path shadersJsonPath = shadersDirectory;
             shadersJsonPath += "shaders.json";
             if (!shadersJsonPath.exists()) {
                 CB_WARN("No shaders.json file found in shaders directory: {}", shadersDirectory.getPath());
@@ -78,13 +78,12 @@ namespace cobalt {
             return 0;
         }
 
-        core::Shader& ShaderLibrary::getShader(const ShaderID id) { return shaders[id - 1].shader; }
+        core::gl::Shader& ShaderLibrary::getShader(const ShaderID id) { return shaders[id - 1].shader; }
 
-        core::Shader& ShaderLibrary::getShader(const std::string& name) { return getShader(getShaderID(name)); }
+        core::gl::Shader& ShaderLibrary::getShader(const std::string& name) { return getShader(getShaderID(name)); }
 
         void ShaderLibrary::init() { instance = createScope<ShaderLibrary>(); }
 
         ShaderLibrary& ShaderLibrary::getShaderLibrary() { return *instance; }
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt

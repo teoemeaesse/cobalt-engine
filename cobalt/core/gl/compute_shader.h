@@ -11,7 +11,7 @@
 #include "core/gl/shader.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gl {
         /** @brief: A compute shader program.
          */
         class ComputeShader : public Shader {
@@ -22,5 +22,5 @@ namespace cobalt {
              */
             ComputeShader(std::string& computeSource);
         };
-    }  // namespace core
+    }  // namespace core::gl
 }  // namespace cobalt

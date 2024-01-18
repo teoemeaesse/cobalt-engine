@@ -13,7 +13,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         class Batch {
             public:
             Batch();
@@ -36,7 +36,7 @@ namespace cobalt {
              *                materials rendered must be compatible with this layout.
              * @return: The batch renderer.
              */
-            BatchRenderer(VAOLayout layout);
+            BatchRenderer(gl::VAOLayout layout);
             /** @brief: Destroy the batch renderer.
              */
             ~BatchRenderer();
@@ -54,6 +54,5 @@ namespace cobalt {
             const UMap<Material,
                        Batch> batches;  // The batches.
         };
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

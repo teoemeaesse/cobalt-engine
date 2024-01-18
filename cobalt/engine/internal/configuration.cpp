@@ -12,7 +12,7 @@
 
 namespace cobalt {
     namespace engine {
-        Configuration::Configuration(const core::Path& path) {
+        Configuration::Configuration(const core::io::Path& path) {
             CB_INFO("Loading configuration from '{}'", path.getPath());
             std::ifstream file(path.getPath());
             nlohmann::json json;
@@ -43,7 +43,7 @@ namespace cobalt {
 
         const bool Configuration::has(const std::string& key) const { return entries.find(key) != entries.end(); }
 
-        void Configuration::serialize(const core::Path& path) const {
+        void Configuration::serialize(const core::io::Path& path) const {
             CB_INFO("Serializing configuration to '{}'", path.getPath());
             nlohmann::json json;
             for (const auto& entry : entries) {
@@ -117,5 +117,4 @@ namespace cobalt {
             }
         }
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt

@@ -14,7 +14,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::scene {
         class Scene {
             public:
             /** @brief: Creates an empty scene.
@@ -29,7 +29,7 @@ namespace cobalt {
              * @param mesh: The mesh to add.
              * @return: The index of the mesh in the scene.
              */
-            const uint addMesh(Mesh&& mesh);
+            const uint addMesh(gfx::Mesh&& mesh);
             /** @brief: Removes all the meshes from the scene.
              */
             void clear();
@@ -37,29 +37,28 @@ namespace cobalt {
             /** @brief: Sets the skybox of the scene.
              * @param skybox: The skybox to set.
              */
-            void setSkybox(Skybox&& skybox);
+            void setSkybox(gfx::Skybox&& skybox);
 
             /** @brief: Gets the meshes in the scene.
              * @return: The meshes in the scene.
              */
-            Vec<Mesh>& getMeshes();
+            Vec<gfx::Mesh>& getMeshes();
             /** @brief: Gets the skybox of the scene.
              * @return: The skybox of the scene.
              */
-            Opt<Skybox>& getSkybox();
+            Opt<gfx::Skybox>& getSkybox();
             /** @brief: Gets the camera controller used to render the scene.
              * @return: The camera controller used to render the scene.
              */
-            CameraController& getCameraController();
+            gfx::CameraController& getCameraController();
 
             private:
-            Vec<Mesh> meshes;    // All the meshes in the scene.
-                                 // This is a massive oversimplification.
-                                 // TODO: Add a proper scene graph.
-            Opt<Skybox> skybox;  // The skybox of the scene.
+            Vec<gfx::Mesh> meshes;    // All the meshes in the scene.
+                                      // This is a massive oversimplification.
+                                      // TODO: Add a proper scene graph.
+            Opt<gfx::Skybox> skybox;  // The skybox of the scene.
 
-            CameraController camera;  // The camera used to render the scene.
+            gfx::CameraController camera;  // The camera used to render the scene.
         };
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::scene
+}  // namespace cobalt

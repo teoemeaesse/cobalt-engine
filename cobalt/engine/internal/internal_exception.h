@@ -18,5 +18,4 @@ namespace cobalt {
             InternalException(const char* message) : std::runtime_error(message) {}
         };
     }  // namespace engine
-}  // namespace
-   // cobalt
+} // namespace cobalt

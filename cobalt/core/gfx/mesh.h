@@ -13,7 +13,7 @@
 #include "core/gl/vao.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         class Mesh {
             public:
             /** @brief: Create a mesh.
@@ -23,7 +23,7 @@ namespace cobalt {
              * @param primitives: Primitive type.
              * @return: The mesh.
              */
-            Mesh(VAO&& vao, IBO&& ibo, Material& material, const GL::Primitive& primitive = GL::Primitive::Triangles);
+            Mesh(gl::VAO&& vao, gl::IBO&& ibo, Material& material, const gl::Primitive& primitive = gl::Primitive::Triangles);
             /** @brief: Destroy the mesh.
              */
             ~Mesh() = default;
@@ -77,7 +77,7 @@ namespace cobalt {
             /** @brief: Get the mesh primitive type.
              * @return: The primitive type.
              */
-            GL::Primitive getPrimitive() const;
+            gl::Primitive getPrimitive() const;
 
             /** @brief: Create a rectangle-shaped mesh.
              * @param width: The width.
@@ -102,14 +102,13 @@ namespace cobalt {
             static Mesh createCube(const uint side, Material& material);
 
             private:
-            VAO vao;                   // Vertex array object.
-            IBO ibo;                   // Index buffer object.
+            gl::VAO vao;               // Vertex array object.
+            gl::IBO ibo;               // Index buffer object.
             Material& material;        // Material.
-            GL::Primitive primitive;   // Primitive type.
+            gl::Primitive primitive;   // Primitive type.
             glm::vec3 worldTranslate;  // World position.
             glm::vec3 worldRotate;     // World rotation (degrees).
             glm::vec3 worldScale;      // World scale.
         };
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

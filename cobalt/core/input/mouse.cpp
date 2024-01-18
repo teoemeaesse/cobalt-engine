@@ -11,7 +11,7 @@
 #include "core/exceptions/input_exception.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::input {
         const std::string Mouse::NAME = "Mouse";
 
         ButtonState::ButtonState() : down(false), polled(false) {}
@@ -163,5 +163,4 @@ namespace cobalt {
             return CB_TO_STR.at(MouseInputID::UNKNOWN);
         }
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

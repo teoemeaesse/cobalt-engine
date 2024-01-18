@@ -11,7 +11,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         class BatchMesh {
             public:
             /** @brief: Push the vertices and indices of the mesh into the buffers.
@@ -52,5 +52,4 @@ namespace cobalt {
             void pushInto(Vec<char>& vertices, Vec<char>& indices) const override;
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

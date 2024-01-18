@@ -11,8 +11,8 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
-        Shader::Shader(GL::Handle handle) : program(handle) {}
+    namespace core::gl {
+        Shader::Shader(gl::Handle handle) : program(handle) {}
 
         Shader::~Shader() {
             if (program != 0) {
@@ -39,7 +39,7 @@ namespace cobalt {
             return index;
         }
 
-        const GL::Handle Shader::getGLHandle() const { return program; }
+        const gl::Handle Shader::getGLHandle() const { return program; }
 
         const GLuint Shader::getUniformLocation(const std::string& name) {
             GLint linkStatus;
@@ -113,7 +113,7 @@ namespace cobalt {
             glUniformMatrix4fv(getUniformLocation(name), count, GL_FALSE, (GLfloat*)value);
         }
 
-        void Shader::compileShader(const GL::Handle shader, const std::string& source) {
+        void Shader::compileShader(const gl::Handle shader, const std::string& source) {
             const char* sourcePtr = source.c_str();
             glShaderSource(shader, 1, &sourcePtr, nullptr);
             glCompileShader(shader);
@@ -129,7 +129,7 @@ namespace cobalt {
             }
         }
 
-        void Shader::linkShader(const GL::Handle shader) {
+        void Shader::linkShader(const gl::Handle shader) {
             glLinkProgram(shader);
             GLint success;
             glGetProgramiv(shader, GL_LINK_STATUS, &success);
@@ -176,5 +176,4 @@ namespace cobalt {
             }
         }
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

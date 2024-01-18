@@ -8,12 +8,12 @@
 
 #include "core/gfx/window.h"
 
-#include "core/gfx/render_context.h"
+#include "core/gl/context.h"
 #include "core/input/input_manager.h"
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         static void windowCloseCallback(GLFWwindow* window) {
             CB_CORE_WARN("Window closed");
             CB_CORE_WARN("Shutting down");
@@ -37,7 +37,7 @@ namespace cobalt {
 
         void Window::init() {
             glfwWindowHint(GLFW_RESIZABLE, resizable);
-            glfwSetWindowCloseCallback(RenderContext::getGLFWContext(), windowCloseCallback);
+            glfwSetWindowCloseCallback(gl::Context::getGLFWContext(), windowCloseCallback);
             GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
             const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
             switch (mode) {
@@ -75,18 +75,18 @@ namespace cobalt {
                     throw GFXException("Invalid window mode");
             }
 
-            RenderContext::recreateFromContext(RenderContext::getGLFWContext());
+            gl::Context::recreateFromContext(gl::Context::getGLFWContext());
             glfwSwapInterval(vsync);
-            glfwSetWindowTitle(RenderContext::getGLFWContext(), title.c_str());
+            glfwSetWindowTitle(gl::Context::getGLFWContext(), title.c_str());
             if (lockAspectRatio) {
                 if (mode == WindowMode::Windowed) {
                     this->width = (uint)(this->height * aspectRatio);
                 }
-                glfwSetWindowAspectRatio(RenderContext::getGLFWContext(), this->width, this->height);
+                glfwSetWindowAspectRatio(gl::Context::getGLFWContext(), this->width, this->height);
             }
-            glfwSetWindowSize(RenderContext::getGLFWContext(), this->width, this->height);
+            glfwSetWindowSize(gl::Context::getGLFWContext(), this->width, this->height);
             int framebufferWidth, framebufferHeight;
-            glfwGetFramebufferSize(RenderContext::getGLFWContext(), &framebufferWidth, &framebufferHeight);
+            glfwGetFramebufferSize(gl::Context::getGLFWContext(), &framebufferWidth, &framebufferHeight);
             defaultFBO.resize(framebufferWidth, framebufferHeight);
             if (callbackSetter != nullptr) {
                 callbackSetter();
@@ -101,10 +101,10 @@ namespace cobalt {
 
         Window::~Window() {
             CB_CORE_INFO("Destroyed window");
-            glfwSetWindowShouldClose(RenderContext::getGLFWContext(), GLFW_TRUE);
+            glfwSetWindowShouldClose(gl::Context::getGLFWContext(), GLFW_TRUE);
         }
 
-        void Window::swapBuffers() const { glfwSwapBuffers(RenderContext::getGLFWContext()); }
+        void Window::swapBuffers() const { glfwSwapBuffers(gl::Context::getGLFWContext()); }
 
         void Window::switchMode(const WindowMode mode) {
             this->mode = mode;
@@ -112,25 +112,25 @@ namespace cobalt {
             show();
         }
 
-        void Window::show() const { glfwShowWindow(RenderContext::getGLFWContext()); }
+        void Window::show() const { glfwShowWindow(gl::Context::getGLFWContext()); }
 
-        void Window::hide() const { glfwHideWindow(RenderContext::getGLFWContext()); }
+        void Window::hide() const { glfwHideWindow(gl::Context::getGLFWContext()); }
 
         void Window::clear() { defaultFBO.clear(); }
 
-        bool Window::shouldClose() const { return glfwWindowShouldClose(RenderContext::getGLFWContext()); }
+        bool Window::shouldClose() const { return glfwWindowShouldClose(gl::Context::getGLFWContext()); }
 
         void Window::setClearColor(const Color& color) { defaultFBO.setClearColor(color); }
 
         void Window::onResize(const uint width, const uint height) { defaultFBO.resize(width, height); }
 
-        void Window::resize() { glfwSetWindowSize(RenderContext::getGLFWContext(), width, height); }
+        void Window::resize() { glfwSetWindowSize(gl::Context::getGLFWContext(), width, height); }
 
         const uint Window::getWidth() const { return width; }
 
         const uint Window::getHeight() const { return height; }
 
-        FBO& Window::getDefaultFBO() { return defaultFBO; }
+        gl::FBO& Window::getDefaultFBO() { return defaultFBO; }
 
         const bool Window::isVsync() const { return vsync; }
 
@@ -150,7 +150,7 @@ namespace cobalt {
 
         void Window::setTitle(const std::string& title) {
             this->title = title;
-            glfwSetWindowTitle(RenderContext::getGLFWContext(), title.c_str());
+            glfwSetWindowTitle(gl::Context::getGLFWContext(), title.c_str());
         }
 
         WindowBuilder::WindowBuilder()
@@ -212,6 +212,5 @@ namespace cobalt {
         Window WindowBuilder::build() const {
             return Window(width, height, title, vsync, mode, resizable, decorated, lockAspectRatio, callbackSetter);
         }
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

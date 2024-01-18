@@ -26,5 +26,4 @@ namespace cobalt {
             editorLogger->set_level(spdlog::level::trace);
         }
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

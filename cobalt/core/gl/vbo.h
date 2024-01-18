@@ -11,7 +11,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gl {
         /** @brief: Vertex buffer object, used to store vertex data.
          */
         class VBO {
@@ -20,7 +20,7 @@ namespace cobalt {
              * @param usage: GL_STATIC_DRAW, GL_DYNAMIC_DRAW, GL_STREAM_DRAW.
              * @return: VBO.
              */
-            VBO(const GL::Usage usage);
+            VBO(const gl::Usage usage);
             /** @brief: Destroys the VBO.
              */
             ~VBO();
@@ -68,8 +68,8 @@ namespace cobalt {
             void load(const void* data, const size_t size, const size_t offset) const;
 
             private:
-            GL::Handle buffer;  // The OpenGL buffer handle.
-            GL::Usage usage;    // The usage of the buffer.
+            gl::Handle buffer;  // The OpenGL buffer handle.
+            gl::Usage usage;    // The usage of the buffer.
         };
     }  // namespace core
 }  // namespace cobalt

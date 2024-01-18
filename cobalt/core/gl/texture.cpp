@@ -16,8 +16,8 @@
 #include "stb_image/stb_image.h"
 
 namespace cobalt {
-    namespace core {
-        Texture::Texture(const GL::TextureEncoding encoding) : texture(0), format(GL::getTextureFormat(encoding)), encoding(encoding) {}
+    namespace core::gl {
+        Texture::Texture(const gl::TextureEncoding encoding) : texture(0), format(gl::getTextureFormat(encoding)), encoding(encoding) {}
 
         Texture::~Texture() {
             if (texture != 0) {
@@ -46,9 +46,9 @@ namespace cobalt {
             return *this;
         }
 
-        Texture2D::Texture2D(const uchar red, const uchar green, const uchar blue, const uchar alpha, const GL::TextureFilter filter,
-                             const GL::TextureWrap wrap)
-            : Texture(GL::TextureEncodings::RGBA::Bits8) {
+        Texture2D::Texture2D(const uchar red, const uchar green, const uchar blue, const uchar alpha, const gl::TextureFilter filter,
+                             const gl::TextureWrap wrap)
+            : Texture(gl::TextureEncodings::RGBA::Bits8) {
             source = "";
             this->width = 1;
             this->height = 1;
@@ -58,13 +58,13 @@ namespace cobalt {
             glTexImage2D(GL_TEXTURE_2D, 0, (GLint)encoding, 1, 1, 0, (GLenum)format, GL_UNSIGNED_BYTE, data);
             setFilter(filter);
             setWrap(wrap);
-            CB_CORE_INFO("Created 1x1 px 2D texture (GL: {0}) with encoding: {1}, format: {2}", texture, GL::getTextureEncodingName(encoding),
-                         GL::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", GL::getTextureFilterName(filter), GL::getTextureWrapName(wrap));
+            CB_CORE_INFO("Created 1x1 px 2D texture (GL: {0}) with encoding: {1}, format: {2}", texture, gl::getTextureEncodingName(encoding),
+                         gl::getTextureFormatName(format));
+            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
-        Texture2D::Texture2D(const Color& color, const GL::TextureFilter filter, const GL::TextureWrap wrap)
-            : Texture(GL::TextureEncodings::RGBA::Bits8) {
+        Texture2D::Texture2D(const Color& color, const gl::TextureFilter filter, const gl::TextureWrap wrap)
+            : Texture(gl::TextureEncodings::RGBA::Bits8) {
             source = "";
             this->width = 1;
             this->height = 1;
@@ -74,13 +74,13 @@ namespace cobalt {
             glTexImage2D(GL_TEXTURE_2D, 0, (GLint)encoding, 1, 1, 0, (GLenum)format, GL_UNSIGNED_BYTE, data);
             setFilter(filter);
             setWrap(wrap);
-            CB_CORE_INFO("Created 1x1 px 2D texture (GL: {0}) with encoding: {1}, format: {2}", texture, GL::getTextureEncodingName(encoding),
-                         GL::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", GL::getTextureFilterName(filter), GL::getTextureWrapName(wrap));
+            CB_CORE_INFO("Created 1x1 px 2D texture (GL: {0}) with encoding: {1}, format: {2}", texture, gl::getTextureEncodingName(encoding),
+                         gl::getTextureFormatName(format));
+            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
-        Texture2D::Texture2D(const uint width, const uint height, const GL::TextureEncoding encoding, const GL::TextureFilter filter,
-                             const GL::TextureWrap wrap)
+        Texture2D::Texture2D(const uint width, const uint height, const gl::TextureEncoding encoding, const gl::TextureFilter filter,
+                             const gl::TextureWrap wrap)
             : Texture(encoding) {
             source = "";
             glGenTextures(1, &texture);
@@ -88,12 +88,12 @@ namespace cobalt {
             setFilter(filter);
             setWrap(wrap);
             CB_CORE_INFO("Created {0}x{1} px 2D texture (GL: {2}) with encoding: {3}, format: {4}", width, height, texture,
-                         GL::getTextureEncodingName(encoding), GL::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", GL::getTextureFilterName(filter), GL::getTextureWrapName(wrap));
+                         gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format));
+            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
-        Texture2D::Texture2D(const Path& path, const bool srgb, const GL::TextureFilter filter, const GL::TextureWrap wrap)
-            : Texture(srgb ? GL::TextureEncodings::SRGBA::Bits8 : GL::TextureEncodings::RGBA::Bits8) {
+        Texture2D::Texture2D(const io::Path& path, const bool srgb, const gl::TextureFilter filter, const gl::TextureWrap wrap)
+            : Texture(srgb ? gl::TextureEncodings::SRGBA::Bits8 : gl::TextureEncodings::RGBA::Bits8) {
             // STBI only supports 8-bit images, and doesn't really give much metadata about the image, so we'll just assume it's 8-bit for now
             // TODO: switch loader library (roll custom?)
             source = path.getFileName();
@@ -110,8 +110,8 @@ namespace cobalt {
             setWrap(wrap);
             stbi_image_free(data);
             CB_CORE_INFO("Loaded {0}x{1} px 2D texture (GL: {2}) from {3} with encoding: {4}, format: {4}", width, height, texture,
-                         path.getFileName(), GL::getTextureEncodingName(encoding), GL::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", GL::getTextureFilterName(filter), GL::getTextureWrapName(wrap));
+                         path.getFileName(), gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format));
+            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
         Texture2D::Texture2D(Texture2D&& other) noexcept : Texture(std::move(other)) {}
@@ -136,21 +136,21 @@ namespace cobalt {
             glBindTexture(GL_TEXTURE_2D, texture);
         }
 
-        void Texture2D::setWrap(GL::TextureWrap wrap) {
+        void Texture2D::setWrap(gl::TextureWrap wrap) {
             glBindTexture(GL_TEXTURE_2D, texture);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLint)wrap);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLint)wrap);
         }
 
-        void Texture2D::setFilter(GL::TextureFilter filter) {
+        void Texture2D::setFilter(gl::TextureFilter filter) {
             glBindTexture(GL_TEXTURE_2D, texture);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLint)filter);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)filter);
         }
 
-        Texture3D::Texture3D(const uchar red, const uchar green, const uchar blue, const uchar alpha, const GL::TextureFilter filter,
-                             const GL::TextureWrap wrap)
-            : Texture(GL::TextureEncodings::RGBA::Bits8) {
+        Texture3D::Texture3D(const uchar red, const uchar green, const uchar blue, const uchar alpha, const gl::TextureFilter filter,
+                             const gl::TextureWrap wrap)
+            : Texture(gl::TextureEncodings::RGBA::Bits8) {
             source = "";
             GLubyte data[] = {red, green, blue, alpha};
             glGenTextures(1, &texture);
@@ -160,13 +160,13 @@ namespace cobalt {
             }
             setFilter(filter);
             setWrap(wrap);
-            CB_CORE_INFO("Created 1x1 px/face cubemap (GL: {0}) with encoding: {1}, format: {2}", texture, GL::getTextureEncodingName(encoding),
-                         GL::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", GL::getTextureFilterName(filter), GL::getTextureWrapName(wrap));
+            CB_CORE_INFO("Created 1x1 px/face cubemap (GL: {0}) with encoding: {1}, format: {2}", texture, gl::getTextureEncodingName(encoding),
+                         gl::getTextureFormatName(format));
+            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
-        Texture3D::Texture3D(const Color& color, const GL::TextureFilter filter, const GL::TextureWrap wrap)
-            : Texture(GL::TextureEncodings::RGBA::Bits8) {
+        Texture3D::Texture3D(const Color& color, const gl::TextureFilter filter, const gl::TextureWrap wrap)
+            : Texture(gl::TextureEncodings::RGBA::Bits8) {
             source = "";
             GLubyte data[] = {(uchar)(color.r * 255.0f), (uchar)(color.g * 255.0f), (uchar)(color.b * 255.0f), (uchar)(color.a * 255.0f)};
             glGenTextures(1, &texture);
@@ -176,13 +176,13 @@ namespace cobalt {
             }
             setFilter(filter);
             setWrap(wrap);
-            CB_CORE_INFO("Created 1x1 px/face 3D texture (GL: {0}) with encoding: {1}, format: {2}", texture, GL::getTextureEncodingName(encoding),
-                         GL::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", GL::getTextureFilterName(filter), GL::getTextureWrapName(wrap));
+            CB_CORE_INFO("Created 1x1 px/face 3D texture (GL: {0}) with encoding: {1}, format: {2}", texture, gl::getTextureEncodingName(encoding),
+                         gl::getTextureFormatName(format));
+            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
-        Texture3D::Texture3D(const uint width, const uint height, const GL::TextureEncoding encoding, const GL::TextureFilter filter,
-                             const GL::TextureWrap wrap)
+        Texture3D::Texture3D(const uint width, const uint height, const gl::TextureEncoding encoding, const gl::TextureFilter filter,
+                             const gl::TextureWrap wrap)
             : Texture(encoding) {
             source = "";
             glGenTextures(1, &texture);
@@ -190,12 +190,12 @@ namespace cobalt {
             setFilter(filter);
             setWrap(wrap);
             CB_CORE_INFO("Created {0}x{1} px texture (GL: {2}) with encoding: {3}, format: {4}", width, height, texture,
-                         GL::getTextureEncodingName(encoding), GL::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", GL::getTextureFilterName(filter), GL::getTextureWrapName(wrap));
+                         gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format));
+            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
-        Texture3D::Texture3D(const Path& path, const bool srgb, const GL::TextureFilter filter, const GL::TextureWrap wrap)
-            : Texture(srgb ? GL::TextureEncodings::SRGBA::Bits8 : GL::TextureEncodings::RGBA::Bits8) {
+        Texture3D::Texture3D(const io::Path& path, const bool srgb, const gl::TextureFilter filter, const gl::TextureWrap wrap)
+            : Texture(srgb ? gl::TextureEncodings::SRGBA::Bits8 : gl::TextureEncodings::RGBA::Bits8) {
             // STBI only supports 8-bit images, and doesn't really give much metadata about the image, so we'll just assume it's 8-bit for now
             // TODO: switch loader library (roll custom?)
             source = path.getFileName();
@@ -213,8 +213,8 @@ namespace cobalt {
                 stbi_image_free(data);
             }
             CB_CORE_INFO("Loaded {0}x{1} px/face 3D texture (GL: {2}) from {3} with encoding: {4}, format: {4}", width, height, texture,
-                         path.getFileName(), GL::getTextureEncodingName(encoding), GL::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", GL::getTextureFilterName(filter), GL::getTextureWrapName(wrap));
+                         path.getFileName(), gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format));
+            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
             setFilter(filter);
             setWrap(wrap);
         }
@@ -244,18 +244,17 @@ namespace cobalt {
             glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
         }
 
-        void Texture3D::setWrap(const GL::TextureWrap wrap) {
+        void Texture3D::setWrap(const gl::TextureWrap wrap) {
             glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, (GLint)wrap);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, (GLint)wrap);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, (GLint)wrap);
         }
 
-        void Texture3D::setFilter(const GL::TextureFilter filter) {
+        void Texture3D::setFilter(const gl::TextureFilter filter) {
             glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, (GLint)filter);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, (GLint)filter);
         }
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gl
+}  // namespace cobalt

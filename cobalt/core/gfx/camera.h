@@ -11,7 +11,7 @@
 #include "core/gl/shader.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         /** @brief: A perspective or orthographic camera.
          */
         class Camera {
@@ -330,5 +330,4 @@ namespace cobalt {
                              // center point.
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

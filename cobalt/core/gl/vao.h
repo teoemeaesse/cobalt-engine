@@ -12,7 +12,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gl {
         /** @brief: VAO layout specifies the format of the vertex data.
          * It is a list of vertex attributes and their layout.
          */
@@ -32,7 +32,7 @@ namespace cobalt {
              * @param count: The number of elements in the attribute.
              * @param normalized: Whether the attribute should be normalized.
              */
-            void push(const GL::Type type, const uint count, const bool normalized);
+            void push(const gl::Type type, const uint count, const bool normalized);
 
             /** @brief: Get the stride of the vertex layout.
              * @return: The stride of the vertex layout.
@@ -42,7 +42,7 @@ namespace cobalt {
             private:
             struct Attribute {
                 uint count;       // The number of elements in the attribute.
-                GL::Type type;    // The type of the elements in the attribute.
+                gl::Type type;    // The type of the elements in the attribute.
                 bool normalized;  // Whether the attribute should be normalized.
                 size_t stride;    // The stride of the attribute.
 
@@ -53,7 +53,7 @@ namespace cobalt {
                  * @param stride: The stride of the attribute.
                  * @return: An attribute.
                  */
-                Attribute(const uint count, const GL::Type type, const bool normalized, const size_t stride)
+                Attribute(const uint count, const gl::Type type, const bool normalized, const size_t stride)
                     : count(count), type(type), normalized(normalized), stride(stride) {}
             };
 
@@ -106,8 +106,7 @@ namespace cobalt {
             void unbind() const;
 
             private:
-            GL::Handle buffer;  // The VAO handle.
+            gl::Handle buffer;  // The VAO handle.
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

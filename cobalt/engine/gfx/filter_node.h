@@ -14,7 +14,7 @@ namespace cobalt {
     namespace engine {
         /** @brief: Applies a color filter to the final image.
          */
-        class FilterNode : public core::RenderNode {
+        class FilterNode : public core::gfx::RenderNode {
             public:
             /** @brief: Create a filter node.
              * @param renderer: The renderer to use.
@@ -23,7 +23,7 @@ namespace cobalt {
              * @param filter: The material to use for the filter quad.
              * @return: The filter node.
              */
-            FilterNode(core::Renderer& renderer, core::RenderTarget&& defaultTarget, core::Material& filter);
+            FilterNode(core::gfx::Renderer& renderer, core::gfx::RenderTarget&& defaultTarget, core::gfx::Material& filter);
             /** @brief: Destroy the filter node.
              */
             ~FilterNode() = default;
@@ -38,10 +38,8 @@ namespace cobalt {
             void onResize(const float width, const float height) override;
 
             private:
-            core::Material& filter;  // The material to use for the filter quad.
-            uint width,
-                height;  // The width and height of the filter quad.
+            core::gfx::Material& filter;  // The material to use for the filter quad.
+            uint width, height;           // The width and height of the filter quad.
         };
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt

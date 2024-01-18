@@ -32,5 +32,4 @@ namespace cobalt {
             return ss.str();
         }
     }  // namespace core
-}  // namespace
-   // cobalt
+}  // namespace cobalt

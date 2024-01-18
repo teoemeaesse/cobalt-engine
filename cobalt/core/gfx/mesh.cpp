@@ -11,8 +11,8 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
-        Mesh::Mesh(VAO&& vao, IBO&& ibo, Material& material, const GL::Primitive& primitive)
+    namespace core::gfx {
+        Mesh::Mesh(gl::VAO&& vao, gl::IBO&& ibo, Material& material, const gl::Primitive& primitive)
             : vao(std::move(vao)),
               ibo(std::move(ibo)),
               material(material),
@@ -81,18 +81,18 @@ namespace cobalt {
                                       -w, -h, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, w,  -h, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
                                       w,  h,  0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, -w, h,  0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f};
 
-            VBO vbo(GL::Usage::StaticDraw);
+            gl::VBO vbo(gl::Usage::StaticDraw);
             vbo.bind();
             vbo.load(vertices, sizeof(float) * 32);
 
-            VAOLayout layout;
-            layout.push(GL::Type::Float, 3,
+            gl::VAOLayout layout;
+            layout.push(gl::Type::Float, 3,
                         false);  // Position.
-            layout.push(GL::Type::Float, 2,
+            layout.push(gl::Type::Float, 2,
                         false);  // Texture coordinates.
-            layout.push(GL::Type::Float, 3,
+            layout.push(gl::Type::Float, 3,
                         false);  // Normal.
-            return Mesh(VAO(vbo, layout), IBO::fromQuads(GL::Usage::StaticDraw, 1), material);
+            return Mesh(gl::VAO(vbo, layout), gl::IBO::fromQuads(gl::Usage::StaticDraw, 1), material);
         }
 
         Mesh Mesh::createSphere(const uint radius, Material& material) {
@@ -137,18 +137,18 @@ namespace cobalt {
                 }
             }
 
-            VBO vbo(GL::Usage::StaticDraw);
+            gl::VBO vbo(gl::Usage::StaticDraw);
             vbo.bind();
             vbo.load(vertices, sizeof(float) * 8 * (stacks + 1) * (slices + 1));
 
-            VAOLayout layout;
-            layout.push(GL::Type::Float, 3,
+            gl::VAOLayout layout;
+            layout.push(gl::Type::Float, 3,
                         false);  // Position.
-            layout.push(GL::Type::Float, 2,
+            layout.push(gl::Type::Float, 2,
                         false);  // Texture coordinates.
-            layout.push(GL::Type::Float, 3,
+            layout.push(gl::Type::Float, 3,
                         false);  // Normal.
-            return Mesh(VAO(vbo, layout), IBO(GL::Usage::StaticDraw, indices, 6 * stacks * slices), material);
+            return Mesh(gl::VAO(vbo, layout), gl::IBO(gl::Usage::StaticDraw, indices, 6 * stacks * slices), material);
         }
 
         Mesh Mesh::createCube(const uint size, Material& material) {
@@ -173,19 +173,18 @@ namespace cobalt {
                                       -s, s,  -s, 0.0f, 0.0f, 0.0f,  1.0f,  0.0f,  -s, s,  s,  1.0f, 0.0f, 0.0f,  1.0f,  0.0f,
                                       s,  s,  s,  1.0f, 1.0f, 0.0f,  1.0f,  0.0f,  s,  s,  -s, 0.0f, 1.0f, 0.0f,  1.0f,  0.0f};
 
-            VBO vbo(GL::Usage::StaticDraw);
+            gl::VBO vbo(gl::Usage::StaticDraw);
             vbo.bind();
             vbo.load(vertices, sizeof(float) * 192);
 
-            VAOLayout layout;
-            layout.push(GL::Type::Float, 3,
+            gl::VAOLayout layout;
+            layout.push(gl::Type::Float, 3,
                         false);  // Position.
-            layout.push(GL::Type::Float, 2,
+            layout.push(gl::Type::Float, 2,
                         false);  // Texture coordinates.
-            layout.push(GL::Type::Float, 3,
+            layout.push(gl::Type::Float, 3,
                         false);  // Normal.
-            return Mesh(VAO(vbo, layout), IBO::fromQuads(GL::Usage::StaticDraw, 6), material);
+            return Mesh(gl::VAO(vbo, layout), gl::IBO::fromQuads(gl::Usage::StaticDraw, 6), material);
         }
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

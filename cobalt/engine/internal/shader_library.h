@@ -18,15 +18,15 @@ namespace cobalt {
         class ShaderLibrary {
             public:
             struct ShaderEntry {
-                std::string name;     // The name of the shader.
-                core::Shader shader;  // The shader.
+                std::string name;         // The name of the shader.
+                core::gl::Shader shader;  // The shader.
 
                 /** @brief: Creates a new shader entry.
                  * @param name: The name of the shader.
                  * @param shader: The shader.
                  * @return: The shader entry.
                  */
-                ShaderEntry(const std::string& name, core::Shader&& shader) : name(name), shader(std::move(shader)) {}
+                ShaderEntry(const std::string& name, core::gl::Shader&& shader) : name(name), shader(std::move(shader)) {}
             };
 
             /** @brief: Creates an empty shader library.
@@ -43,7 +43,7 @@ namespace cobalt {
              * vertex/fragment/geometry or compute shader source files.
              * @param shadersDirectory: The directory containing the shader files.
              */
-            void loadShaders(const core::Path& shadersDirectory);
+            void loadShaders(const core::io::Path& shadersDirectory);
 
             /** @brief: Returns the shader ID of the shader with the given name.
              * If the shader does not exist, returns 0.
@@ -57,13 +57,13 @@ namespace cobalt {
              * @param id: The ID of the shader.
              * @return: The shader.
              */
-            core::Shader& getShader(const ShaderID id);
+            core::gl::Shader& getShader(const ShaderID id);
             /** @brief: Returns the shader with the given name.
              * If the shader does not exist, returns a null shader.
              * @param name: The name of the shader.
              * @return: The shader.
              */
-            core::Shader& getShader(const std::string& name);
+            core::gl::Shader& getShader(const std::string& name);
 
             /** @brief: Initializes the singleton instance of the shader library.
              */
@@ -74,12 +74,11 @@ namespace cobalt {
             static ShaderLibrary& getShaderLibrary();
 
             private:
-            core::Deque<ShaderEntry> shaders;  // The shaders in the library.
+            Deque<ShaderEntry> shaders;  // The shaders in the library.
 
             static Scope<ShaderLibrary> instance;  // The singleton instance of the shader library.
         };
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt
 
 #define CB_SHADER_LIBRARY ::cobalt::engine::ShaderLibrary::getShaderLibrary()

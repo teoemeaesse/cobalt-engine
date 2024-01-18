@@ -9,10 +9,10 @@
 #include "core/gl/vao.h"
 
 namespace cobalt {
-    namespace core {
-        void VAOLayout::push(const GL::Type type, const uint count, const bool normalized) {
+    namespace core::gl {
+        void VAOLayout::push(const gl::Type type, const uint count, const bool normalized) {
             attributes.emplace_back(count, type, normalized, stride);
-            stride += count * GL::getTypeSize(type);
+            stride += count * gl::getTypeSize(type);
         }
 
         size_t VAOLayout::getStride() const { return stride; }

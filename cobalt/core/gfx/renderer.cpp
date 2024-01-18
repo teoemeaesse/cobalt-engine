@@ -8,17 +8,17 @@
 
 #include "core/gfx/renderer.h"
 
-#include "core/gfx/render_context.h"
+#include "core/gl/context.h"
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         Renderer::Renderer() : textureUnits(1), currentUnit(0) {}
 
         void Renderer::renderMesh(Mesh& mesh, RenderTarget& target) const {
             mesh.bind();
             target.bind();
-            Shader& shader = mesh.getMaterial().getShader();
+            gl::Shader& shader = mesh.getMaterial().getShader();
             try {
                 sendUniforms(shader);
                 target.sendUBO(shader);
@@ -30,7 +30,7 @@ namespace cobalt {
                 for (auto it = textureUnits.begin(); it != textureUnits.end(); it++) {
                     shader.setUniformInt("u_" + it->first, it->second);
                 }
-            } catch (const GLException& e) {
+            } catch (const gl::GLException& e) {
                 CB_CORE_WARN(e.what());
             }
             // TODO: inject uniforms into shader. use UBOs.
@@ -40,16 +40,16 @@ namespace cobalt {
         void Renderer::renderSkybox(Skybox& skybox, RenderTarget& target) const {
             skybox.bind();
             target.bind();
-            Shader& shader = skybox.getShader();
+            gl::Shader& shader = skybox.getShader();
             try {
                 sendUniforms(shader);
                 target.sendUBO(shader);
-            } catch (const GLException& e) {
+            } catch (const gl::GLException& e) {
                 CB_CORE_WARN(e.what());
             }
-            RenderContext::disableDepthWriting();
+            gl::Context::disableDepthWriting();
             skybox.render();
-            RenderContext::enableDepthWriting();
+            gl::Context::enableDepthWriting();
         }
 
         uint Renderer::getTextureUnit(const std::string& name) const {
@@ -63,8 +63,8 @@ namespace cobalt {
             throw GFXException("Texture not found");
         }
 
-        uint Renderer::bindTexture(const std::string& name, const Texture& texture) {
-            if (currentUnit >= RenderContext::queryMaxFragTextureUnits()) {
+        uint Renderer::bindTexture(const std::string& name, const gl::Texture& texture) {
+            if (currentUnit >= gl::Context::queryMaxFragTextureUnits()) {
                 throw GFXException("No more available texture units");
             }
             texture.bindToUnit(currentUnit);
@@ -77,11 +77,10 @@ namespace cobalt {
             currentUnit = 0;
         }
 
-        void Renderer::sendUniforms(Shader& shader) const {
+        void Renderer::sendUniforms(gl::Shader& shader) const {
             for (auto it = textureUnits.begin(); it != textureUnits.end(); it++) {
                 shader.setUniformInt("u_" + it->first, it->second);
             }
         }
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

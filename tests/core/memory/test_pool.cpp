@@ -9,22 +9,12 @@
 #include "core/memory/pool.h"
 #include "unity/unity.h"
 
-void setUp(void) {
-    // set
-    // stuff
-    // up
-    // here
-}
+void setUp(void) {}
 
-void tearDown(void) {
-    // clean
-    // stuff
-    // up
-    // here
-}
+void tearDown(void) {}
 
 void test_pool_grab() {
-    cobalt::core::PoolAllocator<int> pool(10 * sizeof(int));
+    cobalt::core::memory::PoolAllocator<int> pool(10 * sizeof(int));
     int* ptr[10];
     for (int i = 0; i < 10; i++) {
         ptr[i] = pool.grab();
@@ -37,7 +27,7 @@ void test_pool_grab() {
 }
 
 void test_pool_drop() {
-    cobalt::core::PoolAllocator<int> pool(10 * sizeof(int));
+    cobalt::core::memory::PoolAllocator<int> pool(10 * sizeof(int));
     int* ptr[10];
     for (int i = 0; i < 10; i++) {
         ptr[i] = pool.grab();
@@ -54,7 +44,7 @@ void test_pool_drop() {
 }
 
 void test_pool_expand() {
-    cobalt::core::PoolAllocator<int> pool(10 * sizeof(int));
+    cobalt::core::memory::PoolAllocator<int> pool(10 * sizeof(int));
     int* ptr[1000];
     for (int i = 0; i < 1000; i++) {
         ptr[i] = pool.grab();

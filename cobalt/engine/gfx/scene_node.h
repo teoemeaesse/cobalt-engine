@@ -15,7 +15,7 @@ namespace cobalt {
     namespace engine {
         /** @brief: Scene node. Renders a full scene.
          */
-        class SceneNode : public core::RenderNode {
+        class SceneNode : public core::gfx::RenderNode {
             public:
             /** @brief: Create a scene node with a scene.
              * @param scene: The scene to render.
@@ -23,7 +23,8 @@ namespace cobalt {
              * @return: The scene node.
              */
             template <typename... Targets>
-            SceneNode(core::Scene& scene, core::Renderer& renderer, Targets&&... targets) : RenderNode(renderer, targets...), scene(scene) {}
+            SceneNode(core::scene::Scene& scene, core::gfx::Renderer& renderer, Targets&&... targets)
+                : RenderNode(renderer, targets...), scene(scene) {}
             /** @brief: Destroy the scene node.
              */
             ~SceneNode() = default;
@@ -38,8 +39,7 @@ namespace cobalt {
             void onResize(const float width, const float height) override;
 
             private:
-            core::Scene& scene;  // The scene to render.
+            core::scene::Scene& scene;  // The scene to render.
         };
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt

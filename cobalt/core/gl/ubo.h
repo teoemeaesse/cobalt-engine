@@ -12,7 +12,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gl {
         /** @brief: A uniform buffer object. Used to store uniform data
          * that is shared between multiple shaders.
          */
@@ -24,7 +24,7 @@ namespace cobalt {
              * @param bindingPoint: The binding point of the buffer.
              * @return: UBO.
              */
-            UBO(const GL::Usage usage, const size_t size, const uint bindingPoint);
+            UBO(const gl::Usage usage, const size_t size, const uint bindingPoint);
             /** @brief: Destroys the UBO.
              */
             ~UBO();
@@ -53,11 +53,10 @@ namespace cobalt {
             void load(const void* data, const size_t size, const size_t offset) const;
 
             private:
-            GL::Handle buffer;        // The OpenGL buffer handle.
-            const GL::Usage usage;    // The usage of the buffer.
+            gl::Handle buffer;        // The OpenGL buffer handle.
+            const gl::Usage usage;    // The usage of the buffer.
             const size_t size;        // The size of the buffer in bytes.
             const uint bindingPoint;  // The binding point of the buffer.
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

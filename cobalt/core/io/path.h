@@ -12,7 +12,7 @@
 #include <string>
 
 namespace cobalt {
-    namespace core {
+    namespace core::io {
         /** @brief: A class representing a path to a file or directory.
          * Just a wrapper around std::filesystem::path.
          */
@@ -95,5 +95,4 @@ namespace cobalt {
             std::filesystem::path fsPath;  // The path.
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

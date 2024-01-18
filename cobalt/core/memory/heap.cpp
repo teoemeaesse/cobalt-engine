@@ -15,7 +15,7 @@
 // allocator.
 
 namespace cobalt {
-    namespace core {
+    namespace core::memory {
         void* HeapAllocator::grab(const size_t size) { return malloc(size); }
 
         void HeapAllocator::drop(void* ptr) { ::free(ptr); }
@@ -28,5 +28,4 @@ namespace cobalt {
 
         void* HeapAllocator::realloc(void* ptr, const size_t size) { return resize(ptr, size); }
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

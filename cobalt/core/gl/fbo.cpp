@@ -8,37 +8,37 @@
 
 #include "core/gl/fbo.h"
 
-#include "core/gfx/render_context.h"
+#include "core/gl/context.h"
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gl {
         FBO::FBO(const uint width, const uint height, const Vec<Attachment>& attachments) : width(width), height(height), clearColor(COLOR_BLACK) {
             glGenFramebuffers(1, &buffer);
             glBindFramebuffer(GL_FRAMEBUFFER, buffer);
             for (auto& attachment : attachments) {
-                GL::TextureFormat type = GL::getTextureFormat(attachment.encoding);
+                gl::TextureFormat type = gl::getTextureFormat(attachment.encoding);
                 switch (type) {
-                    case GL::TextureFormats::Stencil:
+                    case gl::TextureFormats::Stencil:
                         stencil.emplace(width, height, attachment.encoding, attachment.filter, attachment.wrap);
                         stencil.value().bind();
                         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, stencil.value().getGLHandle(), 0);
                         break;
-                    case GL::TextureFormats::Depth:
+                    case gl::TextureFormats::Depth:
                         depth.emplace(width, height, attachment.encoding, attachment.filter, attachment.wrap);
                         depth.value().bind();
                         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth.value().getGLHandle(), 0);
                         break;
-                    case GL::TextureFormats::DepthStencil:
+                    case gl::TextureFormats::DepthStencil:
                         depthStencil.emplace(width, height, attachment.encoding, attachment.filter, attachment.wrap);
                         depthStencil.value().bind();
                         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthStencil.value().getGLHandle(), 0);
                         break;
-                    case GL::TextureFormats::R:
-                    case GL::TextureFormats::RG:
-                    case GL::TextureFormats::RGB:
-                    case GL::TextureFormats::RGBA: {
-                        const uint maxColorAttachments = RenderContext::queryMaxColorAttachments();
+                    case gl::TextureFormats::R:
+                    case gl::TextureFormats::RG:
+                    case gl::TextureFormats::RGB:
+                    case gl::TextureFormats::RGBA: {
+                        const uint maxColorAttachments = Context::queryMaxColorAttachments();
                         if (colors.size() > maxColorAttachments) {
                             CB_CORE_WARN("Attempting to add more color attachments to FBO than the maximum supported ({0}).", maxColorAttachments);
                         }
@@ -48,7 +48,7 @@ namespace cobalt {
                         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + id, GL_TEXTURE_2D, colors[id].getGLHandle(), 0);
                     }
                         continue;
-                    case GL::TextureFormats::Unknown:
+                    case gl::TextureFormats::Unknown:
                     default:
                         CB_CORE_WARN("Attempting to add an unknown attachment type to FBO.");
                         break;
@@ -170,5 +170,5 @@ namespace cobalt {
         const uint FBO::getWidth() const { return width; }
 
         const uint FBO::getHeight() const { return height; }
-    }  // namespace core
+    }  // namespace core::gl
 }  // namespace cobalt

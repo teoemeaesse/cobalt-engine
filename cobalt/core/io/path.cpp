@@ -9,7 +9,7 @@
 #include "core/io/path.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::io {
         Path::Path(const std::string& path, const bool relative = true) {
             if (relative) {
                 fsPath = std::filesystem::current_path().string() + "/" + path;
@@ -62,5 +62,4 @@ namespace cobalt {
             return *this;
         }
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

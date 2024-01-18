@@ -9,7 +9,7 @@
 #pragma once
 
 namespace cobalt {
-    namespace core {
+    namespace core::input {
         struct InputValue {
             bool active;  // Whether the input is active.
             bool held;    // Whether the input is held.
@@ -78,5 +78,4 @@ namespace cobalt {
             T* target;  // The receiver of the command.
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

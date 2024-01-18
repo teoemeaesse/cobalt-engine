@@ -11,7 +11,7 @@
 #include "core/io/path.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::io {
         class File {
             public:
             /** @brief: Create a file from a path.
@@ -66,5 +66,4 @@ namespace cobalt {
             Path path;
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

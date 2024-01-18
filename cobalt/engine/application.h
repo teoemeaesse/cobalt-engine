@@ -64,11 +64,11 @@ namespace cobalt {
             /** @brief: Get the window.
              * @return: The window.
              */
-            core::Window& getWindow();
+            core::gfx::Window& getWindow();
             /** @brief: Get the input manager.
              * @return: The input manager.
              */
-            core::InputManager& getInputManager();
+            core::input::InputManager& getInputManager();
             /** @brief: Set the time window in which the estimated framerate is calculated.
              * @param timeWindow: The time window in which the framerate is calculated, in
              * seconds.
@@ -85,8 +85,8 @@ namespace cobalt {
             uint framerateTimeWindow;  // The time window in which the framerate is
                                        // calculated, in seconds.
 
-            core::Window window;              // The window.
-            core::InputManager inputManager;  // The input manager.
+            core::gfx::Window window;                // The window.
+            core::input::InputManager inputManager;  // The input manager.
         };
 
         /** @brief: Create a new application.
@@ -95,5 +95,4 @@ namespace cobalt {
          */
         Application* createApplication();
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt

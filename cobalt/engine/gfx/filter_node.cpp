@@ -10,14 +10,14 @@
 
 namespace cobalt {
     namespace engine {
-        FilterNode::FilterNode(core::Renderer& renderer, core::RenderTarget&& defaultTarget, core::Material& filter)
+        FilterNode::FilterNode(core::gfx::Renderer& renderer, core::gfx::RenderTarget&& defaultTarget, core::gfx::Material& filter)
             : RenderNode(renderer, std::move(defaultTarget)),
               filter(filter),
               width(defaultTarget.getFBO().getWidth()),
               height(defaultTarget.getFBO().getHeight()) {}
 
         void FilterNode::render() {
-            core::Mesh filterMesh = core::Mesh::createRectangle(width, height, filter);
+            core::gfx::Mesh filterMesh = core::gfx::Mesh::createRectangle(width, height, filter);
             RenderNode::renderMesh(filterMesh);
         }
 
@@ -26,5 +26,4 @@ namespace cobalt {
             this->height = height;
         }
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt

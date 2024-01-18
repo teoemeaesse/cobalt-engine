@@ -11,7 +11,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gl {
         enum class ShaderStep { Vertex, Fragment, Geometry, Compute };
 
         /** @brief: A shader program. Can be used to render, compute, etc.
@@ -56,7 +56,7 @@ namespace cobalt {
             /** @brief: Gets the OpenGL program handle.
              * @return: The OpenGL program handle.
              */
-            const GL::Handle getGLHandle() const;
+            const gl::Handle getGLHandle() const;
 
             /** @brief: Sets a uniform integer array for the given uniform name.
              * @param name: The name of the uniform.
@@ -158,22 +158,22 @@ namespace cobalt {
             const GLuint getUniformLocation(const std::string& name);
 
             protected:
-            GL::Handle program;  // The OpenGL program handle.
+            gl::Handle program;  // The OpenGL program handle.
 
             /** @brief: Creates a new shader program.
              * @param program: The OpenGL program handle.
              */
-            Shader(const GL::Handle program);
+            Shader(const gl::Handle program);
 
             /** @brief: Compiles a shader given its source code.
              * @param shader: The shader handle.
              * @param source: The source code of the shader.
              */
-            static void compileShader(const GL::Handle shader, const std::string& source);
+            static void compileShader(const gl::Handle shader, const std::string& source);
             /** @brief: Links a shader.
              * @param shader: The shader handle.
              */
-            static void linkShader(const GL::Handle shader);
+            static void linkShader(const gl::Handle shader);
         };
 
         class RenderShader;
@@ -203,6 +203,5 @@ namespace cobalt {
             UMap<ShaderStep,
                  std::string> sources;  // The shader sources.
         };
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gl
+}  // namespace cobalt

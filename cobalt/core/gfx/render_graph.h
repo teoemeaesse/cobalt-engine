@@ -13,7 +13,7 @@
 #include "core/scene/scene.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         class RenderGraph {
             public:
             /** @brief: Creates an empty render graph.
@@ -45,5 +45,4 @@ namespace cobalt {
             Vec<Scope<RenderNode>> nodes;  // All the nodes in the graph, in topological order.
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

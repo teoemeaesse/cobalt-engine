@@ -15,7 +15,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::input {
         /** @brief: The input manager. Handles all input from peripherals such as the keyboard
          * and mouse. It then dispatches events to the appropriate listeners.
          */
@@ -91,5 +91,4 @@ namespace cobalt {
                  Scope<InputDevice>> peripherals;  // The peripherals.
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

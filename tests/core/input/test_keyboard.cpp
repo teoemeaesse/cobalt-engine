@@ -10,7 +10,7 @@
 #include "unity/unity.h"
 
 int eventCounter = 0;
-const int KEY_MAX = static_cast<int>(cobalt::core::KeyboardInputID::COUNT);
+const int KEY_MAX = static_cast<int>(cobalt::core::input::KeyboardInputID::COUNT);
 
 class TestClass {
     public:
@@ -19,23 +19,24 @@ class TestClass {
         this->value = value;
         this->pressed = pressed;
     }
-    void assertValue(cobalt::core::KeyboardInputID value) { TEST_ASSERT_EQUAL_INT(static_cast<int>(value), this->value); }
+    void assertValue(cobalt::core::input::KeyboardInputID value) { TEST_ASSERT_EQUAL_INT(static_cast<int>(value), this->value); }
     void assertValue(int value) { TEST_ASSERT_EQUAL_INT(value, this->value); }
     void assertPressed() { TEST_ASSERT_EQUAL_INT(true, this->pressed); }
     void assertReleased() { TEST_ASSERT_EQUAL_INT(false, this->pressed); }
     int value;
     bool pressed;
 };
-#define DEFINE_PERIPHERAL_CMD(num)                                                                       \
-    class TestPeripheralCmd##num : public cobalt::core::ConcreteInputCommand<TestClass> {                \
-        public:                                                                                          \
-        TestPeripheralCmd##num(TestClass* test) : cobalt::core::ConcreteInputCommand<TestClass>(test) {} \
-        void execute() const override {                                                                  \
-            getTarget()->setValue(num, getInput().active);                                               \
-            eventCounter++;                                                                              \
-        }                                                                                                \
+#define DEFINE_PERIPHERAL_CMD(num)                                                                              \
+    class TestPeripheralCmd##num : public cobalt::core::input::ConcreteInputCommand<TestClass> {                \
+        public:                                                                                                 \
+        TestPeripheralCmd##num(TestClass* test) : cobalt::core::input::ConcreteInputCommand<TestClass>(test) {} \
+        void execute() const override {                                                                         \
+            getTarget()->setValue(num, getInput().active);                                                      \
+            eventCounter++;                                                                                     \
+        }                                                                                                       \
     };
-#define BIND_KEY(num, bindptr) keyboard->bind(static_cast<cobalt::core::KeyboardInputID>(num), std::make_unique<TestPeripheralCmd##num>(bindptr));
+#define BIND_KEY(num, bindptr) \
+    keyboard->bind(static_cast<cobalt::core::input::KeyboardInputID>(num), std::make_unique<TestPeripheralCmd##num>(bindptr));
 #define X(num) DEFINE_PERIPHERAL_CMD(num)
 #define Y(num, bindptr) BIND_KEY(num, bindptr)
 // Goes up
@@ -204,28 +205,13 @@ X(78);
     Y(76, bindptr);        \
     Y(77, bindptr);        \
     Y(78, bindptr);
-// Basically
-// just
-// bind
-// every
-// key to
-// a
-// command
-// that
-// sets
-// the
-// value
-// of a
-// TestClass
-// to the
-// key's
-// id.
+// Basically just bind every key to a command that sets the value of a TestClass to the key's id.
 
 TestClass testClass;
-cobalt::core::Keyboard* keyboard;
+cobalt::core::input::Keyboard* keyboard;
 
 void setUp(void) {
-    keyboard = new cobalt::core::Keyboard(1);
+    keyboard = new cobalt::core::input::Keyboard(1);
     BIND_KEYS(&testClass);
 }
 
@@ -233,105 +219,56 @@ void tearDown(void) { delete keyboard; }
 
 void testKeyboardSingleTaps() {
     eventCounter = 0;
-    // Do
-    // this
-    // 5
-    // times
-    // to
-    // make
-    // sure
-    // the
-    // state
-    // is
-    // consistent
-    // across
-    // frames.
+    // Do this 5 times to make sure the state is consistent across frames.
     for (int repeats = 0; repeats < 5; repeats++) {
         for (int i = 0; i < KEY_MAX; i++) {
             // Tap key. Ensure that the key input is calling the correct command.
-            keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::KeyboardInputID>(i)), GLFW_PRESS);
+            keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::input::KeyboardInputID>(i)), GLFW_PRESS);
             keyboard->pollEvents();
             keyboard->clearEvents();
             testClass.assertValue(i);
             testClass.assertPressed();
             // Release key.
-            keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::KeyboardInputID>(i)), GLFW_RELEASE);
+            keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::input::KeyboardInputID>(i)), GLFW_RELEASE);
             keyboard->pollEvents();
             keyboard->clearEvents();
             testClass.assertValue(i);
             testClass.assertReleased();
         }
     }
-    // Make
-    // sure
-    // that
-    // the
-    // counter
-    // is
-    // correct.
+    // Make sure that the counter is correct.
     TEST_ASSERT_EQUAL_INT(KEY_MAX * 5 * 2, eventCounter);
 }
 
 void testKeyboardHold() {
     eventCounter = 0;
-    // Hold
-    // every
-    // key.
+    // Hold every key.
     for (int i = 0; i < KEY_MAX; i++) {
-        keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::KeyboardInputID>(i)), GLFW_PRESS);
+        keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::input::KeyboardInputID>(i)), GLFW_PRESS);
     }
     keyboard->pollEvents();
     keyboard->clearEvents();
     TEST_ASSERT_EQUAL_INT(KEY_MAX, eventCounter);
 
-    // Next
-    // frame,
-    // make
-    // sure
-    // that
-    // the
-    // keys
-    // are
-    // still
-    // down.
+    // Next frame, make sure that the keys are still down.
     keyboard->pollEvents();
     keyboard->clearEvents();
     TEST_ASSERT_EQUAL_INT(KEY_MAX * 2, eventCounter);
-    // No
-    // extra
-    // events
-    // should
-    // be
-    // generated.
+    // No extra events should be generated.
     keyboard->clearEvents();
     TEST_ASSERT_EQUAL_INT(KEY_MAX * 2, eventCounter);
     eventCounter = 0;
 
-    // Double
-    // poll.
-    // Make
-    // sure
-    // that
-    // all
-    // the
-    // events
-    // are
-    // queued.
+    // Double poll. Make sure that all the events are queued.
     keyboard->pollEvents();
     keyboard->pollEvents();
     keyboard->clearEvents();
     TEST_ASSERT_EQUAL_INT(KEY_MAX * 2, eventCounter);
     eventCounter = 0;
 
-    // Release
-    // events
-    // should
-    // only
-    // be
-    // generated
-    // once.
+    // Release events should only be generated once.
     for (int i = 0; i < KEY_MAX; i++) {
-        keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::KeyboardInputID>(i)), GLFW_RELEASE);
+        keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::input::KeyboardInputID>(i)), GLFW_RELEASE);
     }
     keyboard->pollEvents();
     keyboard->pollEvents();

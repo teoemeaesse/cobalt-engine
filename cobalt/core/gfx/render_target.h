@@ -13,7 +13,7 @@
 #include "core/gl/ubo.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         class RenderTarget {
             public:
             /** @brief: Create a render target.
@@ -23,7 +23,7 @@ namespace cobalt {
              * @param cameraUBOBinding: The binding point for the camera UBO.
              * @return: The render target.
              */
-            RenderTarget(const FBO& fbo, const Camera& camera, const std::string& name, const uint cameraUBOBinding);
+            RenderTarget(const gl::FBO& fbo, const Camera& camera, const std::string& name, const uint cameraUBOBinding);
             /** @brief: Destroy the render target.
              */
             ~RenderTarget() = default;
@@ -55,12 +55,12 @@ namespace cobalt {
             /** @brief: Send the render target uniforms to a shader.
              * @param shader: The shader.
              */
-            void sendUBO(const Shader& shader) const;
+            void sendUBO(const gl::Shader& shader) const;
 
-            /** @brief: Get the FBO.
-             * @return: The FBO.
+            /** @brief: Get the gl::FBO.
+             * @return: The gl::FBO.
              */
-            const FBO& getFBO() const;
+            const gl::FBO& getFBO() const;
             /** @brief: Get the name of the render target.
              * @return: The name.
              */
@@ -71,11 +71,10 @@ namespace cobalt {
             const Camera& getCamera() const;
 
             private:
-            const UBO ubo;         // Uniform buffer object.
-            const FBO& fbo;        // Frame buffer object.
+            const gl::UBO ubo;     // Uniform buffer object.
+            const gl::FBO& fbo;    // Frame buffer object.
             const Camera& camera;  // The camera used to render.
             std::string name;      // Name of the render target. This is used to send uniforms for a render node that has a render target as a source.
         };
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

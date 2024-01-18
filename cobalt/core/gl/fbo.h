@@ -12,16 +12,16 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gl {
         /** @brief: FrameBuffer Object (FBO). Used for rendering to texture (off-screen
          * rendering and post-processing effects).
          */
         class FBO {
             public:
             struct Attachment {
-                GL::TextureEncoding encoding;
-                GL::TextureFilter filter = GL::TextureFilters::Linear;
-                GL::TextureWrap wrap = GL::TextureWraps::Repeat;
+                gl::TextureEncoding encoding;
+                gl::TextureFilter filter = gl::TextureFilters::Linear;
+                gl::TextureWrap wrap = gl::TextureWraps::Repeat;
             };
 
             /** @brief: Creates a new FBO with the given buffer attachments.
@@ -104,7 +104,7 @@ namespace cobalt {
             const uint getHeight() const;
 
             protected:
-            GL::Handle buffer;            // The handle to the FBO.
+            gl::Handle buffer;            // The handle to the FBO.
             Vec<Texture2D> colors;        // The texture attached to the FBO.
             Opt<Texture2D> depth;         // The depth texture attached to the FBO.
             Opt<Texture2D> stencil;       // The stencil texture attached to the FBO.
@@ -113,5 +113,5 @@ namespace cobalt {
             uint width;                   // The width of the FBO.
             uint height;                  // The height of the FBO.
         };
-    }  // namespace core
+    }  // namespace core::gl
 }  // namespace cobalt

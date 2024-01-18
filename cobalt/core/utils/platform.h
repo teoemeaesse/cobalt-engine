@@ -67,5 +67,4 @@ namespace cobalt {
             inline static bool isUnixLike() { return strcmp(getName(), "Unix-like") == 0; }
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

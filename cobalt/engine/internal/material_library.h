@@ -21,14 +21,14 @@ namespace cobalt {
             public:
             struct MaterialEntry {
                 std::string name;
-                core::Material material;
+                core::gfx::Material material;
 
                 /** @brief: Creates a new material entry.
                  * @param name: The name of the material.
                  * @param material: The material.
                  * @return: The material entry.
                  */
-                MaterialEntry(const std::string& name, const core::Material& material) : name(name), material(material) {}
+                MaterialEntry(const std::string& name, const core::gfx::Material& material) : name(name), material(material) {}
             };
 
             /** @brief: Creates an empty material library.
@@ -50,7 +50,7 @@ namespace cobalt {
              * @param id: The ID of the material.
              * @return: The material.
              */
-            core::Material& getMaterial(const MaterialID id);
+            core::gfx::Material& getMaterial(const MaterialID id);
 
             /** @brief: Creates a new PBR material.
              * @param name: The name of the material.
@@ -100,12 +100,11 @@ namespace cobalt {
             static MaterialLibrary& getMaterialLibrary();
 
             private:
-            core::Deque<MaterialEntry> materials;  // The materials in the library.
+            Deque<MaterialEntry> materials;  // The materials in the library.
 
             static Scope<MaterialLibrary> instance;  // The singleton instance of the material library.
         };
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt
 
 #define CB_MATERIAL_LIBRARY ::cobalt::engine::MaterialLibrary::getMaterialLibrary()

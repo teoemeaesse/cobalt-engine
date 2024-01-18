@@ -13,9 +13,9 @@
 
 namespace cobalt {
     namespace editor {
-        class Spawn : public core::ConcreteInputCommand<core::Scene> {
+        class Spawn : public core::input::ConcreteInputCommand<core::scene::Scene> {
             public:
-            Spawn(core::Scene* target) : core::ConcreteInputCommand<core::Scene>(target) {}
+            Spawn(core::scene::Scene* target) : core::input::ConcreteInputCommand<core::scene::Scene>(target) {}
             void execute() const override {
                 if (getInput().held || !getInput().active) return;
                 static int i = 2;
@@ -23,104 +23,103 @@ namespace cobalt {
                 const engine::TextureID woodNormal = CB_TEXTURE_LIBRARY.getTextureID("wood-normal");
                 const engine::TextureID woodMrao = CB_TEXTURE_LIBRARY.getTextureID("wood-mrao");
                 const engine::MaterialID woodMaterial = CB_MATERIAL_LIBRARY.makePBR("wood", woodAlbedo, woodNormal, woodMrao);
-                core::Material& material = CB_MATERIAL_LIBRARY.getMaterial(woodMaterial);
-                core::Mesh sphere = core::Mesh::createSphere(5.0f, material);
+                core::gfx::Material& material = CB_MATERIAL_LIBRARY.getMaterial(woodMaterial);
+                core::gfx::Mesh sphere = core::gfx::Mesh::createSphere(5.0f, material);
                 sphere.translate(glm::vec3(10.0f * i++, 0.0f, 0.0f));
                 getTarget()->addMesh(std::move(sphere));
             }
         };
-        class Quit : public core::ConcreteInputCommand<Editor> {
+        class Quit : public core::input::ConcreteInputCommand<Editor> {
             public:
-            Quit(Editor* target) : core::ConcreteInputCommand<Editor>(target) {}
+            Quit(Editor* target) : core::input::ConcreteInputCommand<Editor>(target) {}
             void execute() const override { getTarget()->stop(); }
         };
 
-        class Fullscreen : public core::ConcreteInputCommand<Editor> {
+        class Fullscreen : public core::input::ConcreteInputCommand<Editor> {
             public:
-            Fullscreen(Editor* target) : core::ConcreteInputCommand<Editor>(target) {}
+            Fullscreen(Editor* target) : core::input::ConcreteInputCommand<Editor>(target) {}
             void execute() const override {
                 if (!getInput().active) {
-                    getTarget()->getWindow().switchMode(core::WindowMode::Fullscreen);
+                    getTarget()->getWindow().switchMode(core::gfx::WindowMode::Fullscreen);
                     getTarget()->createScene();
                 }
             }
         };
 
-        class Borderless : public core::ConcreteInputCommand<Editor> {
+        class Borderless : public core::input::ConcreteInputCommand<Editor> {
             public:
-            Borderless(Editor* target) : core::ConcreteInputCommand<Editor>(target) {}
+            Borderless(Editor* target) : core::input::ConcreteInputCommand<Editor>(target) {}
             void execute() const override {
                 if (!getInput().active) {
-                    getTarget()->getWindow().switchMode(core::WindowMode::Borderless);
+                    getTarget()->getWindow().switchMode(core::gfx::WindowMode::Borderless);
                     getTarget()->createScene();
                 }
             }
         };
 
-        class Windowed : public core::ConcreteInputCommand<Editor> {
+        class Windowed : public core::input::ConcreteInputCommand<Editor> {
             public:
-            Windowed(Editor* target) : core::ConcreteInputCommand<Editor>(target) {}
+            Windowed(Editor* target) : core::input::ConcreteInputCommand<Editor>(target) {}
             void execute() const override {
                 if (!getInput().active) {
-                    getTarget()->getWindow().switchMode(core::WindowMode::Windowed);
+                    getTarget()->getWindow().switchMode(core::gfx::WindowMode::Windowed);
                     getTarget()->createScene();
                 }
             }
         };
 
-        class PanLeft : public core::ConcreteInputCommand<core::CameraController> {
+        class PanLeft : public core::input::ConcreteInputCommand<core::gfx::CameraController> {
             public:
-            PanLeft(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {}
+            PanLeft(core::gfx::CameraController* target) : core::input::ConcreteInputCommand<core::gfx::CameraController>(target) {}
             void execute() const override { getTarget()->panHorizontal(-1.0f); }
         };
 
-        class PanRight : public core::ConcreteInputCommand<core::CameraController> {
+        class PanRight : public core::input::ConcreteInputCommand<core::gfx::CameraController> {
             public:
-            PanRight(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {}
+            PanRight(core::gfx::CameraController* target) : core::input::ConcreteInputCommand<core::gfx::CameraController>(target) {}
             void execute() const override { getTarget()->panHorizontal(1.0f); }
         };
 
-        class PanUp : public core::ConcreteInputCommand<core::CameraController> {
+        class PanUp : public core::input::ConcreteInputCommand<core::gfx::CameraController> {
             public:
-            PanUp(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {}
+            PanUp(core::gfx::CameraController* target) : core::input::ConcreteInputCommand<core::gfx::CameraController>(target) {}
             void execute() const override { getTarget()->panVertical(1.0f); }
         };
 
-        class PanDown : public core::ConcreteInputCommand<core::CameraController> {
+        class PanDown : public core::input::ConcreteInputCommand<core::gfx::CameraController> {
             public:
-            PanDown(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {}
+            PanDown(core::gfx::CameraController* target) : core::input::ConcreteInputCommand<core::gfx::CameraController>(target) {}
             void execute() const override { getTarget()->panVertical(-1.0f); }
         };
 
-        class PanIn : public core::ConcreteInputCommand<core::CameraController> {
+        class PanIn : public core::input::ConcreteInputCommand<core::gfx::CameraController> {
             public:
-            PanIn(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {}
+            PanIn(core::gfx::CameraController* target) : core::input::ConcreteInputCommand<core::gfx::CameraController>(target) {}
             void execute() const override { getTarget()->panDepth(-1.0f); }
         };
 
-        class PanOut : public core::ConcreteInputCommand<core::CameraController> {
+        class PanOut : public core::input::ConcreteInputCommand<core::gfx::CameraController> {
             public:
-            PanOut(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {}
+            PanOut(core::gfx::CameraController* target) : core::input::ConcreteInputCommand<core::gfx::CameraController>(target) {}
             void execute() const override { getTarget()->panDepth(1.0f); }
         };
 
-        class RotateY : public core::ConcreteInputCommand<core::CameraController> {
+        class RotateY : public core::input::ConcreteInputCommand<core::gfx::CameraController> {
             public:
-            RotateY(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {}
+            RotateY(core::gfx::CameraController* target) : core::input::ConcreteInputCommand<core::gfx::CameraController>(target) {}
             void execute() const override { getTarget()->rotateVertical(-getInput().value * 0.005f); }
         };
 
-        class RotateX : public core::ConcreteInputCommand<core::CameraController> {
+        class RotateX : public core::input::ConcreteInputCommand<core::gfx::CameraController> {
             public:
-            RotateX(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {}
+            RotateX(core::gfx::CameraController* target) : core::input::ConcreteInputCommand<core::gfx::CameraController>(target) {}
             void execute() const override { getTarget()->rotateHorizontal(getInput().value * 0.005f); }
         };
 
-        class Zoom : public core::ConcreteInputCommand<core::CameraController> {
+        class Zoom : public core::input::ConcreteInputCommand<core::gfx::CameraController> {
             public:
-            Zoom(core::CameraController* target) : core::ConcreteInputCommand<core::CameraController>(target) {}
+            Zoom(core::gfx::CameraController* target) : core::input::ConcreteInputCommand<core::gfx::CameraController>(target) {}
             void execute() const override { getTarget()->zoom(-getInput().value * 5.0f); }
         };
     }  // namespace editor
-}  // namespace
-   // cobalt
+}  // namespace cobalt

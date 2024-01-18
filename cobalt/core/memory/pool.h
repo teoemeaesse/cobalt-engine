@@ -12,7 +12,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::memory {
         /** @brief: A pool allocator is a memory allocator that allocates
          * memory in blocks of a fixed size. It is useful for allocating many objects
          * of the same type (e.g. components in an ECS).
@@ -120,5 +120,4 @@ namespace cobalt {
             }
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

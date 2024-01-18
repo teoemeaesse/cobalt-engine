@@ -14,7 +14,7 @@
 #include "core/gl/vao.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         class Skybox {
             public:
             /** @brief: Destroys the skybox.
@@ -47,7 +47,7 @@ namespace cobalt {
              * @param shader: The shader to render it with.
              * @return: The skybox.
              */
-            static Skybox create(const Texture3D& texture, Shader& shader);
+            static Skybox create(const gl::Texture3D& texture, gl::Shader& shader);
 
             /** @brief: Binds the skybox.
              */
@@ -59,17 +59,17 @@ namespace cobalt {
             /** @brief: Gets the texture.
              * @return: The texture.
              */
-            const Texture3D& getTexture() const;
+            const gl::Texture3D& getTexture() const;
             /** @brief: Gets the shader.
              * @return: The shader.
              */
-            Shader& getShader() const;
+            gl::Shader& getShader() const;
 
             private:
-            VAO vao;                   // The vertex array object for the skybox cube.
-            IBO ibo;                   // The index buffer object.
-            const Texture3D& texture;  // The texture.
-            Shader& shader;            // The shader.
+            gl::VAO vao;                   // The vertex array object for the skybox cube.
+            gl::IBO ibo;                   // The index buffer object.
+            const gl::Texture3D& texture;  // The texture.
+            gl::Shader& shader;            // The shader.
 
             /** @brief: Creates a new skybox.
              * @param texture: The texture.
@@ -78,8 +78,7 @@ namespace cobalt {
              * @param ibo: The index buffer object.
              * @return: The skybox.
              */
-            Skybox(const Texture3D& texture, Shader& shader, VAO&& vao, IBO&& ibo);
+            Skybox(const gl::Texture3D& texture, gl::Shader& shader, gl::VAO&& vao, gl::IBO&& ibo);
         };
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

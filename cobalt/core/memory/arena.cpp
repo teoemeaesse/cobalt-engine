@@ -11,7 +11,7 @@
 #include <cstring>
 
 namespace cobalt {
-    namespace core {
+    namespace core::memory {
         ArenaAllocator::ArenaAllocator(const size_t initial_size) : heap(), block_count(1), arena_size(0) {
             blocks = (ArenaBlock*)heap.grab(sizeof(ArenaBlock));
             blocks[0] = arenaBlockCreate(heap, initial_size);
@@ -66,5 +66,4 @@ namespace cobalt {
 
         void ArenaAllocator::arenaBlockDestroy(HeapAllocator& heap, ArenaBlock* block) { heap.drop(block->data); }
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

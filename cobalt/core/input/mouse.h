@@ -12,7 +12,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::input {
         enum class MouseInputID {
             LEFT,
             RIGHT,
@@ -181,5 +181,4 @@ namespace cobalt {
             const std::string& cobaltToStr(const MouseInputID cobaltCode) const override;
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

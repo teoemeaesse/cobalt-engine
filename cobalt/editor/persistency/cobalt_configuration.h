@@ -30,13 +30,12 @@ namespace cobalt {
             /** @brief: Create a new window from the configuration.
              * @return: A new window.
              */
-            core::Window createWindow() const;
+            core::gfx::Window createWindow() const;
 
             /** @brief: Configure a window from the configuration.
              * @param window: The window to configure.
              */
-            void configureWindow(core::Window& window) const;
+            void configureWindow(core::gfx::Window& window) const;
         };
     }  // namespace editor
-}  // namespace
-   // cobalt
+}  // namespace cobalt

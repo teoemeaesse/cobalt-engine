@@ -12,7 +12,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         enum class WindowMode { Windowed, Fullscreen, Borderless };
 
         /** @brief: Wrapper for GLFW window.
@@ -73,7 +73,7 @@ namespace cobalt {
             /** @brief: Gets the default framebuffer object of the window.
              * @return: The default framebuffer object of the window.
              */
-            FBO& getDefaultFBO();
+            gl::FBO& getDefaultFBO();
             /** @brief: Gets whether or not the window is using vsync.
              * @return: Whether or not the window is using vsync.
              */
@@ -121,7 +121,7 @@ namespace cobalt {
             uint width,
                 height;               // The width and height of the window.
             std::string title;        // The title of the window.
-            FBO defaultFBO;           // The default framebuffer object of the window.
+            gl::FBO defaultFBO;       // The default framebuffer object of the window.
             bool vsync;               // Whether or not the window is using vsync.
             bool resizable;           // Whether or not the window is resizable.
             bool decorated;           // Whether or not the window is decorated.
@@ -213,6 +213,5 @@ namespace cobalt {
             bool lockAspectRatio;
             Window::CallbackSetter callbackSetter;
         };
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

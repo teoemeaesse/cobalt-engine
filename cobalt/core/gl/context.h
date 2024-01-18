@@ -11,17 +11,17 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
-        typedef GLFWwindow* GLFWContext;
+    namespace core::gl {
+        using GLFWContext = GLFWwindow*;
 
-        /** @brief: Singleton class for the render context.
+        /** @brief: Singleton class for a GL render context.
          * The render context is the context that is used for rendering.
          * It is shared between all windows and thread-local.
          * Don't attempt to call GLFW functions or OpenGL functions before initializing
          * the render context with init() or alternatively init(GLFWContext), in
          * multithreaded applications.
          */
-        class RenderContext {
+        class Context {
             public:
             /** @brief: Initializes the render context.
              */
@@ -97,7 +97,7 @@ namespace cobalt {
              */
             static void disableDepthWriting();
             /** @brief: Sets the user pointer. This is any pointer that
-             * can be used by anyone with the render context.
+             * can be used by anyone with the GL render context.
              * @param pointer: The user pointer.
              */
             static void setUserPointer(void* pointer);
@@ -106,10 +106,10 @@ namespace cobalt {
              */
             static void* getUserPointer();
 
-            /** @brief: Gets the current render context.
-             * @return: The current render context.
+            /** @brief: Gets the current GL render context.
+             * @return: The current GL render context.
              */
-            static std::shared_ptr<RenderContext>& getInstance();
+            static Ref<Context>& getInstance();
 
             /** @brief: Gets the GLFW context.
              * @return: The GLFW context.
@@ -160,25 +160,24 @@ namespace cobalt {
              */
             static void checkGLErrors();
 
-            /** @brief: Creates a new render context.
+            /** @brief: Creates a new GL render context.
              * @param context: The GLFW context.
-             * @return: A new render context.
+             * @return: A new GL render context.
              */
-            RenderContext();
-            /** @brief: Creates a new render context, given a GLFW context.
+            Context();
+            /** @brief: Creates a new GL render context, given a GLFW context.
              * @param context: The GLFW context.
-             * @return: A new render context.
+             * @return: A new GL render context.
              */
-            RenderContext(GLFWContext context);
-            /** @brief: Destroys the render context.
+            Context(GLFWContext context);
+            /** @brief: Destroys the GL render context.
              */
-            ~RenderContext();
+            ~Context();
 
             private:
             GLFWContext context;  // The GLFW context.
 
-            static Ref<RenderContext> instance;  // The current render context.
+            static Ref<Context> instance;  // The current GL render context.
         };
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gl
+}  // namespace cobalt

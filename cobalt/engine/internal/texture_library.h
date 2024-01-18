@@ -24,15 +24,12 @@ namespace cobalt {
             friend bool operator==(const TextureCache& lhs, const TextureCache& rhs) { return lhs.type == rhs.type && lhs.color == rhs.color; }
         };
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt
 
 namespace std {
     template <>
     struct hash<cobalt::core::Color> {
         size_t operator()(const cobalt::core::Color& color) const {
-            // Example hash function for illustration; you'll need one suited to your
-            // Color type
             return hash<float>()(color.r) ^ hash<float>()(color.g) << 1 ^ hash<float>()(color.b) << 2 ^ hash<float>()(color.a) << 3;
         }
     };
@@ -52,7 +49,7 @@ namespace cobalt {
             public:
             template <typename T>
             struct TextureEntry {
-                static_assert(std::is_base_of<core::Texture, T>::value, "T must be a subclass of core::Texture");
+                static_assert(std::is_base_of<core::gl::Texture, T>::value, "T must be a subclass of core::gl::Texture");
                 std::string name;  // The name of the texture.
                 T texture;         // The texture.
 
@@ -78,7 +75,7 @@ namespace cobalt {
              * texture files.
              * @param texturesDirectory: The directory containing the texture files.
              */
-            void loadTextures(const core::Path& texturesDirectory);
+            void loadTextures(const core::io::Path& texturesDirectory);
 
             /** @brief: Returns the texture ID of the texture with the given name.
              * If the texture does not exist, returns the null texture ID.
@@ -92,13 +89,13 @@ namespace cobalt {
              * @param id: The ID of the texture.
              * @return: The texture.
              */
-            const core::Texture2D& getTexture2D(const TextureID id);
+            const core::gl::Texture2D& getTexture2D(const TextureID id);
             /** @brief: Returns the 2D texture with the given name.
              * If the texture does not exist, returns a null texture.
              * @param name: The name of the texture.
              * @return: The texture.
              */
-            const core::Texture2D& getTexture2D(const std::string& name);
+            const core::gl::Texture2D& getTexture2D(const std::string& name);
             /** @brief: Returns the 2D texture with the given color.
              * If the texture does not exist, cache and return a new texture.
              * @param color: The color of the texture.
@@ -106,8 +103,8 @@ namespace cobalt {
              * @param wrap: The wrap mode to use for the texture.
              * @return: The texture.
              */
-            const core::Texture2D& getTexture2D(const core::Color color, const core::GL::TextureFilter filter = core::GL::TextureFilters::Linear,
-                                                const core::GL::TextureWrap wrap = core::GL::TextureWraps::Repeat);
+            const core::gl::Texture2D& getTexture2D(const core::Color color, const core::gl::TextureFilter filter = core::gl::TextureFilters::Linear,
+                                                    const core::gl::TextureWrap wrap = core::gl::TextureWraps::Repeat);
             /** @brief: Returns the 2D texture with the given color.
              * If the texture does not exist, cache and return a new texture.
              * @param red: The red component of the color.
@@ -118,22 +115,22 @@ namespace cobalt {
              * @param wrap: The wrap mode to use for the texture.
              * @return: The texture.
              */
-            const core::Texture2D& getTexture2D(const uchar red, const uchar green, const uchar blue, const uchar alpha = 255,
-                                                const core::GL::TextureFilter filter = core::GL::TextureFilters::Linear,
-                                                const core::GL::TextureWrap wrap = core::GL::TextureWraps::Repeat);
+            const core::gl::Texture2D& getTexture2D(const uchar red, const uchar green, const uchar blue, const uchar alpha = 255,
+                                                    const core::gl::TextureFilter filter = core::gl::TextureFilters::Linear,
+                                                    const core::gl::TextureWrap wrap = core::gl::TextureWraps::Repeat);
 
             /** @brief: Returns the 3D texture with the given ID.
              * If the texture does not exist, returns a null texture.
              * @param id: The ID of the texture.
              * @return: The texture.
              */
-            const core::Texture3D& getTexture3D(const TextureID id);
+            const core::gl::Texture3D& getTexture3D(const TextureID id);
             /** @brief: Returns the 3D texture with the given name.
              * If the texture does not exist, returns a null texture.
              * @param name: The name of the texture.
              * @return: The texture.
              */
-            const core::Texture3D& getTexture3D(const std::string& name);
+            const core::gl::Texture3D& getTexture3D(const std::string& name);
             /** @brief: Returns the 3D texture with the given color.
              * If the texture does not exist, cache and return a new texture.
              * @param color: The color of the texture.
@@ -141,8 +138,8 @@ namespace cobalt {
              * @param wrap: The wrap mode to use for the texture.
              * @return: The texture.
              */
-            const core::Texture3D& getTexture3D(const core::Color color, const core::GL::TextureFilter filter = core::GL::TextureFilters::Linear,
-                                                const core::GL::TextureWrap wrap = core::GL::TextureWraps::Repeat);
+            const core::gl::Texture3D& getTexture3D(const core::Color color, const core::gl::TextureFilter filter = core::gl::TextureFilters::Linear,
+                                                    const core::gl::TextureWrap wrap = core::gl::TextureWraps::Repeat);
             /** @brief: Returns the 3D texture with the given color.
              * If the texture does not exist, cache and return a new texture.
              * @param red: The red component of the color.
@@ -153,22 +150,22 @@ namespace cobalt {
              * @param wrap: The wrap mode to use for the texture.
              * @return: The texture.
              */
-            const core::Texture3D& getTexture3D(const uchar red, const uchar green, const uchar blue, const uchar alpha = 255,
-                                                const core::GL::TextureFilter filter = core::GL::TextureFilters::Linear,
-                                                const core::GL::TextureWrap wrap = core::GL::TextureWraps::Repeat);
+            const core::gl::Texture3D& getTexture3D(const uchar red, const uchar green, const uchar blue, const uchar alpha = 255,
+                                                    const core::gl::TextureFilter filter = core::gl::TextureFilters::Linear,
+                                                    const core::gl::TextureWrap wrap = core::gl::TextureWraps::Repeat);
 
             /** @brief: Returns the texture with the given ID.
              * If the texture does not exist, returns a null texture.
              * @param id: The ID of the texture.
              * @return: The texture.
              */
-            const core::Texture& getTexture(const TextureID id);
+            const core::gl::Texture& getTexture(const TextureID id);
             /** @brief: Returns the texture with the given name.
              * If the texture does not exist, returns a null texture.
              * @param name: The name of the texture.
              * @return: The texture.
              */
-            const core::Texture& getTexture(const std::string& name);
+            const core::gl::Texture& getTexture(const std::string& name);
 
             /** @brief: Initializes the singleton instance of the texture library.
              */
@@ -179,15 +176,14 @@ namespace cobalt {
             static TextureLibrary& getTextureLibrary();
 
             private:
-            core::Deque<TextureEntry<core::Texture2D>> textures2D;  // The 2D textures in the library.
-            core::Deque<TextureEntry<core::Texture3D>> textures3D;  // The cubemap textures in the library.
-            core::UMap<TextureCache,
-                       TextureID> cache;  // The cache of textures.
+            Deque<TextureEntry<core::gl::Texture2D>> textures2D;  // The 2D textures in the library.
+            Deque<TextureEntry<core::gl::Texture3D>> textures3D;  // The cubemap textures in the library.
+            UMap<TextureCache,
+                 TextureID> cache;  // The cache of textures.
 
             static Scope<TextureLibrary> instance;  // The singleton instance of the texture library.
         };
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt
 
 #define CB_TEXTURE_LIBRARY ::cobalt::engine::TextureLibrary::getTextureLibrary()

@@ -12,7 +12,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         using CameraID = uint;
 
         class CameraProperties {
@@ -358,141 +358,71 @@ namespace cobalt {
             UMap<std::string, CameraID> cameraNames;
             UMap<CameraID, CameraController> cameras;
         };
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt
 
 template <typename T>
-T inline cobalt::core::CameraProperties::getCamera() const {
+T inline cobalt::core::gfx::CameraProperties::getCamera() const {
     static_assert(std::is_base_of<Camera, T>::value, "T must be a camera type");
     throw GFXException("Invalid camera mode");
 }
-/** @brief: Create
- * an
- * orthographic
- * camera
- * from
- * the
- * properties.
- * @return:
- * The
- * camera.
+/** @brief: Create an orthographic camera from the properties.
+ * @return: The camera.
  */
 template <>
-cobalt::core::OrthographicCamera inline cobalt::core::CameraProperties::getCamera<cobalt::core::OrthographicCamera>() const {
+cobalt::core::gfx::OrthographicCamera inline cobalt::core::gfx::CameraProperties::getCamera<cobalt::core::gfx::OrthographicCamera>() const {
     return OrthographicCamera(position, direction, left, right, top, bottom, near, far);
 }
-/** @brief: Create
- * a first
- * person
- * perspective
- * camera
- * from
- * the
- * properties.
- * @return:
- * The
- * camera.
+/** @brief: Create a first person perspective camera from the properties.
+ * @return: The camera.
  */
 template <>
-cobalt::core::FPSCamera inline cobalt::core::CameraProperties::getCamera<cobalt::core::FPSCamera>() const {
-    return cobalt::core::FPSCamera(position, direction, fov, near, far, aspectRatio);
+cobalt::core::gfx::FPSCamera inline cobalt::core::gfx::CameraProperties::getCamera<cobalt::core::gfx::FPSCamera>() const {
+    return cobalt::core::gfx::FPSCamera(position, direction, fov, near, far, aspectRatio);
 }
-/** @brief: Create
- * a pivot
- * camera
- * from
- * the
- * properties.
- * @return:
- * The
- * camera.
+/** @brief: Create a pivot camera from the properties.
+ * @return: The camera.
  */
 template <>
-cobalt::core::PivotCamera inline cobalt::core::CameraProperties::getCamera<cobalt::core::PivotCamera>() const {
+cobalt::core::gfx::PivotCamera inline cobalt::core::gfx::CameraProperties::getCamera<cobalt::core::gfx::PivotCamera>() const {
     if (center.has_value()) {
-        return cobalt::core::PivotCamera(position, center.value(), fov, near, far, aspectRatio);
+        return cobalt::core::gfx::PivotCamera(position, center.value(), fov, near, far, aspectRatio);
     } else {
-        return cobalt::core::PivotCamera(position, direction, distance, fov, near, far, aspectRatio);
+        return cobalt::core::gfx::PivotCamera(position, direction, distance, fov, near, far, aspectRatio);
     }
 }
 template <typename T>
-cobalt::core::CameraController inline cobalt::core::CameraController::create(const cobalt::core::CameraProperties& properties) {
+cobalt::core::gfx::CameraController inline cobalt::core::gfx::CameraController::create(const cobalt::core::gfx::CameraProperties& properties) {
     static_assert(std::is_base_of<Camera, T>::value, "T must be a camera type");
     throw GFXException("Invalid camera mode");
 }
-/** @brief: Create
- * an
- * orthographic
- * camera
- * controller
- * from
- * the
- * given
- * properties.
- * @param
- * properties:
- * Properties
- * of the
- * camera.
- * @return:
- * The
- * camera
- * controller.
+/** @brief: Create an orthographic camera controller from the given properties.
+ * @param properties: Properties of the camera.
+ * @return: The camera controller.
  */
 template <>
-cobalt::core::CameraController inline cobalt::core::CameraController::create<cobalt::core::OrthographicCamera>(
-    const cobalt::core::CameraProperties& properties) {
+cobalt::core::gfx::CameraController inline cobalt::core::gfx::CameraController::create<cobalt::core::gfx::OrthographicCamera>(
+    const cobalt::core::gfx::CameraProperties& properties) {
     return CameraController(std::move(cobalt::createScope<OrthographicCamera>(properties.getCamera<OrthographicCamera>())),
                             properties.getLinearCling(), properties.getAngularCling(), properties.getZoomCling());
 }
-/** @brief: Create
- * a first
- * person
- * perspective
- * camera
- * controller
- * from
- * the
- * given
- * properties.
- * @param
- * properties:
- * Properties
- * of the
- * camera.
- * @return:
- * The
- * camera
- * controller.
+/** @brief: Create a first person perspective camera controller from the given properties.
+ * @param properties: Properties of the camera.
+ * @return: The camera controller.
  */
 template <>
-cobalt::core::CameraController inline cobalt::core::CameraController::create<cobalt::core::FPSCamera>(
-    const cobalt::core::CameraProperties& properties) {
+cobalt::core::gfx::CameraController inline cobalt::core::gfx::CameraController::create<cobalt::core::gfx::FPSCamera>(
+    const cobalt::core::gfx::CameraProperties& properties) {
     return CameraController(std::move(cobalt::createScope<FPSCamera>(properties.getCamera<FPSCamera>())), properties.getLinearCling(),
                             properties.getAngularCling(), properties.getZoomCling());
 }
-/** @brief: Create
- * a pivot
- * camera
- * controller
- * from
- * the
- * given
- * properties.
- * @param
- * properties:
- * Properties
- * of the
- * camera.
- * @return:
- * The
- * camera
- * controller.
+/** @brief: Create a pivot camera controller from the given properties.
+ * @param properties: Properties of the camera.
+ * @return: The camera controller.
  */
 template <>
-cobalt::core::CameraController inline cobalt::core::CameraController::create<cobalt::core::PivotCamera>(
-    const cobalt::core::CameraProperties& properties) {
+cobalt::core::gfx::CameraController inline cobalt::core::gfx::CameraController::create<cobalt::core::gfx::PivotCamera>(
+    const cobalt::core::gfx::CameraProperties& properties) {
     return CameraController(std::move(cobalt::createScope<PivotCamera>(properties.getCamera<PivotCamera>())), properties.getLinearCling(),
                             properties.getAngularCling(), properties.getZoomCling());
 }

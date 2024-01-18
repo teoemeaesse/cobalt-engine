@@ -26,8 +26,7 @@ namespace cobalt {
             private:
             CobaltConfiguration configuration;
             engine::DefaultGraph renderGraph;
-            core::Scene scene;
+            core::scene::Scene scene;
         };
     }  // namespace editor
-}  // namespace
-   // cobalt
+}  // namespace cobalt

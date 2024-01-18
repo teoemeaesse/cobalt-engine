@@ -11,7 +11,7 @@
 #include "core/memory/allocator.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::memory {
         class HeapAllocator : public Allocator {
             public:
             HeapAllocator() = default;
@@ -50,5 +50,4 @@ namespace cobalt {
             void* realloc(void* ptr, const size_t size) override;
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

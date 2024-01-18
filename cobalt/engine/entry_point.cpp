@@ -23,15 +23,14 @@ namespace cobalt {
             }
         }
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt
 
 int main(int argc, char** argv) {
     // Initialize
     // the
     // engine.
     cobalt::core::Log::init();
-    cobalt::core::RenderContext::init();
+    cobalt::core::gl::Context::init();
     cobalt::core::Platform::log();
     cobalt::engine::TextureLibrary::init();
     cobalt::engine::ShaderLibrary::init();
@@ -55,9 +54,9 @@ int main(int argc, char** argv) {
     // application.
     try {
         app->run();
-    } catch (const cobalt::core::GLException& e) {
+    } catch (const cobalt::core::gl::GLException& e) {
         CB_ERROR("GL exception: {0}", e.what());
-    } catch (const cobalt::core::GFXException& e) {
+    } catch (const cobalt::core::gfx::GFXException& e) {
         CB_ERROR("GFX exception: {0}", e.what());
     } catch (const std::exception& e) {
         CB_ERROR("Exception: {0}", e.what());
@@ -65,7 +64,7 @@ int main(int argc, char** argv) {
 
     // Cleanup.
     delete app;
-    cobalt::core::RenderContext::destroy();
+    cobalt::core::gl::Context::destroy();
 
     return EXIT_SUCCESS;
 }

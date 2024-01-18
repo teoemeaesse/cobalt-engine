@@ -9,8 +9,8 @@
 #include "core/gfx/material.h"
 
 namespace cobalt {
-    namespace core {
-        Material::Material(Shader& shader, const Texture& albedoMap, const Texture& normalMap, const Texture& mraoMap)
+    namespace core::gfx {
+        Material::Material(gl::Shader& shader, const gl::Texture& albedoMap, const gl::Texture& normalMap, const gl::Texture& mraoMap)
             : shader(shader), albedoMap(albedoMap), normalMap(normalMap), mraoMap(mraoMap) {}
 
         Material::Material(const Material& other)
@@ -28,13 +28,12 @@ namespace cobalt {
             return {albedoSlot, normalSlot, mraoSlot};
         }
 
-        const Texture& Material::getAlbedoMap() const { return albedoMap; }
+        const gl::Texture& Material::getAlbedoMap() const { return albedoMap; }
 
-        const Texture& Material::getNormalMap() const { return normalMap; }
+        const gl::Texture& Material::getNormalMap() const { return normalMap; }
 
-        const Texture& Material::getMRAOMap() const { return mraoMap; }
+        const gl::Texture& Material::getMRAOMap() const { return mraoMap; }
 
-        Shader& Material::getShader() { return shader; }
-    }  // namespace core
-}  // namespace
-   // cobalt
+        gl::Shader& Material::getShader() { return shader; }
+    }  // namespace core::gfx
+}  // namespace cobalt

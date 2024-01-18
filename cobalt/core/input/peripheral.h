@@ -11,7 +11,7 @@
 #include "core/input/input_command.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::input {
         using DeviceID = int;
 
         template <typename T>
@@ -122,14 +122,13 @@ namespace cobalt {
             UMap<PeripheralInput<T>,
                  Scope<InputCommand>> bindings;  // The bindings for the peripheral.
         };
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::input
+}  // namespace cobalt
 
 namespace std {
     template <typename T>
-    struct hash<cobalt::core::PeripheralInput<T>> {
-        std::size_t operator()(const cobalt::core::PeripheralInput<T>& input) const { return hash<T>()(input.getId()); }
+    struct hash<cobalt::core::input::PeripheralInput<T>> {
+        std::size_t operator()(const cobalt::core::input::PeripheralInput<T>& input) const { return hash<T>()(input.getId()); }
     };
 }  // namespace
    // std

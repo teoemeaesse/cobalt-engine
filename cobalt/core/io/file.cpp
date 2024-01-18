@@ -13,7 +13,7 @@
 #include <sstream>
 
 namespace cobalt {
-    namespace core {
+    namespace core::io {
         File::File(const Path& path) : path(path) {}
 
         std::string File::read() const {
@@ -48,5 +48,4 @@ namespace cobalt {
             return file.is_open() && file.good();
         }
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

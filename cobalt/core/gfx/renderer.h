@@ -14,7 +14,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         class Renderer {
             public:
             /** @brief: Create a renderer.
@@ -49,22 +49,20 @@ namespace cobalt {
              * @param texture: The texture.
              * @return: The texture unit.
              */
-            uint bindTexture(const std::string& name, const Texture& texture);
+            uint bindTexture(const std::string& name, const gl::Texture& texture);
 
             /** @brief: Send all the bound textures to the shader.
              * @param shader: The shader to send the uniforms to.
              */
-            void sendUniforms(Shader& shader) const;
+            void sendUniforms(gl::Shader& shader) const;
 
             /** @brief: Unbind all texture units.
              */
             void clearTextureUnits();
 
             private:
-            UMap<std::string,
-                 uint> textureUnits;  // Map of bound textures.
-            uint currentUnit;         // Current texture unit.
+            UMap<std::string, uint> textureUnits;  // Map of bound textures.
+            uint currentUnit;                      // Current texture unit.
         };
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

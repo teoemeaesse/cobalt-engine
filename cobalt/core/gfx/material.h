@@ -13,7 +13,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         class Material {
             public:
             struct Uniform {
@@ -29,7 +29,7 @@ namespace cobalt {
              * @param mraoMap: The metallic (R), roughness (G) and AO (B) map.
              * @return: The material.
              */
-            Material(Shader& shader, const Texture& albedoMap, const Texture& normalMap, const Texture& mraoMap);
+            Material(gl::Shader& shader, const gl::Texture& albedoMap, const gl::Texture& normalMap, const gl::Texture& mraoMap);
             /** @brief: Destroys the material.
              */
             ~Material() = default;
@@ -69,27 +69,26 @@ namespace cobalt {
             /** @brief: Get the albedo map.
              * @return: The albedo map.
              */
-            const Texture& getAlbedoMap() const;
+            const gl::Texture& getAlbedoMap() const;
             /** @brief: Get the normal map.
              * @return: The normal map.
              */
-            const Texture& getNormalMap() const;
+            const gl::Texture& getNormalMap() const;
             /** @brief: Get the metallic (R), roughness (G) and AO (B) map.
              * @return: The metallic (R), roughness (G) and AO (B) map.
              */
-            const Texture& getMRAOMap() const;
+            const gl::Texture& getMRAOMap() const;
 
             /** @brief: Get the shader for this material.
              * @return: The shader.
              */
-            Shader& getShader();
+            gl::Shader& getShader();
 
             protected:
-            Shader& shader;            // Shader program.
-            const Texture& albedoMap;  // Surface albedo map.
-            const Texture& normalMap;  // Surface normal map.
-            const Texture& mraoMap;    // Metallic (R), roughness (G) and AO (B) map.
+            gl::Shader& shader;            // Shader program.
+            const gl::Texture& albedoMap;  // Surface albedo map.
+            const gl::Texture& normalMap;  // Surface normal map.
+            const gl::Texture& mraoMap;    // Metallic (R), roughness (G) and AO (B) map.
         };
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

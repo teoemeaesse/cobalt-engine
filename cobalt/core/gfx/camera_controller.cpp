@@ -9,7 +9,7 @@
 #include "core/gfx/camera_controller.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         CameraProperties::CameraProperties()
             : type(Type::Free),
               position(glm::vec3(0.0f)),
@@ -211,5 +211,4 @@ namespace cobalt {
             }
         }
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

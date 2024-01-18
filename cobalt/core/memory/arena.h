@@ -11,7 +11,7 @@
 #include "core/memory/heap.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::memory {
         /** @brief: An arena allocator is a memory allocator that allocates
          * memory in variable-sized blocks. It is useful for allocating many objects
          * of different types (e.g. entities in an ECS) that are not freed individually.
@@ -91,5 +91,4 @@ namespace cobalt {
             void arenaBlockDestroy(HeapAllocator& heap, ArenaBlock* block);
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

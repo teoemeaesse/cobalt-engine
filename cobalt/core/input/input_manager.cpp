@@ -8,10 +8,10 @@
 
 #include "core/input/input_manager.h"
 
-#include "core/gfx/render_context.h"
+#include "core/gl/context.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::input {
         DeviceID unknownPeripheral;
 
         void InputManager::pollEvents() {
@@ -44,5 +44,4 @@ namespace cobalt {
             return peripheralToString(unknownPeripheral);
         }
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

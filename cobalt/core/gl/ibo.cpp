@@ -9,10 +9,10 @@
 #include "core/gl/ibo.h"
 
 namespace cobalt {
-    namespace core {
-        IBO::IBO(const GL::Usage usage, const uint indexCount) : usage(usage), indexCount(indexCount) { glGenBuffers(1, &buffer); }
+    namespace core::gl {
+        IBO::IBO(const gl::Usage usage, const uint indexCount) : usage(usage), indexCount(indexCount) { glGenBuffers(1, &buffer); }
 
-        IBO::IBO(const GL::Usage usage, const uint* data, const uint indexCount) : usage(usage), indexCount(indexCount) {
+        IBO::IBO(const gl::Usage usage, const uint* data, const uint indexCount) : usage(usage), indexCount(indexCount) {
             glGenBuffers(1, &buffer);
             bind();
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(uint), data, (GLenum)usage);
@@ -43,7 +43,7 @@ namespace cobalt {
 
         void IBO::unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
 
-        IBO IBO::fromQuads(const GL::Usage usage, const uint count) {
+        IBO IBO::fromQuads(const gl::Usage usage, const uint count) {
             IBO ibo(usage, count * 6);
             ibo.bind();
             uint pattern[6] = {0, 1, 2, 2, 3, 0};
@@ -55,7 +55,7 @@ namespace cobalt {
             return ibo;
         }
 
-        IBO IBO::fromCube(const GL::Usage usage) {
+        IBO IBO::fromCube(const gl::Usage usage) {
             IBO ibo(usage, 36);
             ibo.bind();
             uint indices[36] = {
@@ -78,5 +78,4 @@ namespace cobalt {
 
         const uint IBO::getCount() const { return this->indexCount; }
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

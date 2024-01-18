@@ -8,11 +8,11 @@
 
 #include "core/gfx/render_node.h"
 
-#include "core/gfx/render_context.h"
+#include "core/gl/context.h"
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         RenderNode::RenderNode(const RenderNode& other) : renderer(other.renderer), sources(other.sources), targets(other.targets) {}
 
         RenderNode::RenderNode(RenderNode&& other) noexcept
@@ -50,6 +50,5 @@ namespace cobalt {
         Vec<RenderTarget>& RenderNode::getSources() { return sources; }
 
         Vec<RenderTarget>& RenderNode::getTargets() { return targets; }
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

@@ -29,7 +29,7 @@ namespace cobalt {
              * @param path: The path to the file.
              * @return: The configuration.
              */
-            explicit Configuration(const core::Path& path);
+            explicit Configuration(const core::io::Path& path);
             /** @brief: Create an empty configuration.
              * @return: The configuration.
              */
@@ -84,7 +84,7 @@ namespace cobalt {
             /** @brief: Write the configuration to a file as JSON.
              * @param path: The path to write the configuration to.
              */
-            void serialize(const core::Path& path) const;
+            void serialize(const core::io::Path& path) const;
             /** @brief: Merge another configuration into this one.
              * Overrides values in this configuration with values from the other
              * configuration.
@@ -96,7 +96,7 @@ namespace cobalt {
             void log() const;
 
             private:
-            core::UMap<std::string, std::any> entries;
+            UMap<std::string, std::any> entries;
 
             /** @brief: Check if a type is supported.
              * @param T: The type to check.
@@ -111,5 +111,4 @@ namespace cobalt {
             }
         };
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt

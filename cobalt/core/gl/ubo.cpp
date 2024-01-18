@@ -9,8 +9,8 @@
 #include "core/gl/ubo.h"
 
 namespace cobalt {
-    namespace core {
-        UBO::UBO(const GL::Usage usage, const size_t size, const uint bindingPoint) : usage(usage), size(size), bindingPoint(bindingPoint) {
+    namespace core::gl {
+        UBO::UBO(const gl::Usage usage, const size_t size, const uint bindingPoint) : usage(usage), size(size), bindingPoint(bindingPoint) {
             glGenBuffers(1, &buffer);
             glBindBuffer(GL_UNIFORM_BUFFER, buffer);
             glBufferData(GL_UNIFORM_BUFFER, size, nullptr, (GLenum)usage);
@@ -32,5 +32,4 @@ namespace cobalt {
 
         void UBO::load(const void* data, const size_t size, const size_t offset) const { glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data); }
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

@@ -46,10 +46,8 @@
 #include "core/exceptions/gl_exception.h"
 
 // Logging.
+#include "core/utils/color.h"
 #include "core/utils/log.h"
-
-// Graphics.
-#include "core/gfx/color.h"
 
 // IO.
 #include "core/io/file.h"
@@ -82,29 +80,29 @@ namespace cobalt {
     constexpr Wrap<T> createWrap(T& ref) {
         return std::ref(ref);
     }
+    template <typename T, typename S>
+    using UMap = std::unordered_map<T, S>;
+    template <typename T, typename S>
+    using USet = std::unordered_set<T, S>;
+    template <typename T>
+    using Opt = std::optional<T>;
+    inline constexpr auto& None = std::nullopt;
+    template <typename T>
+    using Vec = std::vector<T>;
+    template <typename T>
+    using List = std::list<T>;
+    template <typename T>
+    using Deque = std::deque<T>;
+    template <typename T>
+    using Stack = std::stack<T>;
+    template <typename T>
+    using Queue = std::queue<T>;
     using uchar = unsigned char;
     using int64 = int64_t;
     using uint64 = uint64_t;
     using uint = unsigned int;
     namespace core {
-        template <typename T, typename S>
-        using UMap = std::unordered_map<T, S>;
-        template <typename T, typename S>
-        using USet = std::unordered_set<T, S>;
-        template <typename T>
-        using Opt = std::optional<T>;
-        inline constexpr auto& None = std::nullopt;
-        template <typename T>
-        using Vec = std::vector<T>;
-        template <typename T>
-        using List = std::list<T>;
-        template <typename T>
-        using Deque = std::deque<T>;
-        template <typename T>
-        using Stack = std::stack<T>;
-        template <typename T>
-        using Queue = std::queue<T>;
-        namespace GL {
+        namespace gl {
             using Int = GLint;      // 32-bit integer.
             using UInt = GLuint;    // 32-bit unsigned integer.
             using Float = GLfloat;  // 32-bit floating point.
@@ -563,7 +561,6 @@ namespace cobalt {
                         return 0;
                 }
             }
-        }  // namespace GL
+        }  // namespace gl
     }      // namespace core
-}  // namespace
-   // cobalt
+}  // namespace cobalt

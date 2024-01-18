@@ -12,14 +12,14 @@
 
 namespace cobalt {
     namespace engine {
-        class DefaultGraph : public core::RenderGraph {
+        class DefaultGraph : public core::gfx::RenderGraph {
             public:
             /** @brief: Creates a default render graph.
              * @param scene: The scene to render.
              * @param defaultFBO: The default FBO to render the final image to.
              * @return: A default render graph.
              */
-            DefaultGraph(core::Scene& scene, core::FBO& defaultFBO);
+            DefaultGraph(core::scene::Scene& scene, core::gl::FBO& defaultFBO);
             /** @brief: Destroys the default render graph.
              */
             ~DefaultGraph() = default;
@@ -35,12 +35,11 @@ namespace cobalt {
             void onResize(const uint width, const uint height) override;
 
             private:
-            core::CameraController output;  // The camera used to render the final image.
-            core::Renderer renderer;        // The renderer used to render the scene.
-            core::FBO& defaultFBO;          // The default FBO to render the final image to.
-            core::FBO sceneFBO;             // The FBO to render the scene to.
-            core::Scene& scene;             // The scene to render.
+            core::gfx::CameraController output;  // The camera used to render the final image.
+            core::gfx::Renderer renderer;        // The renderer used to render the scene.
+            core::gl::FBO& defaultFBO;           // The default FBO to render the final image to.
+            core::gl::FBO sceneFBO;              // The FBO to render the scene to.
+            core::scene::Scene& scene;           // The scene to render.
         };
     }  // namespace engine
-}  // namespace
-   // cobalt
+}  // namespace cobalt

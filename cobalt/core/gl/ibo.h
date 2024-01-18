@@ -11,7 +11,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gl {
         /** @brief: Index buffer object, used for indexed rendering.
          */
         class IBO {
@@ -21,13 +21,13 @@ namespace cobalt {
              * @param indexCount: The number of indices.
              * @return: IBO.
              */
-            IBO(const GL::Usage usage, const uint indexCount);
+            IBO(const gl::Usage usage, const uint indexCount);
             /** @brief: Creates an index buffer object with the given data.
              * @param usage: GL_STATIC_DRAW, GL_DYNAMIC_DRAW, GL_STREAM_DRAW.
              * @param data: The data.
              * @param indexCount: The number of indices.
              */
-            IBO(const GL::Usage usage, const uint* data, const uint indexCount);
+            IBO(const gl::Usage usage, const uint* data, const uint indexCount);
             /** @brief: Destroys the IBO.
              */
             ~IBO();
@@ -67,17 +67,16 @@ namespace cobalt {
              * @param usage: The usage of the buffer.
              * @param count: The number of quads.
              */
-            static IBO fromQuads(const GL::Usage usage, const uint count);
+            static IBO fromQuads(const gl::Usage usage, const uint count);
             /** @brief: Create an IBO for a cube.
              * @param usage: The usage of the buffer.
              */
-            static IBO fromCube(const GL::Usage usage);
+            static IBO fromCube(const gl::Usage usage);
 
             private:
-            GL::Handle buffer;  // The OpenGL buffer handle.
-            GL::Usage usage;    // The usage of the buffer.
+            gl::Handle buffer;  // The OpenGL buffer handle.
+            gl::Usage usage;    // The usage of the buffer.
             uint indexCount;    // The number of indices.
         };
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt

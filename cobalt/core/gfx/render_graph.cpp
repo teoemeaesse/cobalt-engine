@@ -8,10 +8,10 @@
 
 #include "core/gfx/render_graph.h"
 
-#include "core/gfx/render_context.h"
+#include "core/gl/context.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::gfx {
         const uint RenderGraph::addNode(Scope<RenderNode> node) {
             nodes.push_back(std::move(node));
             return nodes.size() - 1;
@@ -27,6 +27,5 @@ namespace cobalt {
                 nodes[i]->render();
             }
         }
-    }  // namespace core
-}  // namespace
-   // cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

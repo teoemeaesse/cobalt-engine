@@ -11,7 +11,7 @@
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core {
+    namespace core::memory {
         class Allocator {
             public:
             virtual ~Allocator() = default;
@@ -39,5 +39,4 @@ namespace cobalt {
 
     template <typename T>
     using Ref = std::shared_ptr<T>;
-}  // namespace
-   // cobalt
+} // namespace cobalt

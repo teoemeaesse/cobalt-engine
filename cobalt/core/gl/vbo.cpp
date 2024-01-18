@@ -9,8 +9,8 @@
 #include "core/gl/vbo.h"
 
 namespace cobalt {
-    namespace core {
-        VBO::VBO(const GL::Usage usage) : usage(usage) { glGenBuffers(1, &buffer); }
+    namespace core::gl {
+        VBO::VBO(const gl::Usage usage) : usage(usage) { glGenBuffers(1, &buffer); }
 
         VBO::~VBO() {
             if (buffer != 0) {
@@ -42,5 +42,4 @@ namespace cobalt {
 
         void VBO::load(const void* data, const size_t size, const size_t offset) const { glBufferSubData(GL_ARRAY_BUFFER, offset, size, data); }
     }  // namespace core
-}  // namespace
-   // cobalt
+} // namespace cobalt
