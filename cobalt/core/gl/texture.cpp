@@ -205,7 +205,7 @@ namespace cobalt {
             stbi_set_flip_vertically_on_load(true);
             std::string faces[6] = {"right.png", "left.png", "bottom.png", "top.png", "front.png", "back.png"};
             for (uint i = 0; i < 6; i++) {
-                uchar* data = stbi_load((path + faces[i]).getPath().c_str(), &width, &height, &channels, 0);
+                uchar* data = stbi_load((path + faces[i]).getPath().c_str(), &width, &height, &channels, STBI_rgb_alpha);
                 if (!data) {
                     throw GLException("Failed to load texture: " + source);
                 }
