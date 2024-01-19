@@ -46,6 +46,17 @@ namespace cobalt {
 
             inline static void log() { CB_CORE_INFO("Running on {0}", getName()); }
 
+            inline static void checkCompatibility() {
+                if (isWindows()) {
+                    CB_CORE_ERROR("Windows is not yet supported");
+                    exit(1);
+                }
+                if (sizeof(size_t) < sizeof(uint64_t)) {
+                    CB_CORE_INFO("32-bit systems are not supported");
+                    exit(1);
+                }
+            }
+
             /** @brief: Check if the platform is windows
              * @return: True if the platform is windows, false otherwise
              */

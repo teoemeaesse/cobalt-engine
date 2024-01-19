@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
     // the
     // engine.
     cobalt::core::Log::init();
+    cobalt::core::Platform::checkCompatibility();
     cobalt::core::Platform::log();
     cobalt::core::gl::Context::init();
     cobalt::engine::TextureLibrary::init();
