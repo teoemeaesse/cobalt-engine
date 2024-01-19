@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 03-12-2023.
-//
+// Created by tomas on
+// 03-12-2023
 
 #include "engine/entry_point.h"
 
@@ -30,8 +25,8 @@ int main(int argc, char** argv) {
     // the
     // engine.
     cobalt::core::Log::init();
-    cobalt::core::gl::Context::init();
     cobalt::core::Platform::log();
+    cobalt::core::gl::Context::init();
     cobalt::engine::TextureLibrary::init();
     cobalt::engine::ShaderLibrary::init();
     cobalt::engine::MaterialLibrary::init();

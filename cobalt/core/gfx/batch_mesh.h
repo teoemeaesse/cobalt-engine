@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 23-12-2023.
-//
+// Created by tomas on
+// 23-12-2023
 
 #pragma once
 
@@ -51,5 +46,5 @@ namespace cobalt {
              */
             void pushInto(Vec<char>& vertices, Vec<char>& indices) const override;
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 10-12-2023.
-//
+// Created by tomas on
+// 10-12-2023
 
 #include "engine/gfx/default_graph.h"
 

@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 30-11-2023.
-//
+// Created by tomas on
+// 30-11-2023
 
 #include "core/gl/render_shader.h"
 
@@ -55,5 +50,5 @@ namespace cobalt {
             glDeleteShader(fragmentShader);
             glDeleteShader(geometryShader);
         }
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gl
+}  // namespace cobalt

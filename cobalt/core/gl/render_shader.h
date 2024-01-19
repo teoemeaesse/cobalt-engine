@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 30-11-2023.
-//
+// Created by tomas on
+// 30-11-2023
 
 #pragma once
 
@@ -30,5 +25,5 @@ namespace cobalt {
              */
             RenderShader(std::string& vertexSource, std::string& fragmentSource, std::string& geometrySource);
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gl
+}  // namespace cobalt

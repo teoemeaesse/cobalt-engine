@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 30-11-2023.
-//
+// Created by tomas on
+// 30-11-2023
 
 #include "core/gl/compute_shader.h"
 
@@ -24,5 +19,5 @@ namespace cobalt {
             linkShader(program);
             glDeleteShader(computeShader);
         }
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gl
+}  // namespace cobalt

@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 01-12-2023.
-//
+// Created by tomas on
+// 01-12-2023
 
 #include "core/gl/vao.h"
 
@@ -50,5 +45,5 @@ namespace cobalt {
         void VAO::bind() const { glBindVertexArray(buffer); }
 
         void VAO::unbind() const { glBindVertexArray(0); }
-    }  // namespace core
+    }  // namespace core::gl
 }  // namespace cobalt

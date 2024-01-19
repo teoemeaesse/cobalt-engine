@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 08-12-2023.
-//
+// Created by tomas on
+// 08-12-2023
 
 #pragma once
 
@@ -44,5 +39,5 @@ namespace cobalt {
             protected:
             Vec<Scope<RenderNode>> nodes;  // All the nodes in the graph, in topological order.
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

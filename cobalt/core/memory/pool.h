@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 28-11-2023.
-//
+// Created by tomas on
+// 28-11-2023
 
 #pragma once
 
@@ -119,5 +114,5 @@ namespace cobalt {
                 heap.drop(chunk->free_blocks);
             }
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::memory
+}  // namespace cobalt

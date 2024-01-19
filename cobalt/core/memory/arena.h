@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 29-11-2023.
-//
+// Created by tomas on
+// 29-11-2023
 
 #pragma once
 
@@ -90,5 +85,5 @@ namespace cobalt {
              */
             void arenaBlockDestroy(HeapAllocator& heap, ArenaBlock* block);
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::memory
+}  // namespace cobalt

@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 30-11-2023.
-//
+// Created by tomas on
+// 30-11-2023
 
 #pragma once
 
@@ -78,5 +73,5 @@ namespace cobalt {
             gl::Usage usage;    // The usage of the buffer.
             uint indexCount;    // The number of indices.
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gl
+}  // namespace cobalt

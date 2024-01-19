@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 30-11-2023.
-//
+// Created by tomas on
+// 30-11-2023
 
 #include "core/gl/ubo.h"
 
@@ -31,5 +26,5 @@ namespace cobalt {
         void UBO::load(const void* data, const size_t size) const { glBufferData(GL_UNIFORM_BUFFER, size, data, (GLenum)usage); }
 
         void UBO::load(const void* data, const size_t size, const size_t offset) const { glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data); }
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gl
+}  // namespace cobalt

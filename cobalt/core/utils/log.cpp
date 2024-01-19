@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 29-11-2023.
-//
+// Created by tomas on
+// 29-11-2023
 
 #include "core/utils/log.h"
 
@@ -26,4 +21,4 @@ namespace cobalt {
             editorLogger->set_level(spdlog::level::trace);
         }
     }  // namespace core
-} // namespace cobalt
+}  // namespace cobalt

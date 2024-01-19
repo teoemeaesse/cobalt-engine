@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 07-12-2023.
-//
+// Created by tomas on
+// 07-12-2023
 
 #pragma once
 
@@ -65,5 +60,5 @@ namespace cobalt {
             private:
             Path path;
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::io
+}  // namespace cobalt

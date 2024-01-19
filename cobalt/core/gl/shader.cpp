@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 30-11-2023.
-//
+// Created by tomas on
+// 30-11-2023
 
 #include "core/gl/compute_shader.h"
 #include "core/gl/render_shader.h"
@@ -175,5 +170,5 @@ namespace cobalt {
                 throw GLException("A compute shader must have a compute shader source");
             }
         }
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gl
+}  // namespace cobalt

@@ -1,37 +1,37 @@
 {
-    "steel-albedo" : {
-        "type" : "2d",
-        "srgb" : true,
-        "src" : "steel-albedo.png"
+    "steel-albedo": {
+        "type": "2d",
+        "srgb": true,
+        "src": "steel-albedo.png"
     },
-    "steel-normal" : {
-        "type" : "2d",
-        "srgb" : false,
-        "src" : "steel-normal.png"
+    "steel-normal": {
+        "type": "2d",
+        "srgb": false,
+        "src": "steel-normal.png"
     },
-    "steel-mrao" : {
-        "type" : "2d",
-        "srgb" : false,
-        "src" : "steel-mrao.png"
+    "steel-mrao": {
+        "type": "2d",
+        "srgb": false,
+        "src": "steel-mrao.png"
     },
-    "wood-albedo" : {
-        "type" : "2d",
-        "srgb" : true,
-        "src" : "wood-albedo.png"
+    "wood-albedo": {
+        "type": "2d",
+        "srgb": true,
+        "src": "wood-albedo.png"
     },
-    "wood-normal" : {
-        "type" : "2d",
-        "srgb" : false,
-        "src" : "wood-normal.png"
+    "wood-normal": {
+        "type": "2d",
+        "srgb": false,
+        "src": "wood-normal.png"
     },
-    "wood-mrao" : {
-        "type" : "2d",
-        "srgb" : false,
-        "src" : "wood-mrao.png"
+    "wood-mrao": {
+        "type": "2d",
+        "srgb": false,
+        "src": "wood-mrao.png"
     },
-    "skybox" : {
-        "type" : "3d",
-        "srgb" : true,
-        "src" : "editor-skybox"
+    "skybox": {
+        "type": "3d",
+        "srgb": true,
+        "src": "editor-skybox"
     }
 }

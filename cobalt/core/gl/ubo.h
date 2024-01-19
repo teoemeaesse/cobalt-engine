@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 30-11-2023.
-//
+// Created by tomas on
+// 30-11-2023
 
 #pragma once
 
@@ -58,5 +53,5 @@ namespace cobalt {
             const size_t size;        // The size of the buffer in bytes.
             const uint bindingPoint;  // The binding point of the buffer.
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gl
+}  // namespace cobalt

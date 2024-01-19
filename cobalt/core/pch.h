@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 22-12-2023.
-//
+// Created by tomas on
+// 22-12-2023
 
 #pragma once
 
@@ -13,6 +8,7 @@
 
 #include <algorithm>
 #include <any>
+#include <bitset>
 #include <cstddef>
 #include <cstring>
 #include <deque>
@@ -97,6 +93,8 @@ namespace cobalt {
     using Stack = std::stack<T>;
     template <typename T>
     using Queue = std::queue<T>;
+    template <unsigned int N>
+    using Mask = std::bitset<N>;
     using uchar = unsigned char;
     using int64 = int64_t;
     using uint64 = uint64_t;

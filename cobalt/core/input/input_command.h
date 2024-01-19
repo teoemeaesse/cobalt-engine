@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 04-12-2023.
-//
+// Created by tomas on
+// 04-12-2023
 
 #pragma once
 
@@ -77,5 +72,5 @@ namespace cobalt {
             private:
             T* target;  // The receiver of the command.
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::input
+}  // namespace cobalt

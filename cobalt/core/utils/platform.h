@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 25-12-2023.
-//
+// Created by tomas on
+// 25-12-2023
 
 #pragma once
 
@@ -67,4 +62,4 @@ namespace cobalt {
             inline static bool isUnixLike() { return strcmp(getName(), "Unix-like") == 0; }
         };
     }  // namespace core
-} // namespace cobalt
+}  // namespace cobalt

@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 08-12-2023.
-//
+// Created by tomas on
+// 08-12-2023
 
 #pragma once
 
@@ -100,5 +95,5 @@ namespace cobalt {
              */
             void renderSkybox(Skybox& skybox);
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

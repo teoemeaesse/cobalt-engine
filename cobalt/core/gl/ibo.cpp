@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 30-11-2023.
-//
+// Created by tomas on
+// 30-11-2023
 
 #include "core/gl/ibo.h"
 
@@ -77,5 +72,5 @@ namespace cobalt {
         }
 
         const uint IBO::getCount() const { return this->indexCount; }
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gl
+}  // namespace cobalt

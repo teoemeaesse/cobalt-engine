@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 01-12-2023.
-//
+// Created by tomas on
+// 01-12-2023
 
 #ifdef TEST_ENVIRONMENT
 #define STBI_NO_SIMD

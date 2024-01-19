@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 29-11-2023.
-//
+// Created by tomas on
+// 29-11-2023
 
 #pragma once
 
@@ -28,7 +23,7 @@ namespace cobalt {
             static std::shared_ptr<spdlog::logger> editorLogger;
         };
     }  // namespace core
-} // namespace cobalt
+}  // namespace cobalt
 
 #define CB_CORE_TRACE(...) ::cobalt::core::Log::getCoreLogger()->trace(__VA_ARGS__)
 #define CB_CORE_INFO(...) ::cobalt::core::Log::getCoreLogger()->info(__VA_ARGS__)

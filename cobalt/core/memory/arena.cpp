@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 29-11-2023.
-//
+// Created by tomas on
+// 29-11-2023
 
 #include "core/memory/arena.h"
 
@@ -65,5 +60,5 @@ namespace cobalt {
         }
 
         void ArenaAllocator::arenaBlockDestroy(HeapAllocator& heap, ArenaBlock* block) { heap.drop(block->data); }
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::memory
+}  // namespace cobalt

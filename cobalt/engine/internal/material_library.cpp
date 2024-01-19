@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 24-12-2023.
-//
+// Created by tomas on
+// 24-12-2023
 
 #include "engine/internal/material_library.h"
 

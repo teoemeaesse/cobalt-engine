@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 01-12-2023.
-//
+// Created by tomas on
+// 01-12-2023
 
 #include "core/io/path.h"
 
@@ -61,5 +56,5 @@ namespace cobalt {
             fsPath += "/" + other;
             return *this;
         }
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::io
+}  // namespace cobalt

@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 28-11-2023.
-//
+// Created by tomas on
+// 28-11-2023
 
 #include "core/memory/heap.h"
 
@@ -27,5 +22,5 @@ namespace cobalt {
         void HeapAllocator::free(void* ptr) { drop(ptr); }
 
         void* HeapAllocator::realloc(void* ptr, const size_t size) { return resize(ptr, size); }
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::memory
+}  // namespace cobalt

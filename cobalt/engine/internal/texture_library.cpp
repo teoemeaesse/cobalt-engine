@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 06-12-2023.
-//
+// Created by tomas on
+// 06-12-2023
 
 #include "engine/internal/texture_library.h"
 
@@ -126,7 +121,7 @@ namespace cobalt {
         const core::gl::Texture3D& TextureLibrary::getTexture3D(const std::string& name) { return getTexture3D(getTextureID(name)); }
 
         const core::gl::Texture3D& TextureLibrary::getTexture3D(const core::Color color, const core::gl::TextureFilter filter,
-                                                            const core::gl::TextureWrap wrap) {
+                                                                const core::gl::TextureWrap wrap) {
             TextureCache entry = {TextureID::Type::TEXTURE_3D, color};
             if (cache.find(entry) == cache.end()) {
                 textures3D.emplace_back(core::colorToString(color), core::gl::Texture3D(color, filter, wrap));
@@ -136,7 +131,7 @@ namespace cobalt {
         }
 
         const core::gl::Texture3D& TextureLibrary::getTexture3D(const uchar red, const uchar green, const uchar blue, const uchar alpha,
-                                                            const core::gl::TextureFilter filter, const core::gl::TextureWrap wrap) {
+                                                                const core::gl::TextureFilter filter, const core::gl::TextureWrap wrap) {
             core::Color color = COLOR(red, green, blue, alpha);
             TextureCache entry = {TextureID::Type::TEXTURE_3D, color};
             if (cache.find(entry) == cache.end()) {

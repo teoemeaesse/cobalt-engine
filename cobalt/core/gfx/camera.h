@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 05-12-2023.
-//
+// Created by tomas on
+// 05-12-2023
 
 #pragma once
 
@@ -329,5 +324,5 @@ namespace cobalt {
             float distance;  // The distance from the position of the camera to the the
                              // center point.
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

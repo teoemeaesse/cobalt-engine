@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 28-11-2023.
-//
+// Created by tomas on
+// 28-11-2023
 
 #pragma once
 
@@ -49,5 +44,5 @@ namespace cobalt {
              */
             void* realloc(void* ptr, const size_t size) override;
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::memory
+}  // namespace cobalt

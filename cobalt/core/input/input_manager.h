@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 03-12-2023.
-//
+// Created by tomas on
+// 03-12-2023
 
 #pragma once
 
@@ -90,5 +85,5 @@ namespace cobalt {
             UMap<DeviceID,
                  Scope<InputDevice>> peripherals;  // The peripherals.
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::input
+}  // namespace cobalt

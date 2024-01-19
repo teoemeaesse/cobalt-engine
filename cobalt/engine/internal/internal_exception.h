@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 24-12-2023.
-//
+// Created by tomas on
+// 24-12-2023
 
 #pragma once
 
@@ -18,4 +13,4 @@ namespace cobalt {
             InternalException(const char* message) : std::runtime_error(message) {}
         };
     }  // namespace engine
-} // namespace cobalt
+}  // namespace cobalt

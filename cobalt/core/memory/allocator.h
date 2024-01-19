@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 28-11-2023.
-//
+// Created by tomas on
+// 28-11-2023
 
 #pragma once
 
@@ -32,11 +27,11 @@ namespace cobalt {
              */
             virtual void* realloc(void* ptr, const size_t size) = 0;
         };
-    }  // namespace core
+    }  // namespace core::memory
 
     template <typename T>
     using Scope = std::unique_ptr<T>;
 
     template <typename T>
     using Ref = std::shared_ptr<T>;
-} // namespace cobalt
+}  // namespace cobalt

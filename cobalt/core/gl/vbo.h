@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 30-11-2023.
-//
+// Created by tomas on
+// 30-11-2023
 
 #pragma once
 
@@ -71,5 +66,5 @@ namespace cobalt {
             gl::Handle buffer;  // The OpenGL buffer handle.
             gl::Usage usage;    // The usage of the buffer.
         };
-    }  // namespace core
+    }  // namespace core::gl
 }  // namespace cobalt

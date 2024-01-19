@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 01-12-2023.
-//
+// Created by tomas on
+// 01-12-2023
 
 #pragma once
 
@@ -94,5 +89,5 @@ namespace cobalt {
             private:
             std::filesystem::path fsPath;  // The path.
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::io
+}  // namespace cobalt

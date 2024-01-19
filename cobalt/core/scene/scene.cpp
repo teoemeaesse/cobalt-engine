@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 09-12-2023.
-//
+// Created by tomas on
+// 09-12-2023
 
 #include "core/scene/scene.h"
 

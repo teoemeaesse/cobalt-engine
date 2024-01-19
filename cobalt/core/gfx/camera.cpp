@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 05-12-2023.
-//
+// Created by tomas on
+// 05-12-2023
 
 #include "core/gfx/camera.h"
 
@@ -272,5 +267,5 @@ namespace cobalt {
             position += glm::vec3(0.0f, 1.0f,
                                   0.0f) * amount;  // move up/down
         }
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

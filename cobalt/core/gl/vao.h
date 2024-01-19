@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 01-12-2023.
-//
+// Created by tomas on
+// 01-12-2023
 
 #pragma once
 
@@ -108,5 +103,5 @@ namespace cobalt {
             private:
             gl::Handle buffer;  // The VAO handle.
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gl
+}  // namespace cobalt

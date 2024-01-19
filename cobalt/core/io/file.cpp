@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 07-12-2023.
-//
+// Created by tomas on
+// 07-12-2023
 
 #include "core/io/file.h"
 
@@ -47,5 +42,5 @@ namespace cobalt {
             std::ofstream file(path.getPath());
             return file.is_open() && file.good();
         }
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::io
+}  // namespace cobalt

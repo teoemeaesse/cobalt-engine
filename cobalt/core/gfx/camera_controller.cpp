@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 28-12-2023.
-//
+// Created by tomas on
+// 28-12-2023
 
 #include "core/gfx/camera_controller.h"
 
@@ -210,5 +205,5 @@ namespace cobalt {
                 throw GFXException("Camera with name " + name + " does not exist");
             }
         }
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::gfx
+}  // namespace cobalt

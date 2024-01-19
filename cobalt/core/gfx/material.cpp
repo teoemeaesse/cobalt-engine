@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 06-12-2023.
-//
+// Created by tomas on
+// 06-12-2023
 
 #include "core/gfx/material.h"
 

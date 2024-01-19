@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 28-12-2023.
-//
+// Created by tomas on
+// 28-12-2023
 
 #pragma once
 

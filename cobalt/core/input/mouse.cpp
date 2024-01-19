@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 03-12-2023.
-//
+// Created by tomas on
+// 03-12-2023
 
 #include "core/input/mouse.h"
 
@@ -162,5 +157,5 @@ namespace cobalt {
             }
             return CB_TO_STR.at(MouseInputID::UNKNOWN);
         }
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::input
+}  // namespace cobalt

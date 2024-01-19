@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 29-11-2023.
-//
+// Created by tomas on
+// 29-11-2023
 
 #pragma once
 
@@ -19,4 +14,4 @@ namespace cobalt {
 
         void handleCtrlC(int s);
     }  // namespace engine
-} // namespace cobalt
+}  // namespace cobalt

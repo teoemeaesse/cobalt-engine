@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 02-12-2023.
-//
+// Created by tomas on
+// 02-12-2023
 
 #include "core/gfx/window.h"
 

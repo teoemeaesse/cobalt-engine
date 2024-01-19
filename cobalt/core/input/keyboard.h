@@ -1,10 +1,5 @@
-//
-// Created
-// by
-// tomas
-// on
-// 03-12-2023.
-//
+// Created by tomas on
+// 03-12-2023
 
 #pragma once
 
@@ -180,5 +175,5 @@ namespace cobalt {
              */
             const std::string& cobaltToStr(const KeyboardInputID cobaltCode) const override;
         };
-    }  // namespace core
-} // namespace cobalt
+    }  // namespace core::input
+}  // namespace cobalt
