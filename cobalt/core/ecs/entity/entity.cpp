@@ -7,6 +7,8 @@ namespace cobalt {
     namespace core::ecs {
         Entity::Entity(const ID id) : id(id) {}
 
+        bool Entity::operator==(const Entity& other) const { return id == other.id; }
+
         void Entity::addComponent(const Component::ID id) { mask.set(id); }
 
         void Entity::removeComponent(const Component::ID id) { mask.reset(id); }

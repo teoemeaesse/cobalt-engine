@@ -113,9 +113,8 @@ namespace cobalt {
             virtual const std::string& cobaltToStr(const T cobaltCode) const = 0;
 
             protected:
-            Queue<const InputCommand*> events;  // The events to execute.
-            UMap<PeripheralInput<T>,
-                 Scope<InputCommand>> bindings;  // The bindings for the peripheral.
+            Queue<const InputCommand*> events;                       // The events to execute.
+            UMap<PeripheralInput<T>, Scope<InputCommand>> bindings;  // The bindings for the peripheral.
         };
     }  // namespace core::input
 }  // namespace cobalt
@@ -125,5 +124,4 @@ namespace std {
     struct hash<cobalt::core::input::PeripheralInput<T>> {
         std::size_t operator()(const cobalt::core::input::PeripheralInput<T>& input) const { return hash<T>()(input.getId()); }
     };
-}  // namespace
-   // std
+}  // namespace std

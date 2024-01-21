@@ -5,7 +5,7 @@
 
 namespace cobalt {
     namespace core::ecs {
-        const Entity::ID EntityRegistry::createEntity() noexcept {
+        const Entity::ID EntityRegistry::add() noexcept {
             Entity::ID id;
             if (freeIDs.empty()) {
                 id = Entity::ID(entities.size());
@@ -17,13 +17,13 @@ namespace cobalt {
             return id;
         }
 
-        void EntityRegistry::destroyEntity(const Entity::ID id) noexcept {
+        void EntityRegistry::remove(const Entity::ID id) noexcept {
             entities.erase(id);
             freeIDs.push(id);
         }
 
         const bool EntityRegistry::isAlive(const Entity::ID id) const noexcept { return entities.find(id) != entities.end(); }
 
-        const uint64 EntityRegistry::getEntityCount() const noexcept { return entities.size(); }
+        const uint64 EntityRegistry::getCount() const noexcept { return entities.size(); }
     }  // namespace core::ecs
 }  // namespace cobalt

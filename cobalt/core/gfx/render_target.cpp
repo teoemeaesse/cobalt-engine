@@ -26,7 +26,7 @@ namespace cobalt {
         RenderTarget::RenderTarget(const RenderTarget& other)
             : fbo(other.fbo), camera(other.camera), name(other.name), ubo(gl::Usage::StaticDraw, sizeof(CameraUBO), 0) {}
 
-        RenderTarget::RenderTarget(RenderTarget&& other)
+        RenderTarget::RenderTarget(RenderTarget&& other) noexcept
             : fbo(std::move(other.fbo)),
               camera(std::move(other.camera)),
               name(std::move(other.name)),

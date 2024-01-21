@@ -13,16 +13,19 @@ namespace cobalt {
          */
         class Entity {
             public:
-            using ID = uint64;
+            using ID = uint64;  // Entity ID - unique between all entities.
 
             /** @brief: Default constructor.
              * @param id: Entity ID. Should be unique.
              * @return: Entity instance.
              */
             Entity(const ID id);
-            /** @brief: Default destructor.
+
+            /** @brief: Equality operator.
+             * @param other: Other entity.
+             * @return: True if the entity ID's are equal, false otherwise.
              */
-            ~Entity() = default;
+            bool operator==(const Entity& other) const;
 
             /** @brief: Add a component to the entity.
              * @param id: Component ID.
@@ -44,7 +47,7 @@ namespace cobalt {
             const ID getID() const;
 
             private:
-            const ID id;
+            ID id;
             Mask<CB_MAX_COMPONENTS> mask;
         };
     }  // namespace core::ecs

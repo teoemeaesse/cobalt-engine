@@ -9,12 +9,19 @@ namespace cobalt {
     namespace core::ecs {
         class Component {
             public:
-            using ID = uint64;
+            using ID = uint64;    // Component ID - unique between all components.
+            using Type = uint64;  // Component type - unique between different component types.
 
-            Component() = default;
-            ~Component() = default;
+            /** @brief: Default constructor.
+             * @param type: Component type.
+             * @param id: Component ID.
+             * @return: Component instance.
+             */
+            Component(const Type type, const ID id) noexcept;
 
             private:
+            Type type;
+            ID id;
         };
     }  // namespace core::ecs
 }  // namespace cobalt

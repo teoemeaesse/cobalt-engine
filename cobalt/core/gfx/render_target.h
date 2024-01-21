@@ -31,7 +31,7 @@ namespace cobalt {
              * @param other: The other render target.
              * @return: The render target.
              */
-            RenderTarget(RenderTarget&&);
+            RenderTarget(RenderTarget&&) noexcept;
             /** @brief: Copy assignment.
              * @param other: The other render target.
              * @return: The render target.

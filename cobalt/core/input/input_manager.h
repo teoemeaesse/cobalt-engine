@@ -78,12 +78,8 @@ namespace cobalt {
             }
 
             private:
-            UMap<std::string,
-                 DeviceID>
-                peripheralIDs;  // Map from peripheral names to
-                                // peripheral ids for easy lookup.
-            UMap<DeviceID,
-                 Scope<InputDevice>> peripherals;  // The peripherals.
+            UMap<std::string, DeviceID> peripheralIDs;       // Map from peripheral names to peripheral ids for easy lookup.
+            UMap<DeviceID, Scope<InputDevice>> peripherals;  // The peripherals.
         };
     }  // namespace core::input
 }  // namespace cobalt

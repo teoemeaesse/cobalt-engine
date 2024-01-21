@@ -23,7 +23,7 @@ namespace cobalt {
              * @param other: The camera to move.
              * @return: The newly created camera.
              */
-            Camera(Camera&&) = default;
+            Camera(Camera&&) noexcept = default;
             /** @brief: Copy assignment operator.
              * @param other: The camera to copy.
              * @return: The newly created camera.
@@ -33,7 +33,7 @@ namespace cobalt {
              * @param other: The camera to move.
              * @return: The newly created camera.
              */
-            Camera& operator=(Camera&&) = default;
+            Camera& operator=(Camera&&) noexcept = default;
 
             /** @brief: Calculates the view matrix of the camera.
              * @return: The view matrix of the camera.
