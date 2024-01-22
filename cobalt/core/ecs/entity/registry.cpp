@@ -3,8 +3,12 @@
 
 #include "core/ecs/entity/registry.h"
 
+#include "core/pch.h"
+
 namespace cobalt {
     namespace core::ecs {
+        EntityRegistry::EntityRegistry(ComponentRegistry& componentRegistry) noexcept : componentRegistry(componentRegistry) {}
+
         const Entity::ID EntityRegistry::add() noexcept {
             Entity::ID id;
             if (freeIDs.empty()) {
@@ -13,7 +17,7 @@ namespace cobalt {
                 id = freeIDs.front();
                 freeIDs.pop();
             }
-            entities.emplace(id, Entity(id));
+            entities.emplace(id, Entity(id, *this, componentRegistry));
             return id;
         }
 

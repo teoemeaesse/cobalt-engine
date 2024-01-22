@@ -10,9 +10,18 @@ namespace cobalt {
     namespace core::ecs {
         class ComponentRegistry {
             public:
+            /** @brief: Default constructor.
+             * @return: ComponentRegistry instance.
+             */
             ComponentRegistry() = default;
+            /** @brief: Default destructor.
+             */
             ~ComponentRegistry() = default;
 
+            /** @brief: Add a component to an entity.
+             * @tparam T: Component type.
+             * @param entityID: Entity ID.
+             */
             template <typename T>
             void add(const Entity::ID entityID) noexcept {
                 static_assert(std::is_base_of<Component, T>::value, "T must be a component.");
@@ -23,6 +32,10 @@ namespace cobalt {
                 store[type].add(entityID, T());
             }
 
+            /** @brief: Remove a component from an entity.
+             * @tparam T: Component type.
+             * @param entityID: Entity ID.
+             */
             template <typename T>
             void remove(const Entity::ID entityID) noexcept {
                 static_assert(std::is_base_of<Component, T>::value, "T must be a component.");
@@ -33,6 +46,11 @@ namespace cobalt {
                 store[type].remove(entityID);
             }
 
+            /** @brief: Get a component from an entity.
+             * @tparam T: Component type.
+             * @param entityID: Entity ID.
+             * @return: Component reference.
+             */
             template <typename T>
             T& get(const Entity::ID entityID) {
                 static_assert(std::is_base_of<Component, T>::value, "T must be a component.");
@@ -43,6 +61,11 @@ namespace cobalt {
                 return store[type].get(entityID);
             }
 
+            /** @brief: Get a component from an entity.
+             * @tparam T: Component type.
+             * @param entityID: Entity ID.
+             * @return: Component reference.
+             */
             template <typename T>
             const T& get(const Entity::ID entityID) const {
                 static_assert(std::is_base_of<Component, T>::value, "T must be a component.");
@@ -54,7 +77,7 @@ namespace cobalt {
             }
 
             private:
-            UMap<Component::Type, ComponentStorage> store;
+            UMap<Component::Type, ComponentStorage> store;  // Component storage.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

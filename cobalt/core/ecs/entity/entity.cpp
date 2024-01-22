@@ -5,15 +5,12 @@
 
 namespace cobalt {
     namespace core::ecs {
-        Entity::Entity(const ID id) : id(id) {}
+        Entity::Entity(const ID id, EntityRegistry& entityRegistry, ComponentRegistry& componentRegistry) noexcept
+            : id(id), entityRegistry(entityRegistry), componentRegistry(componentRegistry) {}
 
-        bool Entity::operator==(const Entity& other) const { return id == other.id; }
-
-        void Entity::addComponent(const Component::ID id) { mask.set(id); }
-
-        void Entity::removeComponent(const Component::ID id) { mask.reset(id); }
-
-        const bool Entity::hasComponent(const Component::ID id) const { return mask.test(id); }
+        bool Entity::operator==(const Entity& other) const {
+            return id == other.id && &entityRegistry == &other.entityRegistry && &componentRegistry == &other.componentRegistry;
+        }
 
         const Entity::ID Entity::getID() const { return id; }
     }  // namespace core::ecs

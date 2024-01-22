@@ -7,14 +7,17 @@
 
 namespace cobalt {
     namespace core::ecs {
+        class ComponentRegistry;
+
         /** @brief: Entity registry. Stores and manages all entities.
          */
         class EntityRegistry {
             public:
             /** @brief: Default constructor.
+             * @param componentRegistry: ComponentRegistry instance.
              * @return: EntityRegistry instance.
              */
-            EntityRegistry() = default;
+            EntityRegistry(ComponentRegistry& componentRegistry) noexcept;
             /** @brief: Default destructor.
              */
             ~EntityRegistry() = default;
@@ -27,6 +30,7 @@ namespace cobalt {
              * @param id: Entity ID.
              */
             void remove(const Entity::ID id) noexcept;
+
             /** @brief: Check if an entity is alive.
              * @param id: Entity ID.
              * @return: True if the entity is alive, false otherwise.
@@ -39,8 +43,9 @@ namespace cobalt {
             const uint64 getCount() const noexcept;
 
             private:
-            UMap<Entity::ID, Entity> entities;  // All living entities.
-            Queue<Entity::ID> freeIDs;          // Recently-freed IDs.
+            UMap<Entity::ID, Entity> entities;     // All living entities.
+            Queue<Entity::ID> freeIDs;             // Recently-freed IDs.
+            ComponentRegistry& componentRegistry;  // Component registry.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

@@ -4,7 +4,7 @@
 #pragma once
 
 #include "core/ecs/component/registry.h"
-#include "core/pch.h"
+#include "core/ecs/entity/registry.h"
 
 namespace cobalt {
     namespace core::ecs {
@@ -14,6 +14,8 @@ namespace cobalt {
             ~World() = default;
 
             private:
+            EntityRegistry entityRegistry;
+            ComponentRegistry componentRegistry;
         };
     }  // namespace core::ecs
 }  // namespace cobalt
