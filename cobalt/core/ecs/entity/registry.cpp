@@ -3,13 +3,14 @@
 
 #include "core/ecs/entity/registry.h"
 
+#include "core/ecs/entity/entity.h"
 #include "core/pch.h"
 
 namespace cobalt {
     namespace core::ecs {
         EntityRegistry::EntityRegistry(ComponentRegistry& componentRegistry) noexcept : componentRegistry(componentRegistry) {}
 
-        const Entity::ID EntityRegistry::add() noexcept {
+        Entity& EntityRegistry::add() noexcept {
             Entity::ID id;
             if (freeIDs.empty()) {
                 id = Entity::ID(entities.size());
@@ -18,15 +19,15 @@ namespace cobalt {
                 freeIDs.pop();
             }
             entities.emplace(id, Entity(id, *this, componentRegistry));
-            return id;
+            return entities.at(id);
         }
 
-        void EntityRegistry::remove(const Entity::ID id) noexcept {
-            entities.erase(id);
-            freeIDs.push(id);
+        void EntityRegistry::remove(Entity& entity) noexcept {
+            entities.erase(entity.getID());
+            freeIDs.push(entity.getID());
         }
 
-        const bool EntityRegistry::isAlive(const Entity::ID id) const noexcept { return entities.find(id) != entities.end(); }
+        const bool EntityRegistry::isAlive(const Entity& entity) const noexcept { return entities.find(entity.getID()) != entities.end(); }
 
         const uint64 EntityRegistry::getCount() const noexcept { return entities.size(); }
     }  // namespace core::ecs

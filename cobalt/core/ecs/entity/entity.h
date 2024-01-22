@@ -28,6 +28,25 @@ namespace cobalt {
              */
             ~Entity() = default;
 
+            /** @brief: Add a component to the entity.
+             * @tparam T: Component type.
+             */
+            template <typename T>
+            void addComponent() noexcept;
+
+            /** @brief: Remove a component from the entity.
+             * @tparam T: Component type.
+             */
+            template <typename T>
+            void removeComponent() noexcept;
+
+            /** @brief: Check if the entity has a component.
+             * @tparam T: Component type.
+             * @return: True if the entity has the component, false otherwise.
+             */
+            template <typename T>
+            const bool hasComponent() const noexcept;
+
             /** @brief: Equality operator.
              * @param other: Other entity.
              * @return: True if the entities are equal, false otherwise.

@@ -17,27 +17,27 @@ namespace cobalt {
             ~ComponentStorage() = default;
 
             /** @brief: Adds a component to the storage.
-             * @param entityID: ID of the entity to which the component belongs.
+             * @param entity: The entity to which the component belongs.
              * @param component: Component to add.
              */
-            void add(const Entity::ID entityID, const Component& component) noexcept;
+            void add(const Entity& entity, const Component& component) noexcept;
 
             /** @brief: Removes a component from the storage.
-             * @param entityID: ID of the entity to which the component belongs.
+             * @param entity: The entity to which the component belongs.
              */
-            void remove(const Entity::ID entityID) noexcept;
+            void remove(const Entity& entity) noexcept;
 
             /** @brief: Gets a component from the storage.
-             * @param entityID: ID of the entity to which the component belongs.
+             * @param entity: The entity to which the component belongs.
              * @return: A reference to the component.
              */
-            Component& get(const Entity::ID entityID) noexcept;
+            Component& get(const Entity& entity) noexcept;
 
             /** @brief: Gets a component from the storage.
-             * @param entityID: ID of the entity to which the component belongs.
+             * @param entity: The entity to which the component belongs.
              * @return: A const reference to the component.
              */
-            const Component& get(const Entity::ID entityID) const noexcept;
+            const Component& get(const Entity& entity) const noexcept;
 
             private:
             UMap<Entity::ID, uint64> entityToIndex;  // Maps entity IDs to component indices.

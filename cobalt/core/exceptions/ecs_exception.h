@@ -17,7 +17,7 @@ namespace cobalt {
              * @return: The new component not found exception.
              */
             ComponentNotFoundException(const Entity::ID entityID)
-                : std::runtime_error("Component not found for entity: " + std::to_string(entityID) + " with component: " + typeid(T).to_string()) {}
+                : std::runtime_error("Component not found for entity: " + std::to_string(entityID) + " with component: " + typeid(T).name()) {}
             ~ComponentNotFoundException() = default;
         };
     }  // namespace core::ecs
