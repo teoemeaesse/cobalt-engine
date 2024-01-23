@@ -8,9 +8,7 @@
 
 namespace cobalt {
     namespace core::ecs {
-        EntityRegistry::EntityRegistry(ComponentRegistry& componentRegistry) noexcept : componentRegistry(componentRegistry) {}
-
-        Entity& EntityRegistry::add() noexcept {
+        Entity& EntityRegistry::add(ComponentRegistry& componentRegistry) noexcept {
             Entity::ID id;
             if (freeIDs.empty()) {
                 id = Entity::ID(entities.size());
@@ -22,7 +20,10 @@ namespace cobalt {
             return entities.at(id);
         }
 
-        void EntityRegistry::remove(Entity& entity) noexcept {
+        void EntityRegistry::remove(const Entity& entity) noexcept {
+            if (!isAlive(entity)) {
+                return;
+            }
             entities.erase(entity.getID());
             freeIDs.push(entity.getID());
         }

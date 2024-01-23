@@ -10,8 +10,23 @@ namespace cobalt {
     namespace core::ecs {
         class World {
             public:
-            World() = default;
+            /** @brief: Default constructor.
+             * @return: World instance.
+             */
+            World() noexcept;
+            /** @brief: Default destructor.
+             */
             ~World() = default;
+
+            /** @brief: Create a new entity.
+             * @return: Entity instance.
+             */
+            Entity& createEntity() noexcept;
+
+            /** @brief: Destroy an entity.
+             * @param entity: Entity instance.
+             */
+            void destroyEntity(const Entity& entity) noexcept;
 
             private:
             EntityRegistry entityRegistry;

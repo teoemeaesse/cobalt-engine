@@ -16,22 +16,22 @@ namespace cobalt {
 
             public:
             /** @brief: Default constructor.
-             * @param componentRegistry: ComponentRegistry instance.
              * @return: EntityRegistry instance.
              */
-            EntityRegistry(ComponentRegistry& componentRegistry) noexcept;
+            EntityRegistry() noexcept = default;
             /** @brief: Default destructor.
              */
             ~EntityRegistry() = default;
 
             /** @brief: Create a new entity.
+             * @param ComponentRegistry: Component registry for this entity's components.
              * @return: Entity ID.
              */
-            Entity& add() noexcept;
+            Entity& add(ComponentRegistry& componentRegistry) noexcept;
             /** @brief: Destroy an entity.
              * @param id: Entity ID.
              */
-            void remove(Entity& entity) noexcept;
+            void remove(const Entity& entity) noexcept;
 
             /** @brief: The number of living entities in the registry.
              * @return: Number of living entities.
@@ -39,9 +39,8 @@ namespace cobalt {
             const uint64 getCount() const noexcept;
 
             private:
-            UMap<Entity::ID, Entity> entities;     // All living entities.
-            Queue<Entity::ID> freeIDs;             // Recently-freed IDs.
-            ComponentRegistry& componentRegistry;  // Component registry.
+            UMap<Entity::ID, Entity> entities;  // All living entities.
+            Queue<Entity::ID> freeIDs;          // Recently-freed IDs.
 
             /** @brief: Check if an entity is alive.
              * @param id: Entity ID.

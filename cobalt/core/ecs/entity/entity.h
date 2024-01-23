@@ -60,8 +60,8 @@ namespace cobalt {
 
             private:
             const ID id;
-            EntityRegistry& entityRegistry;
-            ComponentRegistry& componentRegistry;
+            const EntityRegistry& entityRegistry;
+            const ComponentRegistry& componentRegistry;
 
             /** @brief: Default constructor.
              * @param id: Entity ID. Should be unique.
