@@ -23,28 +23,22 @@ namespace cobalt {
              * @param entity: The entity.
              */
             template <typename T>
-            void add(const Entity& entity) noexcept {
-                static_assert(std::is_base_of<Component, T>::value, "T must be a component.");
-                const Component::Type type = typeid(T).hash_code();
-                if (store.find(type) == store.end()) {
-                    store[type] = ComponentStorage();
-                }
-                store[type].add(entity, T());
-            }
+            void add(const Entity& entity) noexcept;
+
+            /** @brief: Add a component to an entity.
+             * @tparam T: Component type.
+             * @param entity: The entity.
+             * @param args: Component's constructor arguments.
+             */
+            template <typename T, typename... Args>
+            void add(const Entity& entity, Args&&... args) noexcept;
 
             /** @brief: Remove a component from an entity.
              * @tparam T: Component type.
              * @param entity: The entity.
              */
             template <typename T>
-            void remove(const Entity& entity) noexcept {
-                static_assert(std::is_base_of<Component, T>::value, "T must be a component.");
-                const Component::Type type = typeid(T).hash_code();
-                if (store.find(type) == store.end()) {
-                    return;
-                }
-                store[type].remove(entity);
-            }
+            void remove(const Entity& entity) noexcept;
 
             /** @brief: Get a component from an entity.
              * @tparam T: Component type.
@@ -52,14 +46,7 @@ namespace cobalt {
              * @return: Component reference.
              */
             template <typename T>
-            T& get(const Entity& entity) {
-                static_assert(std::is_base_of<Component, T>::value, "T must be a component.");
-                const Component::Type type = typeid(T).hash_code();
-                if (store.find(type) == store.end()) {
-                    throw ComponentNotFoundException<T>(entity.getID());
-                }
-                return store[type].get(entity);
-            }
+            T& get(const Entity& entity);
 
             /** @brief: Get a component from an entity.
              * @tparam T: Component type.
@@ -67,14 +54,7 @@ namespace cobalt {
              * @return: Component reference.
              */
             template <typename T>
-            const T& get(const Entity& entity) const {
-                static_assert(std::is_base_of<Component, T>::value, "T must be a component.");
-                const Component::Type type = typeid(T).hash_code();
-                if (store.find(type) == store.end()) {
-                    throw ComponentNotFoundException<T>(entity.getID());
-                }
-                return store.at(type).get(entity);
-            }
+            const T& get(const Entity& entity) const;
 
             /** @brief: Check if an entity has a component.
              * @tparam T: Component type.
@@ -82,10 +62,7 @@ namespace cobalt {
              * @return: True if the entity has the component, false otherwise.
              */
             template <typename T>
-            const bool has(const Entity& entity) const {
-                static_assert(std::is_base_of<Component, T>::value, "T must be a component.");
-                return store.find(typeid(T).hash_code()) != store.end();
-            }
+            const bool has(const Entity& entity) const;
 
             private:
             UMap<Component::Type, ComponentStorage> store;  // Component storage.

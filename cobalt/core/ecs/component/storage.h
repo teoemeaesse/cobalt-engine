@@ -39,6 +39,34 @@ namespace cobalt {
              */
             const Component& get(const Entity& entity) const noexcept;
 
+            /** @brief: Iterator for the component storage.
+             */
+            class Iterator {
+                public:
+                Iterator(Component* component) : component(component) {}
+
+                Component& operator*() const { return *component; }
+                Component* operator->() { return component; }
+                Iterator& operator++() {
+                    component++;
+                    return *this;
+                }
+                Iterator operator++(int) {
+                    Iterator temp = *this;
+                    ++(*this);
+                    return temp;
+                }
+                bool operator==(const Iterator& it) { return component == it.component; }
+                bool operator!=(const Iterator& it) { return component != it.component; }
+
+                private:
+                Component* component;
+            };
+
+            Iterator begin() { return Iterator(&components[0]); }
+
+            Iterator end() { return Iterator(&components[0] + components.size()); }
+
             private:
             UMap<Entity::ID, uint64> entityToIndex;  // Maps entity IDs to component indices.
             Vec<Component> components;               // Packed array of components.
