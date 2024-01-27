@@ -65,7 +65,7 @@ namespace cobalt {
             const bool has(const Entity& entity) const;
 
             private:
-            UMap<Component::Type, ComponentStorage> store;  // Component storage.
+            UMap<Component::Type, Scope<ComponentStorageInterface>> store;  // Component storage.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

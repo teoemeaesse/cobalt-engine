@@ -5,7 +5,13 @@
 
 namespace cobalt {
     namespace core::ecs {
-        void ComponentStorage::add(const Entity& entity, const Component& component) noexcept {
+        template <typename T>
+        ComponentStorage<T>::ComponentStorage() : ComponentStorageInterface() {
+            Component::validateComponent<T>();
+        }
+
+        template <typename T>
+        void ComponentStorage<T>::add(const Entity& entity, const T& component) noexcept {
             if (entityToIndex.find(entity.getID()) != entityToIndex.end()) {
                 return;
             }
@@ -13,7 +19,8 @@ namespace cobalt {
             components.push_back(component);
         }
 
-        void ComponentStorage::remove(const Entity& entity) noexcept {
+        template <typename T>
+        void ComponentStorage<T>::remove(const Entity& entity) noexcept {
             if (entityToIndex.find(entity.getID()) == entityToIndex.end()) {
                 return;
             }
@@ -25,8 +32,14 @@ namespace cobalt {
             components.pop_back();
         }
 
-        Component& ComponentStorage::get(const Entity& entity) noexcept { return components[entityToIndex[entity.getID()]]; }
+        template <typename T>
+        T& ComponentStorage<T>::get(const Entity& entity) noexcept {
+            return components[entityToIndex[entity.getID()]];
+        }
 
-        const Component& ComponentStorage::get(const Entity& entity) const noexcept { return components[entityToIndex.at(entity.getID())]; }
+        template <typename T>
+        const T& ComponentStorage<T>::get(const Entity& entity) const noexcept {
+            return components[entityToIndex.at(entity.getID())];
+        }
     }  // namespace core::ecs
 }  // namespace cobalt
