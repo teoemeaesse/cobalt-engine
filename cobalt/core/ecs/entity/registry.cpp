@@ -3,6 +3,8 @@
 
 #include "core/ecs/entity/registry.h"
 
+#include <iostream>
+
 #include "core/ecs/component/registry.h"
 #include "core/ecs/entity/entity.h"
 #include "core/pch.h"
@@ -19,6 +21,7 @@ namespace cobalt {
                 versions.at(id) = versions.at(id) == num::MAX_UINT64 ? 1 : versions.at(id) + 1;
                 freeIDs.pop();
             }
+            entities.erase(id);
             entities.emplace(std::piecewise_construct, std::forward_as_tuple(id),
                              std::forward_as_tuple(id, versions.at(id), *this, componentRegistry));
             return entities.at(id);
