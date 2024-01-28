@@ -14,6 +14,7 @@
 #include <deque>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <list>
 #include <memory>
 #include <optional>
@@ -99,6 +100,28 @@ namespace cobalt {
     using int64 = int64_t;
     using uint64 = uint64_t;
     using uint = unsigned int;
+
+    namespace num {
+        static inline constexpr uint64_t MAX_UINT64 = std::numeric_limits<uint64_t>::max();
+        static inline constexpr int64_t MAX_INT64 = std::numeric_limits<int64_t>::max();
+        static inline constexpr uint64_t MIN_UINT64 = std::numeric_limits<uint64_t>::min();
+        static inline constexpr int64_t MIN_INT64 = std::numeric_limits<int64_t>::min();
+        static inline constexpr uint MAX_UINT = std::numeric_limits<uint>::max();
+        static inline constexpr int MAX_INT = std::numeric_limits<int>::max();
+        static inline constexpr uint MIN_UINT = std::numeric_limits<uint>::min();
+        static inline constexpr int MIN_INT = std::numeric_limits<int>::min();
+        static inline constexpr float MAX_FLOAT = std::numeric_limits<float>::max();
+        static inline constexpr float MIN_FLOAT = std::numeric_limits<float>::min();
+        static inline constexpr double MAX_DOUBLE = std::numeric_limits<double>::max();
+        static inline constexpr double MIN_DOUBLE = std::numeric_limits<double>::min();
+        static inline constexpr float PI = 3.14159265358979323846f;
+        static inline constexpr float TWO_PI = 6.28318530717958647692f;
+        static inline constexpr float HALF_PI = 1.57079632679489661923f;
+        static inline constexpr float QUARTER_PI = 0.78539816339744830961f;
+        static inline constexpr float E = 2.71828182845904523536f;
+        static inline constexpr float SQRT_2 = 1.41421356237309504880f;
+        static inline constexpr float SQRT_3 = 1.73205080756887729352f;
+    }  // namespace num
     namespace core {
         namespace gl {
             using Int = GLint;      // 32-bit integer.

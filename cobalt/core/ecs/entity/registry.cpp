@@ -3,6 +3,7 @@
 
 #include "core/ecs/entity/registry.h"
 
+#include "core/ecs/component/registry.h"
 #include "core/ecs/entity/entity.h"
 #include "core/pch.h"
 
@@ -12,11 +13,14 @@ namespace cobalt {
             Entity::ID id;
             if (freeIDs.empty()) {
                 id = Entity::ID(entities.size());
+                versions.emplace_back(1);
             } else {
                 id = freeIDs.front();
+                versions.at(id) = versions.at(id) == num::MAX_UINT64 ? 1 : versions.at(id) + 1;
                 freeIDs.pop();
             }
-            entities.emplace(id, Entity(id, *this, componentRegistry));
+            entities.emplace(std::piecewise_construct, std::forward_as_tuple(id),
+                             std::forward_as_tuple(id, versions.at(id), *this, componentRegistry));
             return entities.at(id);
         }
 
@@ -24,12 +28,14 @@ namespace cobalt {
             if (!isAlive(entity)) {
                 return;
             }
-            entities.erase(entity.getID());
+            entities.at(entity.getID()).version = 0;  // Easiest way to invalidate an entity.
             freeIDs.push(entity.getID());
         }
 
-        const bool EntityRegistry::isAlive(const Entity& entity) const noexcept { return entities.find(entity.getID()) != entities.end(); }
+        const bool EntityRegistry::isAlive(const Entity& entity) const noexcept {
+            return entity.getVersion() != 0 && entities.find(entity.getID()) != entities.end() && entities.at(entity.getID()) == entity;
+        }
 
-        const uint64 EntityRegistry::getCount() const noexcept { return entities.size(); }
+        const uint64 EntityRegistry::getSize() const noexcept { return entities.size(); }
     }  // namespace core::ecs
 }  // namespace cobalt

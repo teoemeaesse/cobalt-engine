@@ -13,6 +13,8 @@ namespace cobalt {
         /** @brief: Entity registry. Stores and manages all entities.
          */
         class EntityRegistry {
+            friend class Entity;
+
             public:
             /** @brief: Default constructor.
              * @return: EntityRegistry instance.
@@ -24,21 +26,22 @@ namespace cobalt {
 
             /** @brief: Create a new entity.
              * @param ComponentRegistry: Component registry for this entity's components.
-             * @return: Entity ID.
+             * @return: The new entity.
              */
             Entity& add(ComponentRegistry& componentRegistry) noexcept;
             /** @brief: Destroy an entity.
-             * @param id: Entity ID.
+             * @param entity: Entity to destroy.
              */
             void remove(const Entity& entity) noexcept;
 
-            /** @brief: The number of living entities in the registry.
-             * @return: Number of living entities.
+            /** @brief: The number entities in the registry.
+             * @return: Number of entities.
              */
-            const uint64 getCount() const noexcept;
+            const uint64 getSize() const noexcept;
 
             private:
             UMap<Entity::ID, Entity> entities;  // All living entities.
+            Vec<uint64> versions;               // Entity versions.
             Queue<Entity::ID> freeIDs;          // Recently-freed IDs.
 
             /** @brief: Check if an entity is alive.

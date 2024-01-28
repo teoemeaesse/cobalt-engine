@@ -14,10 +14,28 @@ namespace cobalt {
             /** @brief: Default constructor.
              * @return: ComponentRegistry instance.
              */
-            ComponentRegistry() = default;
+            ComponentRegistry() noexcept = default;
             /** @brief: Default destructor.
              */
             ~ComponentRegistry() = default;
+            /** @brief: Copy constructor.
+             * @param other: ComponentRegistry instance to copy.
+             */
+            ComponentRegistry(const ComponentRegistry&) = delete;
+            /** @brief: Move constructor.
+             * @param other: ComponentRegistry instance to move.
+             */
+            ComponentRegistry(ComponentRegistry&&) = delete;
+            /** @brief: Copy assignment operator.
+             * @param other: ComponentRegistry instance to copy.
+             * @return: Reference to this.
+             */
+            ComponentRegistry& operator=(const ComponentRegistry&) = delete;
+            /** @brief: Move assignment operator.
+             * @param other: ComponentRegistry instance to move.
+             * @return: Reference to this.
+             */
+            ComponentRegistry& operator=(ComponentRegistry&&) = delete;
 
             /** @brief: Register a component type.
              * @tparam T: Component type.
