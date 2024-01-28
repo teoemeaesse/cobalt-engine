@@ -171,8 +171,34 @@ namespace cobalt {
             static void linkShader(const gl::Handle shader);
         };
 
-        class RenderShader;
-        class ComputeShader;
+        /** @brief: A shader program that can be used to render.
+         */
+        class RenderShader : public Shader {
+            public:
+            /** @brief: Creates a new render shader.
+             * @param vertexSource: The source code of the vertex shader.
+             * @param fragmentSource: The source code of the fragment shader.
+             * @return: The render shader.
+             */
+            RenderShader(std::string& vertexSource, std::string& fragmentSource);
+            /** @brief: Creates a new render shader.
+             * @param vertexSource: The source code of the vertex shader.
+             * @param fragmentSource: The source code of the fragment shader.
+             * @param geometrySource: The source code of the geometry shader.v
+             * @return: The render shader.
+             */
+            RenderShader(std::string& vertexSource, std::string& fragmentSource, std::string& geometrySource);
+        };
+        /** @brief: A shader program that can be used to compute.
+         */
+        class ComputeShader : public Shader {
+            public:
+            /** @brief: Creates a new compute shader.
+             * @param computeSource: The source code of the compute shader.
+             * @return: The compute shader.
+             */
+            ComputeShader(std::string& computeSource);
+        };
 
         /** @brief: A builder for shaders. Can be used to create a render, compute or geometry
          * shader, for example.

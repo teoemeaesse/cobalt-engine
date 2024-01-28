@@ -3,8 +3,7 @@
 
 #include "engine/internal/shader_library.h"
 
-#include "core/gl/compute_shader.h"
-#include "core/gl/render_shader.h"
+#include "core/gl/shader.h"
 #include "core/pch.h"
 
 namespace cobalt {
