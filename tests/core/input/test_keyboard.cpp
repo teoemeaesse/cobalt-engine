@@ -14,7 +14,7 @@ const int KEY_MAX = static_cast<int>(cobalt::core::input::KeyboardInputID::COUNT
 
 class TestClass {
     public:
-    TestClass() : value(0) {}
+    TestClass() : value(0), pressed(false) {}  // Initialize 'pressed' to false
     void setValue(int value, bool pressed) {
         this->value = value;
         this->pressed = pressed;
