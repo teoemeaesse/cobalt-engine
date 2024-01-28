@@ -4,7 +4,8 @@
 #pragma once
 
 #include "core/ecs/component/storage.h"
-#include "core/exceptions/ecs_exception.h"
+
+#define CB_ECS_MAX_COMPONENTS 64
 
 namespace cobalt {
     namespace core::ecs {
@@ -17,6 +18,12 @@ namespace cobalt {
             /** @brief: Default destructor.
              */
             ~ComponentRegistry() = default;
+
+            /** @brief: Register a component type.
+             * @tparam T: Component type.
+             */
+            template <typename T>
+            void registerComponent();
 
             /** @brief: Add a component to an entity.
              * @tparam T: Component type.
@@ -66,6 +73,8 @@ namespace cobalt {
 
             private:
             UMap<Component::Type, Scope<ComponentStorageInterface>> store;  // Component storage.
+            UMap<Entity::ID, Mask<CB_ECS_MAX_COMPONENTS>> signatures;       // Entity signatures.
+            UMap<Component::Type, uint64> typeIndices;                      // Map component types to indices into the signature mask.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

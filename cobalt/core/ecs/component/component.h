@@ -34,21 +34,25 @@ namespace cobalt {
              * @return: Component type identifier.
              */
             virtual const Type getType() noexcept;
-
-            /**
-             * @brief: Get the component's type. This is a unique identifier, generated at compile time based on the component class' name.
+            /** @brief: Get the component's type. This is a unique identifier, generated at compile time based on the component class' name.
              * @tparam T: Component type.
              * @return: Component type identifier.
              */
             template <typename T>
-            static const Type getType() noexcept {
-                validateComponent<T>();
-                const T component(0);
-                return component.getType();
-            }
+            static const Type getType() noexcept;
+
+            /** @brief: Get the component's type name.
+             * @return: Component type name.
+             */
+            virtual const std::string& getTypeName() noexcept;
+            /** @brief: Get the component's type name.
+             * @tparam T: Component type.
+             * @return: Component type name.
+             */
+            template <typename T>
+            static const std::string& getTypeName() noexcept;
 
             private:
-            Type type;
             ID id;
         };
     }  // namespace core::ecs

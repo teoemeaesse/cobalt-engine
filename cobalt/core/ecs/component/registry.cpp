@@ -3,16 +3,34 @@
 
 #include "core/ecs/component/registry.h"
 
+#include "core/exceptions/ecs_exception.h"
+
 namespace cobalt {
     namespace core::ecs {
+        template <typename T>
+        void ComponentRegistry::registerComponent() {
+            Component::validateComponent<T>();
+            const Component::Type type = Component::getType<T>();
+            if (store.find(type) == store.end()) {
+                if (typeIndices.size() >= CB_ECS_MAX_COMPONENTS) {
+                    throw ComponentOverflowException<T>(CB_ECS_MAX_COMPONENTS);
+                }
+                store[type] = std::move(createScope<ComponentStorage<T>>());
+                const uint64 index = typeIndices.size();
+                typeIndices[type] = index;
+            }
+        }
+
         template <typename T>
         void ComponentRegistry::add(const Entity& entity) noexcept {
             Component::validateComponent<T>();
             const Component::Type type = Component::getType<T>();
             if (store.find(type) == store.end()) {
-                store[type] = std::move(createScope<ComponentStorage<T>>());
+                CB_CORE_WARN("Component \"{0}\" not registered.", Component::getTypeName<T>());
+                return;
             }
             store[type]->add(entity, T());
+            signatures[entity.getID()].set(typeIndices[type]);
         }
 
         template <typename T, typename... Args>
@@ -21,9 +39,11 @@ namespace cobalt {
             static_assert(std::is_constructible<T, Args...>::value, "T must be constructible with Args.");
             const Component::Type type = Component::getType<T>();
             if (store.find(type) == store.end()) {
-                store[type] = std::move(createScope<ComponentStorage<T>>());
+                CB_CORE_WARN("Component \"{0}\" not registered.", Component::getTypeName<T>());
+                return;
             }
             store[type]->add(entity, T(std::forward<Args>(args)...));
+            signatures[entity.getID()].set(typeIndices[type]);
         }
 
         template <typename T>
@@ -34,6 +54,7 @@ namespace cobalt {
                 return;
             }
             store[type]->remove(entity);
+            signatures[entity.getID()].reset(typeIndices[type]);
         }
 
         template <typename T>

@@ -13,8 +13,6 @@ namespace cobalt {
         /** @brief: Entity registry. Stores and manages all entities.
          */
         class EntityRegistry {
-            friend class Entity;
-
             public:
             /** @brief: Default constructor.
              * @return: EntityRegistry instance.
