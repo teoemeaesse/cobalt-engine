@@ -8,7 +8,8 @@
 
 namespace cobalt {
     namespace core::ecs {
-        Entity::Entity(const ID id, const Version version, EntityRegistry& entityRegistry, ComponentRegistry& componentRegistry) noexcept
+        Entity::Entity(const EntityProperties::ID id, const EntityProperties::Version version, EntityRegistry& entityRegistry,
+                       ComponentRegistry& componentRegistry) noexcept
             : id(id), version(version), entityRegistry(entityRegistry), componentRegistry(componentRegistry) {}
 
         Entity::Entity(Entity&& other) noexcept
@@ -16,19 +17,9 @@ namespace cobalt {
             other.version = 0;
         }
 
-        template <typename T>
-        void Entity::addComponent() noexcept {
-            componentRegistry.add<T>(*this);
-        }
-
-        template <typename T>
-        void Entity::removeComponent() noexcept {
-            componentRegistry.remove<T>(*this);
-        }
-
-        template <typename T>
-        const bool Entity::hasComponent() const noexcept {
-            return componentRegistry.has<T>(*this);
+        void Entity::kill() noexcept {
+            componentRegistry.removeAll(id);
+            entityRegistry.remove(*this);
         }
 
         const bool Entity::isAlive() const noexcept { return entityRegistry.isAlive(*this); }
@@ -38,8 +29,8 @@ namespace cobalt {
                    &componentRegistry == &other.componentRegistry;
         }
 
-        const Entity::ID Entity::getID() const { return id; }
+        const EntityProperties::ID Entity::getID() const { return id; }
 
-        const Entity::Version Entity::getVersion() const { return version; }
+        const EntityProperties::Version Entity::getVersion() const { return version; }
     }  // namespace core::ecs
 }  // namespace cobalt

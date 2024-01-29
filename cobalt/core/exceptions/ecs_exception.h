@@ -5,7 +5,7 @@
 
 #include <stdexcept>
 
-#include "core/ecs/entity/entity.h"
+#include "core/ecs/properties.h"
 
 namespace cobalt {
     namespace core::ecs {
@@ -16,7 +16,7 @@ namespace cobalt {
              * @param entityID: The entity that was not found.
              * @return: The new component not found exception.
              */
-            ComponentNotFoundException(const Entity::ID entityID)
+            ComponentNotFoundException(const EntityProperties::ID entityID)
                 : std::runtime_error("Component not found for entity: " + std::to_string(entityID) + " with component: " + typeid(T).name()) {}
             ~ComponentNotFoundException() = default;
         };

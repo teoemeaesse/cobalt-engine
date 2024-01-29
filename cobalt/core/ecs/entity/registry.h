@@ -4,7 +4,6 @@
 #pragma once
 
 #include "core/ecs/entity/entity.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::ecs {
@@ -23,6 +22,26 @@ namespace cobalt {
             /** @brief: Default destructor.
              */
             ~EntityRegistry() = default;
+            /** @brief: Copy constructor.
+             * @param EntityRegistry: EntityRegistry to copy.
+             * @return: EntityRegistry instance.
+             */
+            EntityRegistry(const EntityRegistry&) noexcept = delete;
+            /** @brief: Move constructor.
+             * @param EntityRegistry: EntityRegistry to move.
+             * @return: EntityRegistry instance.
+             */
+            EntityRegistry(EntityRegistry&&) noexcept = delete;
+            /** @brief: Copy assignment operator.
+             * @param EntityRegistry: EntityRegistry to copy.
+             * @return: EntityRegistry instance.
+             */
+            EntityRegistry& operator=(const EntityRegistry&) noexcept = delete;
+            /** @brief: Move assignment operator.
+             * @param EntityRegistry: EntityRegistry to move.
+             * @return: EntityRegistry instance.
+             */
+            EntityRegistry& operator=(EntityRegistry&&) noexcept = delete;
 
             /** @brief: Create a new entity.
              * @param ComponentRegistry: Component registry for this entity's components.
@@ -33,6 +52,10 @@ namespace cobalt {
              * @param entity: Entity to destroy.
              */
             void remove(const Entity& entity) noexcept;
+            /** @brief: Destroy an entity.
+             * @param entityID: ID of the entity to destroy.
+             */
+            void remove(const EntityProperties::ID& entityID) noexcept;
 
             /** @brief: The number entities in the registry.
              * @return: Number of entities.
@@ -40,9 +63,9 @@ namespace cobalt {
             const uint64 getSize() const noexcept;
 
             private:
-            UMap<Entity::ID, Entity> entities;  // All living entities.
-            Vec<uint64> versions;               // Entity versions.
-            Queue<Entity::ID> freeIDs;          // Recently-freed IDs.
+            UMap<EntityProperties::ID, Entity> entities;  // All living entities.
+            Vec<uint64> versions;                         // Entity versions.
+            Queue<EntityProperties::ID> freeIDs;          // Recently-freed IDs.
 
             /** @brief: Check if an entity is alive.
              * @param id: Entity ID.

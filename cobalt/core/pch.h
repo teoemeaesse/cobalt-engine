@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <cxxabi.h>
 #include <signal.h>
 #include <time.h>
 

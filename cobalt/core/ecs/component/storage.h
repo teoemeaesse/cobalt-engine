@@ -4,7 +4,6 @@
 #pragma once
 
 #include "core/ecs/component/component.h"
-#include "core/ecs/entity/entity.h"
 
 namespace cobalt {
     namespace core::ecs {
@@ -16,27 +15,27 @@ namespace cobalt {
             virtual ~ComponentStorageInterface() = default;
 
             /** @brief: Adds a component to the storage.
-             * @param entity: The entity to which the component belongs.
+             * @param entityID: The ID of its entity.
              * @param component: Component to add.
              */
-            virtual void add(const Entity& entity, const Component& component) noexcept = 0;
+            virtual void add(const EntityProperties::ID& entityID, const Component& component) noexcept = 0;
 
             /** @brief: Removes a component from the storage.
-             * @param entity: The entity to which the component belongs.
+             * @param entityID: The ID of its entity.
              */
-            virtual void remove(const Entity& entity) noexcept = 0;
+            virtual void remove(const EntityProperties::ID& entityID) noexcept = 0;
 
             /** @brief: Gets a component from the storage.
-             * @param entity: The entity to which the component belongs.
+             * @param entityID: The ID of its entity.
              * @return: A reference to the component.
              */
-            virtual Component& get(const Entity& entity) noexcept = 0;
+            virtual Component& get(const EntityProperties::ID& entityID) noexcept = 0;
 
             /** @brief: Gets a component from the storage.
-             * @param entity: The entity to which the component belongs.
+             * @param entityID: The ID of its entity.
              * @return: A const reference to the component.
              */
-            virtual const Component& get(const Entity& entity) const noexcept = 0;
+            virtual const Component& get(const EntityProperties::ID& entityID) const noexcept = 0;
         };
 
         /** @brief: Packed array of components. Maps entity IDs to components.
@@ -46,36 +45,57 @@ namespace cobalt {
         class ComponentStorage : public ComponentStorageInterface {
             friend class ComponentStorageInterface;
 
-            private:
-            ComponentStorage();
+            static_assert(std::is_base_of<Component, T>::value, "T must be a component.");
+            static_assert(std::is_default_constructible<T>::value, "T must be default constructible.");
+            static_assert(std::is_copy_constructible<T>::value, "T must be copy constructible.");
+
+            public:
+            ComponentStorage() = default;
             ~ComponentStorage() = default;
 
+            private:
             /** @brief: Adds a component to the storage.
              * @param entity: The entity to which the component belongs.
              * @param component: Component to add.
              */
-            void add(const Entity& entity, const T& component) noexcept override;
+            void add(const EntityProperties::ID& entityID, const Component& component) noexcept override {
+                if (entityToIndex.find(entityID) != entityToIndex.end()) {
+                    return;
+                }
+                entityToIndex[entityID] = components.size();
+                components.push_back(dynamic_cast<const T&>(component));
+            }
 
             /** @brief: Removes a component from the storage.
              * @param entity: The entity to which the component belongs.
              */
-            void remove(const Entity& entity) noexcept override;
+            void remove(const EntityProperties::ID& entityID) noexcept override {
+                if (entityToIndex.find(entityID) == entityToIndex.end()) {
+                    return;
+                }
+                const uint64 index = entityToIndex[entityID];
+                entityToIndex.erase(entityID);
+                if (index != components.size() - 1) {
+                    components[index] = components.back();
+                }
+                components.pop_back();
+            }
 
             /** @brief: Gets a component from the storage.
              * @param entity: The entity to which the component belongs.
              * @return: A reference to the component.
              */
-            T& get(const Entity& entity) noexcept override;
+            Component& get(const EntityProperties::ID& entityID) noexcept override { return components[entityToIndex[entityID]]; }
 
             /** @brief: Gets a component from the storage.
              * @param entity: The entity to which the component belongs.
              * @return: A const reference to the component.
              */
-            const T& get(const Entity& entity) const noexcept override;
+            const Component& get(const EntityProperties::ID& entityID) const noexcept override { return components[entityToIndex.at(entityID)]; }
 
             private:
-            UMap<Entity::ID, uint64> entityToIndex;  // Maps entity IDs to component indices.
-            Vec<T> components;                       // Packed array of components.
+            UMap<EntityProperties::ID, uint64> entityToIndex;  // Maps entity IDs to component indices.
+            Vec<T> components;                                 // Packed array of components.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

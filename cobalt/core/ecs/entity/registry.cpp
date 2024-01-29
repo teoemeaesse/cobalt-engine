@@ -12,9 +12,9 @@
 namespace cobalt {
     namespace core::ecs {
         Entity& EntityRegistry::add(ComponentRegistry& componentRegistry) noexcept {
-            Entity::ID id;
+            EntityProperties::ID id;
             if (freeIDs.empty()) {
-                id = Entity::ID(entities.size());
+                id = EntityProperties::ID(entities.size());
                 versions.emplace_back(1);
             } else {
                 id = freeIDs.front();
@@ -33,6 +33,14 @@ namespace cobalt {
             }
             entities.at(entity.getID()).version = 0;  // Easiest way to invalidate an entity.
             freeIDs.push(entity.getID());
+        }
+
+        void EntityRegistry::remove(const EntityProperties::ID& entityID) noexcept {
+            if (entities.find(entityID) == entities.end()) {
+                return;
+            }
+            entities.at(entityID).version = 0;  // Easiest way to invalidate an entity.
+            freeIDs.push(entityID);
         }
 
         const bool EntityRegistry::isAlive(const Entity& entity) const noexcept {

@@ -3,10 +3,11 @@
 
 #pragma once
 
+#include "core/ecs/component/registry.h"
+
 namespace cobalt {
     namespace core::ecs {
         class EntityRegistry;
-        class ComponentRegistry;
 
         /** @brief: ECS entity class. Just a handle to a component mask.
          */
@@ -14,9 +15,6 @@ namespace cobalt {
             friend class EntityRegistry;
 
             public:
-            using ID = uint64;       // Entity ID - unique between all entities.
-            using Version = uint64;  // Entity version - incremented every time an entity with this ID is destroyed.
-
             /** @brief: Default constructor. Users should never call this.
              * @param id: Entity ID. Should be unique.
              * @param version: Entity version. Should be unique.
@@ -24,7 +22,8 @@ namespace cobalt {
              * @param componentRegistry: Component registry.
              * @return: Entity instance.
              */
-            Entity(const ID id, const Version version, EntityRegistry& entityRegistry, ComponentRegistry& componentRegistry) noexcept;
+            Entity(const EntityProperties::ID id, const EntityProperties::Version version, EntityRegistry& entityRegistry,
+                   ComponentRegistry& componentRegistry) noexcept;
             /** @brief: Copy constructor.
              * @return: Entity instance.
              */
@@ -49,20 +48,40 @@ namespace cobalt {
              * @tparam T: Component type.
              */
             template <typename T>
-            void addComponent() noexcept;
+            void add() noexcept {
+                componentRegistry.add<T>(id);
+            }
+
+            /** @brief: Add a component to the entity.
+             * @tparam T: Component type.
+             * @tparam Args: Component constructor arguments.
+             * @param args: Component constructor arguments.
+             */
+            template <typename T, typename... Args>
+            void add(Args&&... args) noexcept {
+                componentRegistry.add<T>(id, std::forward<Args>(args)...);
+            }
 
             /** @brief: Remove a component from the entity.
              * @tparam T: Component type.
              */
             template <typename T>
-            void removeComponent() noexcept;
+            void remove() noexcept {
+                componentRegistry.remove<T>(id);
+            }
 
             /** @brief: Check if the entity has a component.
              * @tparam T: Component type.
              * @return: True if the entity has the component, false otherwise.
              */
             template <typename T>
-            const bool hasComponent() const noexcept;
+            const bool has() const noexcept {
+                return componentRegistry.has<T>(id);
+            }
+
+            /** @brief: Kill the entity. This will remove all its components and invalidate it.
+             */
+            void kill() noexcept;
 
             /** @brief: Check if the entity is alive: living entities have a positive ID and the latest version.
              * @return: True if the entity is alive, false otherwise.
@@ -78,16 +97,16 @@ namespace cobalt {
             /** @brief: Get the entity's ID.
              * @return: Entity ID.
              */
-            const ID getID() const;
+            const EntityProperties::ID getID() const;
 
             /** @brief: Get the entity's version.
              * @return: Entity version.
              */
-            const Version getVersion() const;
+            const EntityProperties::Version getVersion() const;
 
             private:
-            const ID id;
-            Version version;
+            const EntityProperties::ID id;
+            EntityProperties::Version version;
             EntityRegistry& entityRegistry;
             ComponentRegistry& componentRegistry;
         };
