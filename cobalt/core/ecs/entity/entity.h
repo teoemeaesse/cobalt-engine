@@ -89,6 +89,24 @@ namespace cobalt {
                 static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
                 return componentRegistry.get<Components...>(id);
             }
+            /** @brief: Get a component from the entity.
+             * @tparam Component: Component type.
+             * @return: A reference to the component.
+             */
+            template <typename ComponentType>
+            const ComponentType& get() const {
+                static_assert(std::is_reference<ComponentType>::value, "Component type must be a reference type.");
+                return componentRegistry.getSingleComponent<ComponentType>(id);
+            }
+            /** @brief: Get a component from the entity.
+             * @tparam Component: Component type.
+             * @return: A reference to the component.
+             */
+            template <typename ComponentType>
+            ComponentType& get() {
+                static_assert(std::is_reference<ComponentType>::value, "Component type must be a reference type.");
+                return componentRegistry.getSingleComponent<ComponentType>(id);
+            }
 
             /** @brief: Kill the entity. This will remove all its components and invalidate it.
              */

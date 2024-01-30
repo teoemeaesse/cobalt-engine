@@ -110,15 +110,23 @@ namespace cobalt {
              */
             void removeAll(const EntityProperties::ID& entityID) noexcept;
 
+            template <typename ComponentType>
+            ComponentType& getSingleComponent(const EntityProperties::ID& entityID) {
+                try {
+                    return static_cast<ComponentType&>(store.at(Component::template getType<RemoveConstRef<ComponentType>>())->get(entityID));
+                } catch (const std::out_of_range& e) {
+                    throw ComponentNotFoundException<RemoveConstRef<ComponentType>>(entityID);
+                }
+            }
             /** @brief: Get a component from an entity.
              * @tparam ComponentType: Component type.
              * @param entityID: The entity ID.
              * @return: Component reference.
              */
             template <typename ComponentType>
-            ComponentType& getSingleComponent(const EntityProperties::ID& entityID) const {
+            const ComponentType& getSingleComponent(const EntityProperties::ID& entityID) const {
                 try {
-                    return static_cast<ComponentType&>(store.at(Component::template getType<RemoveConstRef<ComponentType>>())->get(entityID));
+                    return static_cast<const ComponentType&>(store.at(Component::template getType<RemoveConstRef<ComponentType>>())->get(entityID));
                 } catch (const std::out_of_range& e) {
                     throw ComponentNotFoundException<RemoveConstRef<ComponentType>>(entityID);
                 }
