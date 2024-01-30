@@ -90,19 +90,19 @@ namespace cobalt {
             }
 
             /** @brief: Remove a set of components from an entity.
-             * @tparam Types...: Component types.
+             * @tparam Components...: Component types.
              * @param entityID: The entity ID.
              */
-            template <typename... Types>
+            template <typename... Components>
             void remove(const EntityProperties::ID& entityID) noexcept {
-                Component::validate<Types...>();
+                Component::validate<Components...>();
                 try {
-                    (store.at(Component::getType<Types>())->remove(entityID), ...);
+                    (store.at(Component::getType<Components>())->remove(entityID), ...);
                 } catch (const std::out_of_range& e) {
                     CB_CORE_WARN("Component not registered", e.what());
                     return;
                 }
-                (signatures[entityID].reset(typeIndices.at(Component::getType<Types>())), ...);
+                (signatures[entityID].reset(typeIndices.at(Component::getType<Components>())), ...);
             }
 
             /** @brief: Remove all components from an entity.
@@ -125,26 +125,27 @@ namespace cobalt {
             }
 
             /** @brief: Get a set of components from an entity.
-             * @tparam T: Component type.
+             * @tparam Components...: Component types.
              * @param entityID: The entity ID.
              * @return: Component reference.
              */
-            template <typename... Types>
-            Tuple<Types...> get(const EntityProperties::ID& entityID) {
-                Component::validate<RemoveConstRef<Types>...>();
-                return (std::make_tuple(std::ref(getSingleComponent<Types>(entityID))...));
+            template <typename... Components>
+            Tuple<Components...> get(const EntityProperties::ID& entityID) {
+                static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
+                Component::validate<RemoveConstRef<Components>...>();
+                return (std::make_tuple(std::ref(getSingleComponent<Components>(entityID))...));
             }
 
             /** @brief: Check if an entity has a set of components.
-             * @tparam Types: Component types.
+             * @tparam Components...: Component types.
              * @param entityID: The entity ID.
              * @return: True if the entity has the components, false otherwise.
              */
-            template <typename... Types>
+            template <typename... Components>
             const bool has(const EntityProperties::ID& entityID) const {
-                Component::validate<Types...>();
+                Component::validate<Components...>();
                 return signatures.find(entityID) != signatures.end() &&
-                       (signatures.at(entityID).test(typeIndices.at(Component::getType<Types>())) && ...);
+                       (signatures.at(entityID).test(typeIndices.at(Component::getType<Components>())) && ...);
             }
 
             private:

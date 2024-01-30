@@ -11,14 +11,14 @@ namespace cobalt {
         class Component {
             public:
             /** @brief: Validate a set of component types.
-             * @tparam Types...: Component types.
+             * @tparam Components...: Component types.
              * @return: True if the component type is valid.
              */
-            template <typename... Types>
+            template <typename... Components>
             static constexpr bool validate() {
-                static_assert((std::is_base_of<Component, Types>::value && ...), "All types must be components.");
-                static_assert((std::is_default_constructible<Types>::value && ...), "All types must be default constructible.");
-                static_assert((std::is_copy_constructible<Types>::value && ...), "All types must be copy constructible.");
+                static_assert((std::is_base_of<Component, Components>::value && ...), "All types must be components.");
+                static_assert((std::is_default_constructible<Components>::value && ...), "All types must be default constructible.");
+                static_assert((std::is_copy_constructible<Components>::value && ...), "All types must be copy constructible.");
                 return true;
             }
 

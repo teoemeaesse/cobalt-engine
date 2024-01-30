@@ -63,30 +63,31 @@ namespace cobalt {
             }
 
             /** @brief: Remove a set of components from the entity.
-             * @tparam Types...: Component types.
+             * @tparam Components...: Component types.
              */
-            template <typename... Types>
+            template <typename... Components>
             void remove() noexcept {
-                componentRegistry.remove<Types...>(id);
+                componentRegistry.remove<Components...>(id);
             }
 
             /** @brief: Check if the entity has a set of components.
-             * @tparam Types: Component types.
+             * @tparam Components...: Component types.
              * @param entityID: The entity ID.
              * @return: True if the entity has the components, false otherwise.
              */
-            template <typename... Types>
+            template <typename... Components>
             const bool has() const noexcept {
-                return componentRegistry.has<Types...>(id);
+                return componentRegistry.has<Components...>(id);
             }
 
             /** @brief: Get a set of components from the entity.
-             * @tparam Types...: Component types.
+             * @tparam Components...: Component types.
              * @return: A tuple of references to the components.
              */
-            template <typename... Types>
-            Tuple<Types...> get() {
-                return componentRegistry.get<Types...>(id);
+            template <typename... Components>
+            Tuple<Components...> get() {
+                static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
+                return componentRegistry.get<Components...>(id);
             }
 
             /** @brief: Kill the entity. This will remove all its components and invalidate it.
