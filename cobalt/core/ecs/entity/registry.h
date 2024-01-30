@@ -67,9 +67,9 @@ namespace cobalt {
              * @return: A vector of tuples of references to components.
              */
             template <typename... Components>
-            const Vec<Tuple<Components&...>> get() const noexcept {
+            const Vec<Tuple<Components...>> get() const noexcept {
                 static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
-                Vec<Tuple<Components&...>> components;
+                Vec<Tuple<Components...>> components;
                 for (auto& entity : entities) {
                     if (entity.second.has<Components...>()) {
                         components.push_back(entity.second.get<Components...>());

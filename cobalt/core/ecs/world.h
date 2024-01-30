@@ -28,6 +28,18 @@ namespace cobalt {
              */
             void destroyEntity(const Entity& entity) noexcept;
 
+            /** @brief: Register a component.
+             * @tparam ComponentType: Component type.
+             */
+            template <typename ComponentType>
+            void registerComponent() noexcept {
+                componentRegistry.registerComponent<ComponentType>();
+            }
+
+            /** @brief: Get a subset of entities' components.
+             * @tparam Components...: Components to select for.
+             * @return: A vector of tuples of references to components.
+             */
             template <typename... Components>
             Vec<Tuple<Components...>> get() const noexcept {
                 static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");

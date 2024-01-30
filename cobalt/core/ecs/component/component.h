@@ -27,12 +27,12 @@ namespace cobalt {
              */
             virtual const ComponentProperties::Type getType() noexcept;
             /** @brief: Get the component's type. This is a unique identifier, generated at compile time based on the component class' name.
-             * @tparam T: Component type.
+             * @tparam ComponentType: Component type.
              * @return: Component type identifier.
              */
-            template <typename T>
+            template <typename ComponentType>
             static const ComponentProperties::Type getType() noexcept {
-                static const ComponentProperties::Type type = typeid(T).hash_code();
+                static const ComponentProperties::Type type = typeid(ComponentType).hash_code();
                 return type;
             }
 
@@ -42,12 +42,12 @@ namespace cobalt {
             virtual const std::string& getTypeName() noexcept;
 
             /** @brief: Get the component's type name.
-             * @tparam T: Component type.
+             * @tparam ComponentType: Component type.
              * @return: Component type name.
              */
-            template <typename T>
+            template <typename ComponentType>
             static const std::string& getTypeName() noexcept {
-                static const std::string typeName = demangle(typeid(T).name());
+                static const std::string typeName = demangle(typeid(ComponentType).name());
                 return typeName;
             }
         };

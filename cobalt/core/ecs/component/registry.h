@@ -39,53 +39,53 @@ namespace cobalt {
             ComponentRegistry& operator=(ComponentRegistry&&) noexcept = delete;
 
             /** @brief: Register a component type.
-             * @tparam T: Component type.
+             * @tparam ComponentType: Component type.
              */
-            template <typename T>
+            template <typename ComponentType>
             void registerComponent() {
-                Component::validate<T>();
-                const ComponentProperties::Type type = Component::getType<T>();
+                Component::template validate<ComponentType>();
+                const ComponentProperties::Type type = Component::template getType<ComponentType>();
                 if (store.find(type) == store.end()) {
                     if (typeIndices.size() >= CB_ECS_MAX_COMPONENTS) {
-                        throw ComponentOverflowException<T>(CB_ECS_MAX_COMPONENTS);
+                        throw ComponentOverflowException<ComponentType>(CB_ECS_MAX_COMPONENTS);
                     }
-                    store[type] = std::move(createScope<ComponentStorage<T>>());
+                    store[type] = std::move(createScope<ComponentStorage<ComponentType>>());
                     const uint64 index = typeIndices.size();
                     typeIndices[type] = index;
                 }
             }
 
             /** @brief: Add a component to an entity.
-             * @tparam T: Component type.
+             * @tparam ComponentType: Component type.
              * @param entityID: The entity ID.
              */
-            template <typename T>
+            template <typename ComponentType>
             void add(const EntityProperties::ID& entityID) noexcept {
-                Component::validate<T>();
-                const ComponentProperties::Type type = Component::getType<T>();
+                Component::template validate<ComponentType>();
+                const ComponentProperties::Type type = Component::template getType<ComponentType>();
                 if (store.find(type) == store.end()) {
-                    CB_CORE_WARN("Component \"{0}\" not registered", Component::getTypeName<T>());
+                    CB_CORE_WARN("Component \"{0}\" not registered", Component::template getTypeName<ComponentType>());
                     return;
                 }
-                store[type]->add(entityID, T());
+                store[type]->add(entityID, ComponentType());
                 signatures[entityID].set(typeIndices[type]);
             }
 
             /** @brief: Add a component to an entity.
-             * @tparam T: Component type.
+             * @tparam ComponentType: Component type.
              * @param entityID: The entity ID.
              * @param args: Component's constructor arguments.
              */
-            template <typename T, typename... Args>
+            template <typename ComponentType, typename... Args>
             void add(const EntityProperties::ID& entityID, Args&&... args) noexcept {
-                Component::validate<T>();
-                static_assert(std::is_constructible<T, Args...>::value, "T must be constructible with Args.");
-                const ComponentProperties::Type type = Component::getType<T>();
+                Component::template validate<ComponentType>();
+                static_assert(std::is_constructible<ComponentType, Args...>::value, "T must be constructible with Args.");
+                const ComponentProperties::Type type = Component::template getType<ComponentType>();
                 if (store.find(type) == store.end()) {
-                    CB_CORE_WARN("Component \"{0}\" not registered", Component::getTypeName<T>());
+                    CB_CORE_WARN("Component \"{0}\" not registered", Component::template getTypeName<ComponentType>());
                     return;
                 }
-                store[type]->add(entityID, T(std::forward<Args>(args)...));
+                store[type]->add(entityID, ComponentType(std::forward<Args>(args)...));
                 signatures[entityID].set(typeIndices[type]);
             }
 
@@ -95,14 +95,14 @@ namespace cobalt {
              */
             template <typename... Components>
             void remove(const EntityProperties::ID& entityID) noexcept {
-                Component::validate<Components...>();
+                Component::template validate<Components...>();
                 try {
                     (store.at(Component::getType<Components>())->remove(entityID), ...);
                 } catch (const std::out_of_range& e) {
                     CB_CORE_WARN("Component not registered", e.what());
                     return;
                 }
-                (signatures[entityID].reset(typeIndices.at(Component::getType<Components>())), ...);
+                (signatures[entityID].reset(typeIndices.at(Component::template getType<Components>())), ...);
             }
 
             /** @brief: Remove all components from an entity.
@@ -111,16 +111,16 @@ namespace cobalt {
             void removeAll(const EntityProperties::ID& entityID) noexcept;
 
             /** @brief: Get a component from an entity.
-             * @tparam T: Component type.
+             * @tparam ComponentType: Component type.
              * @param entityID: The entity ID.
              * @return: Component reference.
              */
-            template <typename T>
-            T& getSingleComponent(const EntityProperties::ID& entityID) {
+            template <typename ComponentType>
+            ComponentType& getSingleComponent(const EntityProperties::ID& entityID) const {
                 try {
-                    return static_cast<T&>(store.at(Component::getType<RemoveConstRef<T>>())->get(entityID));
+                    return static_cast<ComponentType&>(store.at(Component::template getType<RemoveConstRef<ComponentType>>())->get(entityID));
                 } catch (const std::out_of_range& e) {
-                    throw ComponentNotFoundException<RemoveConstRef<T>>(entityID);
+                    throw ComponentNotFoundException<RemoveConstRef<ComponentType>>(entityID);
                 }
             }
 
@@ -130,9 +130,9 @@ namespace cobalt {
              * @return: Component reference.
              */
             template <typename... Components>
-            Tuple<Components...> get(const EntityProperties::ID& entityID) {
+            Tuple<Components...> get(const EntityProperties::ID& entityID) const {
                 static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
-                Component::validate<RemoveConstRef<Components>...>();
+                Component::template validate<RemoveConstRef<Components>...>();
                 return (std::make_tuple(std::ref(getSingleComponent<Components>(entityID))...));
             }
 
@@ -143,9 +143,9 @@ namespace cobalt {
              */
             template <typename... Components>
             const bool has(const EntityProperties::ID& entityID) const {
-                Component::validate<Components...>();
+                Component::template validate<RemoveConstRef<Components>...>();
                 return signatures.find(entityID) != signatures.end() &&
-                       (signatures.at(entityID).test(typeIndices.at(Component::getType<Components>())) && ...);
+                       (signatures.at(entityID).test(typeIndices.at(Component::template getType<Components>())) && ...);
             }
 
             private:

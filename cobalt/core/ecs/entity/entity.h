@@ -45,21 +45,21 @@ namespace cobalt {
             ~Entity() = default;
 
             /** @brief: Add a component to the entity.
-             * @tparam T: Component type.
+             * @tparam ComponentType: Component type.
              */
-            template <typename T>
+            template <typename ComponentType>
             void add() noexcept {
-                componentRegistry.add<T>(id);
+                componentRegistry.add<ComponentType>(id);
             }
 
             /** @brief: Add a component to the entity.
-             * @tparam T: Component type.
+             * @tparam ComponentType: Component type.
              * @tparam Args: Component constructor arguments.
              * @param args: Component constructor arguments.
              */
-            template <typename T, typename... Args>
+            template <typename ComponentType, typename... Args>
             void add(Args&&... args) noexcept {
-                componentRegistry.add<T>(id, std::forward<Args>(args)...);
+                componentRegistry.add<ComponentType>(id, std::forward<Args>(args)...);
             }
 
             /** @brief: Remove a set of components from the entity.
@@ -85,7 +85,7 @@ namespace cobalt {
              * @return: A tuple of references to the components.
              */
             template <typename... Components>
-            Tuple<Components...> get() {
+            Tuple<Components...> get() const {
                 static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
                 return componentRegistry.get<Components...>(id);
             }

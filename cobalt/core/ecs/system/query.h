@@ -14,42 +14,34 @@ namespace cobalt {
             public:
             Query(const World& world) noexcept : componentTuples(world.get<Components...>()) {}
 
-            class Proxy {
-                public:
-                Proxy(const Tuple<Components...>& tuple) : tuple(tuple) {}
-
-                template <typename Comp>
-                Comp& get() const {
-                    return std::get<Comp>(tuple);
-                }
-
-                private:
-                const Tuple<Components...>& tuple;
-            };
-
             class Iterator {
                 public:
-                Iterator(typename std::vector<Tuple<Components...>>::iterator it) : it(it) {}
+                Iterator(Tuple<Components...>* ptr) : ptr(ptr) {}
 
+                Tuple<Components...>& operator*() const { return *ptr; }
+                Tuple<Components...>* operator->() { return ptr; }
                 Iterator& operator++() {
-                    ++it;
+                    ptr++;
                     return *this;
                 }
-
-                bool operator!=(const Iterator& other) const { return it != other.it; }
-
-                Proxy operator*() const { return Proxy(*it); }
+                Iterator operator++(int) {
+                    Iterator tmp = *this;
+                    ++(*this);
+                    return tmp;
+                }
+                friend bool operator==(const Iterator& a, const Iterator& b) { return a.ptr == b.ptr; }
+                friend bool operator!=(const Iterator& a, const Iterator& b) { return a.ptr != b.ptr; }
 
                 private:
-                typename std::vector<Tuple<Components...>>::iterator it;
+                Tuple<Components...>* ptr;
             };
 
-            Iterator begin() { return Iterator(componentTuples.begin()); }
+            Iterator begin() { return Iterator(&componentTuples[0]); }
 
-            Iterator end() { return Iterator(componentTuples.end()); }
+            Iterator end() { return Iterator(&componentTuples[0] + componentTuples.size()); }
 
             private:
-            typename std::vector<Tuple<Components...>> componentTuples;
+            Vec<Tuple<Components...>> componentTuples;
         };
     }  // namespace core::ecs
 }  // namespace cobalt
