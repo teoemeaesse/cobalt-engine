@@ -10,15 +10,15 @@ namespace cobalt {
     namespace core::ecs {
         class Component {
             public:
-            /** @brief: Validate a component type.
-             * @tparam T: Component type.
+            /** @brief: Validate a set of component types.
+             * @tparam Types...: Component types.
              * @return: True if the component type is valid.
              */
-            template <typename T>
-            static constexpr bool validateComponent() {
-                static_assert(std::is_base_of<Component, T>::value, "T must be a component.");
-                static_assert(std::is_default_constructible<T>::value, "T must be default constructible.");
-                static_assert(std::is_copy_constructible<T>::value, "T must be copy constructible.");
+            template <typename... Types>
+            static constexpr bool validate() {
+                static_assert((std::is_base_of<Component, Types>::value && ...), "All types must be components.");
+                static_assert((std::is_default_constructible<Types>::value && ...), "All types must be default constructible.");
+                static_assert((std::is_copy_constructible<Types>::value && ...), "All types must be copy constructible.");
                 return true;
             }
 

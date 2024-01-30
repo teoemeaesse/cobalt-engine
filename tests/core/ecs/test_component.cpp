@@ -59,6 +59,10 @@ void test_component_registry_add() {
     entity.add<Position>(0, 0);
     TEST_ASSERT_TRUE_MESSAGE(entity.has<Position>(), "Entity should have Position component");
     entity.add<Velocity>(0, 0);
+    bool check = entity.has<Position, Velocity>();
+    TEST_ASSERT_TRUE_MESSAGE(check, "Entity should have Position and Velocity components");
+    check = entity.has<Position, Velocity, Mass>();
+    TEST_ASSERT_FALSE_MESSAGE(check, "Entity should not have Position, Velocity and Mass components");
     entity.add<Mass>(0);
 }
 
@@ -84,10 +88,41 @@ void test_component_registry_remove() {
     entity.remove<Mass>();
 }
 
+void test_component_variadics() {
+    ComponentRegistry componentRegistry;
+    EntityRegistry entityRegistry;
+    componentRegistry.registerComponent<Position>();
+    componentRegistry.registerComponent<Velocity>();
+    componentRegistry.registerComponent<Mass>();
+    auto& entity = entityRegistry.add(componentRegistry);
+    entity.add<Position>(0, 0);
+    entity.add<Velocity>(0, 0);
+    entity.add<Mass>(0);
+    bool check = entity.has<Position, Velocity>();
+    TEST_ASSERT_TRUE_MESSAGE(check, "Entity should have Position and Velocity components");
+    check = entity.has<Position, Velocity, Mass>();
+    TEST_ASSERT_TRUE_MESSAGE(check, "Entity should have Position, Velocity and Mass components");
+    entity.remove<Position, Velocity>();
+    check = entity.has<Position, Velocity>();
+    TEST_ASSERT_FALSE_MESSAGE(check, "Entity should not have Position and Velocity components");
+    check = entity.has<Position, Velocity, Mass>();
+    TEST_ASSERT_FALSE_MESSAGE(check, "Entity should not have Position, Velocity and Mass components");
+    entity.add<Position>(0, 0);
+    entity.add<Velocity>(0, 0);
+    entity.add<Mass>(0);
+    entity.add<Position>(0, 0);
+    check = entity.has<Position, Velocity, Mass>();
+    TEST_ASSERT_TRUE_MESSAGE(check, "Entity should have Position, Velocity and Mass components");
+    entity.remove<Position, Mass>();
+    check = entity.has<Velocity>();
+    TEST_ASSERT_TRUE_MESSAGE(check, "Entity should have Velocity component");
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_component_registry_register);
     RUN_TEST(test_component_registry_add);
     RUN_TEST(test_component_registry_remove);
+    RUN_TEST(test_component_variadics);
     return UNITY_END();
 }

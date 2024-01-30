@@ -62,21 +62,22 @@ namespace cobalt {
                 componentRegistry.add<T>(id, std::forward<Args>(args)...);
             }
 
-            /** @brief: Remove a component from the entity.
-             * @tparam T: Component type.
+            /** @brief: Remove a set of components from the entity.
+             * @tparam Types...: Component types.
              */
-            template <typename T>
+            template <typename... Types>
             void remove() noexcept {
-                componentRegistry.remove<T>(id);
+                componentRegistry.remove<Types...>(id);
             }
 
-            /** @brief: Check if the entity has a component.
-             * @tparam T: Component type.
-             * @return: True if the entity has the component, false otherwise.
+            /** @brief: Check if the entity has a set of components.
+             * @tparam Types: Component types.
+             * @param entityID: The entity ID.
+             * @return: True if the entity has the components, false otherwise.
              */
-            template <typename T>
+            template <typename... Types>
             const bool has() const noexcept {
-                return componentRegistry.has<T>(id);
+                return componentRegistry.has<Types...>(id);
             }
 
             /** @brief: Kill the entity. This will remove all its components and invalidate it.
