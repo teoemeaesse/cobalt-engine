@@ -41,11 +41,6 @@ namespace cobalt {
              */
             virtual const std::string& getTypeName() noexcept;
 
-            static inline const std::string demangle(const char* name) noexcept {
-                int status = 42;
-                std::unique_ptr<char, void (*)(void*)> res{abi::__cxa_demangle(name, nullptr, nullptr, &status), std::free};
-                return (status == 0) ? res.get() : name;
-            }
             /** @brief: Get the component's type name.
              * @tparam T: Component type.
              * @return: Component type name.

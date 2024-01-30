@@ -5,6 +5,7 @@
 #include "core/ecs/entity/registry.h"
 #include "unity/unity.h"
 
+using namespace cobalt;
 using namespace cobalt::core::ecs;
 
 void setUp(void) {}
@@ -88,12 +89,34 @@ void test_component_registry_remove() {
     entity.remove<Mass>();
 }
 
-void test_component_variadics() {
+void test_component_registry_get() {
     ComponentRegistry componentRegistry;
-    EntityRegistry entityRegistry;
     componentRegistry.registerComponent<Position>();
     componentRegistry.registerComponent<Velocity>();
     componentRegistry.registerComponent<Mass>();
+    EntityRegistry entityRegistry;
+    auto& entity = entityRegistry.add(componentRegistry);
+    entity.add<Position>(0, 0);
+    auto [position] = entity.get<MutRef<Position>>();
+    position.x = 1;
+    position.y = 2;
+    auto [updatedPosition] = entity.get<Ref<Position>>();
+    TEST_ASSERT_EQUAL_INT(1, updatedPosition.x);
+    TEST_ASSERT_EQUAL_INT(2, updatedPosition.y);
+    try {
+        auto [errPosition, errVelocity] = entity.get<Ref<Position>, Ref<Velocity>>();
+        TEST_FAIL_MESSAGE("Entity should not have Velocity component");
+    } catch (const ComponentNotFoundException<Velocity>& e) {
+        TEST_ASSERT_EQUAL_STRING("Component not found for entity (0) with component: Velocity", e.what());
+    }
+}
+
+void test_component_variadics() {
+    ComponentRegistry componentRegistry;
+    componentRegistry.registerComponent<Position>();
+    componentRegistry.registerComponent<Velocity>();
+    componentRegistry.registerComponent<Mass>();
+    EntityRegistry entityRegistry;
     auto& entity = entityRegistry.add(componentRegistry);
     entity.add<Position>(0, 0);
     entity.add<Velocity>(0, 0);
@@ -123,6 +146,7 @@ int main(void) {
     RUN_TEST(test_component_registry_register);
     RUN_TEST(test_component_registry_add);
     RUN_TEST(test_component_registry_remove);
+    RUN_TEST(test_component_registry_get);
     RUN_TEST(test_component_variadics);
     return UNITY_END();
 }

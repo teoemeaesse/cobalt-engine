@@ -116,28 +116,23 @@ namespace cobalt {
              * @return: Component reference.
              */
             template <typename T>
-            T& get(const EntityProperties::ID& entityID) {
-                Component::validate<T>();
-                const ComponentProperties::Type type = Component::getType<T>();
-                if (store.find(type) == store.end()) {
-                    throw ComponentNotFoundException<T>(entityID);
+            T& getSingleComponent(const EntityProperties::ID& entityID) {
+                try {
+                    return static_cast<T&>(store.at(Component::getType<RemoveConstRef<T>>())->get(entityID));
+                } catch (const std::out_of_range& e) {
+                    throw ComponentNotFoundException<RemoveConstRef<T>>(entityID);
                 }
-                return store.at(type)->get(entityID);
             }
 
-            /** @brief: Get a component from an entity.
+            /** @brief: Get a set of components from an entity.
              * @tparam T: Component type.
              * @param entityID: The entity ID.
              * @return: Component reference.
              */
-            template <typename T>
-            const T& get(const EntityProperties::ID& entityID) const {
-                Component::validate<T>();
-                const ComponentProperties::Type type = Component::getType<T>();
-                if (store.find(type) == store.end()) {
-                    throw ComponentNotFoundException<T>(entityID);
-                }
-                return store.at(type)->get(entityID);
+            template <typename... Types>
+            Tuple<Types...> get(const EntityProperties::ID& entityID) {
+                Component::validate<RemoveConstRef<Types>...>();
+                return (std::make_tuple(std::ref(getSingleComponent<Types>(entityID))...));
             }
 
             /** @brief: Check if an entity has a set of components.

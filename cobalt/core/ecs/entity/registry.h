@@ -62,6 +62,21 @@ namespace cobalt {
              */
             const uint64 getSize() const noexcept;
 
+            /** @brief: Get a subset of entities' components.
+             * @tparam Components...: Components to select for.
+             * @return: A vector of tuples of references to components.
+             */
+            template <typename... Components>
+            const Vec<Tuple<Components&...>> get() const noexcept {
+                Vec<Tuple<Components&...>> components;
+                for (auto& entity : entities) {
+                    if (entity.second.has<Components...>()) {
+                        components.push_back(entity.second.get<Components...>());
+                    }
+                }
+                return components;
+            }
+
             private:
             UMap<EntityProperties::ID, Entity> entities;  // All living entities.
             Vec<uint64> versions;                         // Entity versions.

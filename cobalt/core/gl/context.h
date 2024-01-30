@@ -104,7 +104,7 @@ namespace cobalt {
             /** @brief: Gets the current GL render context.
              * @return: The current GL render context.
              */
-            static Ref<Context>& getInstance();
+            static Shared<Context>& getInstance();
 
             /** @brief: Gets the GLFW context.
              * @return: The GLFW context.
@@ -172,7 +172,7 @@ namespace cobalt {
             private:
             GLFWContext context;  // The GLFW context.
 
-            static Ref<Context> instance;  // The current GL render context.
+            static Shared<Context> instance;  // The current GL render context.
         };
     }  // namespace core::gl
 }  // namespace cobalt

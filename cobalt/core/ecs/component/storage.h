@@ -29,13 +29,13 @@ namespace cobalt {
              * @param entityID: The ID of its entity.
              * @return: A reference to the component.
              */
-            virtual Component& get(const EntityProperties::ID& entityID) noexcept = 0;
+            virtual Component& get(const EntityProperties::ID& entityID) = 0;
 
             /** @brief: Gets a component from the storage.
              * @param entityID: The ID of its entity.
              * @return: A const reference to the component.
              */
-            virtual const Component& get(const EntityProperties::ID& entityID) const noexcept = 0;
+            virtual const Component& get(const EntityProperties::ID& entityID) const = 0;
         };
 
         /** @brief: Packed array of components. Maps entity IDs to components.
@@ -85,13 +85,13 @@ namespace cobalt {
              * @param entity: The entity to which the component belongs.
              * @return: A reference to the component.
              */
-            Component& get(const EntityProperties::ID& entityID) noexcept override { return components[entityToIndex[entityID]]; }
+            Component& get(const EntityProperties::ID& entityID) override { return components[entityToIndex.at(entityID)]; }
 
             /** @brief: Gets a component from the storage.
              * @param entity: The entity to which the component belongs.
              * @return: A const reference to the component.
              */
-            const Component& get(const EntityProperties::ID& entityID) const noexcept override { return components[entityToIndex.at(entityID)]; }
+            const Component& get(const EntityProperties::ID& entityID) const override { return components[entityToIndex.at(entityID)]; }
 
             private:
             UMap<EntityProperties::ID, uint64> entityToIndex;  // Maps entity IDs to component indices.

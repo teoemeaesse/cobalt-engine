@@ -23,6 +23,8 @@
 #include <sstream>
 #include <stack>
 #include <string>
+#include <tuple>
+#include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -67,9 +69,9 @@ namespace cobalt {
         return std::make_unique<T>(std::forward<Args>(args)...);
     }
     template <typename T>
-    using Ref = std::shared_ptr<T>;
+    using Shared = std::shared_ptr<T>;
     template <typename T, typename... Args>
-    constexpr Ref<T> createRef(Args&&... args) {
+    constexpr Shared<T> createShared(Args&&... args) {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
     template <typename T>
@@ -85,6 +87,8 @@ namespace cobalt {
     template <typename T>
     using Opt = std::optional<T>;
     inline constexpr auto& None = std::nullopt;
+    template <typename... T>
+    using Tuple = std::tuple<T...>;
     template <typename T>
     using Vec = std::vector<T>;
     template <typename T>
@@ -101,6 +105,19 @@ namespace cobalt {
     using int64 = int64_t;
     using uint64 = uint64_t;
     using uint = unsigned int;
+
+    template <typename T>
+    using RemoveConstRef = std::remove_const_t<std::remove_reference_t<T>>;
+    template <typename T>
+    using Ref = const T&;
+    template <typename T>
+    using MutRef = T&;
+
+    static inline const std::string demangle(const char* name) noexcept {
+        int status = 42;
+        std::unique_ptr<char, void (*)(void*)> res{abi::__cxa_demangle(name, nullptr, nullptr, &status), std::free};
+        return (status == 0) ? res.get() : name;
+    }
 
     namespace num {
         static inline constexpr uint64_t MAX_UINT64 = std::numeric_limits<uint64_t>::max();

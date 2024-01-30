@@ -80,6 +80,15 @@ namespace cobalt {
                 return componentRegistry.has<Types...>(id);
             }
 
+            /** @brief: Get a set of components from the entity.
+             * @tparam Types...: Component types.
+             * @return: A tuple of references to the components.
+             */
+            template <typename... Types>
+            Tuple<Types...> get() {
+                return componentRegistry.get<Types...>(id);
+            }
+
             /** @brief: Kill the entity. This will remove all its components and invalidate it.
              */
             void kill() noexcept;
