@@ -111,7 +111,7 @@ namespace cobalt {
     template <typename T>
     using Ref = const T&;
     template <typename T>
-    using MutRef = T&;
+    using RefMut = T&;
     template <typename T>
     constexpr typename std::remove_reference<T>::type&& Move(T&& arg) noexcept {
         return std::move(arg);

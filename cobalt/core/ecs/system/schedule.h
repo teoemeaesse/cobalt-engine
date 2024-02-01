@@ -26,15 +26,21 @@ namespace cobalt {
 
             /**
              * @brief: Adds a system to the schedule.
-             * @tparam Queries...: The queries that the system will run on. Must derive from Query<...>.
-             * @param system: The system to add.
+             * @tparam SystemType: System type.
+             * @param world: The world that the system will run on.
              * @return: void
              */
-            template <typename... Queries>
-            void addSystem(System<Queries...>&& system) noexcept {
-                static_assert((std::is_base_of<QueryInterface, Queries>::value && ...), "All queries must derive from Query<...>.");
-                systems.push_back(createScope<System<Queries...>>(Move(system)));
+            template <typename SystemType>
+            void addSystem(const World& world) noexcept {
+                static_assert(std::is_base_of<SystemInterface, SystemType>::value, "System must be a subclass of SystemInterface.");
+                systems.push_back(Move(createScope<SystemType>(world)));
             }
+
+            /**
+             * @brief: Runs the schedule.
+             * @return: void
+             */
+            void run() noexcept;
 
             private:
             const World& world;

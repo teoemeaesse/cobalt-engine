@@ -18,7 +18,7 @@ namespace cobalt {
             /**
              * @brief: Default destructor.
              */
-            ~World() = default;
+            ~World() noexcept = default;
 
             /**
              * @brief: Create a new entity.

@@ -24,7 +24,7 @@ namespace cobalt {
 
         /**
          * @brief: Query class. Used to iterate over entities with specific components.
-         * @tparam Components...: Components to query for. Must be reference types (use cobalt::MutRef<T> or cobalt::Ref<T>). Must be registered in
+         * @tparam Components...: Components to query for. Must be reference types (use cobalt::RefMut<T> or cobalt::Ref<T>). Must be registered in
          * the world.
          */
         template <typename... Components>

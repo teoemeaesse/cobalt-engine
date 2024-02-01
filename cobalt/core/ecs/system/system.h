@@ -24,7 +24,7 @@ namespace cobalt {
              */
             virtual void run() = 0;
 
-            private:
+            protected:
             /**
              * @brief: Default constructor.
              * @return: void
@@ -37,7 +37,7 @@ namespace cobalt {
          * @tparam Queries...: Queries to run on. Must derive from Query<...>.
          */
         template <typename... Queries>
-        class System : SystemInterface {
+        class System : public SystemInterface {
             static_assert((std::is_base_of<QueryInterface, Queries>::value && ...), "All queries must derive from Query<...>.");
 
             public:
@@ -77,7 +77,7 @@ namespace cobalt {
              */
             template <size_t... Is>
             void runQueries(std::index_sequence<Is...>) {
-                run(Query<std::tuple_element_t<Is, Tuple<Queries...>>>(world)...);
+                run(std::tuple_element_t<Is, Tuple<Queries...>>(world)...);
             }
         };
     }  // namespace core::ecs

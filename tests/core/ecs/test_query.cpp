@@ -60,7 +60,7 @@ void test_const_query() {
     }
     TEST_ASSERT_EQUAL_INT(count, 2);
 
-    Query<MutRef<Position>, Ref<Velocity>> query2(world);
+    Query<RefMut<Position>, Ref<Velocity>> query2(world);
     for (auto [position, velocity] : query2) {
         position.x += velocity.x;
         position.y += velocity.y;

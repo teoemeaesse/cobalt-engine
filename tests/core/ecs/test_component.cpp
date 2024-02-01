@@ -97,7 +97,7 @@ void test_component_registry_get() {
     EntityRegistry entityRegistry;
     auto& entity = entityRegistry.add(componentRegistry);
     entity.add<Position>(0, 0);
-    auto& position = entity.get<MutRef<Position>>();
+    auto& position = entity.get<RefMut<Position>>();
     position.x = 1;
     position.y = 2;
     auto& updatedPosition = entity.get<Ref<Position>>();
