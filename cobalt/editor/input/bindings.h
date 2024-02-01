@@ -21,7 +21,7 @@ namespace cobalt {
                 core::gfx::Material& material = CB_MATERIAL_LIBRARY.getMaterial(woodMaterial);
                 core::gfx::Mesh sphere = core::gfx::Mesh::createSphere(5.0f, material);
                 sphere.translate(glm::vec3(10.0f * i++, 0.0f, 0.0f));
-                getTarget()->addMesh(std::move(sphere));
+                getTarget()->addMesh(Move(sphere));
             }
         };
         class Quit : public core::input::ConcreteInputCommand<Editor> {

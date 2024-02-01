@@ -12,34 +12,42 @@ namespace cobalt {
     namespace core::ecs {
         class ComponentRegistry {
             public:
-            /** @brief: Default constructor.
+            /**
+             * @brief: Default constructor.
              * @return: ComponentRegistry instance.
              */
             ComponentRegistry() noexcept = default;
-            /** @brief: Default destructor.
+            /**
+             * @brief: Default destructor.
              */
             ~ComponentRegistry() = default;
-            /** @brief: Copy constructor.
+            /**
+             * @brief: Copy constructor.
              * @param other: ComponentRegistry instance to copy.
              */
             ComponentRegistry(const ComponentRegistry&) noexcept = delete;
-            /** @brief: Move constructor.
+            /**
+             * @brief: Move constructor.
              * @param other: ComponentRegistry instance to move.
              */
             ComponentRegistry(ComponentRegistry&&) noexcept = delete;
-            /** @brief: Copy assignment operator.
+            /**
+             * @brief: Copy assignment operator.
              * @param other: ComponentRegistry instance to copy.
              * @return: Reference to this.
              */
             ComponentRegistry& operator=(const ComponentRegistry&) noexcept = delete;
-            /** @brief: Move assignment operator.
+            /**
+             * @brief: Move assignment operator.
              * @param other: ComponentRegistry instance to move.
              * @return: Reference to this.
              */
             ComponentRegistry& operator=(ComponentRegistry&&) noexcept = delete;
 
-            /** @brief: Register a component type.
+            /**
+             * @brief: Register a component type.
              * @tparam ComponentType: Component type.
+             * @return: void
              */
             template <typename ComponentType>
             void registerComponent() {
@@ -49,15 +57,17 @@ namespace cobalt {
                     if (typeIndices.size() >= CB_ECS_MAX_COMPONENTS) {
                         throw ComponentOverflowException<ComponentType>(CB_ECS_MAX_COMPONENTS);
                     }
-                    store[type] = std::move(createScope<ComponentStorage<ComponentType>>());
+                    store[type] = Move(createScope<ComponentStorage<ComponentType>>());
                     const uint64 index = typeIndices.size();
                     typeIndices[type] = index;
                 }
             }
 
-            /** @brief: Add a component to an entity.
+            /**
+             * @brief: Add a component to an entity.
              * @tparam ComponentType: Component type.
              * @param entityID: The entity ID.
+             * @return: void
              */
             template <typename ComponentType>
             void add(const EntityProperties::ID& entityID) noexcept {
@@ -71,10 +81,12 @@ namespace cobalt {
                 signatures[entityID].set(typeIndices[type]);
             }
 
-            /** @brief: Add a component to an entity.
+            /**
+             * @brief: Add a component to an entity.
              * @tparam ComponentType: Component type.
              * @param entityID: The entity ID.
              * @param args: Component's constructor arguments.
+             * @return: void
              */
             template <typename ComponentType, typename... Args>
             void add(const EntityProperties::ID& entityID, Args&&... args) noexcept {
@@ -89,9 +101,11 @@ namespace cobalt {
                 signatures[entityID].set(typeIndices[type]);
             }
 
-            /** @brief: Remove a set of components from an entity.
+            /**
+             * @brief: Remove a set of components from an entity.
              * @tparam Components...: Component types.
              * @param entityID: The entity ID.
+             * @return: void
              */
             template <typename... Components>
             void remove(const EntityProperties::ID& entityID) noexcept {
@@ -105,8 +119,10 @@ namespace cobalt {
                 (signatures[entityID].reset(typeIndices.at(Component::template getType<Components>())), ...);
             }
 
-            /** @brief: Remove all components from an entity.
+            /**
+             * @brief: Remove all components from an entity.
              * @param entityID: The entity ID.
+             * @return: void
              */
             void removeAll(const EntityProperties::ID& entityID) noexcept;
 
@@ -118,7 +134,8 @@ namespace cobalt {
                     throw ComponentNotFoundException<RemoveConstRef<ComponentType>>(entityID);
                 }
             }
-            /** @brief: Get a component from an entity.
+            /**
+             * @brief: Get a component from an entity.
              * @tparam ComponentType: Component type.
              * @param entityID: The entity ID.
              * @return: Component reference.
@@ -132,7 +149,8 @@ namespace cobalt {
                 }
             }
 
-            /** @brief: Get a set of components from an entity.
+            /**
+             * @brief: Get a set of components from an entity.
              * @tparam Components...: Component types.
              * @param entityID: The entity ID.
              * @return: Component reference.
@@ -144,7 +162,8 @@ namespace cobalt {
                 return (std::make_tuple(std::ref(getSingleComponent<Components>(entityID))...));
             }
 
-            /** @brief: Check if an entity has a set of components.
+            /**
+             * @brief: Check if an entity has a set of components.
              * @tparam Components...: Component types.
              * @param entityID: The entity ID.
              * @return: True if the entity has the components, false otherwise.

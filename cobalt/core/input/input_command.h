@@ -15,23 +15,29 @@ namespace cobalt {
                           // value of the axis.
         };
 
-        /** @brief: Any command to perform in reaction to an input.
+        /**
+         * @brief: Any command to perform in reaction to an input.
          */
         class InputCommand {
             public:
-            /** @brief: Create a new input command.
+            /**
+             * @brief: Create a new input command.
              * @return: The new input command.
              */
-            InputCommand() = default;
-            /** @brief: Destroy the input command.
+            InputCommand() : input({false, false, 0.0f}) {}
+            /**
+             * @brief: Destroy the input command.
              */
             virtual ~InputCommand() = default;
 
-            /** @brief: Execute the command.
+            /**
+             * @brief: Execute the command.
+             * @return: void
              */
             virtual void execute() const = 0;
 
-            /** @brief: Set the input value of the bound input.
+            /**
+             * @brief: Set the input value of the bound input.
              * @param input: The input value of the bound input.
              * @return: This input command.
              */
@@ -39,7 +45,8 @@ namespace cobalt {
                 this->input = input;
                 return this;
             }
-            /** @brief: Get the input value of the bound input.
+            /**
+             * @brief: Get the input value of the bound input.
              * @return: The input value of the bound input.
              */
             InputValue getInput() const { return input; }
@@ -48,23 +55,27 @@ namespace cobalt {
             InputValue input;  // The input value of the bound input.
         };
 
-        /** @brief: Concrete input command. Executes a function on a receiver.
+        /**
+         * @brief: Concrete input command. Executes a function on a receiver.
          * Extend this class to create a new concrete input command.
          * @tparam T: The type of the receiver.
          */
         template <typename T>
         class ConcreteInputCommand : public InputCommand {
             public:
-            /** @brief: Create a new concrete input command.
+            /**
+             * @brief: Create a new concrete input command.
              * @param target: The receiver of the command.
              * @return: The new concrete input command.
              */
             ConcreteInputCommand(T* target) : target(target) {}
-            /** @brief: Destroy the concrete input command.
+            /**
+             * @brief: Destroy the concrete input command.
              */
             virtual ~ConcreteInputCommand() = default;
 
-            /** @brief: Get the receiver of the command.
+            /**
+             * @brief: Get the receiver of the command.
              * @return: The receiver of the command.
              */
             T* getTarget() const { return target; }

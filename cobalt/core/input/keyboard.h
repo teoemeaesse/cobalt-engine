@@ -95,11 +95,13 @@ namespace cobalt {
             friend class Keyboard;
 
             public:
-            /** @brief: Check if the key is currently down.
+            /**
+             * @brief: Check if the key is currently down.
              * @return: Whether the key is currently down.
              */
             bool isDown() const;
-            /** @brief: Check if the key has been polled since the last frame.
+            /**
+             * @brief: Check if the key has been polled since the last frame.
              * @return: Whether the key has been polled since the last frame.
              */
             bool isPolled() const;
@@ -108,11 +110,13 @@ namespace cobalt {
             bool down = false;   // Whether the key is currently down.
             bool polled = true;  // Whether the key has been polled since the last frame.
 
-            /** @brief: Create a new key state.
+            /**
+             * @brief: Create a new key state.
              * @return: The new key state.
              */
             KeyState();
-            /** @brief: Destroy the key state.
+            /**
+             * @brief: Destroy the key state.
              */
             ~KeyState() = default;
         };
@@ -121,31 +125,40 @@ namespace cobalt {
             public:
             const static std::string NAME;
 
-            /** @brief: Create a new keyboard.
+            /**
+             * @brief: Create a new keyboard.
              * @param id: The device id for the keyboard.
              * @return: The new keyboard.
              */
-            Keyboard(const DeviceID id);
-            /** @brief: Destroy the keyboard.
+            explicit Keyboard(const DeviceID id);
+            /**
+             * @brief: Destroy the keyboard.
              */
             ~Keyboard() = default;
 
-            /** @brief: Callback for when a key is pressed.
+            /**
+             * @brief: Callback for when a key is pressed.
              * @param key: The key (glfw) that was pressed.
              * @param action: The action (glfw) that was performed.
+             * @return: void
              */
             void onKeyPress(const int key, const int action);
-            /** @brief: Poll the keyboard for events.
+            /**
+             * @brief: Poll the keyboard for events.
              * This generates peripheral events for all keys
              * that are currently down or just released.
+             * @return: void
              */
             void pollEvents() override;
-            /** @brief: Clear all events from the keyboard.
+            /**
+             * @brief: Clear all events from the keyboard.
              * Executes all pending input events.
+             * @return: void
              */
             void clearEvents() override;
 
-            /** @brief: Get the state of a key.
+            /**
+             * @brief: Get the state of a key.
              * @param key: The key to get the state of.
              * @return: The state of the key.
              */
@@ -155,21 +168,25 @@ namespace cobalt {
             KeyState keyStates[static_cast<size_t>(KeyboardInputID::COUNT)];  // The states of all the keys.
 
             public:  // ----- DEBUG -----
-            /** @brief: Get a user-friendly string for the peripheral.
+            /**
+             * @brief: Get a user-friendly string for the peripheral.
              * @return: The converted string.
              */
             const std::string& toString() const override;
-            /** @brief: Convert a GLFW key code to a Cobalt key code.
+            /**
+             * @brief: Convert a GLFW key code to a Cobalt key code.
              * @param glfwCode: The GLFW key code.
              * @return: The Cobalt key code.
              */
             const KeyboardInputID glfwToCobalt(const int glfwCode) const override;
-            /** @brief: Convert a Cobalt key code to a GLFW key code.
+            /**
+             * @brief: Convert a Cobalt key code to a GLFW key code.
              * @param cobaltCode: The Cobalt key code.
              * @return: The GLFW key code.
              */
             const int cobaltToGlfw(const KeyboardInputID cobaltCode) const override;
-            /** @brief: Convert a Cobalt key code to a user-friendly string.
+            /**
+             * @brief: Convert a Cobalt key code to a user-friendly string.
              * @param cobaltCode: The Cobalt key code.
              * @return: The converted string.
              */

@@ -6,10 +6,9 @@
 namespace cobalt {
     namespace core::gfx {
         Skybox::Skybox(const gl::Texture3D& texture, gl::Shader& shader, gl::VAO&& vao, gl::IBO&& ibo)
-            : texture(texture), shader(shader), vao(std::move(vao)), ibo(std::move(ibo)) {}
+            : texture(texture), shader(shader), vao(Move(vao)), ibo(Move(ibo)) {}
 
-        Skybox::Skybox(Skybox&& other) noexcept
-            : texture(other.texture), shader(other.shader), vao(std::move(other.vao)), ibo(std::move(other.ibo)) {}
+        Skybox::Skybox(Skybox&& other) noexcept : texture(other.texture), shader(other.shader), vao(Move(other.vao)), ibo(Move(other.ibo)) {}
 
         Skybox Skybox::create(const gl::Texture3D& texture, gl::Shader& shader) {
             const float vertices[24] = {

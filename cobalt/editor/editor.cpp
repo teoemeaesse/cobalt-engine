@@ -134,12 +134,12 @@ namespace cobalt {
             cube0.rotate(glm::vec3(0.0f, 30.0f, 0.0f));
             cube1.rotate(glm::vec3(0.0f, 15.0f, 0.0f));
             cube2.rotate(glm::vec3(0.0f, 45.0f, 0.0f));
-            scene.addMesh(std::move(mesh));
-            scene.addMesh(std::move(ground));
-            scene.addMesh(std::move(sphere));
-            scene.addMesh(std::move(cube0));
-            scene.addMesh(std::move(cube1));
-            scene.addMesh(std::move(cube2));
+            scene.addMesh(Move(mesh));
+            scene.addMesh(Move(ground));
+            scene.addMesh(Move(sphere));
+            scene.addMesh(Move(cube0));
+            scene.addMesh(Move(cube1));
+            scene.addMesh(Move(cube2));
         }
     }  // namespace editor
 }  // namespace cobalt

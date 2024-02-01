@@ -10,33 +10,41 @@ namespace cobalt {
     namespace core::ecs {
         class World {
             public:
-            /** @brief: Default constructor.
+            /**
+             * @brief: Default constructor.
              * @return: World instance.
              */
             World() noexcept;
-            /** @brief: Default destructor.
+            /**
+             * @brief: Default destructor.
              */
             ~World() = default;
 
-            /** @brief: Create a new entity.
+            /**
+             * @brief: Create a new entity.
              * @return: Entity instance.
              */
             Entity& createEntity() noexcept;
 
-            /** @brief: Destroy an entity.
+            /**
+             * @brief: Destroy an entity.
              * @param entity: Entity instance.
+             * @return: void
              */
             void destroyEntity(const Entity& entity) noexcept;
 
-            /** @brief: Register a component.
+            /**
+             * @brief: Register a component.
              * @tparam ComponentType: Component type.
+             * @return: void
              */
             template <typename ComponentType>
             void registerComponent() noexcept {
                 componentRegistry.registerComponent<ComponentType>();
             }
 
-            /** @brief: Get a subset of entities' components.
+            /**
+             * @brief: Get a subset of entities' components.
              * @tparam Components...: Components to select for.
              * @return: A vector of tuples of references to components.
              */

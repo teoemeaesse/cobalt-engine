@@ -10,7 +10,8 @@ namespace cobalt {
     namespace core::gfx {
         enum class WindowMode { Windowed, Fullscreen, Borderless };
 
-        /** @brief: Wrapper for GLFW window.
+        /**
+         * @brief: Wrapper for GLFW window.
          */
         class Window {
             friend class WindowBuilder;
@@ -18,86 +19,117 @@ namespace cobalt {
             public:
             typedef void (*CallbackSetter)();
 
-            /** @brief: Destroys the window.
+            /**
+             * @brief: Destroys the window.
              */
             ~Window();
 
-            /** @brief: Swap the front and back buffers of the window.
+            /**
+             * @brief: Swap the front and back buffers of the window.
+             * @return: void
              */
             void swapBuffers() const;
-            /** @brief: Switches the mode of the window.
-             * VAOs and VBOs are not preserved, so make sure to rebuild your
-             * scene after switching the mode of the window.
+            /**
+             * @brief: Switches the mode of the window. VAOs and VBOs are not preserved, so make sure to rebuild your scene after switching the mode
+             * of the window.
              * @param mode: The new mode of the window.
+             * @return: void
              */
             void switchMode(const WindowMode mode);
-            /** @brief: Makes the window visible
+            /**
+             * @brief: Makes the window visible
+             * @return: void
              */
             void show() const;
-            /** @brief: Hides the window.
+            /**
+             * @brief: Hides the window.
+             * @return: void
              */
             void hide() const;
-            /** @brief: Clears the screen to the default color.
+            /**
+             * @brief: Clears the screen to the default color.
+             * @return: void
              */
             void clear();
-            /** @brief: Checks if the window should close.
+            /**
+             * @brief: Checks if the window should close.
              * @return: Whether or not the window should close.
              */
             bool shouldClose() const;
-            /** @brief: Sets the clear color of the window.
+            /**
+             * @brief: Sets the clear color of the window.
              * @param color: The color to clear the screen to.
+             * @return: void
              */
             void setClearColor(const Color& color);
-            /** @brief: Called when the window is resized.
+            /**
+             * @brief: Called when the window is resized.
              * @param width: The new width of the window.
              * @param height: The new height of the window.
+             * @return: void
              */
             void onResize(const uint width, const uint height);
-            /** @brief: Call to resize the GLFW window to match this window's dimensions.
+            /**
+             * @brief: Call to resize the GLFW window to match this window's dimensions.
+             * @return: void
              */
             void resize();
 
-            /** @brief: Gets the width of the window.
+            /**
+             * @brief: Gets the width of the window.
              * @return: The width of the window.
              */
             const uint getWidth() const;
-            /** @brief: Gets the height of the window.
+            /**
+             * @brief: Gets the height of the window.
              * @return: The height of the window.
              */
             const uint getHeight() const;
-            /** @brief: Gets the default framebuffer object of the window.
+            /**
+             * @brief: Gets the default framebuffer object of the window.
              * @return: The default framebuffer object of the window.
              */
             gl::FBO& getDefaultFBO();
-            /** @brief: Gets whether or not the window is using vsync.
+            /**
+             * @brief: Gets whether or not the window is using vsync.
              * @return: Whether or not the window is using vsync.
              */
             const bool isVsync() const;
-            /** @brief: Gets the mode of the window.
+            /**
+             * @brief: Gets the mode of the window.
              * @return: The mode of the window.
              */
             const WindowMode getMode() const;
 
-            /** @brief: Sets the dimensions of the window.
+            /**
+             * @brief: Sets the dimensions of the window.
              * @param width: The new width of the window.
              * @param height: The new height of the window.
+             * @return: void
              */
             void setDimensions(const uint width, const uint height);
-            /** @brief: Sets whether or not the window is using vsync.
+            /**
+             * @brief: Sets whether or not the window is using vsync.
              * @param vsync: Whether or not the window is using vsync.
+             * @return: void
              */
             void setVsync(const bool vsync);
-            /** @brief: Sets the mode of the window.
+            /**
+             * @brief: Sets the mode of the window.
              * @param mode: The new mode of the window.
+             * @return: void
              */
             void setMode(const WindowMode mode);
-            /** @brief: Sets the title of the window.
+            /**
+             * @brief: Sets the title of the window.
              * @param title: The new title of the window.
+             * @return: void
              */
             void setTitle(const std::string& title);
 
             private:
-            /** @brief: Creates a new window.
+            /**
+             * @brief: Creates a new window.
              * @param width: The width of the window.
              * @param height: The height of the window.
              * @param title: The title of the window.
@@ -129,71 +161,85 @@ namespace cobalt {
                                                   // the window. It is important to have
                                                   // this for when the window is recreated.
 
-            /** @brief: Initializes the window.
-             * Called on construction and after changing window hints.
+            /**
+             * @brief: Initializes the window. Called on construction and after changing window hints.
+             * @return: void
              */
             void init();
         };
 
-        /** @brief: Builder for windows.
+        /**
+         * @brief: Builder for windows.
          */
         class WindowBuilder {
             public:
-            /** @brief: Creates a new window builder with default values.
+            /**
+             * @brief: Creates a new window builder with default values.
              * @return: A new window builder.
              */
             WindowBuilder();
-            /** @brief: Destroys the window builder.
+            /**
+             * @brief: Destroys the window builder.
              */
             ~WindowBuilder() = default;
 
-            /** @brief: Sets the width of the window.
+            /**
+             * @brief: Sets the width of the window.
              * @param width: The width of the window.
              * @return: The window builder.
              */
             WindowBuilder& setWidth(const uint width);
-            /** @brief: Sets the height of the window.
+            /**
+             * @brief: Sets the height of the window.
              * @param height: The height of the window.
              * @return: The window builder.
              */
             WindowBuilder& setHeight(const uint height);
-            /** @brief: Sets the title of the window.
+            /**
+             * @brief: Sets the title of the window.
              * @param title: The title of the window.
              * @return: The window builder.
              */
             WindowBuilder& setTitle(const std::string& title);
-            /** @brief: Sets whether or not the window is using vsync.
+            /**
+             * @brief: Sets whether or not the window is using vsync.
              * @param vsync: Whether or not the window is using vsync.
              * @return: The window builder.
              */
             WindowBuilder& setVsync(const bool vsync);
-            /** @brief: Sets the mode of the window.
+            /**
+             * @brief: Sets the mode of the window.
              * @param mode: The mode of the window.
              * @return: The window builder.
              */
             WindowBuilder& setMode(const WindowMode mode);
-            /** @brief: Sets whether or not the window is resizable.
+            /**
+             * @brief: Sets whether or not the window is resizable.
              * @param resizable: Whether or not the window is resizable.
              * @return: The window builder.
              */
             WindowBuilder& setResizable(const bool resizable);
-            /** @brief: Sets whether or not the window is decorated.
+            /**
+             * @brief: Sets whether or not the window is decorated.
              * @param decorated: Whether or not the window is decorated.
              * @return: The window builder.
              */
             WindowBuilder& setDecorated(const bool decorated);
-            /** @brief: Locks the aspect ratio of the window.
+            /**
+             * @brief: Locks the aspect ratio of the window.
              * @param lockAspectRatio: The aspect ratio of the window.
              * @return: The window builder.
              */
             WindowBuilder& setLockAspectRatio(const bool lockAspectRatio);
-            /** @brief: Sets the callbacks setter (sorry) of the window.
+            /**
+             * @brief: Sets the callbacks setter (sorry) of the window.
              * @param callbackSetter: The function to set the callbacks of the window.
              * @return: The window builder.
              */
             WindowBuilder& setCallbackSetter(Window::CallbackSetter callbackSetter);
 
-            /** @brief: Builds the window.
+            /**
+             * @brief: Builds the window.
              * @return: The window.
              */
             Window build() const;

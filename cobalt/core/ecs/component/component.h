@@ -10,7 +10,8 @@ namespace cobalt {
     namespace core::ecs {
         class Component {
             public:
-            /** @brief: Validate a set of component types.
+            /** 
+             * @brief: Validate a set of component types.
              * @tparam Components...: Component types.
              * @return: True if the component type is valid.
              */
@@ -22,11 +23,13 @@ namespace cobalt {
                 return true;
             }
 
-            /** @brief: Get the component's type. This is a unique identifier, lazy-generated based on the component class' name.
+            /** 
+             * @brief: Get the component's type. This is a unique identifier, lazy-generated based on the component class' name.
              * @return: Component type identifier.
              */
             virtual const ComponentProperties::Type getType() noexcept;
-            /** @brief: Get the component's type. This is a unique identifier, generated at compile time based on the component class' name.
+            /** 
+             * @brief: Get the component's type. This is a unique identifier, generated at compile time based on the component class' name.
              * @tparam ComponentType: Component type.
              * @return: Component type identifier.
              */
@@ -36,12 +39,14 @@ namespace cobalt {
                 return type;
             }
 
-            /** @brief: Get the component's type name.
+            /** 
+             * @brief: Get the component's type name.
              * @return: Component type name.
              */
             virtual const std::string& getTypeName() noexcept;
 
-            /** @brief: Get the component's type name.
+            /** 
+             * @brief: Get the component's type name.
              * @tparam ComponentType: Component type.
              * @return: Component type name.
              */

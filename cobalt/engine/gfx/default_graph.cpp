@@ -33,8 +33,8 @@ namespace cobalt {
                 createScope<FilterNode>(FilterNode(renderer, core::gfx::RenderTarget(defaultFBO, output.getCamera(), "output", 1), filter));
             filterNode->addSource(core::gfx::RenderTarget(sceneFBO, scene.getCameraController().getCamera(), "scene", 0));
 
-            addNode(std::move(sceneNode));
-            addNode(std::move(filterNode));
+            addNode(Move(sceneNode));
+            addNode(Move(filterNode));
         }
 
         void DefaultGraph::onResize(const uint width, const uint height) {

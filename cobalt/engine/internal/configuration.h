@@ -20,29 +20,35 @@ namespace cobalt {
 
         class Configuration {
             public:
-            /** @brief: Create a configuration from a file.
+            /**
+             * @brief: Create a configuration from a file.
              * @param path: The path to the file.
              * @return: The configuration.
              */
             explicit Configuration(const core::io::Path& path);
-            /** @brief: Create an empty configuration.
+            /**
+             * @brief: Create an empty configuration.
              * @return: The configuration.
              */
             Configuration() = default;
-            /** @brief: Destroy the configuration.
+            /**
+             * @brief: Destroy the configuration.
              */
             ~Configuration() = default;
 
-            /** @brief: Set a value in the configuration.
+            /**
+             * @brief: Set a value in the configuration.
              * @param key: The key to set the value for.
              * @param value: The value to set.
+             * @return: void
              */
             template <typename T>
             void set(const std::string& key, const T& value) {
                 checkType<T>();
                 entries[key] = value;
             }
-            /** @brief: Get a value from the configuration.
+            /**
+             * @brief: Get a value from the configuration.
              * @param key: The key to get the value for.
              * @return: The value.
              */
@@ -60,7 +66,8 @@ namespace cobalt {
                     throw ConfigurationException(key, typeid(T).name());
                 }
             }
-            /** @brief: Get a value from the configuration.
+            /**
+             * @brief: Get a value from the configuration.
              * @param key: The key to get the value for.
              * @return: The value.
              */
@@ -69,31 +76,37 @@ namespace cobalt {
                 std::string keyString(key);
                 return get<T>(keyString);
             }
-            /** @brief: Check if the configuration has a value for a key.
+            /**
+             * @brief: Check if the configuration has a value for a key.
              * @param key: The key to check.
              * @return: True if the configuration has a value for the key, false
              * otherwise.
              */
             const bool has(const std::string& key) const;
 
-            /** @brief: Write the configuration to a file as JSON.
+            /**
+             * @brief: Write the configuration to a file as JSON.
              * @param path: The path to write the configuration to.
+             * @return: void
              */
             void serialize(const core::io::Path& path) const;
-            /** @brief: Merge another configuration into this one.
-             * Overrides values in this configuration with values from the other
-             * configuration.
+            /**
+             * @brief: Merge another configuration into this one. Overrides values in this configuration with values from the other configuration.
              * @param other: The other configuration.
+             * @return: void
              */
             void merge(const Configuration& other);
-            /** @brief: Log the configuration to the console.
+            /**
+             * @brief: Log the configuration to the console.
+             * @return: void
              */
             void log() const;
 
             private:
             UMap<std::string, std::any> entries;
 
-            /** @brief: Check if a type is supported.
+            /**
+             * @brief: Check if a type is supported.
              * @param T: The type to check.
              */
             template <typename T>

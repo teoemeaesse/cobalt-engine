@@ -54,10 +54,10 @@ namespace cobalt {
                 nlohmann::json shaderJson = it.value();
                 if (shaderJson["type"].get<std::string>() == "render") {
                     CB_INFO("Loading render shader: {}", shaderName);
-                    shaders.emplace_back(shaderName, std::move(parseRenderShader(shaderJson, shadersDirectory)));
+                    shaders.emplace_back(shaderName, Move(parseRenderShader(shaderJson, shadersDirectory)));
                 } else if (shaderJson["type"].get<std::string>() == "compute") {
                     CB_INFO("Loading compute shader: {}", shaderName);
-                    shaders.emplace_back(shaderName, std::move(parseComputeShader(shaderJson, shadersDirectory)));
+                    shaders.emplace_back(shaderName, Move(parseComputeShader(shaderJson, shadersDirectory)));
                 }
             }
         }

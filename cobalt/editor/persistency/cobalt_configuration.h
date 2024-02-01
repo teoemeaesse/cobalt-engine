@@ -7,28 +7,34 @@
 
 namespace cobalt {
     namespace editor {
-        /** @brief: Stores the configuration for the editor.
+        /**
+         * @brief: Stores the configuration for the editor.
          * Always loads from the default configuration file.
          */
         class CobaltConfiguration : public engine::Configuration {
             public:
-            /** @brief: Create a new configuration from the default configuration file.
+            /**
+             * @brief: Create a new configuration from the default configuration file.
              * This must be in the same directory as the executable, and be named
              * "cobalt-config.json".
              * @return: A new configuration.
              */
             CobaltConfiguration();
-            /** @brief: Destroy the configuration.
+            /**
+             * @brief: Destroy the configuration.
              */
             ~CobaltConfiguration() = default;
 
-            /** @brief: Create a new window from the configuration.
+            /**
+             * @brief: Create a new window from the configuration.
              * @return: A new window.
              */
             core::gfx::Window createWindow() const;
 
-            /** @brief: Configure a window from the configuration.
+            /**
+             * @brief: Configure a window from the configuration.
              * @param window: The window to configure.
+             * @return: void
              */
             void configureWindow(core::gfx::Window& window) const;
         };

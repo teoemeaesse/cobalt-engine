@@ -12,37 +12,47 @@ namespace cobalt {
     namespace core::scene {
         class Scene {
             public:
-            /** @brief: Creates an empty scene.
+            /**
+             * @brief: Creates an empty scene.
              * @return: An empty scene.
              */
             Scene();
-            /** @brief: Destroys the scene.
+            /**
+             * @brief: Destroys the scene.
              */
             ~Scene() = default;
 
-            /** @brief: Adds a mesh to the scene.
+            /**
+             * @brief: Adds a mesh to the scene.
              * @param mesh: The mesh to add.
              * @return: The index of the mesh in the scene.
              */
             const uint addMesh(gfx::Mesh&& mesh);
-            /** @brief: Removes all the meshes from the scene.
+            /**
+             * @brief: Removes all the meshes from the scene.
+             * @return: void
              */
             void clear();
 
-            /** @brief: Sets the skybox of the scene.
+            /**
+             * @brief: Sets the skybox of the scene.
              * @param skybox: The skybox to set.
+             * @return: void
              */
             void setSkybox(gfx::Skybox&& skybox);
 
-            /** @brief: Gets the meshes in the scene.
+            /**
+             * @brief: Gets the meshes in the scene.
              * @return: The meshes in the scene.
              */
             Vec<gfx::Mesh>& getMeshes();
-            /** @brief: Gets the skybox of the scene.
+            /**
+             * @brief: Gets the skybox of the scene.
              * @return: The skybox of the scene.
              */
             Opt<gfx::Skybox>& getSkybox();
-            /** @brief: Gets the camera controller used to render the scene.
+            /**
+             * @brief: Gets the camera controller used to render the scene.
              * @return: The camera controller used to render the scene.
              */
             gfx::CameraController& getCameraController();

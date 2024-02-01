@@ -7,38 +7,46 @@
 
 namespace cobalt {
     namespace core::ecs {
-        /** @brief: Interface for component storage.
+        /**
+         * @brief: Interface for component storage.
          * TODO: This uses virtual functions, which might not be ideal for this performance-critical code.
          */
         class ComponentStorageInterface {
             public:
             virtual ~ComponentStorageInterface() = default;
 
-            /** @brief: Adds a component to the storage.
+            /**
+             * @brief: Adds a component to the storage.
              * @param entityID: The ID of its entity.
              * @param component: Component to add.
+             * @return: void
              */
             virtual void add(const EntityProperties::ID& entityID, const Component& component) noexcept = 0;
 
-            /** @brief: Removes a component from the storage.
+            /**
+             * @brief: Removes a component from the storage.
              * @param entityID: The ID of its entity.
+             * @return: void
              */
             virtual void remove(const EntityProperties::ID& entityID) noexcept = 0;
 
-            /** @brief: Gets a component from the storage.
+            /**
+             * @brief: Gets a component from the storage.
              * @param entityID: The ID of its entity.
              * @return: A reference to the component.
              */
             virtual Component& get(const EntityProperties::ID& entityID) = 0;
 
-            /** @brief: Gets a component from the storage.
+            /**
+             * @brief: Gets a component from the storage.
              * @param entityID: The ID of its entity.
              * @return: A const reference to the component.
              */
             virtual const Component& get(const EntityProperties::ID& entityID) const = 0;
         };
 
-        /** @brief: Packed array of components. Maps entity IDs to components.
+        /**
+         * @brief: Packed array of components. Maps entity IDs to components.
          * @tparam T: Component type.
          */
         template <typename T>
@@ -54,9 +62,11 @@ namespace cobalt {
             ~ComponentStorage() = default;
 
             private:
-            /** @brief: Adds a component to the storage.
+            /**
+             * @brief: Adds a component to the storage.
              * @param entity: The entity to which the component belongs.
              * @param component: Component to add.
+             * @return: void
              */
             void add(const EntityProperties::ID& entityID, const Component& component) noexcept override {
                 if (entityToIndex.find(entityID) != entityToIndex.end()) {
@@ -66,8 +76,10 @@ namespace cobalt {
                 components.push_back(dynamic_cast<const T&>(component));
             }
 
-            /** @brief: Removes a component from the storage.
+            /**
+             * @brief: Removes a component from the storage.
              * @param entity: The entity to which the component belongs.
+             * @return: void
              */
             void remove(const EntityProperties::ID& entityID) noexcept override {
                 if (entityToIndex.find(entityID) == entityToIndex.end()) {
@@ -81,13 +93,15 @@ namespace cobalt {
                 components.pop_back();
             }
 
-            /** @brief: Gets a component from the storage.
+            /**
+             * @brief: Gets a component from the storage.
              * @param entity: The entity to which the component belongs.
              * @return: A reference to the component.
              */
             Component& get(const EntityProperties::ID& entityID) override { return components[entityToIndex.at(entityID)]; }
 
-            /** @brief: Gets a component from the storage.
+            /**
+             * @brief: Gets a component from the storage.
              * @param entity: The entity to which the component belongs.
              * @return: A const reference to the component.
              */

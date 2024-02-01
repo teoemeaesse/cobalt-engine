@@ -9,23 +9,29 @@ namespace cobalt {
     namespace engine {
         class DefaultGraph : public core::gfx::RenderGraph {
             public:
-            /** @brief: Creates a default render graph.
+            /**
+             * @brief: Creates a default render graph.
              * @param scene: The scene to render.
              * @param defaultFBO: The default FBO to render the final image to.
              * @return: A default render graph.
              */
             DefaultGraph(core::scene::Scene& scene, core::gl::FBO& defaultFBO);
-            /** @brief: Destroys the default render graph.
+            /**
+             * @brief: Destroys the default render graph.
              */
             ~DefaultGraph() = default;
 
-            /** @brief: Initializes the render graph.
+            /**
+             * @brief: Initializes the render graph.
+             * @return: void
              */
             void init();
 
-            /** @brief: Called upon window resize.
+            /**
+             * @brief: Called upon window resize.
              * @param width: The new width of the render graph.
              * @param height: The new height of the render graph.
+             * @return: void
              */
             void onResize(const uint width, const uint height) override;
 

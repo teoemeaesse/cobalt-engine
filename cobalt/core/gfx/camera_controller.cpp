@@ -182,7 +182,7 @@ namespace cobalt {
         void CameraController::panVertical(const float amount) { deltaLinear.y += amount; }
 
         CameraController::CameraController(Scope<Camera> camera, const float linearCling, const float angularCling, const float zoomCling)
-            : camera(std::move(camera)),
+            : camera(Move(camera)),
               deltaLinear(glm::vec3(0.0f)),
               deltaAngular(glm::vec2(0.0f)),
               deltaZoom(0.0f),

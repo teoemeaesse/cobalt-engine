@@ -11,7 +11,8 @@ namespace cobalt {
     namespace core::gfx {
         class RenderTarget {
             public:
-            /** @brief: Create a render target.
+            /**
+             * @brief: Create a render target.
              * @param fbo: Frame buffer object to render to.
              * @param camera: The camera to render with.
              * @param name: The name of the render target.
@@ -19,48 +20,60 @@ namespace cobalt {
              * @return: The render target.
              */
             RenderTarget(const gl::FBO& fbo, const Camera& camera, const std::string& name, const uint cameraUBOBinding);
-            /** @brief: Destroy the render target.
+            /**
+             * @brief: Destroy the render target.
              */
             ~RenderTarget() = default;
-            /** @brief: Copy constructor.
+            /**
+             * @brief: Copy constructor.
              * @param other: The other render target.
              * @return: The render target.
              */
             RenderTarget(const RenderTarget&);
-            /** @brief: Move constructor.
+            /**
+             * @brief: Move constructor.
              * @param other: The other render target.
              * @return: The render target.
              */
             RenderTarget(RenderTarget&&) noexcept;
-            /** @brief: Copy assignment.
+            /**
+             * @brief: Copy assignment.
              * @param other: The other render target.
              * @return: The render target.
              */
             RenderTarget& operator=(const RenderTarget&) = delete;
-            /** @brief: Move assignment.
+            /**
+             * @brief: Move assignment.
              * @param other: The other render target.
              * @return: The render target.
              */
             RenderTarget& operator=(RenderTarget&&) = delete;
 
-            /** @brief: Bind the render target.
+            /**
+             * @brief: Bind the render target.
+             * @return: void
              */
             void bind() const;
 
-            /** @brief: Send the render target uniforms to a shader.
+            /**
+             * @brief: Send the render target uniforms to a shader.
              * @param shader: The shader.
+             * @return: void
              */
             void sendUBO(const gl::Shader& shader) const;
 
-            /** @brief: Get the gl::FBO.
+            /**
+             * @brief: Get the gl::FBO.
              * @return: The gl::FBO.
              */
             const gl::FBO& getFBO() const;
-            /** @brief: Get the name of the render target.
+            /**
+             * @brief: Get the name of the render target.
              * @return: The name.
              */
             const std::string& getName() const;
-            /** @brief: Get the camera used to render.
+            /**
+             * @brief: Get the camera used to render.
              * @return: The camera.
              */
             const Camera& getCamera() const;

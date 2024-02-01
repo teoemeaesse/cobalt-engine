@@ -12,7 +12,8 @@ namespace cobalt {
         template <typename T>
         class ComponentNotFoundException : public std::runtime_error {
             public:
-            /** @brief: Create a new component not found exception.
+            /** 
+             * @brief: Create a new component not found exception.
              * @param entityID: The entity that was not found.
              * @return: The new component not found exception.
              */
@@ -25,7 +26,8 @@ namespace cobalt {
         template <typename T>
         class ComponentOverflowException : public std::runtime_error {
             public:
-            /** @brief: Create a new max components exceeded exception.
+            /** 
+             * @brief: Create a new max components exceeded exception.
              * @return: The new max components exceeded exception.
              */
             ComponentOverflowException(const uint64 maxComponents)

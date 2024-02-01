@@ -9,9 +9,11 @@ namespace cobalt {
     namespace core::gfx {
         class BatchMesh {
             public:
-            /** @brief: Push the vertices and indices of the mesh into the buffers.
+            /**
+             * @brief: Push the vertices and indices of the mesh into the buffers.
              * @param vertices: The buffer to push the vertices into.
              * @param indices: The buffer to push the indices into.
+             * @return: void
              */
             virtual void pushInto(Vec<char>& vertices, Vec<char>& indices) const;
 
@@ -20,29 +22,35 @@ namespace cobalt {
             glm::vec3 worldRotate;     // The world rotation of the mesh.
             glm::vec3 worldScale;      // The world scale of the mesh.
 
-            /** @brief: Create a batch mesh.
+            /**
+             * @brief: Create a batch mesh.
              * @return: The batch mesh.
              */
             BatchMesh() = default;
-            /** @brief: Destroy the batch mesh.
+            /**
+             * @brief: Destroy the batch mesh.
              */
             ~BatchMesh() = default;
         };
 
         class BatchQuad : public BatchMesh {
             public:
-            /** @brief: Push the vertices and indices of the mesh into the buffers.
+            /**
+             * @brief: Push the vertices and indices of the mesh into the buffers.
              * @param vertices: The buffer to push the vertices into.
              * @param indices: The buffer to push the indices into.
+             * @return: void
              */
             void pushInto(Vec<char>& vertices, Vec<char>& indices) const override;
         };
 
         class BatchSphere : public BatchMesh {
             public:
-            /** @brief: Push the vertices and indices of the mesh into the buffers.
+            /**
+             * @brief: Push the vertices and indices of the mesh into the buffers.
              * @param vertices: The buffer to push the vertices into.
              * @param indices: The buffer to push the indices into.
+             * @return: void
              */
             void pushInto(Vec<char>& vertices, Vec<char>& indices) const override;
         };

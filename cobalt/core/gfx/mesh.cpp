@@ -8,17 +8,11 @@
 namespace cobalt {
     namespace core::gfx {
         Mesh::Mesh(gl::VAO&& vao, gl::IBO&& ibo, Material& material, const gl::Primitive& primitive)
-            : vao(std::move(vao)),
-              ibo(std::move(ibo)),
-              material(material),
-              primitive(primitive),
-              worldTranslate(0.0f),
-              worldRotate(0.0f),
-              worldScale(1.0f) {}
+            : vao(Move(vao)), ibo(Move(ibo)), material(material), primitive(primitive), worldTranslate(0.0f), worldRotate(0.0f), worldScale(1.0f) {}
 
         Mesh::Mesh(Mesh&& other) noexcept
-            : vao(std::move(other.vao)),
-              ibo(std::move(other.ibo)),
+            : vao(Move(other.vao)),
+              ibo(Move(other.ibo)),
               material(other.material),
               primitive(other.primitive),
               worldTranslate(other.worldTranslate),

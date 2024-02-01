@@ -11,28 +11,36 @@
 
 namespace cobalt {
     namespace core::input {
-        /** @brief: The input manager. Handles all input from peripherals such as the keyboard
+        /**
+         * @brief: The input manager. Handles all input from peripherals such as the keyboard
          * and mouse. It then dispatches events to the appropriate listeners.
          */
         class InputManager {
             public:
-            /** @brief: Create a new input manager.
+            /**
+             * @brief: Create a new input manager.
              * @param mouseSensitivity: The mouse sensitivity.
              * @return: The new input manager.
              */
             InputManager();
-            /** @brief: Destroy the input manager.
+            /**
+             * @brief: Destroy the input manager.
              */
             ~InputManager() = default;
 
-            /** @brief: Poll all events from the peripherals.
+            /**
+             * @brief: Poll all events from the peripherals.
+             * @return: void
              */
             void pollEvents();
-            /** @brief: Clear all events from the peripherals.
+            /**
+             * @brief: Clear all events from the peripherals.
+             * @return: void
              */
             void clearEvents();
 
-            /** @brief: Register a peripheral to the input manager.
+            /**
+             * @brief: Register a peripheral to the input manager.
              * @param name: The name of the peripheral.
              * @tparam T: The type of the peripheral.
              * @tparam Args: The arguments to pass to the constructor of the peripheral.
@@ -42,18 +50,20 @@ namespace cobalt {
             const DeviceID registerPeripheral(const std::string& name, Args&&... args) {
                 const DeviceID id = peripherals.size();
                 Scope<InputDevice> peripheral = createScope<T>(id, std::forward<Args>(args)...);
-                peripherals[peripheral->getId()] = std::move(peripheral);
+                peripherals[peripheral->getId()] = Move(peripheral);
                 peripheralIDs[name] = id;
                 return id;
             }
 
-            /** @brief: Get the name of a peripheral, given its registered handle.
+            /**
+             * @brief: Get the name of a peripheral, given its registered handle.
              * @param id: The peripheral's device id.
              * @return: The name of the peripheral.
              */
             const std::string& peripheralToString(const DeviceID id);
 
-            /** @brief: Get a peripheral, given its handle.
+            /**
+             * @brief: Get a peripheral, given its handle.
              * @param id: The peripheral's device id.
              * @return: The peripheral.
              */
@@ -65,7 +75,8 @@ namespace cobalt {
                 }
                 return *static_cast<T*>(peripherals[id].get());
             }
-            /** @brief: Get a peripheral, given its name.
+            /**
+             * @brief: Get a peripheral, given its name.
              * @return: The peripheral.
              */
             template <typename T>

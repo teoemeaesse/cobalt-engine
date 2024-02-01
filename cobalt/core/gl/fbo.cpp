@@ -67,10 +67,10 @@ namespace cobalt {
               width(other.width),
               height(other.height),
               clearColor(other.clearColor),
-              colors(std::move(other.colors)),
-              depth(std::move(other.depth)),
-              stencil(std::move(other.stencil)),
-              depthStencil(std::move(other.depthStencil)) {
+              colors(Move(other.colors)),
+              depth(Move(other.depth)),
+              stencil(Move(other.stencil)),
+              depthStencil(Move(other.depthStencil)) {
             other.buffer = 0;
         }
 
@@ -82,10 +82,10 @@ namespace cobalt {
             width = other.width;
             height = other.height;
             clearColor = other.clearColor;
-            colors = std::move(other.colors);
-            depth = std::move(other.depth);
-            stencil = std::move(other.stencil);
-            depthStencil = std::move(other.depthStencil);
+            colors = Move(other.colors);
+            depth = Move(other.depth);
+            stencil = Move(other.stencil);
+            depthStencil = Move(other.depthStencil);
             other.buffer = 0;
             return *this;
         }

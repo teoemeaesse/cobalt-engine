@@ -18,7 +18,7 @@ namespace cobalt {
                                                                          .setZoomCling(0.4f))) {}
 
         const uint Scene::addMesh(gfx::Mesh&& mesh) {
-            meshes.push_back(std::move(mesh));
+            meshes.push_back(Move(mesh));
             return meshes.size() - 1;
         }
 
@@ -27,7 +27,7 @@ namespace cobalt {
             this->skybox.reset();
         }
 
-        void Scene::setSkybox(gfx::Skybox&& skybox) { this->skybox.emplace(std::move(skybox)); }
+        void Scene::setSkybox(gfx::Skybox&& skybox) { this->skybox.emplace(Move(skybox)); }
 
         Vec<gfx::Mesh>& Scene::getMeshes() { return meshes; }
 

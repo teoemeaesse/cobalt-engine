@@ -14,8 +14,10 @@ namespace cobalt {
             Batch();
             ~Batch();
 
-            /** @brief: Add a mesh to the batch.
+            /**
+             * @brief: Add a mesh to the batch.
              * @param mesh: The mesh to add.
+             * @return: void
              */
             void add(BatchMesh& mesh);
 
@@ -26,21 +28,27 @@ namespace cobalt {
 
         class BatchRenderer {
             public:
-            /** @brief: Create a batch renderer.
+            /**
+             * @brief: Create a batch renderer.
              * @param layout: The layout of the vertices. The shaders for the
              *                materials rendered must be compatible with this layout.
              * @return: The batch renderer.
              */
             BatchRenderer(gl::VAOLayout layout);
-            /** @brief: Destroy the batch renderer.
+            /**
+             * @brief: Destroy the batch renderer.
              */
             ~BatchRenderer();
 
-            /** @brief: Batch a mesh.
+            /**
+             * @brief: Batch a mesh.
              * @param mesh: The mesh to batch.
+             * @return: void
              */
             void batch(BatchMesh& mesh);
-            /** @brief: Render all the batched vertices.
+            /**
+             * @brief: Render all the batched vertices.
+             * @return: void
              */
             void flush();
 

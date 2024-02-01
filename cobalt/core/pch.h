@@ -112,6 +112,10 @@ namespace cobalt {
     using Ref = const T&;
     template <typename T>
     using MutRef = T&;
+    template <typename T>
+    constexpr typename std::remove_reference<T>::type&& Move(T&& arg) noexcept {
+        return std::move(arg);
+    }
 
     static inline const std::string demangle(const char* name) noexcept {
         int status = 42;
@@ -278,7 +282,8 @@ namespace cobalt {
                     }
                 }  // namespace DepthStencil
             }      // namespace TextureEncodings
-            /** @brief: Gets the name of a texture encoding.
+            /**
+             * @brief: Gets the name of a texture encoding.
              * @param encoding: The texture encoding.
              * @return: The name of the encoding.
              */
@@ -419,7 +424,8 @@ namespace cobalt {
                 constexpr TextureFormat Stencil = GL_STENCIL_INDEX;  // OpenGL 4.4 or higher.
                 constexpr TextureFormat DepthStencil = GL_DEPTH_STENCIL;
             }  // namespace TextureFormats
-            /** @brief: Gets the name of a texture format.
+            /**
+             * @brief: Gets the name of a texture format.
              * @param format: The texture format.
              * @return: The name of the format.
              */
@@ -444,7 +450,8 @@ namespace cobalt {
                         return "Unknown format";
                 }
             }
-            /** @brief: Gets the texture format for a texture encoding.
+            /**
+             * @brief: Gets the texture format for a texture encoding.
              * @param encoding: The texture encoding.
              * @return: The texture format.
              */
@@ -531,7 +538,8 @@ namespace cobalt {
                 constexpr TextureWrap ClampToEdge = GL_CLAMP_TO_EDGE;
                 constexpr TextureWrap ClampToBorder = GL_CLAMP_TO_BORDER;
             }  // namespace TextureWraps
-            /** @brief: Gets the name of a texture wrap.
+            /**
+             * @brief: Gets the name of a texture wrap.
              * @param wrap: The wrap.
              * @return: The name of the wrap.
              */
@@ -557,7 +565,8 @@ namespace cobalt {
                 constexpr TextureFilter Nearest = GL_NEAREST;
                 constexpr TextureFilter Linear = GL_LINEAR;
             }  // namespace TextureFilters
-            /** @brief: Gets the name of a texture filter.
+            /**
+             * @brief: Gets the name of a texture filter.
              * @param filter: The filter.
              * @return: The name of the filter.
              */
@@ -582,7 +591,8 @@ namespace cobalt {
                 TriangleStrip = GL_TRIANGLE_STRIP,  // Triangle strip.
                 TriangleFan = GL_TRIANGLE_FAN       // Triangle fan.
             };
-            /** @brief: Gets the size of a GL Type.
+            /**
+             * @brief: Gets the size of a GL Type.
              * @param type: The GL Type.
              * @return: The size in bytes of the GL Type.
              */

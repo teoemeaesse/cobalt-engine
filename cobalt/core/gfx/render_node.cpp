@@ -10,8 +10,7 @@ namespace cobalt {
     namespace core::gfx {
         RenderNode::RenderNode(const RenderNode& other) : renderer(other.renderer), sources(other.sources), targets(other.targets) {}
 
-        RenderNode::RenderNode(RenderNode&& other) noexcept
-            : renderer(other.renderer), sources(std::move(other.sources)), targets(std::move(other.targets)) {}
+        RenderNode::RenderNode(RenderNode&& other) noexcept : renderer(other.renderer), sources(Move(other.sources)), targets(Move(other.targets)) {}
 
         void RenderNode::renderMesh(Mesh& mesh) {
             if (targets.size() == 0) {
@@ -40,7 +39,7 @@ namespace cobalt {
             renderer.clearTextureUnits();
         }
 
-        void RenderNode::addSource(RenderTarget&& source) { sources.push_back(std::move(source)); }
+        void RenderNode::addSource(RenderTarget&& source) { sources.push_back(Move(source)); }
 
         Vec<RenderTarget>& RenderNode::getSources() { return sources; }
 

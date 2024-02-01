@@ -7,13 +7,46 @@
 
 namespace cobalt {
     namespace core::ecs {
+        /**
+         * @brief: Interface for all queries. Just for static assertions.
+         */
+        class QueryInterface {
+            public:
+            /**
+             * @brief: Default virtual destructor.
+             * @return: void
+             */
+            virtual ~QueryInterface() noexcept = default;
+
+            protected:
+            QueryInterface() noexcept = default;
+        };
+
+        /**
+         * @brief: Query class. Used to iterate over entities with specific components.
+         * @tparam Components...: Components to query for. Must be reference types (use cobalt::MutRef<T> or cobalt::Ref<T>). Must be registered in
+         * the world.
+         */
         template <typename... Components>
-        class Query {
+        class Query : QueryInterface {
             static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
 
             public:
-            Query(const World& world) noexcept : componentTuples(world.get<Components...>()) {}
+            /**
+             * @brief: Creates a new query.
+             * @param world: The world that the query will run on.
+             * @return: A new query.
+             */
+            explicit Query(const World& world) noexcept : componentTuples(world.get<Components...>()) {}
+            /**
+             * @brief: Destroys the query.
+             * @return: void
+             */
+            ~Query() noexcept = default;
 
+            /**
+             * @brief: Iterator for the queried entities.
+             */
             class Iterator {
                 public:
                 Iterator(Tuple<Components...>* ptr) : ptr(ptr) {}
@@ -35,9 +68,7 @@ namespace cobalt {
                 private:
                 Tuple<Components...>* ptr;
             };
-
             Iterator begin() { return Iterator(&componentTuples[0]); }
-
             Iterator end() { return Iterator(&componentTuples[0] + componentTuples.size()); }
 
             private:

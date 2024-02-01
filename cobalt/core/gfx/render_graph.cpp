@@ -8,7 +8,7 @@
 namespace cobalt {
     namespace core::gfx {
         const uint RenderGraph::addNode(Scope<RenderNode> node) {
-            nodes.push_back(std::move(node));
+            nodes.push_back(Move(node));
             return nodes.size() - 1;
         }
 

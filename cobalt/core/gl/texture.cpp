@@ -26,7 +26,7 @@ namespace cobalt {
             height = other.height;
             format = other.format;
             encoding = other.encoding;
-            source = std::move(other.source);
+            source = Move(other.source);
             other.texture = 0;
         }
 
@@ -36,7 +36,7 @@ namespace cobalt {
             height = other.height;
             format = other.format;
             encoding = other.encoding;
-            source = std::move(other.source);
+            source = Move(other.source);
             other.texture = 0;
             return *this;
         }
@@ -109,10 +109,10 @@ namespace cobalt {
             CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
-        Texture2D::Texture2D(Texture2D&& other) noexcept : Texture(std::move(other)) {}
+        Texture2D::Texture2D(Texture2D&& other) noexcept : Texture(Move(other)) {}
 
         Texture2D& Texture2D::operator=(Texture2D&& other) noexcept {
-            Texture::operator=(std::move(other));
+            Texture::operator=(Move(other));
             return *this;
         }
 
@@ -214,10 +214,10 @@ namespace cobalt {
             setWrap(wrap);
         }
 
-        Texture3D::Texture3D(Texture3D&& other) noexcept : Texture(std::move(other)) {}
+        Texture3D::Texture3D(Texture3D&& other) noexcept : Texture(Move(other)) {}
 
         Texture3D& Texture3D::operator=(Texture3D&& other) noexcept {
-            Texture::operator=(std::move(other));
+            Texture::operator=(Move(other));
             return *this;
         }
 

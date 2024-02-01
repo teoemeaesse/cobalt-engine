@@ -12,50 +12,62 @@ namespace cobalt {
     namespace core::gfx {
         class Skybox {
             public:
-            /** @brief: Destroys the skybox.
+            /**
+             * @brief: Destroys the skybox.
              */
             ~Skybox() = default;
 
-            /** @brief: Copy constructor.
+            /**
+             * @brief: Copy constructor.
              * @param other: The other skybox.
              * @return: The copied skybox.
              */
             Skybox(const Skybox& other) = delete;
-            /** @brief: Move constructor.
+            /**
+             * @brief: Move constructor.
              * @param other: The other skybox.
              * @return: The moved skybox.
              */
             Skybox(Skybox&& other) noexcept;
-            /** @brief: Copy assignment operator.
+            /**
+             * @brief: Copy assignment operator.
              * @param other: The other skybox.
              * @return: The copied skybox.
              */
             Skybox& operator=(const Skybox& other) = delete;
-            /** @brief: Move assignment operator.
+            /**
+             * @brief: Move assignment operator.
              * @param other: The other skybox.
              * @return: The moved skybox.
              */
             Skybox& operator=(Skybox&& other) = delete;
 
-            /** @brief: Creates a new skybox.
+            /**
+             * @brief: Creates a new skybox.
              * @param texture: The texture of the skybox.
              * @param shader: The shader to render it with.
              * @return: The skybox.
              */
             static Skybox create(const gl::Texture3D& texture, gl::Shader& shader);
 
-            /** @brief: Binds the skybox.
+            /**
+             * @brief: Binds the skybox.
+             * @return: void
              */
             void bind() const;
-            /** @brief: Renders the skybox.
+            /**
+             * @brief: Renders the skybox.
+             * @return: void
              */
             void render() const;
 
-            /** @brief: Gets the texture.
+            /**
+             * @brief: Gets the texture.
              * @return: The texture.
              */
             const gl::Texture3D& getTexture() const;
-            /** @brief: Gets the shader.
+            /**
+             * @brief: Gets the shader.
              * @return: The shader.
              */
             gl::Shader& getShader() const;
@@ -66,7 +78,8 @@ namespace cobalt {
             const gl::Texture3D& texture;  // The texture.
             gl::Shader& shader;            // The shader.
 
-            /** @brief: Creates a new skybox.
+            /**
+             * @brief: Creates a new skybox.
              * @param texture: The texture.
              * @param shader: The shader.
              * @param vao: The vertex array object.
