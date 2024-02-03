@@ -37,7 +37,7 @@ namespace cobalt {
              * @param entityRegistry: The entity registry that the query will run on.
              * @return: A new query.
              */
-            explicit Query(EntityRegistry& entityRegistry) noexcept : componentTuples(entityRegistry.get<Components...>()) {}
+            explicit Query(EntityRegistry& entityRegistry) noexcept : componentTuples(entityRegistry.getMany<Components...>()) {}
             /**
              * @brief: Destroys the query.
              * @return: void
@@ -49,7 +49,7 @@ namespace cobalt {
              */
             class Iterator {
                 public:
-                Iterator(Tuple<Components...>* ptr) : ptr(ptr) {}
+                explicit Iterator(Tuple<Components...>* ptr) : ptr(ptr) {}
 
                 Tuple<Components...>& operator*() const { return *ptr; }
                 Tuple<Components...>* operator->() { return ptr; }
@@ -73,6 +73,44 @@ namespace cobalt {
 
             private:
             Vec<Tuple<Components...>> componentTuples;
+        };
+
+        template <typename... Components>
+        class Query<Ref<Entity>, Components...> {
+            static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
+
+            public:
+            explicit Query(EntityRegistry& entityRegistry) noexcept : componentTuples(entityRegistry.getWithEntity<Components...>()) {}
+
+            /**
+             * @brief: Iterator for the queried entities.
+             */
+            class Iterator {
+                public:
+                Iterator(Tuple<Ref<Entity>, Components...>* ptr) : ptr(ptr) {}
+
+                Tuple<Ref<Entity>, Components...>& operator*() const { return *ptr; }
+                Tuple<Ref<Entity>, Components...>* operator->() { return ptr; }
+                Iterator& operator++() {
+                    ptr++;
+                    return *this;
+                }
+                Iterator operator++(int) {
+                    Iterator tmp = *this;
+                    ++(*this);
+                    return tmp;
+                }
+                friend bool operator==(const Iterator& a, const Iterator& b) { return a.ptr == b.ptr; }
+                friend bool operator!=(const Iterator& a, const Iterator& b) { return a.ptr != b.ptr; }
+
+                private:
+                Tuple<Ref<Entity>, Components...>* ptr;
+            };
+            Iterator begin() { return Iterator(&componentTuples[0]); }
+            Iterator end() { return Iterator(&componentTuples[0] + componentTuples.size()); }
+
+            private:
+            Vec<Tuple<Ref<Entity>, Components...>> componentTuples;
         };
     }  // namespace core::ecs
 }  // namespace cobalt

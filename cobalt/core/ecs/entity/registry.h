@@ -81,12 +81,28 @@ namespace cobalt {
              * @return: A vector of tuples of references to components.
              */
             template <typename... Components>
-            const Vec<Tuple<Components...>> get() const noexcept {
+            const Vec<Tuple<Components...>> getMany() const noexcept {
                 static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
                 Vec<Tuple<Components...>> components;
                 for (auto& entity : entities) {
                     if (entity.second.has<Components...>()) {
-                        components.push_back(entity.second.get<Components...>());
+                        components.push_back(entity.second.getMany<Components...>());
+                    }
+                }
+                return components;
+            }
+            /**
+             * @brief: Get a subset of entities' components.
+             * @tparam Components...: Components to select for.
+             * @return: A vector of tuples of references to components.
+             */
+            template <typename... Components>
+            const Vec<Tuple<Ref<Entity>, Components...>> getWithEntity() const noexcept {
+                static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
+                Vec<Tuple<Ref<Entity>, Components...>> components;
+                for (auto& entity : entities) {
+                    if (entity.second.has<Components...>()) {
+                        components.push_back(std::tuple_cat(std::make_tuple(std::cref(entity.second)), entity.second.getMany<Components...>()));
                     }
                 }
                 return components;

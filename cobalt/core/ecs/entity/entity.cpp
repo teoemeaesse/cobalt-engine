@@ -17,7 +17,7 @@ namespace cobalt {
             other.version = 0;
         }
 
-        void Entity::kill() noexcept {
+        void Entity::kill() const noexcept {
             componentRegistry.removeAll(id);
             entityRegistry.remove(*this);
         }

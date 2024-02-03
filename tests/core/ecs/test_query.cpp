@@ -32,7 +32,7 @@ void setUp(void) {}
 
 void tearDown(void) {}
 
-void test_const_query() {
+void test_query() {
     ComponentRegistry componentRegistry;
     EntityRegistry entityRegistry;
     componentRegistry.registerComponent<Position>();
@@ -75,9 +75,31 @@ void test_const_query() {
     TEST_ASSERT_EQUAL_INT(y2, 26);
 }
 
+void test_entity_query() {
+    ComponentRegistry componentRegistry;
+    EntityRegistry entityRegistry;
+    componentRegistry.registerComponent<Position>();
+    componentRegistry.registerComponent<Velocity>();
+    componentRegistry.registerComponent<Mass>();
+
+    Entity& e1 = entityRegistry.add(componentRegistry);
+    Entity& e2 = entityRegistry.add(componentRegistry);
+    Entity& e3 = entityRegistry.add(componentRegistry);
+
+    e1.add<Position>(1, 2);
+    e2.add<Position>(6, 7);
+    e3.add<Position>(11, 12);
+
+    Query<Ref<Entity>, Ref<Position>> query(entityRegistry);
+    uint count = 0;
+    for (auto [entity, position] : query) {
+        TEST_ASSERT_EQUAL_INT(entity.getID(), count++);
+    }
+}
+
 int main(void) {
     UNITY_BEGIN();
-    RUN_TEST(test_const_query);
+    RUN_TEST(test_query);
     // RUN_TEST(test_const_query);
     return UNITY_END();
 }

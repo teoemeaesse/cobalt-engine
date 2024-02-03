@@ -104,7 +104,7 @@ void test_component_registry_get() {
     TEST_ASSERT_EQUAL_INT(1, updatedPosition.x);
     TEST_ASSERT_EQUAL_INT(2, updatedPosition.y);
     try {
-        auto [errPosition, errVelocity] = entity.get<Ref<Position>, Ref<Velocity>>();
+        auto [errPosition, errVelocity] = entity.getMany<Ref<Position>, Ref<Velocity>>();
         TEST_FAIL_MESSAGE("Entity should not have Velocity component");
     } catch (const ComponentNotFoundException<Velocity>& e) {
         TEST_ASSERT_EQUAL_STRING("Component not found for entity (0) with component: Velocity", e.what());

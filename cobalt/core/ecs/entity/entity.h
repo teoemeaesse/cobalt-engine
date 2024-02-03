@@ -100,9 +100,9 @@ namespace cobalt {
              * @return: A tuple of references to the components.
              */
             template <typename... Components>
-            Tuple<Components...> get() const {
+            Tuple<Components...> getMany() const {
                 static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
-                return componentRegistry.get<Components...>(id);
+                return componentRegistry.getMany<Components...>(id);
             }
             /**
              * @brief: Get a component from the entity.
@@ -112,7 +112,7 @@ namespace cobalt {
             template <typename ComponentType>
             const ComponentType& get() const {
                 static_assert(std::is_reference<ComponentType>::value, "Component type must be a reference type.");
-                return componentRegistry.getSingleComponent<ComponentType>(id);
+                return componentRegistry.get<ComponentType>(id);
             }
             /**
              * @brief: Get a component from the entity.
@@ -122,14 +122,14 @@ namespace cobalt {
             template <typename ComponentType>
             ComponentType& get() {
                 static_assert(std::is_reference<ComponentType>::value, "Component type must be a reference type.");
-                return componentRegistry.getSingleComponent<ComponentType>(id);
+                return componentRegistry.get<ComponentType>(id);
             }
 
             /**
              * @brief: Kill the entity. This will remove all its components and invalidate it.
              * @return: void
              */
-            void kill() noexcept;
+            void kill() const noexcept;
 
             /**
              * @brief: Check if the entity is alive: living entities have a positive ID and the latest version.

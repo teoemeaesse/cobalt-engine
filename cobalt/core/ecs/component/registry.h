@@ -125,7 +125,7 @@ namespace cobalt {
             void removeAll(const EntityProperties::ID& entityID) noexcept;
 
             template <typename ComponentType>
-            ComponentType& getSingleComponent(const EntityProperties::ID& entityID) {
+            ComponentType& get(const EntityProperties::ID& entityID) {
                 try {
                     return static_cast<ComponentType&>(store.at(Component::template getType<RemoveConstRef<ComponentType>>())->get(entityID));
                 } catch (const std::out_of_range& e) {
@@ -139,7 +139,7 @@ namespace cobalt {
              * @return: Component reference.
              */
             template <typename ComponentType>
-            const ComponentType& getSingleComponent(const EntityProperties::ID& entityID) const {
+            const ComponentType& get(const EntityProperties::ID& entityID) const {
                 try {
                     return static_cast<const ComponentType&>(store.at(Component::template getType<RemoveConstRef<ComponentType>>())->get(entityID));
                 } catch (const std::out_of_range& e) {
@@ -154,10 +154,10 @@ namespace cobalt {
              * @return: Component reference.
              */
             template <typename... Components>
-            Tuple<Components...> get(const EntityProperties::ID& entityID) const {
+            Tuple<Components...> getMany(const EntityProperties::ID& entityID) const {
                 static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
                 Component::template validate<RemoveConstRef<Components>...>();
-                return (std::make_tuple(std::ref(getSingleComponent<Components>(entityID))...));
+                return (std::make_tuple(std::ref(get<Components>(entityID))...));
             }
 
             /**

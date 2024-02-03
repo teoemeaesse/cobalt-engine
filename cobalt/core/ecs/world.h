@@ -52,7 +52,7 @@ namespace cobalt {
             template <typename... Components>
             Vec<Tuple<Components...>> get() const noexcept {
                 static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
-                return entityRegistry.get<Components...>();
+                return entityRegistry.getMany<Components...>();
             }
 
             /**
