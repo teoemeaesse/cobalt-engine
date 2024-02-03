@@ -80,7 +80,6 @@ namespace cobalt {
                 store[type]->add(entityID, ComponentType());
                 signatures[entityID].set(typeIndices[type]);
             }
-
             /**
              * @brief: Add a component to an entity.
              * @tparam ComponentType: Component type.
@@ -118,7 +117,6 @@ namespace cobalt {
                 }
                 (signatures[entityID].reset(typeIndices.at(Component::template getType<Components>())), ...);
             }
-
             /**
              * @brief: Remove all components from an entity.
              * @param entityID: The entity ID.

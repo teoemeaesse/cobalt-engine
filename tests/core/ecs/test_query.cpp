@@ -1,6 +1,7 @@
 // Created by tomas on
 // 28-01-2024.
 
+#include "core/ecs/component/registry.h"
 #include "core/ecs/system/query.h"
 #include "unity/unity.h"
 
@@ -32,14 +33,15 @@ void setUp(void) {}
 void tearDown(void) {}
 
 void test_const_query() {
-    World world;
-    world.registerComponent<Position>();
-    world.registerComponent<Velocity>();
-    world.registerComponent<Mass>();
+    ComponentRegistry componentRegistry;
+    EntityRegistry entityRegistry;
+    componentRegistry.registerComponent<Position>();
+    componentRegistry.registerComponent<Velocity>();
+    componentRegistry.registerComponent<Mass>();
 
-    Entity& e1 = world.createEntity();
-    Entity& e2 = world.createEntity();
-    Entity& e3 = world.createEntity();
+    Entity& e1 = entityRegistry.add(componentRegistry);
+    Entity& e2 = entityRegistry.add(componentRegistry);
+    Entity& e3 = entityRegistry.add(componentRegistry);
 
     e1.add<Position>(1, 2);
     e1.add<Velocity>(3, 4);
@@ -51,7 +53,7 @@ void test_const_query() {
     e3.add<Position>(11, 12);
     e3.add<Velocity>(13, 14);
 
-    Query<Ref<Position>, Ref<Velocity>> query(world);
+    Query<Ref<Position>, Ref<Velocity>> query(entityRegistry);
     uint count = 0;
     for (auto [position, velocity] : query) {
         TEST_ASSERT_EQUAL_INT(position.x, velocity.x - 2);
@@ -60,7 +62,7 @@ void test_const_query() {
     }
     TEST_ASSERT_EQUAL_INT(count, 2);
 
-    Query<RefMut<Position>, Ref<Velocity>> query2(world);
+    Query<RefMut<Position>, Ref<Velocity>> query2(entityRegistry);
     for (auto [position, velocity] : query2) {
         position.x += velocity.x;
         position.y += velocity.y;

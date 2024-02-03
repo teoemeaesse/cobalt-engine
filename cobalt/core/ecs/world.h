@@ -5,11 +5,14 @@
 
 #include "core/ecs/component/registry.h"
 #include "core/ecs/entity/registry.h"
+#include "core/ecs/system/schedule.h"
 
 namespace cobalt {
     namespace core::ecs {
         class World {
             public:
+            enum class DefaultSchedules { Startup, PreUpdate, Update, PostUpdate, PreRender, Render, PostRender, Shutdown };
+
             /**
              * @brief: Default constructor.
              * @return: World instance.
@@ -21,17 +24,16 @@ namespace cobalt {
             ~World() noexcept = default;
 
             /**
-             * @brief: Create a new entity.
+             * @brief: Spawn a new entity.
              * @return: Entity instance.
              */
-            Entity& createEntity() noexcept;
-
+            Entity& spawn() noexcept;
             /**
-             * @brief: Destroy an entity.
+             * @brief: Kill an entity.
              * @param entity: Entity instance.
              * @return: void
              */
-            void destroyEntity(const Entity& entity) noexcept;
+            void kill(const Entity& entity) noexcept;
 
             /**
              * @brief: Register a component.
@@ -42,7 +44,6 @@ namespace cobalt {
             void registerComponent() noexcept {
                 componentRegistry.registerComponent<ComponentType>();
             }
-
             /**
              * @brief: Get a subset of entities' components.
              * @tparam Components...: Components to select for.
@@ -54,9 +55,30 @@ namespace cobalt {
                 return entityRegistry.get<Components...>();
             }
 
+            /**
+             * @brief: Add a system to the world.
+             * @tparam SystemType: System type.
+             * @param schedule: Schedule to add the system to.
+             * @return: void
+             */
+            template <typename SystemType>
+            void addSystem(DefaultSchedules schedule) noexcept {
+                static_assert(std::is_base_of<SystemInterface, SystemType>::value, "System must be a subclass of SystemInterface.");
+                if (schedules.find(schedule) == schedules.end()) {
+                    schedules.emplace(schedule, entityRegistry);
+                }
+                schedules[schedule].addSystem<SystemType>();
+            }
+            /**
+             * @brief: Run all systems in each schedule, in order.
+             * @return: void
+             */
+            void update() noexcept;
+
             private:
             EntityRegistry entityRegistry;
             ComponentRegistry componentRegistry;
+            UMap<DefaultSchedules, Schedule> schedules;
         };
     }  // namespace core::ecs
 }  // namespace cobalt

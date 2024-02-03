@@ -1,6 +1,7 @@
 // Created by tomas on
 // 28-01-2024.
 
+#include "core/ecs/component/registry.h"
 #include "core/ecs/system/schedule.h"
 #include "unity/unity.h"
 
@@ -29,7 +30,7 @@ struct Mass : public Component {
 
 class MovementSystem : public System<Query<RefMut<Position>, Ref<Velocity>>> {
     public:
-    MovementSystem(const World& world) : System<Query<RefMut<Position>, Ref<Velocity>>>(world) {}
+    MovementSystem(EntityRegistry& entityRegistry) : System<Query<RefMut<Position>, Ref<Velocity>>>(entityRegistry) {}
     void run(Query<RefMut<Position>, Ref<Velocity>> query) override {
         for (auto [position, velocity] : query) {
             position.x += velocity.x;
@@ -43,14 +44,15 @@ void setUp(void) {}
 void tearDown(void) {}
 
 void test_scheduled_system() {
-    World world;
-    world.registerComponent<Position>();
-    world.registerComponent<Velocity>();
-    world.registerComponent<Mass>();
+    EntityRegistry entityRegistry;
+    ComponentRegistry componentRegistry;
+    componentRegistry.registerComponent<Position>();
+    componentRegistry.registerComponent<Velocity>();
+    componentRegistry.registerComponent<Mass>();
 
-    Entity& e1 = world.createEntity();
-    Entity& e2 = world.createEntity();
-    Entity& e3 = world.createEntity();
+    Entity& e1 = entityRegistry.add(componentRegistry);
+    Entity& e2 = entityRegistry.add(componentRegistry);
+    Entity& e3 = entityRegistry.add(componentRegistry);
     e1.add<Position>(1, 2);
     e1.add<Velocity>(3, 4);
     e1.add<Mass>(5);
@@ -59,8 +61,8 @@ void test_scheduled_system() {
     e3.add<Position>(11, 12);
     e3.add<Velocity>(13, 14);
 
-    Schedule schedule(world);
-    schedule.addSystem<MovementSystem>(world);
+    Schedule schedule(entityRegistry);
+    schedule.addSystem<MovementSystem>();
     schedule.run();
     TEST_ASSERT_EQUAL_INT(4, e1.get<Ref<Position>>().x);
     TEST_ASSERT_EQUAL_INT(6, e1.get<Ref<Position>>().y);

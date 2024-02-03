@@ -7,8 +7,17 @@ namespace cobalt {
     namespace core::ecs {
         World::World() noexcept : entityRegistry(), componentRegistry() {}
 
-        Entity& World::createEntity() noexcept { return entityRegistry.add(componentRegistry); }
+        Entity& World::spawn() noexcept { return entityRegistry.add(componentRegistry); }
 
-        void World::destroyEntity(const Entity& entity) noexcept { entityRegistry.remove(entity); }
+        void World::kill(const Entity& entity) noexcept {
+            componentRegistry.removeAll(entity.getID());
+            entityRegistry.remove(entity);
+        }
+
+        void World::update() noexcept {
+            for (auto& schedule : schedules) {
+                schedule.second.run();
+            }
+        }
     }  // namespace core::ecs
 }  // namespace cobalt

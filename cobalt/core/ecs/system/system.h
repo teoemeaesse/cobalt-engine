@@ -43,10 +43,10 @@ namespace cobalt {
             public:
             /**
              * @brief: Creates a new system.
-             * @param world: The world that the system will run on.
+             * @param entityRegistry: The entity registry that the system will run on.
              * @return: A new system.
              */
-            explicit System(const World& world) noexcept : world(world) {}
+            explicit System(EntityRegistry& entityRegistry) noexcept : entityRegistry(entityRegistry) {}
             /**
              * @brief: Destroys the system.
              * @return: void
@@ -68,7 +68,7 @@ namespace cobalt {
             virtual void run(Queries... queries) = 0;
 
             private:
-            const World& world;
+            EntityRegistry& entityRegistry;
 
             /**
              * @brief: Template magic.
@@ -77,7 +77,7 @@ namespace cobalt {
              */
             template <size_t... Is>
             void runQueries(std::index_sequence<Is...>) {
-                run(std::tuple_element_t<Is, Tuple<Queries...>>(world)...);
+                run(std::tuple_element_t<Is, Tuple<Queries...>>(entityRegistry)...);
             }
         };
     }  // namespace core::ecs

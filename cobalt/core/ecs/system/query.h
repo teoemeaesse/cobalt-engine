@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "core/ecs/world.h"
+#include "core/ecs/entity/registry.h"
 
 namespace cobalt {
     namespace core::ecs {
@@ -34,10 +34,10 @@ namespace cobalt {
             public:
             /**
              * @brief: Creates a new query.
-             * @param world: The world that the query will run on.
+             * @param entityRegistry: The entity registry that the query will run on.
              * @return: A new query.
              */
-            explicit Query(const World& world) noexcept : componentTuples(world.get<Components...>()) {}
+            explicit Query(EntityRegistry& entityRegistry) noexcept : componentTuples(entityRegistry.get<Components...>()) {}
             /**
              * @brief: Destroys the query.
              * @return: void
