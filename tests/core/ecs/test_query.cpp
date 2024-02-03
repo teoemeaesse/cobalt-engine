@@ -91,15 +91,29 @@ void test_entity_query() {
     e3.add<Position>(11, 12);
 
     Query<Ref<Entity>, Ref<Position>> query(entityRegistry);
-    uint count = 0;
     for (auto [entity, position] : query) {
-        TEST_ASSERT_EQUAL_INT(entity.getID(), count++);
+        switch (entity.getID()) {
+            case 0:
+                TEST_ASSERT_EQUAL_INT(position.x, 1);
+                TEST_ASSERT_EQUAL_INT(position.y, 2);
+                break;
+            case 1:
+                TEST_ASSERT_EQUAL_INT(position.x, 6);
+                TEST_ASSERT_EQUAL_INT(position.y, 7);
+                break;
+            case 2:
+                TEST_ASSERT_EQUAL_INT(position.x, 11);
+                TEST_ASSERT_EQUAL_INT(position.y, 12);
+                break;
+            default:
+                TEST_FAIL_MESSAGE("Invalid entity id");
+        }
     }
 }
 
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_query);
-    // RUN_TEST(test_const_query);
+    RUN_TEST(test_entity_query);
     return UNITY_END();
 }
