@@ -44,7 +44,6 @@ namespace cobalt {
              * @return: Component type name.
              */
             virtual const std::string& getTypeName() noexcept;
-
             /**
              * @brief: Get the component's type name.
              * @tparam ComponentType: Component type.

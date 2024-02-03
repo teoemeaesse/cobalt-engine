@@ -15,5 +15,9 @@ namespace cobalt {
         namespace ComponentProperties {
             using Type = uint64;  // Component type - unique between different component types.
         };                        // namespace ComponentProperties
+
+        namespace ResourceProperties {
+            using Type = uint64;  // Resource type - unique between different resource types.
+        };                        // namespace ResourceProperties
     }                             // namespace core::ecs
 }  // namespace cobalt

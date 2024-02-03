@@ -24,7 +24,7 @@ namespace cobalt {
             /**
              * @brief: Default destructor.
              */
-            ~EntityRegistry() = default;
+            ~EntityRegistry() noexcept = default;
             /**
              * @brief: Copy constructor.
              * @param EntityRegistry: EntityRegistry to copy.
