@@ -109,6 +109,8 @@ namespace cobalt {
     template <typename T>
     using RemoveConstRef = std::remove_const_t<std::remove_reference_t<T>>;
     template <typename T>
+    struct IsConst : std::integral_constant<bool, std::is_const<T>::value || std::is_const<typename std::remove_reference<T>::type>::value> {};
+    template <typename T>
     using Ref = const T&;
     template <typename T>
     using RefMut = T&;

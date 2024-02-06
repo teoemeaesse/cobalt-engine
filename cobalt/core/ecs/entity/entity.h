@@ -75,54 +75,54 @@ namespace cobalt {
 
             /**
              * @brief: Remove a set of components from the entity.
-             * @tparam Components...: Component types.
+             * @tparam ComponentTypes...: Component types.
              * @return: void
              */
-            template <typename... Components>
+            template <typename... ComponentTypes>
             void remove() noexcept {
-                componentRegistry.remove<Components...>(id);
+                componentRegistry.remove<ComponentTypes...>(id);
             }
 
             /**
              * @brief: Check if the entity has a set of components.
-             * @tparam Components...: Component types.
+             * @tparam ComponentTypes...: Component types.
              * @param entityID: The entity ID.
              * @return: True if the entity has the components, false otherwise.
              */
-            template <typename... Components>
+            template <typename... ComponentTypes>
             const bool has() const noexcept {
-                return componentRegistry.has<Components...>(id);
+                return componentRegistry.has<ComponentTypes...>(id);
             }
 
             /**
              * @brief: Get a set of components from the entity.
-             * @tparam Components...: Component types.
+             * @tparam ComponentRefs...: Component types.
              * @return: A tuple of references to the components.
              */
-            template <typename... Components>
-            Tuple<Components...> getMany() const {
-                static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
-                return componentRegistry.getMany<Components...>(id);
+            template <typename... ComponentRefs>
+            Tuple<ComponentRefs...> getMany() const {
+                static_assert((std::is_reference<ComponentRefs>::value && ...), "All component types must be reference types.");
+                return componentRegistry.getMany<ComponentRefs...>(id);
             }
             /**
              * @brief: Get a component from the entity.
-             * @tparam Component: Component type.
+             * @tparam ComponentRef: Component reference.
              * @return: A reference to the component.
              */
-            template <typename ComponentType>
-            const ComponentType& get() const {
-                static_assert(std::is_reference<ComponentType>::value, "Component type must be a reference type.");
-                return componentRegistry.get<ComponentType>(id);
+            template <typename ComponentRef>
+            const ComponentRef& get() const {
+                static_assert(std::is_reference<ComponentRef>::value, "Component type must be a reference type.");
+                return componentRegistry.get<ComponentRef>(id);
             }
             /**
              * @brief: Get a component from the entity.
-             * @tparam Component: Component type.
+             * @tparam ComponentRef: Component reference.
              * @return: A reference to the component.
              */
-            template <typename ComponentType>
-            ComponentType& get() {
-                static_assert(std::is_reference<ComponentType>::value, "Component type must be a reference type.");
-                return componentRegistry.get<ComponentType>(id);
+            template <typename ComponentRef>
+            ComponentRef& get() {
+                static_assert(std::is_reference<ComponentRef>::value, "Component type must be a reference type.");
+                return componentRegistry.get<ComponentRef>(id);
             }
 
             /**

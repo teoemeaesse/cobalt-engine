@@ -73,7 +73,7 @@ namespace cobalt {
                 if (peripherals.find(id) == peripherals.end()) {
                     throw PeripheralNotFoundException(peripheralToString(id));
                 }
-                return *static_cast<T*>(peripherals[id].get());
+                return *dynamic_cast<T*>(peripherals[id].get());
             }
             /**
              * @brief: Get a peripheral, given its name.

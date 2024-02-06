@@ -37,7 +37,9 @@ namespace cobalt {
              * @param entityRegistry: The entity registry that the query will run on.
              * @return: A new query.
              */
-            explicit Query(EntityRegistry& entityRegistry) noexcept : componentTuples(entityRegistry.getMany<Components...>()) {}
+            explicit Query(EntityRegistry& entityRegistry) noexcept : componentTuples(entityRegistry.getMany<Components...>()) {
+                Component::validate<RemoveConstRef<Components>...>();
+            }
             /**
              * @brief: Destroys the query.
              * @return: void

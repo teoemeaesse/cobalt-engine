@@ -102,20 +102,20 @@ namespace cobalt {
 
             /**
              * @brief: Remove a set of components from an entity.
-             * @tparam Components...: Component types.
+             * @tparam ComponentTypes...: Component types.
              * @param entityID: The entity ID.
              * @return: void
              */
-            template <typename... Components>
+            template <typename... ComponentTypes>
             void remove(const EntityProperties::ID& entityID) noexcept {
-                Component::template validate<Components...>();
+                Component::template validate<ComponentTypes...>();
                 try {
-                    (store.at(Component::getType<Components>())->remove(entityID), ...);
+                    (store.at(Component::getType<ComponentTypes>())->remove(entityID), ...);
                 } catch (const std::out_of_range& e) {
                     CB_CORE_WARN("Component not registered", e.what());
                     return;
                 }
-                (signatures[entityID].reset(typeIndices.at(Component::template getType<Components>())), ...);
+                (signatures[entityID].reset(typeIndices.at(Component::template getType<ComponentTypes>())), ...);
             }
             /**
              * @brief: Remove all components from an entity.
@@ -124,53 +124,58 @@ namespace cobalt {
              */
             void removeAll(const EntityProperties::ID& entityID) noexcept;
 
-            template <typename ComponentType>
-            ComponentType& get(const EntityProperties::ID& entityID) {
+            /**
+             * @brief: Get a component from an entity.
+             * @tparam ComponentRef: Component type.
+             * @param entityID: The entity ID.
+             * @return: Component reference.
+             */
+            template <typename ComponentRef>
+            ComponentRef get(const EntityProperties::ID& entityID) {
                 try {
-                    return static_cast<ComponentType&>(store.at(Component::template getType<RemoveConstRef<ComponentType>>())->get(entityID));
+                    return dynamic_cast<ComponentRef>(store.at(Component::template getType<RemoveConstRef<ComponentRef>>())->get(entityID));
                 } catch (const std::out_of_range& e) {
-                    throw ComponentNotFoundException<RemoveConstRef<ComponentType>>(entityID);
+                    throw ComponentNotFoundException<RemoveConstRef<ComponentRef>>(entityID);
                 }
             }
             /**
              * @brief: Get a component from an entity.
-             * @tparam ComponentType: Component type.
+             * @tparam ComponentRef: Component type.
              * @param entityID: The entity ID.
              * @return: Component reference.
              */
-            template <typename ComponentType>
-            const ComponentType& get(const EntityProperties::ID& entityID) const {
+            template <typename ComponentRef>
+            ComponentRef get(const EntityProperties::ID& entityID) const {
                 try {
-                    return static_cast<const ComponentType&>(store.at(Component::template getType<RemoveConstRef<ComponentType>>())->get(entityID));
+                    return dynamic_cast<ComponentRef>(store.at(Component::template getType<RemoveConstRef<ComponentRef>>())->get(entityID));
                 } catch (const std::out_of_range& e) {
-                    throw ComponentNotFoundException<RemoveConstRef<ComponentType>>(entityID);
+                    throw ComponentNotFoundException<RemoveConstRef<ComponentRef>>(entityID);
                 }
             }
 
             /**
              * @brief: Get a set of components from an entity.
-             * @tparam Components...: Component types.
+             * @tparam ComponentRefs...: Component types.
              * @param entityID: The entity ID.
              * @return: Component reference.
              */
-            template <typename... Components>
-            Tuple<Components...> getMany(const EntityProperties::ID& entityID) const {
-                static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
-                Component::template validate<RemoveConstRef<Components>...>();
-                return (std::make_tuple(std::ref(get<Components>(entityID))...));
+            template <typename... ComponentRefs>
+            Tuple<ComponentRefs...> getMany(const EntityProperties::ID& entityID) const {
+                Component::template validate<RemoveConstRef<ComponentRefs>...>();
+                return (std::make_tuple(std::ref(get<ComponentRefs>(entityID))...));
             }
 
             /**
              * @brief: Check if an entity has a set of components.
-             * @tparam Components...: Component types.
+             * @tparam ComponentTypes...: Component types.
              * @param entityID: The entity ID.
              * @return: True if the entity has the components, false otherwise.
              */
-            template <typename... Components>
+            template <typename... ComponentTypes>
             const bool has(const EntityProperties::ID& entityID) const {
-                Component::template validate<RemoveConstRef<Components>...>();
+                Component::template validate<ComponentTypes...>();
                 return signatures.find(entityID) != signatures.end() &&
-                       (signatures.at(entityID).test(typeIndices.at(Component::template getType<Components>())) && ...);
+                       (signatures.at(entityID).test(typeIndices.at(Component::template getType<ComponentTypes>())) && ...);
             }
 
             private:

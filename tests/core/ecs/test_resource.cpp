@@ -1,0 +1,59 @@
+// Created by tomas on
+// 28-01-2024.
+
+#include "core/ecs/resource/request.h"
+#include "unity/unity.h"
+
+using namespace cobalt::core::ecs;
+using namespace cobalt;
+
+class MyResource : public Resource {
+    public:
+    MyResource() noexcept : valueInt(0), valueFloat(3.141) {}
+    explicit MyResource(int valueInt) noexcept : valueInt(valueInt), valueFloat(0.577) {}
+
+    int valueInt;
+    float valueFloat;
+};
+
+void setUp(void) {}
+
+void tearDown(void) {}
+
+void test_read() {
+    ResourceRegistry resourceRegistry;
+    resourceRegistry.add<MyResource>();
+
+    ReadRequest<MyResource> request(resourceRegistry);
+    const MyResource& resource = request.get();
+    TEST_ASSERT_EQUAL(0, resource.valueInt);
+    TEST_ASSERT_EQUAL_FLOAT(3.141, resource.valueFloat);
+
+    resourceRegistry.add<MyResource>(1);
+    ReadRequest<MyResource> request2(resourceRegistry);
+    const MyResource& resource2 = request2.get();
+    TEST_ASSERT_EQUAL(1, resource2.valueInt);
+    TEST_ASSERT_EQUAL_FLOAT(0.577, resource2.valueFloat);
+}
+
+void test_write() {
+    ResourceRegistry resourceRegistry;
+    resourceRegistry.add<MyResource>();
+
+    WriteRequest<MyResource> request(resourceRegistry);
+    MyResource& resource = request.get();
+    resource.valueInt = 50;
+    resource.valueFloat = 42;
+
+    ReadRequest<MyResource> request2(resourceRegistry);
+    const MyResource& resource2 = request2.get();
+    TEST_ASSERT_EQUAL(50, resource2.valueInt);
+    TEST_ASSERT_EQUAL_FLOAT(42, resource2.valueFloat);
+}
+
+int main(void) {
+    UNITY_BEGIN();
+    RUN_TEST(test_read);
+    RUN_TEST(test_write);
+    return UNITY_END();
+}

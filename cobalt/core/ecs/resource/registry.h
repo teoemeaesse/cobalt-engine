@@ -4,9 +4,13 @@
 #pragma once
 
 #include "core/ecs/resource/resource.h"
+#include "core/exceptions/ecs_exception.h"
 
 namespace cobalt {
     namespace core::ecs {
+        /**
+         * @brief: Resource registry. Responsible for managing ECS resources. Resources are globally unique and accessible by systems.
+         */
         class ResourceRegistry {
             public:
             ResourceRegistry() noexcept = default;
@@ -21,7 +25,9 @@ namespace cobalt {
             void add() noexcept {
                 Resource::validate<ResourceType>();
                 static_assert(std::is_default_constructible<ResourceType>::value, "Resource must be default constructible.");
-                resources.emplace(Resource::getType<ResourceType>(), ResourceType());
+                const auto type = Resource::getType<ResourceType>();
+                resources.erase(type);
+                resources.emplace(type, Move(createScope<ResourceType>()));
             }
             /**
              * @brief: Add a resource to the registry.
@@ -34,40 +40,40 @@ namespace cobalt {
             void add(Args&&... args) noexcept {
                 Resource::validate<ResourceType>();
                 static_assert(std::is_constructible<ResourceType, Args...>::value, "Resource must be constructible with the given arguments.");
-                resources.emplace(Resource::getType<ResourceType>(), ResourceType(std::forward<Args>(args)...));
+                const auto type = Resource::getType<ResourceType>();
+                resources.erase(type);
+                resources.emplace(type, Move(createScope<ResourceType>(std::forward<Args>(args)...)));
             }
 
             /**
              * @brief: Get a resource from the registry.
-             * @tparam ResourceType: Resource type.
+             * @tparam ResourceRef: Resource reference.
              * @return: Resource reference.
              */
-            template <typename ResourceType>
-            ResourceType& get() {
-                Resource::validate<ResourceType>();
-                auto it = resources.find(Resource::getType<ResourceType>());
-                if (it == resources.end()) {
-                    throw ResourceNotFoundException<ResourceType>();
+            template <typename ResourceRef>
+            ResourceRef get() {
+                try {
+                    return *dynamic_cast<RemoveConstRef<ResourceRef>*>(resources.at(Resource::getType<RemoveConstRef<ResourceRef>>()).get());
+                } catch (const std::out_of_range& e) {
+                    throw ResourceNotFoundException<RemoveConstRef<ResourceRef>>();
                 }
-                return static_cast<ResourceType&>(it->second);
             }
             /**
              * @brief: Get a resource from the registry.
-             * @tparam ResourceType: Resource type.
+             * @tparam ResourceRef: Resource reference.
              * @return: Resource reference.
              */
-            template <typename ResourceType>
-            const ResourceType& get() const {
-                Resource::validate<ResourceType>();
-                auto it = resources.find(Resource::getType<ResourceType>());
-                if (it == resources.end()) {
-                    throw ResourceNotFoundException<ResourceType>();
+            template <typename ResourceRef>
+            ResourceRef get() const {
+                try {
+                    return *dynamic_cast<RemoveConstRef<ResourceRef>*>(resources.at(Resource::getType<RemoveConstRef<ResourceRef>>()).get());
+                } catch (const std::out_of_range& e) {
+                    throw ResourceNotFoundException<RemoveConstRef<ResourceRef>>();
                 }
-                return static_cast<const ResourceType&>(it->second);
             }
 
             private:
-            UMap<ResourceProperties::Type, Resource> resources;
+            UMap<ResourceProperties::Type, Scope<Resource>> resources;
         };
     }  // namespace core::ecs
 }  // namespace cobalt

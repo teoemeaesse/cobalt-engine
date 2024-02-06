@@ -77,32 +77,32 @@ namespace cobalt {
 
             /**
              * @brief: Get a subset of entities' components.
-             * @tparam Components...: Components to select for.
+             * @tparam ComponentRefs...: Components to select for.
              * @return: A vector of tuples of references to components.
              */
-            template <typename... Components>
-            const Vec<Tuple<Components...>> getMany() const noexcept {
-                static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
-                Vec<Tuple<Components...>> components;
+            template <typename... ComponentRefs>
+            const Vec<Tuple<ComponentRefs...>> getMany() const noexcept {
+                static_assert((std::is_reference<ComponentRefs>::value && ...), "All component types must be reference types.");
+                Vec<Tuple<ComponentRefs...>> components;
                 for (auto& entity : entities) {
-                    if (entity.second.has<Components...>()) {
-                        components.push_back(entity.second.getMany<Components...>());
+                    if (entity.second.has<RemoveConstRef<ComponentRefs>...>()) {
+                        components.push_back(entity.second.getMany<ComponentRefs...>());
                     }
                 }
                 return components;
             }
             /**
              * @brief: Get a subset of entities' components.
-             * @tparam Components...: Components to select for.
+             * @tparam ComponentTypes...: Components to select for.
              * @return: A vector of tuples of references to components.
              */
-            template <typename... Components>
-            const Vec<Tuple<Ref<Entity>, Components...>> getWithEntity() const noexcept {
-                static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
-                Vec<Tuple<Ref<Entity>, Components...>> components;
+            template <typename... ComponentTypes>
+            const Vec<Tuple<Ref<Entity>, ComponentTypes...>> getWithEntity() const noexcept {
+                static_assert((std::is_reference<ComponentTypes>::value && ...), "All component types must be reference types.");
+                Vec<Tuple<Ref<Entity>, ComponentTypes...>> components;
                 for (auto& entity : entities) {
-                    if (entity.second.has<Components...>()) {
-                        components.push_back(std::tuple_cat(std::make_tuple(std::cref(entity.second)), entity.second.getMany<Components...>()));
+                    if (entity.second.has<RemoveConstRef<ComponentTypes>...>()) {
+                        components.push_back(std::tuple_cat(std::make_tuple(std::cref(entity.second)), entity.second.getMany<ComponentTypes...>()));
                     }
                 }
                 return components;
