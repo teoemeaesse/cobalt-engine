@@ -196,6 +196,52 @@ void test_mixed_system() {
     TEST_ASSERT_EQUAL_INT(132, e3.get<Ref<Position>>().y);
 }
 
+void test_lambda_system() {
+    EntityRegistry entityRegistry;
+    ComponentRegistry componentRegistry;
+    ResourceRegistry resourceRegistry;
+    componentRegistry.registerComponent<Position>();
+    componentRegistry.registerComponent<Velocity>();
+    componentRegistry.registerComponent<Mass>();
+    resourceRegistry.add<MyResource>();
+
+    Entity& e1 = entityRegistry.add(componentRegistry);
+    Entity& e2 = entityRegistry.add(componentRegistry);
+    Entity& e3 = entityRegistry.add(componentRegistry);
+    e1.add<Position>(1, 2);
+    e1.add<Velocity>(3, 4);
+    e1.add<Mass>(5);
+    e2.add<Position>(6, 7);
+    e2.add<Mass>(10);
+    e3.add<Position>(11, 12);
+    e3.add<Velocity>(13, 14);
+
+    Schedule schedule(entityRegistry, resourceRegistry);
+    schedule.addSystem<Query<RefMut<Position>, Ref<Velocity>>, ReadRequest<MyResource>>([](auto query, auto request) {
+        for (auto [position, velocity] : query) {
+            position.x += velocity.x;
+            position.y += velocity.y;
+            const MyResource& resource = request.get();
+            position.x *= resource.valueInt;
+            position.y *= resource.valueInt;
+        }
+    });
+    schedule.run();
+    TEST_ASSERT_EQUAL_INT(4, e1.get<Ref<Position>>().x);
+    TEST_ASSERT_EQUAL_INT(6, e1.get<Ref<Position>>().y);
+    TEST_ASSERT_EQUAL_INT(6, e2.get<Ref<Position>>().x);
+    TEST_ASSERT_EQUAL_INT(7, e2.get<Ref<Position>>().y);
+    TEST_ASSERT_EQUAL_INT(24, e3.get<Ref<Position>>().x);
+    TEST_ASSERT_EQUAL_INT(26, e3.get<Ref<Position>>().y);
+    schedule.run();
+    TEST_ASSERT_EQUAL_INT(7, e1.get<Ref<Position>>().x);
+    TEST_ASSERT_EQUAL_INT(10, e1.get<Ref<Position>>().y);
+    TEST_ASSERT_EQUAL_INT(6, e2.get<Ref<Position>>().x);
+    TEST_ASSERT_EQUAL_INT(7, e2.get<Ref<Position>>().y);
+    TEST_ASSERT_EQUAL_INT(37, e3.get<Ref<Position>>().x);
+    TEST_ASSERT_EQUAL_INT(40, e3.get<Ref<Position>>().y);
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_single_system);

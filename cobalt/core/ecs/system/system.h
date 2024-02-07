@@ -85,5 +85,21 @@ namespace cobalt {
                 run(std::tuple_element_t<Is, Tuple<Params...>>(entityRegistry, resourceRegistry)...);
             }
         };
+
+        /**
+         * @brief: Lambda system class. Used to run logic on entities with specific components using a lambda function.
+         * @tparam Func: The lambda function type.
+         * @tparam Params...: System parameters. Can be queries or resources.
+         */
+        template <typename Func, typename... Params>
+        class LambdaSystem : public System<Params...> {
+            public:
+            Func func;
+
+            LambdaSystem(Func func, EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry)
+                : System<Params...>(entityRegistry, resourceRegistry), func(func) {}
+
+            void run(Params... params) override { func(std::forward<Params>(params)...); }
+        };
     }  // namespace core::ecs
 }  // namespace cobalt
