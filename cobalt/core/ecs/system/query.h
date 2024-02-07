@@ -4,40 +4,29 @@
 #pragma once
 
 #include "core/ecs/entity/registry.h"
+#include "core/ecs/resource/registry.h"
+#include "core/ecs/system/parameter.h"
 
 namespace cobalt {
     namespace core::ecs {
-        /**
-         * @brief: Interface for all queries. Just for static assertions.
-         */
-        class QueryInterface {
-            public:
-            /**
-             * @brief: Default virtual destructor.
-             * @return: void
-             */
-            virtual ~QueryInterface() noexcept = default;
-
-            protected:
-            QueryInterface() noexcept = default;
-        };
-
         /**
          * @brief: Query class. Used to iterate over entities with specific components.
          * @tparam Components...: Components to query for. Must be reference types (use cobalt::RefMut<T> or cobalt::Ref<T>). Must be registered in
          * the world.
          */
         template <typename... Components>
-        class Query : QueryInterface {
+        class Query : SystemParameter {
             static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
 
             public:
             /**
              * @brief: Creates a new query.
              * @param entityRegistry: The entity registry that the query will run on.
+             * @param resourceRegistry: The resource registry that the query will run on. Unused.
              * @return: A new query.
              */
-            explicit Query(EntityRegistry& entityRegistry) noexcept : componentTuples(entityRegistry.getMany<Components...>()) {
+            explicit Query(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry) noexcept
+                : SystemParameter(entityRegistry, resourceRegistry), componentTuples(entityRegistry.getMany<Components...>()) {
                 Component::validate<RemoveConstRef<Components>...>();
             }
             /**
@@ -82,6 +71,12 @@ namespace cobalt {
             static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
 
             public:
+            static constexpr bool isQuery = true;
+            /**
+             * @brief: Creates a new query.
+             * @param entityRegistry: The entity registry that the query will run on.
+             * @return: A new query.
+             */
             explicit Query(EntityRegistry& entityRegistry) noexcept : componentTuples(entityRegistry.getWithEntity<Components...>()) {}
 
             /**
@@ -89,7 +84,7 @@ namespace cobalt {
              */
             class Iterator {
                 public:
-                Iterator(Tuple<Ref<Entity>, Components...>* ptr) : ptr(ptr) {}
+                explicit Iterator(Tuple<Ref<Entity>, Components...>* ptr) : ptr(ptr) {}
 
                 Tuple<Ref<Entity>, Components...>& operator*() const { return *ptr; }
                 Tuple<Ref<Entity>, Components...>* operator->() { return ptr; }

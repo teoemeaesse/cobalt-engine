@@ -1,7 +1,8 @@
 // Created by tomas on
 // 28-01-2024.
 
-#include "core/ecs/resource/request.h"
+#include "core/ecs/entity/registry.h"
+#include "core/ecs/system/request.h"
 #include "unity/unity.h"
 
 using namespace cobalt::core::ecs;
@@ -21,31 +22,33 @@ void setUp(void) {}
 void tearDown(void) {}
 
 void test_read() {
+    EntityRegistry entityRegistry;
     ResourceRegistry resourceRegistry;
     resourceRegistry.add<MyResource>();
 
-    ReadRequest<MyResource> request(resourceRegistry);
+    ReadRequest<MyResource> request(entityRegistry, resourceRegistry);
     const MyResource& resource = request.get();
     TEST_ASSERT_EQUAL(0, resource.valueInt);
     TEST_ASSERT_EQUAL_FLOAT(3.141, resource.valueFloat);
 
     resourceRegistry.add<MyResource>(1);
-    ReadRequest<MyResource> request2(resourceRegistry);
+    ReadRequest<MyResource> request2(entityRegistry, resourceRegistry);
     const MyResource& resource2 = request2.get();
     TEST_ASSERT_EQUAL(1, resource2.valueInt);
     TEST_ASSERT_EQUAL_FLOAT(0.577, resource2.valueFloat);
 }
 
 void test_write() {
+    EntityRegistry entityRegistry;
     ResourceRegistry resourceRegistry;
     resourceRegistry.add<MyResource>();
 
-    WriteRequest<MyResource> request(resourceRegistry);
+    WriteRequest<MyResource> request(entityRegistry, resourceRegistry);
     MyResource& resource = request.get();
     resource.valueInt = 50;
     resource.valueFloat = 42;
 
-    ReadRequest<MyResource> request2(resourceRegistry);
+    ReadRequest<MyResource> request2(entityRegistry, resourceRegistry);
     const MyResource& resource2 = request2.get();
     TEST_ASSERT_EQUAL(50, resource2.valueInt);
     TEST_ASSERT_EQUAL_FLOAT(42, resource2.valueFloat);

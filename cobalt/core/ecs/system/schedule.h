@@ -15,9 +15,10 @@ namespace cobalt {
             /**
              * @brief: Creates a new schedule.
              * @param entityRegistry: The entity registry that the schedule will run on.
+             * @param resourceRegistry: The resource registry that the schedule will run on.
              * @return: A new schedule.
              */
-            explicit Schedule(EntityRegistry& entityRegistry) noexcept;
+            explicit Schedule(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry) noexcept;
             /**
              * @brief: Destroys the schedule.
              * @return: void
@@ -32,7 +33,7 @@ namespace cobalt {
             template <typename SystemType>
             void addSystem() noexcept {
                 static_assert(std::is_base_of<SystemInterface, SystemType>::value, "System must be a subclass of SystemInterface.");
-                systems.push_back(Move(createScope<SystemType>(entityRegistry)));
+                systems.push_back(Move(createScope<SystemType>(entityRegistry, resourceRegistry)));
             }
 
             /**
@@ -43,6 +44,7 @@ namespace cobalt {
 
             private:
             EntityRegistry& entityRegistry;
+            ResourceRegistry& resourceRegistry;
             const std::string name;
             Vec<Scope<SystemInterface>> systems;
         };

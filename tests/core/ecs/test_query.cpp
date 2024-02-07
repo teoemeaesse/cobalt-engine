@@ -35,6 +35,7 @@ void tearDown(void) {}
 void test_query() {
     ComponentRegistry componentRegistry;
     EntityRegistry entityRegistry;
+    ResourceRegistry resourceRegistry;
     componentRegistry.registerComponent<Position>();
     componentRegistry.registerComponent<Velocity>();
     componentRegistry.registerComponent<Mass>();
@@ -53,7 +54,7 @@ void test_query() {
     e3.add<Position>(11, 12);
     e3.add<Velocity>(13, 14);
 
-    Query<Ref<Position>, Ref<Velocity>> query(entityRegistry);
+    Query<Ref<Position>, Ref<Velocity>> query(entityRegistry, resourceRegistry);
     uint count = 0;
     for (auto [position, velocity] : query) {
         TEST_ASSERT_EQUAL_INT(position.x, velocity.x - 2);
@@ -62,7 +63,7 @@ void test_query() {
     }
     TEST_ASSERT_EQUAL_INT(count, 2);
 
-    Query<RefMut<Position>, Ref<Velocity>> query2(entityRegistry);
+    Query<RefMut<Position>, Ref<Velocity>> query2(entityRegistry, resourceRegistry);
     for (auto [position, velocity] : query2) {
         position.x += velocity.x;
         position.y += velocity.y;

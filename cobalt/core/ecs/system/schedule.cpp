@@ -5,7 +5,8 @@
 
 namespace cobalt {
     namespace core::ecs {
-        Schedule::Schedule(EntityRegistry& entityRegistry) noexcept : entityRegistry(entityRegistry) {}
+        Schedule::Schedule(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry) noexcept
+            : entityRegistry(entityRegistry), resourceRegistry(resourceRegistry) {}
 
         void Schedule::run() noexcept {
             for (auto& system : systems) {
