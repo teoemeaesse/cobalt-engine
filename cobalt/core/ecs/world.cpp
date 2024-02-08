@@ -24,5 +24,7 @@ namespace cobalt {
                 schedule.second->run();
             }
         }
+
+        void World::addPlugin(const Plugin& plugin) noexcept { plugin.onPlug(*this); }
     }  // namespace core::ecs
 }  // namespace cobalt

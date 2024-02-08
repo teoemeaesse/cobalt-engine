@@ -5,6 +5,7 @@
 
 #include "core/ecs/component/registry.h"
 #include "core/ecs/entity/registry.h"
+#include "core/ecs/plugin/plugin.h"
 #include "core/ecs/system/schedule.h"
 
 namespace cobalt {
@@ -79,6 +80,13 @@ namespace cobalt {
                 static_assert(std::is_invocable_r<void, Func, Params...>::value, "Func must be invocable with Params");
                 schedules[schedule]->addSystem<Params...>(func);
             }
+
+            /**
+             * @brief: Add a plugin to the world.
+             * @param plugin: Plugin instance.
+             * @return: void
+             */
+            void addPlugin(const Plugin& plugin) noexcept;
 
             /**
              * @brief: Run all systems in each schedule, in order.
