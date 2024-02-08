@@ -64,7 +64,7 @@ namespace cobalt {
             template <typename SystemType>
             void addSystem(DefaultSchedules schedule) noexcept {
                 static_assert(std::is_base_of<SystemInterface, SystemType>::value, "System must be a subclass of SystemInterface.");
-                schedules[schedule].addSystem<SystemType>();
+                schedules[schedule]->addSystem<SystemType>();
             }
             /**
              * @brief: Add a system to the world.
@@ -77,7 +77,7 @@ namespace cobalt {
             template <typename... Params, typename Func>
             void addSystem(DefaultSchedules schedule, Func func) noexcept {
                 static_assert(std::is_invocable_r<void, Func, Params...>::value, "Func must be invocable with Params");
-                schedules[schedule].addSystem(func);
+                schedules[schedule]->addSystem<Params...>(func);
             }
 
             /**
@@ -90,7 +90,7 @@ namespace cobalt {
             EntityRegistry entityRegistry;
             ComponentRegistry componentRegistry;
             ResourceRegistry resourceRegistry;
-            UMap<DefaultSchedules, Schedule> schedules;
+            UMap<DefaultSchedules, Scope<Schedule>> schedules;
         };
     }  // namespace core::ecs
 }  // namespace cobalt

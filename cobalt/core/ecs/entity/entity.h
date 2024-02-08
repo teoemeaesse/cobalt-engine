@@ -110,7 +110,7 @@ namespace cobalt {
              * @return: A reference to the component.
              */
             template <typename ComponentRef>
-            const ComponentRef& get() const {
+            ComponentRef get() const {
                 static_assert(std::is_reference<ComponentRef>::value, "Component type must be a reference type.");
                 return componentRegistry.get<ComponentRef>(id);
             }
@@ -120,7 +120,7 @@ namespace cobalt {
              * @return: A reference to the component.
              */
             template <typename ComponentRef>
-            ComponentRef& get() {
+            ComponentRef get() {
                 static_assert(std::is_reference<ComponentRef>::value, "Component type must be a reference type.");
                 return componentRegistry.get<ComponentRef>(id);
             }
