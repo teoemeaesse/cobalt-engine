@@ -1,0 +1,29 @@
+// Created by tomas on
+// 08-02-2024
+
+#pragma once
+
+#include "core/ecs/plugin/plugin.h"
+#include "core/ecs/world.h"
+
+namespace cobalt {
+    namespace engine {
+        /**
+         * @brief: Time resource.
+         * @param deltaTime: Time since last frame (seconds).
+         * @param timeSinceStartup: Time since application startup (seconds).
+         */
+        class Time : public core::ecs::Resource {
+            public:
+            Time() noexcept;
+
+            float deltaTime;
+            float timeSinceStartup;
+        };
+
+        class TimePlugin : public core::ecs::Plugin {
+            public:
+            void onPlug(core::ecs::World& world) const noexcept override;
+        };
+    }  // namespace engine
+}  // namespace cobalt

@@ -14,16 +14,21 @@ namespace cobalt {
 
         Entity& World::spawn() noexcept { return entityRegistry.add(componentRegistry); }
 
-        void World::kill(const Entity& entity) noexcept {
-            componentRegistry.removeAll(entity.getID());
-            entityRegistry.remove(entity);
-        }
+        void World::startup() noexcept { schedules[DefaultSchedules::Startup]->run(); }
 
         void World::update() noexcept {
-            for (auto& schedule : schedules) {
-                schedule.second->run();
+            for (DefaultSchedules schedule : {DefaultSchedules::PreUpdate, DefaultSchedules::Update, DefaultSchedules::PostUpdate}) {
+                schedules[schedule]->run();
             }
         }
+
+        void World::render() noexcept {
+            for (DefaultSchedules schedule : {DefaultSchedules::PreRender, DefaultSchedules::Render, DefaultSchedules::PostRender}) {
+                schedules[schedule]->run();
+            }
+        }
+
+        void World::shutdown() noexcept { schedules[DefaultSchedules::Shutdown]->run(); }
 
         void World::addPlugin(const Plugin& plugin) noexcept { plugin.onPlug(*this); }
     }  // namespace core::ecs

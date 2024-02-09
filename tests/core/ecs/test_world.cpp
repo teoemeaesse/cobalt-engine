@@ -45,7 +45,7 @@ void test_entity() {
     TEST_ASSERT_EQUAL(3, entity.get<Ref<Velocity>>().x);
     TEST_ASSERT_EQUAL(4, entity.get<Ref<Velocity>>().y);
     TEST_ASSERT_EQUAL(5, entity.get<Ref<Mass>>().mass);
-    world.kill(entity);
+    entity.kill();
     try {
         entity.get<Ref<Position>>();
         TEST_FAIL();
@@ -53,7 +53,7 @@ void test_entity() {
         TEST_ASSERT_EQUAL_STRING("Component not found for entity (0) with component: Position", e.what());
     }
     entity.kill();
-    world.kill(entity);
+    entity.kill();
 }
 
 void test_system() {
@@ -61,7 +61,7 @@ void test_system() {
     world.registerComponent<Position>();
     world.registerComponent<Velocity>();
     world.registerComponent<Mass>();
-    world.addSystem<Query<RefMut<Position>, RefMut<Velocity>, Ref<Mass>>>(World::DefaultSchedules::Startup, [](auto query) {
+    world.addSystem<Query<RefMut<Position>, RefMut<Velocity>, Ref<Mass>>>(World::DefaultSchedules::PreUpdate, [](auto query) {
         for (auto [position, velocity, mass] : query) {
             position.x += velocity.x;
             position.y += velocity.y;

@@ -29,12 +29,6 @@ namespace cobalt {
              * @return: Entity instance.
              */
             Entity& spawn() noexcept;
-            /**
-             * @brief: Kill an entity.
-             * @param entity: Entity instance.
-             * @return: void
-             */
-            void kill(const Entity& entity) noexcept;
 
             /**
              * @brief: Register a component.
@@ -44,16 +38,6 @@ namespace cobalt {
             template <typename ComponentType>
             void registerComponent() noexcept {
                 componentRegistry.registerComponent<ComponentType>();
-            }
-            /**
-             * @brief: Get a subset of entities' components.
-             * @tparam Components...: Components to select for.
-             * @return: A vector of tuples of references to components.
-             */
-            template <typename... Components>
-            Vec<Tuple<Components...>> get() const noexcept {
-                static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
-                return entityRegistry.getMany<Components...>();
             }
 
             /**
@@ -82,6 +66,46 @@ namespace cobalt {
             }
 
             /**
+             * @brief: Add a unique resource.
+             * @tparam ResourceType: Resource type.
+             * @return: void
+             */
+            template <typename ResourceType>
+            void addResource() noexcept {
+                resourceRegistry.add<ResourceType>();
+            }
+            /**
+             * @brief: Add a resource with constructor arguments.
+             * @tparam ResourceType: Resource type.
+             * @tparam Args...: Resource constructor arguments.
+             * @param args: Resource constructor arguments.
+             * @return: void
+             */
+            template <typename ResourceType, typename... Args>
+            void addResource(Args&&... args) noexcept {
+                resourceRegistry.add<ResourceType>(std::forward<Args>(args)...);
+            }
+
+            /**
+             * @brief: Get a resource.
+             * @tparam ResourceType: Resource type.
+             * @return: ResourceType reference.
+             */
+            template <typename ResourceType>
+            ResourceType& getResource() noexcept {
+                return resourceRegistry.get<ResourceType>();
+            }
+            /**
+             * @brief: Get a resource.
+             * @tparam ResourceType: Resource type.
+             * @return: ResourceType reference.
+             */
+            template <typename ResourceType>
+            const ResourceType& getResource() const noexcept {
+                return resourceRegistry.get<ResourceType>();
+            }
+
+            /**
              * @brief: Add a plugin to the world.
              * @param plugin: Plugin instance.
              * @return: void
@@ -89,10 +113,25 @@ namespace cobalt {
             void addPlugin(const Plugin& plugin) noexcept;
 
             /**
-             * @brief: Run all systems in each schedule, in order.
+             * @brief: Run the startup schedule.
+             * @return: void
+             */
+            void startup() noexcept;
+            /**
+             * @brief: Run the pre-update, update, and post-update schedules.
              * @return: void
              */
             void update() noexcept;
+            /**
+             * @brief: Run the pre-render, render, and post-render schedules.
+             * @return: void
+             */
+            void render() noexcept;
+            /**
+             * @brief: Run the shutdown schedule.
+             * @return: void
+             */
+            void shutdown() noexcept;
 
             private:
             EntityRegistry entityRegistry;

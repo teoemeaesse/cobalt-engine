@@ -15,7 +15,7 @@ namespace cobalt {
             public:
             virtual ~Plugin() = default;
 
-            virtual void onPlug(World& world) const = 0;
+            virtual void onPlug(World& world) const noexcept = 0;
         };
     }  // namespace core::ecs
 }  // namespace cobalt
