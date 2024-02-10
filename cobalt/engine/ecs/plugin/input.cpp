@@ -9,6 +9,8 @@ namespace cobalt {
     namespace engine {
         InputManager::InputManager() noexcept : core() {}
 
+        InputPlugin::InputPlugin() noexcept : Plugin("Input", "Provides peripheral input state information.") {}
+
         void InputPlugin::onPlug(core::ecs::World& world) const noexcept {
             world.addResource<InputManager>();
 

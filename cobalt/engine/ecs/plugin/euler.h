@@ -80,6 +80,12 @@ namespace cobalt {
         class EulerPlugin : public core::ecs::Plugin {
             public:
             /**
+             * @brief: Construct the plugin.
+             * @return: EulerPlugin
+             */
+            EulerPlugin() noexcept;
+
+            /**
              * @brief: Initialize the plugin.
              * @param world: World instance.
              * @return: void

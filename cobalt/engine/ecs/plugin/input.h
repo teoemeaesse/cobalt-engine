@@ -20,6 +20,12 @@ namespace cobalt {
         class InputPlugin : public core::ecs::Plugin {
             public:
             /**
+             * @brief: Construct the plugin.
+             * @return: InputPlugin
+             */
+            InputPlugin() noexcept;
+
+            /**
              * @brief: Initializes the plugin.
              * @param world: World to plug into.
              * @return: void

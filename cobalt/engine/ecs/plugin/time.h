@@ -22,6 +22,17 @@ namespace cobalt {
 
         class TimePlugin : public core::ecs::Plugin {
             public:
+            /**
+             * @brief: Construct the plugin.
+             * @return: TimePlugin
+             */
+            TimePlugin() noexcept;
+
+            /**
+             * @brief: Initialize the plugin.
+             * @param world: World instance.
+             * @return: void
+             */
             void onPlug(core::ecs::World& world) const noexcept override;
         };
     }  // namespace engine

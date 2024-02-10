@@ -115,6 +115,7 @@ namespace cobalt {
                 static_assert(std::is_base_of<Plugin, PluginType>::value, "PluginType must be a subclass of Plugin.");
                 PluginType plugin;
                 plugin.onPlug(*this);
+                plugin.log();
             }
             /**
              * @brief: Add a plugin to the world.
@@ -128,6 +129,7 @@ namespace cobalt {
                 static_assert(std::is_base_of<Plugin, PluginType>::value, "PluginType must be a subclass of Plugin.");
                 PluginType plugin(std::forward<Args>(args)...);
                 plugin.onPlug(*this);
+                plugin.log();
             }
 
             /**
