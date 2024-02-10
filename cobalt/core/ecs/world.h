@@ -93,7 +93,7 @@ namespace cobalt {
              */
             template <typename ResourceType>
             ResourceType& getResource() noexcept {
-                return resourceRegistry.get<ResourceType>();
+                return resourceRegistry.get<ResourceType&>();
             }
             /**
              * @brief: Get a resource.
@@ -102,15 +102,33 @@ namespace cobalt {
              */
             template <typename ResourceType>
             const ResourceType& getResource() const noexcept {
-                return resourceRegistry.get<ResourceType>();
+                return resourceRegistry.get<const ResourceType&>();
             }
 
             /**
              * @brief: Add a plugin to the world.
-             * @param plugin: Plugin instance.
+             * @tparam PluginType: Plugin type.
              * @return: void
              */
-            void addPlugin(const Plugin& plugin) noexcept;
+            template <typename PluginType>
+            void addPlugin() noexcept {
+                static_assert(std::is_base_of<Plugin, PluginType>::value, "PluginType must be a subclass of Plugin.");
+                PluginType plugin;
+                plugin.onPlug(*this);
+            }
+            /**
+             * @brief: Add a plugin to the world.
+             * @tparam PluginType: Plugin type.
+             * @tparam Args...: Plugin constructor arguments.
+             * @param args: Plugin constructor arguments.
+             * @return: void
+             */
+            template <typename PluginType, typename... Args>
+            void addPlugin(Args&&... args) noexcept {
+                static_assert(std::is_base_of<Plugin, PluginType>::value, "PluginType must be a subclass of Plugin.");
+                PluginType plugin(std::forward<Args>(args)...);
+                plugin.onPlug(*this);
+            }
 
             /**
              * @brief: Run the startup schedule.

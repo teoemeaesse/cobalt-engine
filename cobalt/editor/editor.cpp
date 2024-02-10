@@ -39,11 +39,6 @@ namespace cobalt {
         }
 
         void Editor::variableTimeStep(const float delta) {
-            if (getWindow().shouldClose()) {
-                stop();
-            }
-            getWindow().clear();
-
             scene.getMeshes()[0].rotate(glm::vec3(30.0f * delta, 5.0f * delta, 20.0f * delta));
             static float cubeXOffset = 0.0f;
             static float cubeYOffset = 0.0f;
@@ -53,8 +48,6 @@ namespace cobalt {
             cubeYOffset = cos(time) * 25.0f * delta;
             scene.getMeshes()[4].translate(glm::vec3(cubeXOffset, 0.0f, cubeYOffset));
             renderGraph.execute();
-
-            getWindow().swapBuffers();
         }
 
         void Editor::onResize(const uint width, const uint height) {

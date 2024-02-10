@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "core/ecs/world.h"
 #include "core/gfx/window.h"
 #include "core/input/input_manager.h"
 #include "core/pch.h"
@@ -93,6 +94,7 @@ namespace cobalt {
                                        // calculated, in seconds.
 
             core::gfx::Window window;                // The window.
+            core::ecs::World world;                  // The ECS world.
             core::input::InputManager inputManager;  // The input manager.
         };
 

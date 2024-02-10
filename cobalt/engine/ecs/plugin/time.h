@@ -11,14 +11,14 @@ namespace cobalt {
         /**
          * @brief: Time resource.
          * @param deltaTime: Time since last frame (seconds).
-         * @param timeSinceStartup: Time since application startup (seconds).
+         * @param elapsedTime: Time since application startup (seconds).
          */
         class Time : public core::ecs::Resource {
             public:
             Time() noexcept;
 
             float deltaTime;
-            float timeSinceStartup;
+            float elapsedTime;
         };
 
         class TimePlugin : public core::ecs::Plugin {

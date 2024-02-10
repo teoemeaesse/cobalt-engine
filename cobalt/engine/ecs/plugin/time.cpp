@@ -7,7 +7,7 @@ using namespace cobalt::core::ecs;
 
 namespace cobalt {
     namespace engine {
-        Time::Time() noexcept : deltaTime(0.0f), timeSinceStartup(0.0f) {}
+        Time::Time() noexcept : deltaTime(0.0f), elapsedTime(0.0f) {}
 
         void TimePlugin::onPlug(core::ecs::World& world) const noexcept { world.addResource<Time>(); }
     }  // namespace engine

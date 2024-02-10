@@ -5,6 +5,7 @@
 
 #include "core/gl/context.h"
 #include "core/pch.h"
+#include "engine/ecs/plugin/time.h"
 
 namespace cobalt {
     namespace engine {
@@ -81,12 +82,15 @@ namespace cobalt {
             inputManager.registerPeripheral<core::input::Keyboard>(core::input::Keyboard::NAME);
             inputManager.registerPeripheral<core::input::Mouse>(core::input::Mouse::NAME, 1.0f);
             CB_INFO("Created application");
+            world.addPlugin<TimePlugin>();
         }
 
         Application::~Application() { CB_INFO("Destroyed application"); }
 
         extern bool shutdownInterrupt;
         void Application::run() {
+            CB_INFO("Starting up ECS world");
+            world.startup();
             int framebufferWidth, framebufferHeight;
             glfwGetFramebufferSize(core::gl::Context::getGLFWContext(), &framebufferWidth, &framebufferHeight);
             onResize((uint)framebufferWidth, (uint)framebufferHeight);
@@ -99,6 +103,7 @@ namespace cobalt {
                 clock_gettime(CLOCK_MONOTONIC_RAW, &start);
 
                 while (acc >= delta) {
+                    world.update();
                     fixedTimeStep();
                     acc -= delta;
                 }
@@ -111,14 +116,27 @@ namespace cobalt {
                     frames = 0;
                 }
                 float delta = (float)frametime / 1000000.0f;
+                Time& time = world.getResource<Time>();
+                time.deltaTime = delta;
+                time.elapsedTime += delta;
 
+                CB_CORE_WARN("Elapsed: {0}", time.elapsedTime);
+
+                if (getWindow().shouldClose()) {
+                    stop();
+                }
+                window.clear();
+                world.render();
                 variableTimeStep(delta);
+                window.swapBuffers();
 
                 clock_gettime(CLOCK_MONOTONIC_RAW, &end);
                 frametime = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_nsec - start.tv_nsec) / 1000;
                 acc += frametime;
             }
 
+            CB_INFO("Shutting down ECS world");
+            world.shutdown();
             CB_INFO("Shutting down game loop");
         }
 

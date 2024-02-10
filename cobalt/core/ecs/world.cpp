@@ -29,7 +29,5 @@ namespace cobalt {
         }
 
         void World::shutdown() noexcept { schedules[DefaultSchedules::Shutdown]->run(); }
-
-        void World::addPlugin(const Plugin& plugin) noexcept { plugin.onPlug(*this); }
     }  // namespace core::ecs
 }  // namespace cobalt
