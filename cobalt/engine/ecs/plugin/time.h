@@ -13,8 +13,7 @@ namespace cobalt {
          * @param deltaTime: Time since last frame (seconds).
          * @param elapsedTime: Time since application startup (seconds).
          */
-        class Time : public core::ecs::Resource {
-            public:
+        struct Time : public core::ecs::Resource {
             Time() noexcept;
 
             float deltaTime;

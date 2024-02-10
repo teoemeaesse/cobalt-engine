@@ -17,8 +17,8 @@ namespace cobalt {
          * @param scale: Linear scale.
          */
         struct Transform : public core::ecs::Component {
-            Transform(const float x, const float y, const float z, const glm::vec3 rotation, const glm::vec3 scale);
-            Transform();
+            Transform(const float x, const float y, const float z, const glm::vec3 rotation, const glm::vec3 scale) noexcept;
+            Transform() noexcept;
 
             float x, y, z;
             glm::vec3 rotation;
@@ -32,8 +32,8 @@ namespace cobalt {
          * @param z: Z velocity.
          */
         struct Velocity : public core::ecs::Component {
-            Velocity(const float x, const float y, const float z);
-            Velocity();
+            Velocity(const float x, const float y, const float z) noexcept;
+            Velocity() noexcept;
 
             float x, y, z;
         };
@@ -45,8 +45,8 @@ namespace cobalt {
          * @param z: Z angular velocity.
          */
         struct AngularVelocity : public core::ecs::Component {
-            AngularVelocity(const float x, const float y, const float z);
-            AngularVelocity();
+            AngularVelocity(const float x, const float y, const float z) noexcept;
+            AngularVelocity() noexcept;
 
             float x, y, z;
         };
@@ -58,8 +58,8 @@ namespace cobalt {
          * @param z: Z acceleration.
          */
         struct Acceleration : public core::ecs::Component {
-            Acceleration(const float x, const float y, const float z);
-            Acceleration();
+            Acceleration(const float x, const float y, const float z) noexcept;
+            Acceleration() noexcept;
 
             float x, y, z;
         };
@@ -71,8 +71,8 @@ namespace cobalt {
          * @param z: Z angular acceleration.
          */
         struct AngularAcceleration : public core::ecs::Component {
-            AngularAcceleration(const float x, const float y, const float z);
-            AngularAcceleration();
+            AngularAcceleration(const float x, const float y, const float z) noexcept;
+            AngularAcceleration() noexcept;
 
             float x, y, z;
         };
