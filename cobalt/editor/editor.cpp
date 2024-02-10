@@ -30,9 +30,6 @@ namespace cobalt {
         }
 
         void Editor::fixedTimeStep() {
-            getInputManager().pollEvents();
-            getInputManager().clearEvents();
-
             scene.getCameraController().update();
 
             getWindow().setTitle("Cobalt Editor - " + std::to_string(getFramerate()) + " FPS");

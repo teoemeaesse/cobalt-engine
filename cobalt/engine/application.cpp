@@ -5,6 +5,7 @@
 
 #include "core/gl/context.h"
 #include "core/pch.h"
+#include "engine/ecs/plugin/input.h"
 #include "engine/ecs/plugin/time.h"
 
 namespace cobalt {
@@ -15,7 +16,6 @@ namespace cobalt {
               shouldStop(false),
               frameCount(0),
               framerateTimeWindow(1),
-              inputManager(),
               window(
                   core::gfx::WindowBuilder()
                       .setTitle("Cobalt")
@@ -79,18 +79,17 @@ namespace cobalt {
                       })
                       .build()) {
             core::gl::Context::setUserPointer(this);
-            inputManager.registerPeripheral<core::input::Keyboard>(core::input::Keyboard::NAME);
-            inputManager.registerPeripheral<core::input::Mouse>(core::input::Mouse::NAME, 1.0f);
-            CB_INFO("Created application");
+            world.addPlugin<InputPlugin>();
             world.addPlugin<TimePlugin>();
+            CB_INFO("Created application");
+            CB_INFO("Starting up ECS world");
+            world.startup();
         }
 
         Application::~Application() { CB_INFO("Destroyed application"); }
 
         extern bool shutdownInterrupt;
         void Application::run() {
-            CB_INFO("Starting up ECS world");
-            world.startup();
             int framebufferWidth, framebufferHeight;
             glfwGetFramebufferSize(core::gl::Context::getGLFWContext(), &framebufferWidth, &framebufferHeight);
             onResize((uint)framebufferWidth, (uint)framebufferHeight);
@@ -120,8 +119,6 @@ namespace cobalt {
                 time.deltaTime = delta;
                 time.elapsedTime += delta;
 
-                CB_CORE_WARN("Elapsed: {0}", time.elapsedTime);
-
                 if (getWindow().shouldClose()) {
                     stop();
                 }
@@ -146,7 +143,7 @@ namespace cobalt {
 
         core::gfx::Window& Application::getWindow() { return window; }
 
-        core::input::InputManager& Application::getInputManager() { return inputManager; }
+        core::input::InputManager& Application::getInputManager() { return world.getResource<InputManager>().core; }
 
         void Application::setFramerateTimeWindow(const uint timeWindow) { framerateTimeWindow = timeWindow; }
 
