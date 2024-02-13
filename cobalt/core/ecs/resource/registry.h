@@ -3,8 +3,8 @@
 
 #pragma once
 
+#include "core/ecs/exception.h"
 #include "core/ecs/resource/resource.h"
-#include "core/exceptions/ecs_exception.h"
 
 namespace cobalt {
     namespace core::ecs {

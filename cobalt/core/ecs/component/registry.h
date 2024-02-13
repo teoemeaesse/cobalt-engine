@@ -4,7 +4,7 @@
 #pragma once
 
 #include "core/ecs/component/storage.h"
-#include "core/exceptions/ecs_exception.h"
+#include "core/ecs/exception.h"
 
 #define CB_ECS_MAX_COMPONENTS 64
 

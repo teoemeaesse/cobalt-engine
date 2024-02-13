@@ -3,8 +3,8 @@
 
 #include "engine/entry_point.h"
 
-#include "core/exceptions/gfx_exception.h"
-#include "core/exceptions/input_exception.h"
+#include "core/gfx/exception.h"
+#include "core/input/exception.h"
 
 namespace cobalt {
     namespace engine {

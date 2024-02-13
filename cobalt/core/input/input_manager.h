@@ -4,7 +4,7 @@
 #pragma once
 
 #include "core/ecs/resource/resource.h"
-#include "core/exceptions/input_exception.h"
+#include "core/input/exception.h"
 #include "core/input/input_command.h"
 #include "core/input/keyboard.h"
 #include "core/input/mouse.h"

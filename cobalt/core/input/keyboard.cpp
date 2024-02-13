@@ -3,7 +3,7 @@
 
 #include "core/input/keyboard.h"
 
-#include "core/exceptions/input_exception.h"
+#include "core/input/exception.h"
 
 namespace cobalt {
     namespace core::input {
