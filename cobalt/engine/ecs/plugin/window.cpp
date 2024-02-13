@@ -12,7 +12,7 @@ namespace cobalt {
         WindowPlugin::WindowPlugin() noexcept : Plugin("Window", "Provides window management functionality.") {}
 
         void WindowPlugin::onPlug(World& world) const noexcept {
-            world.addResource(Move(createScope<core::gfx::Window>(Move(
+            world.addResource(Move(createScope<core::gfx::Window>(
                 core::gfx::WindowBuilder()
                     .setTitle("Cobalt")
                     .setWidth(1280)
@@ -21,7 +21,7 @@ namespace cobalt {
                     .setFramebufferResizeCallback(
                         [](core::gfx::Window& window, const uint width, const uint height) { window.getDefaultFBO().resize(width, height); })
                     .setResizeCallback([](core::gfx::Window& window, const uint width, const uint height) { window.setDimensions(width, height); })
-                    .build()))));
+                    .build())));
 
             world.addSystem<WriteRequest<core::gfx::Window>>(DefaultSchedules::Startup, [](auto window) { window.get().init(); });
         }

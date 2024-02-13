@@ -3,6 +3,7 @@
 
 #include "engine/ecs/plugin/input.h"
 
+#include "core/ecs/system/commands.h"
 #include "core/gfx/window.h"
 #include "core/input/input_manager.h"
 
@@ -34,7 +35,7 @@ namespace cobalt {
             /**
              * @brief: Set input callbacks.
              */
-            world.addSystem<WriteRequest<core::gfx::Window>>(DefaultSchedules::Startup, [](auto window) {
+            world.addSystem<WriteRequest<core::gfx::Window>>(DefaultSchedules::Startup, [](auto commands, auto window) {
                 window.get().setKeyCallback([](core::input::InputManager& manager, const core::input::KeyboardInputID key, const bool down) {
                     try {
                         manager.getPeripheral<core::input::Keyboard>(core::input::Keyboard::NAME).onKeyPress(key, down);
