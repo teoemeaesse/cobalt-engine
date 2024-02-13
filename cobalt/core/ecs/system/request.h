@@ -21,7 +21,7 @@ namespace cobalt {
              * @param resourceRegistry: Resource registry.
              * @return: Read request instance.
              */
-            ReadRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry) noexcept
+            ReadRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry)
                 : SystemParameter(entityRegistry, resourceRegistry), resource(resourceRegistry.get<const ResourceType&>()) {
                 Resource::validate<ResourceType>();
             }
@@ -54,7 +54,7 @@ namespace cobalt {
              * @param resourceRegistry: Resource registry.
              * @return: Write request instance.
              */
-            explicit WriteRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry) noexcept
+            explicit WriteRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry)
                 : SystemParameter(entityRegistry, resourceRegistry), resource(resourceRegistry.get<ResourceType&>()) {
                 Resource::validate<ResourceType>();
             }

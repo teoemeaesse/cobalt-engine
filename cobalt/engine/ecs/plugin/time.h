@@ -20,6 +20,9 @@ namespace cobalt {
             float elapsedTime;
         };
 
+        /**
+         * @brief: Time plugin. Adds the Time resource to the world.
+         */
         class TimePlugin : public core::ecs::Plugin {
             public:
             /**

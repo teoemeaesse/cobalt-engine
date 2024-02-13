@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "core/ecs/resource/resource.h"
 #include "core/exceptions/input_exception.h"
 #include "core/input/input_command.h"
 #include "core/input/keyboard.h"
@@ -15,7 +16,7 @@ namespace cobalt {
          * @brief: The input manager. Handles all input from peripherals such as the keyboard
          * and mouse. It then dispatches events to the appropriate listeners.
          */
-        class InputManager {
+        class InputManager : public core::ecs::Resource {
             public:
             /**
              * @brief: Create a new input manager.

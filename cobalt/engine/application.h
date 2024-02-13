@@ -43,14 +43,6 @@ namespace cobalt {
             virtual void variableTimeStep(const float delta) = 0;
 
             /**
-             * @brief: Resize callback.
-             * @param width: The new width of the window.
-             * @param height: The new height of the window.
-             * @return: void
-             */
-            virtual void onResize(const uint width, const uint height);
-
-            /**
              * @brief: Run the application. This function will not return until the application is stopped.
              * @return: void
              */
@@ -67,21 +59,31 @@ namespace cobalt {
              */
             uint getFramerate() const;
             /**
-             * @brief: Get the window.
-             * @return: The window.
-             */
-            core::gfx::Window& getWindow();
-            /**
-             * @brief: Get the input manager.
-             * @return: The input manager.
-             */
-            core::input::InputManager& getInputManager();
-            /**
              * @brief: Set the time window in which the estimated framerate is calculated.
              * @param timeWindow: The time window in which the framerate is calculated, in seconds.
              * @return: void
              */
             void setFramerateTimeWindow(const uint timeWindow);
+            /**
+             * @brief: Get the window of the application.
+             * @return: The window of the application.
+             */
+            core::gfx::Window& getWindow();
+            /**
+             * @brief: Get the window of the application.
+             * @return: The window of the application.
+             */
+            const core::gfx::Window& getWindow() const;
+            /**
+             * @brief: Get the input manager of the application.
+             * @return: The input manager of the application.
+             */
+            core::input::InputManager& getInputManager();
+            /**
+             * @brief: Get the input manager of the application.
+             * @return: The input manager of the application.
+             */
+            const core::input::InputManager& getInputManager() const;
 
             private:
             bool shouldStop;           // Whether the game loop should stop.
@@ -92,8 +94,6 @@ namespace cobalt {
                                        // framerate time window.
             uint framerateTimeWindow;  // The time window in which the framerate is
                                        // calculated, in seconds.
-
-            core::gfx::Window window;  // The window.
             core::ecs::World world;    // The ECS world.
         };
 

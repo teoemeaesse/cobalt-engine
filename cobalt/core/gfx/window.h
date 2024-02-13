@@ -4,6 +4,7 @@
 #pragma once
 
 #include "core/gl/fbo.h"
+#include "core/input/input_manager.h"
 #include "core/pch.h"
 
 namespace cobalt {
@@ -13,17 +14,31 @@ namespace cobalt {
         /**
          * @brief: Wrapper for GLFW window.
          */
-        class Window {
+        class Window : public core::ecs::Resource {
             friend class WindowBuilder;
 
             public:
-            typedef void (*CallbackSetter)();
+            typedef void (*KeyCallback)(core::input::InputManager& manager, const core::input::KeyboardInputID key, const bool down);
+            typedef void (*CursorCallback)(core::input::InputManager& manager, const float xpos, const float ypos);
+            typedef void (*MouseButtonCallback)(core::input::InputManager& manager, const core::input::MouseInputID button, const bool down);
+            typedef void (*ScrollCallback)(core::input::InputManager& manager, const float xoffset, const float yoffset);
+            typedef void (*FramebufferResizeCallback)(gfx::Window& window, const uint width, const uint height);
+            typedef void (*ResizeCallback)(gfx::Window& window, const uint width, const uint height);
 
             /**
              * @brief: Destroys the window.
              */
             ~Window();
+            /**
+             * @brief: Default move constructor.
+             */
+            Window(Window&&) noexcept = default;
 
+            /**
+             * @brief: Initializes the window. Called on construction and after changing window hints.
+             * @return: void
+             */
+            void init();
             /**
              * @brief: Swap the front and back buffers of the window.
              * @return: void
@@ -62,13 +77,6 @@ namespace cobalt {
              * @return: void
              */
             void setClearColor(const Color& color);
-            /**
-             * @brief: Called when the window is resized.
-             * @param width: The new width of the window.
-             * @param height: The new height of the window.
-             * @return: void
-             */
-            void onResize(const uint width, const uint height);
             /**
              * @brief: Call to resize the GLFW window to match this window's dimensions.
              * @return: void
@@ -126,6 +134,89 @@ namespace cobalt {
              * @return: void
              */
             void setTitle(const std::string& title);
+            /**
+             * @brief: Sets the key callback of the window.
+             * @param callback: The new key callback of the window.
+             * @return: void
+             */
+            void setKeyCallback(const KeyCallback callback);
+            /**
+             * @brief: Sets the cursor callback of the window.
+             * @param callback: The new cursor callback of the window.
+             * @return: void
+             */
+            void setCursorCallback(const CursorCallback callback);
+            /**
+             * @brief: Sets the mouse button callback of the window.
+             * @param callback: The new mouse button callback of the window.
+             * @return: void
+             */
+            void setMouseButtonCallback(const MouseButtonCallback callback);
+            /**
+             * @brief: Sets the scroll callback of the window.
+             * @param callback: The new scroll callback of the window.
+             * @return: void
+             */
+            void setScrollCallback(const ScrollCallback callback);
+            /**
+             * @brief: Sets the framebuffer resize callback of the window.
+             * @param callback: The new framebuffer resize callback of the window.
+             * @return: void
+             */
+            void setFramebufferResizeCallback(const FramebufferResizeCallback callback);
+            /**
+             * @brief: Sets the resize callback of the window.
+             * @param callback: The new resize callback of the window.
+             * @return: void
+             */
+            void setResizeCallback(const ResizeCallback callback);
+
+            /**
+             * @brief: Callback for when a key is pressed or released.
+             * @param manager: The input manager.
+             * @param key: The key that was pressed or released.
+             * @param down: Whether or not the key was pressed or released.
+             * @return: void
+             */
+            void onKey(input::InputManager& manager, const input::KeyboardInputID key, const bool down);
+            /**
+             * @brief: Callback for when the cursor is moved.
+             * @param manager: The input manager.
+             * @param xpos: The new x position of the cursor.
+             * @param ypos: The new y position of the cursor.
+             * @return: void
+             */
+            void onCursor(input::InputManager& manager, const float xpos, const float ypos);
+            /**
+             * @brief: Callback for when a mouse button is pressed or released.
+             * @param manager: The input manager.
+             * @param button: The button that was pressed or released.
+             * @param down: Whether or not the button was pressed or released.
+             * @return: void
+             */
+            void onMouseButton(input::InputManager& manager, const input::MouseInputID button, const bool down);
+            /**
+             * @brief: Callback for when the scroll wheel is scrolled.
+             * @param manager: The input manager.
+             * @param xoffset: The x offset of the scroll wheel.
+             * @param yoffset: The y offset of the scroll wheel.
+             * @return: void
+             */
+            void onScroll(input::InputManager& manager, const float xoffset, const float yoffset);
+            /**
+             * @brief: Callback for when the framebuffer is resized.
+             * @param width: The new width of the framebuffer.
+             * @param height: The new height of the framebuffer.
+             * @return: void
+             */
+            void onFramebufferResize(const uint width, const uint height);
+            /**
+             * @brief: Callback for when the window is resized.
+             * @param width: The new width of the window.
+             * @param height: The new height of the window.
+             * @return: void
+             */
+            void onResize(const uint width, const uint height);
 
             private:
             /**
@@ -137,13 +228,19 @@ namespace cobalt {
              * @param mode: The mode of the window.
              * @param resizable: Whether or not the window should be resizable.
              * @param decorated: Whether or not the window should be decorated.
-             * @param lockAspectRatio: Whether or not the aspect ratio of the window
-             * should be locked.
-             * @param callbackSetter: The function to set the callbacks of the window.
+             * @param lockAspectRatio: Whether or not the aspect ratio of the window should be locked.
+             * @param keyCallback: The key callback of the window.
+             * @param cursorCallback: The cursor callback of the window.
+             * @param mouseButtonCallback: The mouse button callback of the window.
+             * @param scrollCallback: The scroll callback of the window.
+             * @param framebufferResizeCallback: The framebuffer resize callback of the window.
+             * @param resizeCallback: The resize callback of the window.
              * @return: A new window.
              */
             Window(const uint width, const uint height, const std::string& title, const bool vsync, const WindowMode mode, const bool resizable,
-                   const bool decorated, const bool lockAspectRatio, const CallbackSetter callbackSetter);
+                   const bool decorated, const bool lockAspectRatio, const KeyCallback keyCallback, const CursorCallback cursorCallback,
+                   const MouseButtonCallback mouseButtonCallback, const ScrollCallback scrollCallback,
+                   const FramebufferResizeCallback framebufferResizeCallback, const ResizeCallback resizeCallback);
 
             uint width,
                 height;               // The width and height of the window.
@@ -157,15 +254,12 @@ namespace cobalt {
             const float aspectRatio;  // The aspect ratio of the window.
             WindowMode mode;          // The mode of the window.
 
-            const CallbackSetter callbackSetter;  // The function to set the callbacks of
-                                                  // the window. It is important to have
-                                                  // this for when the window is recreated.
-
-            /**
-             * @brief: Initializes the window. Called on construction and after changing window hints.
-             * @return: void
-             */
-            void init();
+            KeyCallback keyCallback;                              // The key callback of the window.
+            CursorCallback cursorCallback;                        // The cursor callback of the window.
+            MouseButtonCallback mouseButtonCallback;              // The mouse button callback of the window.
+            ScrollCallback scrollCallback;                        // The scroll callback of the window.
+            FramebufferResizeCallback framebufferResizeCallback;  // The framebuffer resize callback of the window.
+            ResizeCallback resizeCallback;                        // The resize callback of the window.
         };
 
         /**
@@ -232,11 +326,41 @@ namespace cobalt {
              */
             WindowBuilder& setLockAspectRatio(const bool lockAspectRatio);
             /**
-             * @brief: Sets the callbacks setter (sorry) of the window.
-             * @param callbackSetter: The function to set the callbacks of the window.
+             * @brief: Sets the key callback of the window.
+             * @param callback: The key callback of the window.
              * @return: The window builder.
              */
-            WindowBuilder& setCallbackSetter(Window::CallbackSetter callbackSetter);
+            WindowBuilder& setKeyCallback(const Window::KeyCallback callback);
+            /**
+             * @brief: Sets the cursor callback of the window.
+             * @param callback: The cursor callback of the window.
+             * @return: The window builder.
+             */
+            WindowBuilder& setCursorCallback(const Window::CursorCallback callback);
+            /**
+             * @brief: Sets the mouse button callback of the window.
+             * @param callback: The mouse button callback of the window.
+             * @return: The window builder.
+             */
+            WindowBuilder& setMouseButtonCallback(const Window::MouseButtonCallback callback);
+            /**
+             * @brief: Sets the scroll callback of the window.
+             * @param callback: The scroll callback of the window.
+             * @return: The window builder.
+             */
+            WindowBuilder& setScrollCallback(const Window::ScrollCallback callback);
+            /**
+             * @brief: Sets the framebuffer resize callback of the window.
+             * @param callback: The framebuffer resize callback of the window.
+             * @return: The window builder.
+             */
+            WindowBuilder& setFramebufferResizeCallback(const Window::FramebufferResizeCallback callback);
+            /**
+             * @brief: Sets the resize callback of the window.
+             * @param callback: The resize callback of the window.
+             * @return: The window builder.
+             */
+            WindowBuilder& setResizeCallback(const Window::ResizeCallback callback);
 
             /**
              * @brief: Builds the window.
@@ -252,7 +376,12 @@ namespace cobalt {
             bool resizable;
             bool decorated;
             bool lockAspectRatio;
-            Window::CallbackSetter callbackSetter;
+            Window::KeyCallback keyCallback;
+            Window::CursorCallback cursorCallback;
+            Window::MouseButtonCallback mouseButtonCallback;
+            Window::ScrollCallback scrollCallback;
+            Window::FramebufferResizeCallback framebufferResizeCallback;
+            Window::ResizeCallback resizeCallback;
         };
     }  // namespace core::gfx
 }  // namespace cobalt

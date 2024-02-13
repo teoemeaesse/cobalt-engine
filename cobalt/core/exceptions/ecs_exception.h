@@ -48,5 +48,15 @@ namespace cobalt {
                                      ") with component: " + Component::getTypeName<T>()) {}
             ~ComponentOverflowException() = default;
         };
+
+        class PluginNotFoundException : public std::runtime_error {
+            public:
+            /**
+             * @brief: Create a new plugin not found exception.
+             * @return: The new plugin not found exception.
+             */
+            PluginNotFoundException(const std::string& pluginName) : std::runtime_error("Plugin not found: " + pluginName) {}
+            ~PluginNotFoundException() = default;
+        };
     }  // namespace core::ecs
 }  // namespace cobalt

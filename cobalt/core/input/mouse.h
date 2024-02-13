@@ -92,10 +92,10 @@ namespace cobalt {
              * @brief: Callback for when a mouse button is pressed.
              * Interfaces with GLFW.
              * @param button: The button that was pressed.
-             * @param action: The action that was performed.
+             * @param down: Whether the button was pressed down or released.
              * @return: void
              */
-            void onButtonPress(const int button, const int action);
+            void onButtonPress(const MouseInputID button, const bool down);
 
             /**
              * @brief: Poll the keyboard for events.

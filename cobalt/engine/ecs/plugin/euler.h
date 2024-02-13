@@ -77,6 +77,9 @@ namespace cobalt {
             float x, y, z;
         };
 
+        /**
+         * @brief: Euler integration plugin. Provides basic euler integration for linear and angular motion.
+         */
         class EulerPlugin : public core::ecs::Plugin {
             public:
             /**

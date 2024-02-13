@@ -34,12 +34,11 @@ namespace cobalt {
             dsy = dy;
         }
 
-        void Mouse::onButtonPress(const int button, const int action) {
-            MouseInputID id = glfwToCobalt(button);
-            if (id == MouseInputID::UNKNOWN) {
+        void Mouse::onButtonPress(const MouseInputID button, const bool down) {
+            if (button == MouseInputID::UNKNOWN) {
                 throw InvalidInputException<MouseInputID>("Invalid button", button, this);
             }
-            buttonStates[static_cast<size_t>(id)].down = action == GLFW_PRESS;
+            buttonStates[static_cast<size_t>(button)].down = down;
         }
 
         void Mouse::queueEvent(const MouseInputID id, const InputValue value) {

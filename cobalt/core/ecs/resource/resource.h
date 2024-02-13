@@ -36,7 +36,7 @@ namespace cobalt {
              * @param: Resource to copy.
              * @return: Instance of Resource.
              */
-            Resource(const Resource&) = delete;
+            Resource(const Resource&) noexcept = default;
             /**
              * @brief: Move constructor.
              * @param: Resource to move.
@@ -48,7 +48,7 @@ namespace cobalt {
              * @param: Resource to copy.
              * @return: Resource reference.
              */
-            Resource& operator=(const Resource&) = delete;
+            Resource& operator=(const Resource&) noexcept = default;
             /**
              * @brief: Move assignment operator.
              * @param: Resource to move.
@@ -60,7 +60,7 @@ namespace cobalt {
              * @brief: Get the resource's type. This is a unique identifier, lazy-generated based on the resource class' name.
              * @return: Resource type identifier.
              */
-            virtual const ResourceProperties::Type getType() noexcept;
+            virtual const ResourceProperties::Type getType() const noexcept;
             /**
              * @brief: Get the resource's type. This is a unique identifier, generated at compile time based on the resource class' name.
              * @tparam ResourceType: Resource type.
@@ -76,7 +76,7 @@ namespace cobalt {
              * @brief: Get the resource's type name.
              * @return: Resource type name.
              */
-            virtual const std::string& getTypeName() noexcept;
+            virtual const std::string& getTypeName() const noexcept;
             /**
              * @brief: Get the resource's type name.
              * @tparam ResourceType: Resource type.

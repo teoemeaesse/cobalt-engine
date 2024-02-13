@@ -14,7 +14,7 @@ namespace cobalt {
 
             void fixedTimeStep() override;
             void variableTimeStep(const float delta) override;
-            void onResize(const uint width, const uint height) override;
+            void onResize(const uint width, const uint height);
             void bindInput();
             void createScene();
 

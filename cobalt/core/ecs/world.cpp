@@ -14,6 +14,8 @@ namespace cobalt {
 
         Entity& World::spawn() noexcept { return entityRegistry.add(componentRegistry); }
 
+        void World::addResource(Scope<Resource>&& resource) noexcept { resourceRegistry.add(Move(resource)); }
+
         void World::startup() noexcept { schedules[DefaultSchedules::Startup]->run(); }
 
         void World::update() noexcept {

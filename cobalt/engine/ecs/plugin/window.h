@@ -1,29 +1,28 @@
 // Created by tomas on
-// 10-02-2024
+// 08-02-2024
 
 #pragma once
 
 #include "core/ecs/plugin/plugin.h"
 #include "core/ecs/world.h"
+#include "core/gfx/window.h"
 
 namespace cobalt {
     namespace engine {
-        struct KeyboardState : public core::ecs::Resource {};
-
         /**
-         * @brief: Input plugin. Provides peripheral input state information.
+         * @brief: Window plugin. Adds the window resource to the world.
          */
-        class InputPlugin : public core::ecs::Plugin {
+        class WindowPlugin : public core::ecs::Plugin {
             public:
             /**
              * @brief: Construct the plugin.
-             * @return: InputPlugin
+             * @return: WindowPlugin
              */
-            InputPlugin() noexcept;
+            WindowPlugin() noexcept;
 
             /**
-             * @brief: Initializes the plugin.
-             * @param world: World to plug into.
+             * @brief: Initialize the plugin.
+             * @param world: World instance.
              * @return: void
              */
             void onPlug(core::ecs::World& world) const noexcept override;

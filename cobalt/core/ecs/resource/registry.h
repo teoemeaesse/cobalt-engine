@@ -44,6 +44,12 @@ namespace cobalt {
                 resources.erase(type);
                 resources.emplace(type, Move(createScope<ResourceType>(std::forward<Args>(args)...)));
             }
+            /**
+             * @brief: Move a resource into the registry.
+             * @param resource: Resource.
+             * @return: void
+             */
+            void add(Scope<Resource>&& resource) noexcept;
 
             /**
              * @brief: Get a resource from the registry.

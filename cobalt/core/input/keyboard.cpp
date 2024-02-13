@@ -21,12 +21,11 @@ namespace cobalt {
             }
         }
 
-        void Keyboard::onKeyPress(const int key, const int action) {
-            KeyboardInputID id = glfwToCobalt(key);
-            if (id == KeyboardInputID::UNKNOWN) {
-                throw InvalidInputException<KeyboardInputID>("Invalid key", id, this);
+        void Keyboard::onKeyPress(const KeyboardInputID key, const bool down) {
+            if (key == KeyboardInputID::UNKNOWN) {
+                throw InvalidInputException<KeyboardInputID>("Invalid key", key, this);
             }
-            keyStates[static_cast<size_t>(id)].down = action != GLFW_RELEASE;
+            keyStates[static_cast<size_t>(key)].down = down;
         }
 
         void Keyboard::pollEvents() {

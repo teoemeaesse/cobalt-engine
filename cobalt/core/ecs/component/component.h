@@ -27,7 +27,7 @@ namespace cobalt {
              * @brief: Get the component's type. This is a unique identifier, lazy-generated based on the component class' name.
              * @return: Component type identifier.
              */
-            virtual const ComponentProperties::Type getType() noexcept;
+            virtual const ComponentProperties::Type getType() const noexcept;
             /**
              * @brief: Get the component's type. This is a unique identifier, generated at compile time based on the component class' name.
              * @tparam ComponentType: Component type.
@@ -43,7 +43,7 @@ namespace cobalt {
              * @brief: Get the component's type name.
              * @return: Component type name.
              */
-            virtual const std::string& getTypeName() noexcept;
+            virtual const std::string& getTypeName() const noexcept;
             /**
              * @brief: Get the component's type name.
              * @tparam ComponentType: Component type.

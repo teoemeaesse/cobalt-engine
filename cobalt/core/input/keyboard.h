@@ -138,11 +138,11 @@ namespace cobalt {
 
             /**
              * @brief: Callback for when a key is pressed.
-             * @param key: The key (glfw) that was pressed.
-             * @param action: The action (glfw) that was performed.
+             * @param key: The key that was pressed.
+             * @param down: Whether the key was pressed down or released.
              * @return: void
              */
-            void onKeyPress(const int key, const int action);
+            void onKeyPress(const KeyboardInputID key, const bool down);
             /**
              * @brief: Poll the keyboard for events.
              * This generates peripheral events for all keys

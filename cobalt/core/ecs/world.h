@@ -7,6 +7,7 @@
 #include "core/ecs/entity/registry.h"
 #include "core/ecs/plugin/plugin.h"
 #include "core/ecs/system/schedule.h"
+#include "core/input/input_manager.h"
 
 namespace cobalt {
     namespace core::ecs {
@@ -85,6 +86,12 @@ namespace cobalt {
             void addResource(Args&&... args) noexcept {
                 resourceRegistry.add<ResourceType>(std::forward<Args>(args)...);
             }
+            /**
+             * @brief: Move a resource into the world.
+             * @param resource: Resource.
+             * @return: void
+             */
+            void addResource(Scope<Resource>&& resource) noexcept;
 
             /**
              * @brief: Get a resource.
@@ -92,7 +99,7 @@ namespace cobalt {
              * @return: ResourceType reference.
              */
             template <typename ResourceType>
-            ResourceType& getResource() noexcept {
+            ResourceType& getResource() {
                 return resourceRegistry.get<ResourceType&>();
             }
             /**
@@ -101,7 +108,7 @@ namespace cobalt {
              * @return: ResourceType reference.
              */
             template <typename ResourceType>
-            const ResourceType& getResource() const noexcept {
+            const ResourceType& getResource() const {
                 return resourceRegistry.get<const ResourceType&>();
             }
 

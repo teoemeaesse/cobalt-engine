@@ -48,6 +48,7 @@ namespace cobalt {
         }
 
         void Editor::onResize(const uint width, const uint height) {
+            // TODO: Call this after ECS event system is implemented
             renderGraph.onResize(width, height);
             scene.getCameraController().resize((float)width / (float)height);
         }

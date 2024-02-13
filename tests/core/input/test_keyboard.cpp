@@ -223,13 +223,13 @@ void testKeyboardSingleTaps() {
     for (int repeats = 0; repeats < 5; repeats++) {
         for (int i = 0; i < KEY_MAX; i++) {
             // Tap key. Ensure that the key input is calling the correct command.
-            keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::input::KeyboardInputID>(i)), GLFW_PRESS);
+            keyboard->onKeyPress(static_cast<cobalt::core::input::KeyboardInputID>(i), GLFW_PRESS);
             keyboard->pollEvents();
             keyboard->clearEvents();
             testClass.assertValue(i);
             testClass.assertPressed();
             // Release key.
-            keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::input::KeyboardInputID>(i)), GLFW_RELEASE);
+            keyboard->onKeyPress(static_cast<cobalt::core::input::KeyboardInputID>(i), GLFW_RELEASE);
             keyboard->pollEvents();
             keyboard->clearEvents();
             testClass.assertValue(i);
@@ -244,7 +244,7 @@ void testKeyboardHold() {
     eventCounter = 0;
     // Hold every key.
     for (int i = 0; i < KEY_MAX; i++) {
-        keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::input::KeyboardInputID>(i)), GLFW_PRESS);
+        keyboard->onKeyPress(static_cast<cobalt::core::input::KeyboardInputID>(i), GLFW_PRESS);
     }
     keyboard->pollEvents();
     keyboard->clearEvents();
@@ -268,7 +268,7 @@ void testKeyboardHold() {
 
     // Release events should only be generated once.
     for (int i = 0; i < KEY_MAX; i++) {
-        keyboard->onKeyPress(keyboard->cobaltToGlfw(static_cast<cobalt::core::input::KeyboardInputID>(i)), GLFW_RELEASE);
+        keyboard->onKeyPress(static_cast<cobalt::core::input::KeyboardInputID>(i), GLFW_RELEASE);
     }
     keyboard->pollEvents();
     keyboard->pollEvents();
@@ -282,7 +282,7 @@ void testKeyboardOutOfBounds() {
     bool exceptionThrown = false;
     eventCounter = 0;
     try {
-        keyboard->onKeyPress(-1, GLFW_PRESS);
+        keyboard->onKeyPress(keyboard->glfwToCobalt(-1), GLFW_PRESS);
         keyboard->pollEvents();
         keyboard->clearEvents();
     } catch (const std::exception& e) {
@@ -293,7 +293,7 @@ void testKeyboardOutOfBounds() {
     exceptionThrown = false;
     eventCounter = 0;
     try {
-        keyboard->onKeyPress(123456789, GLFW_PRESS);
+        keyboard->onKeyPress(keyboard->glfwToCobalt(123456789), GLFW_PRESS);
         keyboard->pollEvents();
         keyboard->clearEvents();
     } catch (const std::exception& e) {
