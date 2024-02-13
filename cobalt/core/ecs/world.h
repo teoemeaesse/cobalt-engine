@@ -6,15 +6,13 @@
 #include "core/ecs/component/registry.h"
 #include "core/ecs/entity/registry.h"
 #include "core/ecs/plugin/plugin.h"
-#include "core/ecs/system/schedule.h"
+#include "core/ecs/system/manager.h"
 #include "core/input/input_manager.h"
 
 namespace cobalt {
     namespace core::ecs {
         class World {
             public:
-            enum class DefaultSchedules { Startup, PreUpdate, Update, PostUpdate, PreRender, Render, PostRender, Shutdown };
-
             /**
              * @brief: Default constructor.
              * @return: World instance.
@@ -50,7 +48,7 @@ namespace cobalt {
             template <typename SystemType>
             void addSystem(DefaultSchedules schedule) noexcept {
                 static_assert(std::is_base_of<SystemInterface, SystemType>::value, "System must be a subclass of SystemInterface.");
-                schedules[schedule]->addSystem<SystemType>();
+                systemManager.addSystem<SystemType>(schedule);
             }
             /**
              * @brief: Add a system to the world.
@@ -63,7 +61,7 @@ namespace cobalt {
             template <typename... Params, typename Func>
             void addSystem(DefaultSchedules schedule, Func func) noexcept {
                 static_assert(std::is_invocable_r<void, Func, Params...>::value, "Func must be invocable with Params");
-                schedules[schedule]->addSystem<Params...>(func);
+                systemManager.addSystem<Params...>(schedule, func);
             }
 
             /**
@@ -164,7 +162,7 @@ namespace cobalt {
             EntityRegistry entityRegistry;
             ComponentRegistry componentRegistry;
             ResourceRegistry resourceRegistry;
-            UMap<DefaultSchedules, Scope<Schedule>> schedules;
+            SystemManager systemManager;
         };
     }  // namespace core::ecs
 }  // namespace cobalt

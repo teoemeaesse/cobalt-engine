@@ -36,6 +36,26 @@ namespace cobalt {
               framebufferResizeCallback(framebufferResizeCallback),
               resizeCallback(resizeCallback) {}
 
+        Window::Window(Window&& other) noexcept
+            : width(other.width),
+              height(other.height),
+              title(Move(other.title)),
+              vsync(other.vsync),
+              mode(other.mode),
+              resizable(other.resizable),
+              decorated(other.decorated),
+              lockAspectRatio(other.lockAspectRatio),
+              aspectRatio(other.aspectRatio),
+              defaultFBO(Move(other.defaultFBO)),
+              keyCallback(Move(other.keyCallback)),
+              cursorCallback(Move(other.cursorCallback)),
+              mouseButtonCallback(Move(other.mouseButtonCallback)),
+              scrollCallback(Move(other.scrollCallback)),
+              framebufferResizeCallback(Move(other.framebufferResizeCallback)),
+              resizeCallback(Move(other.resizeCallback)) {
+            other.title = "void";
+        }
+
         void Window::init() {
             glfwWindowHint(GLFW_RESIZABLE, resizable);
             glfwSetWindowCloseCallback(gl::Context::getGLFWContext(), windowCloseCallback);
@@ -164,8 +184,10 @@ namespace cobalt {
         }
 
         Window::~Window() {
-            CB_CORE_INFO("Destroyed window");
-            glfwSetWindowShouldClose(gl::Context::getGLFWContext(), GLFW_TRUE);
+            if (title != "void") {
+                CB_CORE_INFO("Destroyed window");
+                glfwSetWindowShouldClose(gl::Context::getGLFWContext(), GLFW_TRUE);
+            }
         }
 
         void Window::swapBuffers() const { glfwSwapBuffers(gl::Context::getGLFWContext()); }

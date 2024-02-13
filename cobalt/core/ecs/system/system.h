@@ -40,18 +40,19 @@ namespace cobalt {
         template <typename... Params>
         class System : public SystemInterface {
             static_assert((std::is_base_of<SystemParameter, Params>::value && ...), "All system parameters must derive from SystemParameter.");
-            static_assert((std::is_constructible<Params, EntityRegistry&, ResourceRegistry&>::value && ...),
-                          "All system parameters must be constructible with an EntityRegistry and a ResourceRegistry.");
+            static_assert((std::is_constructible<Params, EntityRegistry&, ResourceRegistry&, SystemManager&>::value && ...),
+                          "All system parameters must be constructible with an EntityRegistry, a ResourceRegistry and a SystemManager.");
 
             public:
             /**
              * @brief: Creates a new system.
              * @param entityRegistry: The entity registry that the system will run on.
              * @param resourceRegistry: The resource registry that the system will run on.
+             * @param systemManager: The system manager that the system will run on.
              * @return: A new system.
              */
-            explicit System(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry) noexcept
-                : entityRegistry(entityRegistry), resourceRegistry(resourceRegistry) {}
+            explicit System(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager) noexcept
+                : entityRegistry(entityRegistry), resourceRegistry(resourceRegistry), systemManager(systemManager) {}
             /**
              * @brief: Destroys the system.
              * @return: void
@@ -74,6 +75,7 @@ namespace cobalt {
             private:
             EntityRegistry& entityRegistry;
             ResourceRegistry& resourceRegistry;
+            SystemManager& systemManager;
 
             /**
              * @brief: Template magic.
@@ -82,7 +84,7 @@ namespace cobalt {
              */
             template <size_t... Is>
             void populateParams(std::index_sequence<Is...>) {
-                run(std::tuple_element_t<Is, Tuple<Params...>>(entityRegistry, resourceRegistry)...);
+                run(std::tuple_element_t<Is, Tuple<Params...>>(entityRegistry, resourceRegistry, systemManager)...);
             }
         };
 
@@ -96,9 +98,22 @@ namespace cobalt {
             public:
             Func func;
 
-            LambdaSystem(Func func, EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry)
-                : System<Params...>(entityRegistry, resourceRegistry), func(func) {}
+            /**
+             * @brief: Creates a new lambda system.
+             * @param func: The lambda function to run.
+             * @param entityRegistry: The entity registry that the system will run on.
+             * @param resourceRegistry: The resource registry that the system will run on.
+             * @param systemManager: The system manager that the system will run on.
+             * @return: A new lambda system.
+             */
+            LambdaSystem(Func func, EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager)
+                : System<Params...>(entityRegistry, resourceRegistry, systemManager), func(func) {}
 
+            /**
+             * @brief: Runs the lambda system on the given system parameters.
+             * @param params: The system parameters to run on.
+             * @return: void
+             */
             void run(Params... params) override { func(std::forward<Params>(params)...); }
         };
     }  // namespace core::ecs

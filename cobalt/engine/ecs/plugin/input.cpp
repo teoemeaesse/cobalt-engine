@@ -18,7 +18,7 @@ namespace cobalt {
             /**
              * @brief: Add input peripherals to the world.
              */
-            world.addSystem<WriteRequest<core::input::InputManager>>(World::DefaultSchedules::Startup, [](auto inputManager) {
+            world.addSystem<WriteRequest<core::input::InputManager>>(DefaultSchedules::Startup, [](auto inputManager) {
                 inputManager.get().template registerPeripheral<core::input::Keyboard>(core::input::Keyboard::NAME);
                 inputManager.get().template registerPeripheral<core::input::Mouse>(core::input::Mouse::NAME, 1.0f);
             });
@@ -26,7 +26,7 @@ namespace cobalt {
             /**
              * @brief: Poll input events.
              */
-            world.addSystem<WriteRequest<core::input::InputManager>>(World::DefaultSchedules::PreUpdate, [](auto inputManager) {
+            world.addSystem<WriteRequest<core::input::InputManager>>(DefaultSchedules::PreUpdate, [](auto inputManager) {
                 inputManager.get().pollEvents();
                 inputManager.get().clearEvents();
             });
@@ -34,7 +34,7 @@ namespace cobalt {
             /**
              * @brief: Set input callbacks.
              */
-            world.addSystem<WriteRequest<core::gfx::Window>>(World::DefaultSchedules::Startup, [](auto window) {
+            world.addSystem<WriteRequest<core::gfx::Window>>(DefaultSchedules::Startup, [](auto window) {
                 window.get().setKeyCallback([](core::input::InputManager& manager, const core::input::KeyboardInputID key, const bool down) {
                     try {
                         manager.getPeripheral<core::input::Keyboard>(core::input::Keyboard::NAME).onKeyPress(key, down);

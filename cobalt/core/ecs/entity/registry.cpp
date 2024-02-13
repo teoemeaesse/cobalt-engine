@@ -11,7 +11,9 @@
 
 namespace cobalt {
     namespace core::ecs {
-        Entity& EntityRegistry::add(ComponentRegistry& componentRegistry) noexcept {
+        EntityRegistry::EntityRegistry(ComponentRegistry& componentRegistry) noexcept : componentRegistry(componentRegistry) {}
+
+        Entity& EntityRegistry::add() noexcept {
             EntityProperties::ID id;
             if (freeIDs.empty()) {
                 id = EntityProperties::ID(entities.size());

@@ -5,31 +5,19 @@
 
 namespace cobalt {
     namespace core::ecs {
-        World::World() noexcept : entityRegistry(), componentRegistry() {
-            for (auto schedule : {DefaultSchedules::Startup, DefaultSchedules::PreUpdate, DefaultSchedules::Update, DefaultSchedules::PostUpdate,
-                                  DefaultSchedules::PreRender, DefaultSchedules::Render, DefaultSchedules::PostRender, DefaultSchedules::Shutdown}) {
-                schedules.emplace(schedule, Move(createScope<Schedule>(entityRegistry, resourceRegistry)));
-            }
-        }
+        World::World() noexcept
+            : entityRegistry(componentRegistry), componentRegistry(), resourceRegistry(), systemManager(entityRegistry, resourceRegistry) {}
 
-        Entity& World::spawn() noexcept { return entityRegistry.add(componentRegistry); }
+        Entity& World::spawn() noexcept { return entityRegistry.add(); }
 
         void World::addResource(Scope<Resource>&& resource) noexcept { resourceRegistry.add(Move(resource)); }
 
-        void World::startup() noexcept { schedules[DefaultSchedules::Startup]->run(); }
+        void World::startup() noexcept { systemManager.startup(); }
 
-        void World::update() noexcept {
-            for (DefaultSchedules schedule : {DefaultSchedules::PreUpdate, DefaultSchedules::Update, DefaultSchedules::PostUpdate}) {
-                schedules[schedule]->run();
-            }
-        }
+        void World::update() noexcept { systemManager.update(); }
 
-        void World::render() noexcept {
-            for (DefaultSchedules schedule : {DefaultSchedules::PreRender, DefaultSchedules::Render, DefaultSchedules::PostRender}) {
-                schedules[schedule]->run();
-            }
-        }
+        void World::render() noexcept { systemManager.render(); }
 
-        void World::shutdown() noexcept { schedules[DefaultSchedules::Shutdown]->run(); }
+        void World::shutdown() noexcept { systemManager.shutdown(); }
     }  // namespace core::ecs
 }  // namespace cobalt

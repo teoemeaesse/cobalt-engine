@@ -8,6 +8,8 @@
 
 namespace cobalt {
     namespace core::ecs {
+        class SystemManager;
+
         /**
          * @brief: Resource request. Facilitates read-only access to resources.
          * @tparam ResourceType: Resource type.
@@ -19,10 +21,11 @@ namespace cobalt {
              * @brief: Constructor.
              * @param entityRegistry: Entity registry. Unused.
              * @param resourceRegistry: Resource registry.
+             * @param systemManager: System manager. Unused.
              * @return: Read request instance.
              */
-            ReadRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry)
-                : SystemParameter(entityRegistry, resourceRegistry), resource(resourceRegistry.get<const ResourceType&>()) {
+            ReadRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager)
+                : SystemParameter(entityRegistry, resourceRegistry, systemManager), resource(resourceRegistry.get<const ResourceType&>()) {
                 Resource::validate<ResourceType>();
             }
             /**
@@ -52,10 +55,11 @@ namespace cobalt {
              * @brief: Constructor.
              * @param entityRegistry: Entity registry. Unused.
              * @param resourceRegistry: Resource registry.
+             * @param systemManager: System manager. Unused.
              * @return: Write request instance.
              */
-            explicit WriteRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry)
-                : SystemParameter(entityRegistry, resourceRegistry), resource(resourceRegistry.get<ResourceType&>()) {
+            explicit WriteRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager)
+                : SystemParameter(entityRegistry, resourceRegistry, systemManager), resource(resourceRegistry.get<ResourceType&>()) {
                 Resource::validate<ResourceType>();
             }
             /**

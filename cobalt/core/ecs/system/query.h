@@ -4,11 +4,13 @@
 #pragma once
 
 #include "core/ecs/entity/registry.h"
-#include "core/ecs/resource/registry.h"
 #include "core/ecs/system/parameter.h"
 
 namespace cobalt {
     namespace core::ecs {
+        class ResourceRegistry;
+        class SystemManager;
+
         /**
          * @brief: Query class. Used to iterate over entities with specific components.
          * @tparam Components...: Components to query for. Must be reference types (use cobalt::RefMut<T> or cobalt::Ref<T>). Must be registered in
@@ -23,10 +25,11 @@ namespace cobalt {
              * @brief: Creates a new query.
              * @param entityRegistry: The entity registry that the query will run on.
              * @param resourceRegistry: The resource registry that the query will run on. Unused.
+             * @param systemManager: The system manager that the query will run on. Unused.
              * @return: A new query.
              */
-            explicit Query(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry) noexcept
-                : SystemParameter(entityRegistry, resourceRegistry), componentTuples(entityRegistry.getMany<Components...>()) {
+            explicit Query(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager) noexcept
+                : SystemParameter(entityRegistry, resourceRegistry, systemManager), componentTuples(entityRegistry.getMany<Components...>()) {
                 Component::validate<RemoveConstRef<Components>...>();
             }
             /**
@@ -67,17 +70,19 @@ namespace cobalt {
         };
 
         template <typename... Components>
-        class Query<Ref<Entity>, Components...> {
+        class Query<Ref<Entity>, Components...> : SystemParameter {
             static_assert((std::is_reference<Components>::value && ...), "All component types must be reference types.");
 
             public:
-            static constexpr bool isQuery = true;
             /**
              * @brief: Creates a new query.
              * @param entityRegistry: The entity registry that the query will run on.
+             * @param resourceRegistry: The resource registry that the query will run on. Unused.
+             * @param systemManager: The system manager that the query will run on. Unused.
              * @return: A new query.
              */
-            explicit Query(EntityRegistry& entityRegistry) noexcept : componentTuples(entityRegistry.getWithEntity<Components...>()) {}
+            explicit Query(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager) noexcept
+                : SystemParameter(entityRegistry, resourceRegistry, systemManager), componentTuples(entityRegistry.getWithEntity<Components...>()) {}
 
             /**
              * @brief: Iterator for the queried entities.

@@ -44,8 +44,8 @@ void test_component_registry_add() {
     componentRegistry.registerComponent<Position>();
     componentRegistry.registerComponent<Velocity>();
     componentRegistry.registerComponent<Mass>();
-    EntityRegistry entityRegistry;
-    auto& entity = entityRegistry.add(componentRegistry);
+    EntityRegistry entityRegistry(componentRegistry);
+    auto& entity = entityRegistry.add();
     TEST_ASSERT_FALSE_MESSAGE(entity.has<Position>(), "Entity should not have Position component");
     TEST_ASSERT_FALSE_MESSAGE(entity.has<Velocity>(), "Entity should not have Velocity component");
     TEST_ASSERT_FALSE_MESSAGE(entity.has<Mass>(), "Entity should not have Mass component");
@@ -72,8 +72,8 @@ void test_component_registry_remove() {
     componentRegistry.registerComponent<Position>();
     componentRegistry.registerComponent<Velocity>();
     componentRegistry.registerComponent<Mass>();
-    EntityRegistry entityRegistry;
-    auto& entity = entityRegistry.add(componentRegistry);
+    EntityRegistry entityRegistry(componentRegistry);
+    auto& entity = entityRegistry.add();
     entity.add<Position>(0, 0);
     entity.add<Velocity>(0, 0);
     entity.add<Mass>(0);
@@ -94,8 +94,8 @@ void test_component_registry_get() {
     componentRegistry.registerComponent<Position>();
     componentRegistry.registerComponent<Velocity>();
     componentRegistry.registerComponent<Mass>();
-    EntityRegistry entityRegistry;
-    auto& entity = entityRegistry.add(componentRegistry);
+    EntityRegistry entityRegistry(componentRegistry);
+    auto& entity = entityRegistry.add();
     entity.add<Position>(0, 0);
     auto& position = entity.get<RefMut<Position>>();
     position.x = 1;
@@ -116,8 +116,8 @@ void test_component_variadics() {
     componentRegistry.registerComponent<Position>();
     componentRegistry.registerComponent<Velocity>();
     componentRegistry.registerComponent<Mass>();
-    EntityRegistry entityRegistry;
-    auto& entity = entityRegistry.add(componentRegistry);
+    EntityRegistry entityRegistry(componentRegistry);
+    auto& entity = entityRegistry.add();
     entity.add<Position>(0, 0);
     entity.add<Velocity>(0, 0);
     entity.add<Mass>(0);

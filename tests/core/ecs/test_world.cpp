@@ -61,7 +61,7 @@ void test_system() {
     world.registerComponent<Position>();
     world.registerComponent<Velocity>();
     world.registerComponent<Mass>();
-    world.addSystem<Query<RefMut<Position>, RefMut<Velocity>, Ref<Mass>>>(World::DefaultSchedules::PreUpdate, [](auto query) {
+    world.addSystem<Query<RefMut<Position>, RefMut<Velocity>, Ref<Mass>>>(DefaultSchedules::PreUpdate, [](auto query) {
         for (auto [position, velocity, mass] : query) {
             position.x += velocity.x;
             position.y += velocity.y;

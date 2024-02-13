@@ -23,8 +23,7 @@ namespace cobalt {
                     .setResizeCallback([](core::gfx::Window& window, const uint width, const uint height) { window.setDimensions(width, height); })
                     .build()))));
 
-            // TODO: Add commands to ECS so i can run this code in a system
-            world.getResource<core::gfx::Window>().init();
+            world.addSystem<WriteRequest<core::gfx::Window>>(DefaultSchedules::Startup, [](auto window) { window.get().init(); });
         }
     }  // namespace engine
 }  // namespace cobalt

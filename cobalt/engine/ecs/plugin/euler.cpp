@@ -42,7 +42,7 @@ namespace cobalt {
             /**
              * @brief: Euler integration system.
              */
-            world.addSystem<Query<RefMut<Transform>, Ref<Velocity>>, ReadRequest<Time>>(World::DefaultSchedules::Update, [](auto query, auto time) {
+            world.addSystem<Query<RefMut<Transform>, Ref<Velocity>>, ReadRequest<Time>>(DefaultSchedules::Update, [](auto query, auto time) {
                 const float deltaTime = time.get().deltaTime;
                 for (auto [transform, velocity] : query) {
                     transform.x += velocity.x * deltaTime;
@@ -53,32 +53,30 @@ namespace cobalt {
             /**
              * @brief: Euler integration system.
              */
-            world.addSystem<Query<RefMut<Velocity>, Ref<Acceleration>>, ReadRequest<Time>>(World::DefaultSchedules::Update,
-                                                                                           [](auto query, auto time) {
-                                                                                               const float deltaTime = time.get().deltaTime;
-                                                                                               for (auto [velocity, acceleration] : query) {
-                                                                                                   velocity.x += acceleration.x * deltaTime;
-                                                                                                   velocity.y += acceleration.y * deltaTime;
-                                                                                                   velocity.z += acceleration.z * deltaTime;
-                                                                                               }
-                                                                                           });
+            world.addSystem<Query<RefMut<Velocity>, Ref<Acceleration>>, ReadRequest<Time>>(DefaultSchedules::Update, [](auto query, auto time) {
+                const float deltaTime = time.get().deltaTime;
+                for (auto [velocity, acceleration] : query) {
+                    velocity.x += acceleration.x * deltaTime;
+                    velocity.y += acceleration.y * deltaTime;
+                    velocity.z += acceleration.z * deltaTime;
+                }
+            });
             /**
              * @brief: Euler integration system.
              */
-            world.addSystem<Query<RefMut<Transform>, Ref<AngularVelocity>>, ReadRequest<Time>>(
-                World::DefaultSchedules::Update, [](auto query, auto time) {
-                    const float deltaTime = time.get().deltaTime;
-                    for (auto [transform, angularVelocity] : query) {
-                        transform.rotation.x += angularVelocity.x * deltaTime;
-                        transform.rotation.y += angularVelocity.y * deltaTime;
-                        transform.rotation.z += angularVelocity.z * deltaTime;
-                    }
-                });
+            world.addSystem<Query<RefMut<Transform>, Ref<AngularVelocity>>, ReadRequest<Time>>(DefaultSchedules::Update, [](auto query, auto time) {
+                const float deltaTime = time.get().deltaTime;
+                for (auto [transform, angularVelocity] : query) {
+                    transform.rotation.x += angularVelocity.x * deltaTime;
+                    transform.rotation.y += angularVelocity.y * deltaTime;
+                    transform.rotation.z += angularVelocity.z * deltaTime;
+                }
+            });
             /**
              * @brief: Euler integration system.
              */
             world.addSystem<Query<RefMut<AngularVelocity>, Ref<AngularAcceleration>>, ReadRequest<Time>>(
-                World::DefaultSchedules::Update, [](auto query, auto time) {
+                DefaultSchedules::Update, [](auto query, auto time) {
                     const float deltaTime = time.get().deltaTime;
                     for (auto [angularVelocity, angularAcceleration] : query) {
                         angularVelocity.x += angularAcceleration.x * deltaTime;

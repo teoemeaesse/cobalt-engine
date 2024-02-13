@@ -32,7 +32,7 @@ namespace cobalt {
             /**
              * @brief: Default move constructor.
              */
-            Window(Window&&) noexcept = default;
+            Window(Window&&) noexcept;
 
             /**
              * @brief: Initializes the window. Called on construction and after changing window hints.

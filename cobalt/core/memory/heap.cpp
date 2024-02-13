@@ -3,12 +3,6 @@
 
 #include "core/memory/heap.h"
 
-// TODO:
-// Implement
-// custom
-// heap
-// allocator.
-
 namespace cobalt {
     namespace core::memory {
         void* HeapAllocator::grab(const size_t size) { return malloc(size); }
