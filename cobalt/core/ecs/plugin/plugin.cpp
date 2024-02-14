@@ -19,7 +19,7 @@ namespace cobalt {
                 formattedTitle += std::string(titleWidth - formattedTitle.length(), ' ');
             }
             std::string padding(paddingWidth, ' ');
-            CB_CORE_INFO("Plugin added: {0}{1}{2}", formattedTitle, padding, description);
+            CB_CORE_INFO("Plugin: {0}{1}{2}", formattedTitle, padding, description);
         }
     }  // namespace core::ecs
 }  // namespace cobalt

@@ -3,10 +3,8 @@
 
 #pragma once
 
-#include "core/ecs/component/registry.h"
-#include "core/ecs/entity/registry.h"
+#include "core/ecs/event/manager.h"
 #include "core/ecs/plugin/plugin.h"
-#include "core/ecs/system/manager.h"
 #include "core/input/input_manager.h"
 
 namespace cobalt {
@@ -163,6 +161,7 @@ namespace cobalt {
             ComponentRegistry componentRegistry;
             ResourceRegistry resourceRegistry;
             SystemManager systemManager;
+            EventManager eventManager;
         };
     }  // namespace core::ecs
 }  // namespace cobalt

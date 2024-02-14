@@ -6,7 +6,11 @@
 namespace cobalt {
     namespace core::ecs {
         World::World() noexcept
-            : entityRegistry(componentRegistry), componentRegistry(), resourceRegistry(), systemManager(entityRegistry, resourceRegistry) {}
+            : entityRegistry(componentRegistry),
+              componentRegistry(),
+              resourceRegistry(),
+              systemManager(entityRegistry, resourceRegistry),
+              eventManager(entityRegistry, resourceRegistry, systemManager) {}
 
         Entity& World::spawn() noexcept { return entityRegistry.add(); }
 
