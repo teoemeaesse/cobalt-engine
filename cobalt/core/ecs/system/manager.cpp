@@ -5,10 +5,11 @@
 
 namespace cobalt {
     namespace core::ecs {
-        SystemManager::SystemManager(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry) noexcept : systems() {
+        SystemManager::SystemManager(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, EventManager& eventManager) noexcept
+            : systems() {
             for (auto schedule : {DefaultSchedules::Startup, DefaultSchedules::PreUpdate, DefaultSchedules::Update, DefaultSchedules::PostUpdate,
                                   DefaultSchedules::PreRender, DefaultSchedules::Render, DefaultSchedules::PostRender, DefaultSchedules::Shutdown}) {
-                systems.emplace(schedule, Move(createScope<SystemRegistry>(entityRegistry, resourceRegistry)));
+                systems.emplace(schedule, Move(createScope<SystemRegistry>(entityRegistry, resourceRegistry, *this, eventManager)));
             }
         }
 

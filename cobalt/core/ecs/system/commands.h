@@ -3,10 +3,7 @@
 
 #pragma once
 
-#include "core/ecs/entity/registry.h"
-#include "core/ecs/resource/registry.h"
-#include "core/ecs/system/manager.h"
-#include "core/ecs/system/parameter.h"
+#include "core/ecs/event/manager.h"
 
 namespace cobalt {
     namespace core::ecs {
@@ -20,9 +17,11 @@ namespace cobalt {
              * @param entityRegistry: Entity registry.
              * @param resourceRegistry: Resource registry.
              * @param systemManager: System manager.
+             * @param eventManager: Event manager.
              * @return: Commands instance.
              */
-            Commands(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager) noexcept;
+            Commands(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
+                     EventManager& eventManager) noexcept;
             /**
              * @brief: Default destructor.
              * @return: void
@@ -43,7 +42,7 @@ namespace cobalt {
              */
             template <typename SystemType>
             void addSystem(DefaultSchedules schedule) noexcept {
-                static_assert(std::is_base_of<SystemInterface, SystemType>::value, "System must be a subclass of SystemInterface.");
+                static_assert(std::is_base_of<SystemInterface, SystemType>::value, "SystemType must be a subclass of SystemInterface.");
                 systemManager.addSystem<SystemType>(schedule);
             }
             /**
@@ -58,6 +57,31 @@ namespace cobalt {
             void addSystem(DefaultSchedules schedule, Func func) noexcept {
                 static_assert(std::is_invocable_r<void, Func, Params...>::value, "Func must be invocable with Params");
                 systemManager.addSystem<Params...>(schedule, func);
+            }
+
+            /**
+             * @brief: Hook a system to an event.
+             * @tparam SystemType: System type.
+             * @param eventName: Event to hook into.
+             * @return: void
+             */
+            template <typename SystemType>
+            void addHook(const std::string& eventName) noexcept {
+                static_assert(std::is_base_of<SystemInterface, SystemType>::value, "SystemType must be a subclass of SystemInterface.");
+                eventManager.addHook<SystemType>(eventName);
+            }
+            /**
+             * @brief: Hook a system to an event.
+             * @tparam Params...: Lambda function parameters.
+             * @tparam Func: Lambda function type.
+             * @param eventName: Event to hook into.
+             * @param func: Lambda function.
+             * @return: void
+             */
+            template <typename... Params, typename Func>
+            void addHook(const std::string& eventName, Func func) noexcept {
+                static_assert(std::is_invocable_r<void, Func, Params...>::value, "Func must be invocable with Params");
+                eventManager.addHook<Params...>(eventName, func);
             }
         };
     }  // namespace core::ecs

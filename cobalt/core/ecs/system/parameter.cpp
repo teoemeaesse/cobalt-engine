@@ -5,7 +5,8 @@
 
 namespace cobalt {
     namespace core::ecs {
-        SystemParameter::SystemParameter(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager) noexcept
-            : entityRegistry(entityRegistry), resourceRegistry(resourceRegistry), systemManager(systemManager) {}
+        SystemParameter::SystemParameter(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
+                                         EventManager& eventManager) noexcept
+            : entityRegistry(entityRegistry), resourceRegistry(resourceRegistry), systemManager(systemManager), eventManager(eventManager) {}
     }  // namespace core::ecs
 }  // namespace cobalt

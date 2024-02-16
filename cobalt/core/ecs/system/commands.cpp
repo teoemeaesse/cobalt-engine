@@ -5,8 +5,9 @@
 
 namespace cobalt {
     namespace core::ecs {
-        Commands::Commands(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager) noexcept
-            : SystemParameter(entityRegistry, resourceRegistry, systemManager) {}
+        Commands::Commands(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
+                           EventManager& eventManager) noexcept
+            : SystemParameter(entityRegistry, resourceRegistry, systemManager, eventManager) {}
 
         Entity& Commands::spawn() noexcept { return entityRegistry.add(); }
     }  // namespace core::ecs

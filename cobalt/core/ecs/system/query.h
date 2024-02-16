@@ -26,10 +26,13 @@ namespace cobalt {
              * @param entityRegistry: The entity registry that the query will run on.
              * @param resourceRegistry: The resource registry that the query will run on. Unused.
              * @param systemManager: The system manager that the query will run on. Unused.
+             * @param eventManager: The event manager that the query will run on. Unused.
              * @return: A new query.
              */
-            explicit Query(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager) noexcept
-                : SystemParameter(entityRegistry, resourceRegistry, systemManager), componentTuples(entityRegistry.getMany<Components...>()) {
+            explicit Query(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
+                           EventManager& eventManager) noexcept
+                : SystemParameter(entityRegistry, resourceRegistry, systemManager, eventManager),
+                  componentTuples(entityRegistry.getMany<Components...>()) {
                 Component::validate<RemoveConstRef<Components>...>();
             }
             /**
@@ -79,10 +82,13 @@ namespace cobalt {
              * @param entityRegistry: The entity registry that the query will run on.
              * @param resourceRegistry: The resource registry that the query will run on. Unused.
              * @param systemManager: The system manager that the query will run on. Unused.
+             * @param eventManager: The event manager that the query will run on. Unused.
              * @return: A new query.
              */
-            explicit Query(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager) noexcept
-                : SystemParameter(entityRegistry, resourceRegistry, systemManager), componentTuples(entityRegistry.getWithEntity<Components...>()) {}
+            explicit Query(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
+                           EventManager& eventManager) noexcept
+                : SystemParameter(entityRegistry, resourceRegistry, systemManager, eventManager),
+                  componentTuples(entityRegistry.getWithEntity<Components...>()) {}
 
             /**
              * @brief: Iterator for the queried entities.

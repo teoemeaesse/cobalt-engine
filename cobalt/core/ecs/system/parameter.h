@@ -8,17 +8,20 @@ namespace cobalt {
         class EntityRegistry;
         class ResourceRegistry;
         class SystemManager;
+        class EventManager;
 
         class SystemParameter {
             public:
             virtual ~SystemParameter() noexcept = default;
 
             protected:
-            SystemParameter(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager) noexcept;
+            SystemParameter(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
+                            EventManager& eventManager) noexcept;
 
             EntityRegistry& entityRegistry;
             ResourceRegistry& resourceRegistry;
             SystemManager& systemManager;
+            EventManager& eventManager;
         };
     }  // namespace core::ecs
 }  // namespace cobalt

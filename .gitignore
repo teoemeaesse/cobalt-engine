@@ -51,3 +51,7 @@ DartConfiguration.tcl
 lib/glfw/tests
 lib/glfw/docs
 lib/glfw/examples
+
+# Build
+build
+tests/build

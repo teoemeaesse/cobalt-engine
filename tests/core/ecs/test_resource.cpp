@@ -1,9 +1,7 @@
 // Created by tomas on
 // 28-01-2024.
 
-#include "core/ecs/entity/registry.h"
-#include "core/ecs/system/manager.h"
-#include "core/ecs/system/request.h"
+#include "core/ecs/world.h"
 #include "unity/unity.h"
 
 using namespace cobalt::core::ecs;
@@ -23,37 +21,31 @@ void setUp(void) {}
 void tearDown(void) {}
 
 void test_read() {
-    ComponentRegistry componentRegistry;
-    EntityRegistry entityRegistry(componentRegistry);
-    ResourceRegistry resourceRegistry;
-    SystemManager systemManager(entityRegistry, resourceRegistry);
-    resourceRegistry.add<MyResource>();
+    World world;
+    world.addResource<MyResource>();
 
-    ReadRequest<MyResource> request(entityRegistry, resourceRegistry, systemManager);
+    auto request = world.read<MyResource>();
     const MyResource& resource = request.get();
     TEST_ASSERT_EQUAL(0, resource.valueInt);
     TEST_ASSERT_EQUAL_FLOAT(3.141, resource.valueFloat);
 
-    resourceRegistry.add<MyResource>(1);
-    ReadRequest<MyResource> request2(entityRegistry, resourceRegistry, systemManager);
+    world.addResource<MyResource>(1);
+    auto request2 = world.read<MyResource>();
     const MyResource& resource2 = request2.get();
     TEST_ASSERT_EQUAL(1, resource2.valueInt);
     TEST_ASSERT_EQUAL_FLOAT(0.577, resource2.valueFloat);
 }
 
 void test_write() {
-    ComponentRegistry componentRegistry;
-    EntityRegistry entityRegistry(componentRegistry);
-    ResourceRegistry resourceRegistry;
-    SystemManager systemManager(entityRegistry, resourceRegistry);
-    resourceRegistry.add<MyResource>();
+    World world;
+    world.addResource<MyResource>();
 
-    WriteRequest<MyResource> request(entityRegistry, resourceRegistry, systemManager);
+    auto request = world.write<MyResource>();
     MyResource& resource = request.get();
     resource.valueInt = 50;
     resource.valueFloat = 42;
 
-    ReadRequest<MyResource> request2(entityRegistry, resourceRegistry, systemManager);
+    auto request2 = world.read<MyResource>();
     const MyResource& resource2 = request2.get();
     TEST_ASSERT_EQUAL(50, resource2.valueInt);
     TEST_ASSERT_EQUAL_FLOAT(42, resource2.valueFloat);

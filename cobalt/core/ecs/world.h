@@ -136,6 +136,36 @@ namespace cobalt {
             }
 
             /**
+             * @brief: Make a query.
+             * @tparam QueryComponents...: The query's components.
+             * @return: QueryType instance.
+             */
+            template <typename... QueryComponents>
+            Query<QueryComponents...> makeQuery() noexcept {
+                static_assert(sizeof...(QueryComponents) > 0, "Query must have at least one component.");
+                return Query<QueryComponents...>(entityRegistry, resourceRegistry, systemManager, eventManager);
+            }
+
+            /**
+             * @brief: Read a resource.
+             * @tparam ResourceType: Resource type.
+             * @return: ReadRequest<ResourceType> instance.
+             */
+            template <typename ResourceType>
+            ReadRequest<ResourceType> read() noexcept {
+                return ReadRequest<ResourceType>(entityRegistry, resourceRegistry, systemManager, eventManager);
+            }
+            /**
+             * @brief: Write to a resource.
+             * @tparam ResourceType: Resource type.
+             * @return: WriteRequest<ResourceType> instance.
+             */
+            template <typename ResourceType>
+            WriteRequest<ResourceType> write() noexcept {
+                return WriteRequest<ResourceType>(entityRegistry, resourceRegistry, systemManager, eventManager);
+            }
+
+            /**
              * @brief: Run the startup schedule.
              * @return: void
              */

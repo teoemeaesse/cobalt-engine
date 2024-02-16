@@ -9,7 +9,7 @@ namespace cobalt {
             : entityRegistry(componentRegistry),
               componentRegistry(),
               resourceRegistry(),
-              systemManager(entityRegistry, resourceRegistry),
+              systemManager(entityRegistry, resourceRegistry, eventManager),
               eventManager(entityRegistry, resourceRegistry, systemManager) {}
 
         Entity& World::spawn() noexcept { return entityRegistry.add(); }

@@ -11,6 +11,7 @@ namespace cobalt {
 
         class EntityRegistry;
         class ResourceRegistry;
+        class EventManager;
 
         class SystemManager {
             public:
@@ -18,9 +19,10 @@ namespace cobalt {
              * @brief: Default constructor.
              * @param entityRegistry: Entity registry.
              * @param resourceRegistry: Resource registry.
+             * @param eventManager: Event manager.
              * @return: SystemManager instance.
              */
-            SystemManager(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry) noexcept;
+            SystemManager(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, EventManager& eventManager) noexcept;
 
             /**
              * @brief: Add a system to a schedule.
@@ -31,7 +33,7 @@ namespace cobalt {
             template <typename SystemType>
             void addSystem(DefaultSchedules schedule) noexcept {
                 static_assert(std::is_base_of<SystemInterface, SystemType>::value, "System must be a subclass of SystemInterface.");
-                systems[schedule]->addSystem<SystemType>(*this);
+                systems[schedule]->addSystem<SystemType>();
             }
             /**
              * @brief: Add a system to a schedule.
@@ -44,7 +46,7 @@ namespace cobalt {
             template <typename... Params, typename Func>
             void addSystem(DefaultSchedules schedule, Func func) noexcept {
                 static_assert(std::is_invocable_r<void, Func, Params...>::value, "Func must be invocable with Params");
-                systems[schedule]->addSystem<Params...>(*this, func);
+                systems[schedule]->addSystem<Params...>(func);
             }
 
             /**

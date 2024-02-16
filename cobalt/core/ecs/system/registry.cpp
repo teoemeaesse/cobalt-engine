@@ -5,8 +5,13 @@
 
 namespace cobalt {
     namespace core::ecs {
-        SystemRegistry::SystemRegistry(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry) noexcept
-            : systems(), entityRegistry(entityRegistry), resourceRegistry(resourceRegistry) {}
+        SystemRegistry::SystemRegistry(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
+                                       EventManager& eventManager) noexcept
+            : systems(),
+              entityRegistry(entityRegistry),
+              resourceRegistry(resourceRegistry),
+              systemManager(systemManager),
+              eventManager(eventManager) {}
 
         void SystemRegistry::run() noexcept {
             for (auto& system : systems) {

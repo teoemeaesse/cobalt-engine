@@ -8,6 +8,8 @@
 
 namespace cobalt {
     namespace core::ecs {
+        class EventManager;
+
         /**
          * @brief: Interface for all systems. Used to store systems in a vector via type erasure.
          */
@@ -40,8 +42,9 @@ namespace cobalt {
         template <typename... Params>
         class System : public SystemInterface {
             static_assert((std::is_base_of<SystemParameter, Params>::value && ...), "All system parameters must derive from SystemParameter.");
-            static_assert((std::is_constructible<Params, EntityRegistry&, ResourceRegistry&, SystemManager&>::value && ...),
-                          "All system parameters must be constructible with an EntityRegistry, a ResourceRegistry and a SystemManager.");
+            static_assert(
+                (std::is_constructible<Params, EntityRegistry&, ResourceRegistry&, SystemManager&, EventManager&>::value && ...),
+                "All system parameters must be constructible with an EntityRegistry, a ResourceRegistry, a SystemManager and an EventManager.");
 
             public:
             /**
@@ -49,10 +52,12 @@ namespace cobalt {
              * @param entityRegistry: The entity registry that the system will run on.
              * @param resourceRegistry: The resource registry that the system will run on.
              * @param systemManager: The system manager that the system will run on.
+             * @param eventManager: The event manager that the system will run on.
              * @return: A new system.
              */
-            explicit System(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager) noexcept
-                : entityRegistry(entityRegistry), resourceRegistry(resourceRegistry), systemManager(systemManager) {}
+            explicit System(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
+                            EventManager& eventManager) noexcept
+                : entityRegistry(entityRegistry), resourceRegistry(resourceRegistry), systemManager(systemManager), eventManager(eventManager) {}
             /**
              * @brief: Destroys the system.
              * @return: void
@@ -76,6 +81,7 @@ namespace cobalt {
             EntityRegistry& entityRegistry;
             ResourceRegistry& resourceRegistry;
             SystemManager& systemManager;
+            EventManager& eventManager;
 
             /**
              * @brief: Template magic.
@@ -84,7 +90,7 @@ namespace cobalt {
              */
             template <size_t... Is>
             void populateParams(std::index_sequence<Is...>) {
-                run(std::tuple_element_t<Is, Tuple<Params...>>(entityRegistry, resourceRegistry, systemManager)...);
+                run(std::tuple_element_t<Is, Tuple<Params...>>(entityRegistry, resourceRegistry, systemManager, eventManager)...);
             }
         };
 
@@ -104,10 +110,12 @@ namespace cobalt {
              * @param entityRegistry: The entity registry that the system will run on.
              * @param resourceRegistry: The resource registry that the system will run on.
              * @param systemManager: The system manager that the system will run on.
+             * @param eventManager: The event manager that the system will run on.
              * @return: A new lambda system.
              */
-            LambdaSystem(Func func, EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager)
-                : System<Params...>(entityRegistry, resourceRegistry, systemManager), func(func) {}
+            LambdaSystem(Func func, EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
+                         EventManager& eventManager)
+                : System<Params...>(entityRegistry, resourceRegistry, systemManager, eventManager), func(func) {}
 
             /**
              * @brief: Runs the lambda system on the given system parameters.

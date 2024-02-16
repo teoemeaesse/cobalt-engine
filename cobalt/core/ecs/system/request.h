@@ -22,10 +22,12 @@ namespace cobalt {
              * @param entityRegistry: Entity registry. Unused.
              * @param resourceRegistry: Resource registry.
              * @param systemManager: System manager. Unused.
+             * @param eventManager: Event manager. Unused.
              * @return: Read request instance.
              */
-            ReadRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager)
-                : SystemParameter(entityRegistry, resourceRegistry, systemManager), resource(resourceRegistry.get<const ResourceType&>()) {
+            ReadRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager, EventManager& eventManager)
+                : SystemParameter(entityRegistry, resourceRegistry, systemManager, eventManager),
+                  resource(resourceRegistry.get<const ResourceType&>()) {
                 Resource::validate<ResourceType>();
             }
             /**
@@ -56,10 +58,12 @@ namespace cobalt {
              * @param entityRegistry: Entity registry. Unused.
              * @param resourceRegistry: Resource registry.
              * @param systemManager: System manager. Unused.
+             * @param eventManager: Event manager. Unused.
              * @return: Write request instance.
              */
-            explicit WriteRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager)
-                : SystemParameter(entityRegistry, resourceRegistry, systemManager), resource(resourceRegistry.get<ResourceType&>()) {
+            explicit WriteRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
+                                  EventManager& eventManager)
+                : SystemParameter(entityRegistry, resourceRegistry, systemManager, eventManager), resource(resourceRegistry.get<ResourceType&>()) {
                 Resource::validate<ResourceType>();
             }
             /**
