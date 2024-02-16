@@ -63,6 +63,37 @@ namespace cobalt {
             }
 
             /**
+             * @brief: Hook a system to an event.
+             * @tparam SystemType: System type.
+             * @param eventName: Event to hook into.
+             * @return: void
+             */
+            template <typename SystemType>
+            void addHook(const std::string& eventName) noexcept {
+                static_assert(std::is_base_of<SystemInterface, SystemType>::value, "System must be a subclass of SystemInterface.");
+                eventManager.addHook(eventName, Move(createScope<SystemType>(entityRegistry, resourceRegistry, systemManager)));
+            }
+            /**
+             * @brief: Hook a system to an event.
+             * @tparam Params...: Lambda function parameters.
+             * @tparam Func: Lambda function type.
+             * @param eventName: Event to hook into.
+             * @param func: Lambda function.
+             * @return: void
+             */
+            template <typename... Params, typename Func>
+            void addHook(const std::string& eventName, Func func) noexcept {
+                static_assert(std::is_invocable_r<void, Func, Params...>::value, "Func must be invocable with Params");
+                eventManager.addHook(eventName, Move(createScope<Params...>(func)));
+            }
+            /**
+             * @brief: Trigger an event.
+             * @param eventName: Event to trigger.
+             * @return: void
+             */
+            void triggerEvent(const std::string& eventName) noexcept;
+
+            /**
              * @brief: Add a unique resource.
              * @tparam ResourceType: Resource type.
              * @return: void

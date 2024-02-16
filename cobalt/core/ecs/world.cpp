@@ -14,11 +14,16 @@ namespace cobalt {
 
         Entity& World::spawn() noexcept { return entityRegistry.add(); }
 
+        void World::triggerEvent(const std::string& eventName) noexcept { eventManager.triggerEvent(eventName); }
+
         void World::addResource(Scope<Resource>&& resource) noexcept { resourceRegistry.add(Move(resource)); }
 
         void World::startup() noexcept { systemManager.startup(); }
 
-        void World::update() noexcept { systemManager.update(); }
+        void World::update() noexcept {
+            eventManager.clearQueue();
+            systemManager.update();
+        }
 
         void World::render() noexcept { systemManager.render(); }
 
