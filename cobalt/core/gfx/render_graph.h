@@ -3,13 +3,14 @@
 
 #pragma once
 
+#include "core/ecs/resource/resource.h"
 #include "core/gfx/render_node.h"
 #include "core/pch.h"
 #include "core/scene/scene.h"
 
 namespace cobalt {
     namespace core::gfx {
-        class RenderGraph {
+        class RenderGraph : public ecs::Resource {
             public:
             /**
              * @brief: Creates an empty render graph.

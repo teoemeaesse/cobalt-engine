@@ -71,7 +71,7 @@ namespace cobalt {
             template <typename SystemType>
             void addHook(const std::string& eventName) noexcept {
                 static_assert(std::is_base_of<SystemInterface, SystemType>::value, "System must be a subclass of SystemInterface.");
-                eventManager.addHook(eventName, Move(createScope<SystemType>(entityRegistry, resourceRegistry, systemManager)));
+                eventManager.addHook<SystemType>(eventName);
             }
             /**
              * @brief: Hook a system to an event.
@@ -84,8 +84,15 @@ namespace cobalt {
             template <typename... Params, typename Func>
             void addHook(const std::string& eventName, Func func) noexcept {
                 static_assert(std::is_invocable_r<void, Func, Params...>::value, "Func must be invocable with Params");
-                eventManager.addHook(eventName, Move(createScope<Params...>(func)));
+                eventManager.addHook<Params...>(eventName, func);
             }
+            /**
+             * @brief: Register an event.
+             * @param name: Event name.
+             * @param description: Event description.
+             * @return: void
+             */
+            void registerEvent(const std::string& name, const std::string& description) noexcept;
             /**
              * @brief: Trigger an event.
              * @param eventName: Event to trigger.

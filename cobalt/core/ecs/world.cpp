@@ -14,6 +14,8 @@ namespace cobalt {
 
         Entity& World::spawn() noexcept { return entityRegistry.add(); }
 
+        void World::registerEvent(const std::string& name, const std::string& description) noexcept { eventManager.registerEvent(name, description); }
+
         void World::triggerEvent(const std::string& eventName) noexcept { eventManager.triggerEvent(eventName); }
 
         void World::addResource(Scope<Resource>&& resource) noexcept { resourceRegistry.add(Move(resource)); }

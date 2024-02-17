@@ -9,19 +9,24 @@ using namespace cobalt::core::ecs;
 
 namespace cobalt {
     namespace engine {
+        const std::string WindowPlugin::FRAMEBUFFER_RESIZE_EVENT = "WindowResize";
+        const std::string WindowPlugin::FRAMEBUFFER_RESIZE_EVENT_DESCRIPTION = "Called whenever the window is resized.";
+
         WindowPlugin::WindowPlugin() noexcept : Plugin("Window", "Provides window management functionality.") {}
 
         void WindowPlugin::onPlug(World& world) const noexcept {
-            world.addResource(Move(createScope<core::gfx::Window>(
-                core::gfx::WindowBuilder()
-                    .setTitle("Cobalt")
-                    .setWidth(1280)
-                    .setHeight(720)
-                    .setVsync(true)
-                    .setFramebufferResizeCallback(
-                        [](core::gfx::Window& window, const uint width, const uint height) { window.getDefaultFBO().resize(width, height); })
-                    .setResizeCallback([](core::gfx::Window& window, const uint width, const uint height) { window.setDimensions(width, height); })
-                    .build())));
+            world.registerEvent(FRAMEBUFFER_RESIZE_EVENT, FRAMEBUFFER_RESIZE_EVENT_DESCRIPTION);
+            world.addResource(Move(
+                createScope<core::gfx::Window>(core::gfx::WindowBuilder()
+                                                   .setTitle("Cobalt")
+                                                   .setWidth(1280)
+                                                   .setHeight(720)
+                                                   .setVsync(true)
+                                                   .setFramebufferResizeCallback([](core::gfx::Window& window, const uint width, const uint height) {
+                                                       static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())
+                                                           ->triggerEvent(cobalt::engine::WindowPlugin::FRAMEBUFFER_RESIZE_EVENT);
+                                                   })
+                                                   .build())));
 
             world.addSystem<WriteRequest<core::gfx::Window>>(DefaultSchedules::Startup, [](auto window) { window.get().init(); });
         }

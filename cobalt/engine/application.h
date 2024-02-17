@@ -94,7 +94,9 @@ namespace cobalt {
                                        // framerate time window.
             uint framerateTimeWindow;  // The time window in which the framerate is
                                        // calculated, in seconds.
-            core::ecs::World world;    // The ECS world.
+
+            protected:
+            core::ecs::World world;  // The ECS world.
         };
 
         /**

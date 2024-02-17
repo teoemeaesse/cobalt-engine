@@ -3,14 +3,14 @@
 
 #pragma once
 
+#include "core/ecs/resource/resource.h"
 #include "core/gfx/camera_controller.h"
 #include "core/gfx/mesh.h"
 #include "core/gfx/skybox.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::scene {
-        class Scene {
+        class Scene : public ecs::Resource {
             public:
             /**
              * @brief: Creates an empty scene.

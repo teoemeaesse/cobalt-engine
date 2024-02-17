@@ -21,6 +21,7 @@ namespace cobalt {
                        const FramebufferResizeCallback framebufferResizeCallback, const ResizeCallback resizeCallback)
             : width(width),
               height(height),
+              defaultFBO(),
               title(title),
               vsync(vsync),
               mode(mode),
@@ -28,7 +29,6 @@ namespace cobalt {
               decorated(decorated),
               lockAspectRatio(lockAspectRatio),
               aspectRatio((float)width / (float)height),
-              defaultFBO(),
               keyCallback(keyCallback),
               cursorCallback(cursorCallback),
               mouseButtonCallback(mouseButtonCallback),
@@ -167,7 +167,8 @@ namespace cobalt {
             gl::Context::setFramebufferResizeCallback([](GLFWwindow* window, int width, int height) {
                 try {
                     core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
-                    window.onFramebufferResize(width, height);
+                    window.getDefaultFBO().resize((uint)width, (uint)height);
+                    window.onFramebufferResize((uint)width, (uint)height);
                 } catch (core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
                     throw core::ecs::PluginNotFoundException("Window");
                 }
@@ -175,7 +176,8 @@ namespace cobalt {
             gl::Context::setResizeCallback([](GLFWwindow* window, int width, int height) {
                 try {
                     core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
-                    window.onResize(width, height);
+                    window.setDimensions((uint)width, (uint)height);
+                    window.onResize((uint)width, (uint)height);
                 } catch (core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
                     throw core::ecs::PluginNotFoundException("Window");
                 }
@@ -215,6 +217,8 @@ namespace cobalt {
         const uint Window::getHeight() const { return height; }
 
         gl::FBO& Window::getDefaultFBO() { return defaultFBO; }
+
+        const gl::FBO& Window::getDefaultFBO() const { return defaultFBO; }
 
         const bool Window::isVsync() const { return vsync; }
 
@@ -280,7 +284,6 @@ namespace cobalt {
         }
 
         void Window::onResize(const uint width, const uint height) {
-            defaultFBO.resize(width, height);
             if (resizeCallback) {
                 resizeCallback(*this, width, height);
             }

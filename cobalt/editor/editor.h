@@ -14,14 +14,11 @@ namespace cobalt {
 
             void fixedTimeStep() override;
             void variableTimeStep(const float delta) override;
-            void onResize(const uint width, const uint height);
             void bindInput();
             void createScene();
 
             private:
             CobaltConfiguration configuration;
-            engine::DefaultGraph renderGraph;
-            core::scene::Scene scene;
         };
     }  // namespace editor
 }  // namespace cobalt

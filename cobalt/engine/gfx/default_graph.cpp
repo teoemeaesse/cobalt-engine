@@ -38,10 +38,10 @@ namespace cobalt {
         }
 
         void DefaultGraph::onResize(const uint width, const uint height) {
-            output.resize(-(float)width / 2, (float)width / 2, -(float)height / 2, (float)height / 2);
+            // output.resize(-(float)width / 2, (float)width / 2, -(float)height / 2, (float)height / 2);
             sceneFBO.resize(width, height);
             for (uint i = 0; i < nodes.size(); i++) {
-                nodes[i]->onResize(width, height);
+                // nodes[i]->onResize(width, height);
             }
         }
     }  // namespace engine

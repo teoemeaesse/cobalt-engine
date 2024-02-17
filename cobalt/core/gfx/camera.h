@@ -112,8 +112,7 @@ namespace cobalt {
             protected:
             glm::vec3 position;   // The position of the camera in world space.
             glm::vec2 direction;  // The direction the camera is facing (degrees).
-            float near,
-                far;  // The near and far clipping planes.
+            float near, far;      // The near and far clipping planes.
 
             /**
              * @brief: Creates a new camera.

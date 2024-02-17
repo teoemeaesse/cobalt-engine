@@ -14,6 +14,9 @@ namespace cobalt {
          */
         class WindowPlugin : public core::ecs::Plugin {
             public:
+            const static std::string FRAMEBUFFER_RESIZE_EVENT;
+            const static std::string FRAMEBUFFER_RESIZE_EVENT_DESCRIPTION;
+
             /**
              * @brief: Construct the plugin.
              * @return: WindowPlugin

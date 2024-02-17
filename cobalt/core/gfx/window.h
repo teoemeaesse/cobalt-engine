@@ -99,6 +99,11 @@ namespace cobalt {
              */
             gl::FBO& getDefaultFBO();
             /**
+             * @brief: Gets the default framebuffer object of the window.
+             * @return: The default framebuffer object of the window.
+             */
+            const gl::FBO& getDefaultFBO() const;
+            /**
              * @brief: Gets whether or not the window is using vsync.
              * @return: Whether or not the window is using vsync.
              */
@@ -242,10 +247,9 @@ namespace cobalt {
                    const MouseButtonCallback mouseButtonCallback, const ScrollCallback scrollCallback,
                    const FramebufferResizeCallback framebufferResizeCallback, const ResizeCallback resizeCallback);
 
-            uint width,
-                height;               // The width and height of the window.
-            std::string title;        // The title of the window.
+            uint width, height;       // The width and height of the window.
             gl::FBO defaultFBO;       // The default framebuffer object of the window.
+            std::string title;        // The title of the window.
             bool vsync;               // Whether or not the window is using vsync.
             bool resizable;           // Whether or not the window is resizable.
             bool decorated;           // Whether or not the window is decorated.
