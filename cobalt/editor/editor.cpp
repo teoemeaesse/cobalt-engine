@@ -116,12 +116,12 @@ namespace cobalt {
             gfx::Material& whiteRough = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", COLOR_WHITE, 0.0f, 1.0f, 1.0f));
             gfx::Material& whiteSmooth = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", COLOR_WHITE, 0.0f, 0.0f, 1.0f));
             gfx::Material& orangeMedium = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("orange", COLOR_ORANGE, 0.0f, 0.5f, 1.0f));
-            gfx::Mesh mesh = gfx::Mesh::createRectangle(10, 10, woodMaterial);
-            gfx::Mesh ground = gfx::Mesh::createRectangle(100, 100, woodMaterial);
-            gfx::Mesh sphere = gfx::Mesh::createSphere(5, woodMaterial);
-            gfx::Mesh cube0 = gfx::Mesh::createCube(10, whiteRough);
-            gfx::Mesh cube1 = gfx::Mesh::createCube(10, whiteSmooth);
-            gfx::Mesh cube2 = gfx::Mesh::createCube(10, orangeMedium);
+            gfx::Mesh mesh = gfx::MeshFactory::createRectangle(10, 10, woodMaterial);
+            gfx::Mesh ground = gfx::MeshFactory::createRectangle(100, 100, woodMaterial);
+            gfx::Mesh sphere = gfx::MeshFactory::createSphere(5, woodMaterial);
+            gfx::Mesh cube0 = gfx::MeshFactory::createCube(10, whiteRough);
+            gfx::Mesh cube1 = gfx::MeshFactory::createCube(10, whiteSmooth);
+            gfx::Mesh cube2 = gfx::MeshFactory::createCube(10, orangeMedium);
             ground.translate(glm::vec3(0.0f, -50.0f, 0.0f));
             ground.rotate(glm::vec3(90.0f, 0.0f, 0.0f));
             sphere.translate(glm::vec3(10.0f, 0.0f, 0.0f));

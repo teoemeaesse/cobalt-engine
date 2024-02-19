@@ -10,16 +10,9 @@
 namespace cobalt {
     namespace core::gfx {
         class Mesh {
+            friend class MeshFactory;
+
             public:
-            /**
-             * @brief: Create a mesh.
-             * @param vao: Vertex array object.
-             * @param ibo: Index buffer object.
-             * @param material: Material.
-             * @param primitives: Primitive type.
-             * @return: The mesh.
-             */
-            Mesh(gl::VAO&& vao, gl::IBO&& ibo, Material& material, const gl::Primitive& primitive = gl::Primitive::Triangles);
             /**
              * @brief: Destroy the mesh.
              */
@@ -93,6 +86,28 @@ namespace cobalt {
              */
             gl::Primitive getPrimitive() const;
 
+            private:
+            /**
+             * @brief: Create a mesh.
+             * @param vao: Vertex array object.
+             * @param ibo: Index buffer object.
+             * @param material: Material.
+             * @param primitives: Primitive type.
+             * @return: The mesh.
+             */
+            Mesh(gl::VAO&& vao, gl::IBO&& ibo, Material& material, const gl::Primitive& primitive = gl::Primitive::Triangles);
+
+            gl::VAO vao;               // Vertex array object.
+            gl::IBO ibo;               // Index buffer object.
+            Material& material;        // Material.
+            gl::Primitive primitive;   // Primitive type.
+            glm::vec3 worldTranslate;  // World position.
+            glm::vec3 worldRotate;     // World rotation (degrees).
+            glm::vec3 worldScale;      // World scale.
+        };
+
+        class MeshFactory {
+            public:
             /**
              * @brief: Create a rectangle-shaped mesh.
              * @param width: The width.
@@ -118,14 +133,13 @@ namespace cobalt {
              */
             static Mesh createCube(const uint side, Material& material);
 
-            private:
-            gl::VAO vao;               // Vertex array object.
-            gl::IBO ibo;               // Index buffer object.
-            Material& material;        // Material.
-            gl::Primitive primitive;   // Primitive type.
-            glm::vec3 worldTranslate;  // World position.
-            glm::vec3 worldRotate;     // World rotation (degrees).
-            glm::vec3 worldScale;      // World scale.
+            /**
+             * @brief: Create a grid-shaped mesh.
+             * @param side: The grid's visible radius.
+             * @param material: The material.
+             * @return: The grid mesh.
+             */
+            static Mesh createGrid(const uint side, Material& material);
         };
     }  // namespace core::gfx
 }  // namespace cobalt

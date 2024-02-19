@@ -18,7 +18,7 @@ namespace cobalt {
                 const engine::TextureID woodMrao = CB_TEXTURE_LIBRARY.getTextureID("wood-mrao");
                 const engine::MaterialID woodMaterial = CB_MATERIAL_LIBRARY.makePBR("wood", woodAlbedo, woodNormal, woodMrao);
                 core::gfx::Material& material = CB_MATERIAL_LIBRARY.getMaterial(woodMaterial);
-                core::gfx::Mesh sphere = core::gfx::Mesh::createSphere(5.0f, material);
+                core::gfx::Mesh sphere = core::gfx::MeshFactory::createSphere(5.0f, material);
                 sphere.translate(glm::vec3(10.0f * i++, 0.0f, 0.0f));
                 getTarget()->addMesh(Move(sphere));
             }

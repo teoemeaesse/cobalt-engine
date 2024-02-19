@@ -64,7 +64,7 @@ namespace cobalt {
 
         gl::Primitive Mesh::getPrimitive() const { return this->primitive; }
 
-        Mesh Mesh::createRectangle(const uint width, const uint height, Material& material) {
+        Mesh MeshFactory::createRectangle(const uint width, const uint height, Material& material) {
             const float w = width / 2.0f;
             const float h = height / 2.0f;
 
@@ -86,7 +86,7 @@ namespace cobalt {
             return Mesh(gl::VAO(vbo, layout), gl::IBO::fromQuads(gl::Usage::StaticDraw, 1), material);
         }
 
-        Mesh Mesh::createSphere(const uint radius, Material& material) {
+        Mesh MeshFactory::createSphere(const uint radius, Material& material) {
             const uint stacks = 20;
             const uint slices = 20;
 
@@ -142,7 +142,7 @@ namespace cobalt {
             return Mesh(gl::VAO(vbo, layout), gl::IBO(gl::Usage::StaticDraw, indices, 6 * stacks * slices), material);
         }
 
-        Mesh Mesh::createCube(const uint size, Material& material) {
+        Mesh MeshFactory::createCube(const uint size, Material& material) {
             const float s = size / 2.0f;
 
             const float vertices[] = {// Position, texture coordinates, normal.
@@ -169,13 +169,27 @@ namespace cobalt {
             vbo.load(vertices, sizeof(float) * 192);
 
             gl::VAOLayout layout;
-            layout.push(gl::Type::Float, 3,
-                        false);  // Position.
-            layout.push(gl::Type::Float, 2,
-                        false);  // Texture coordinates.
-            layout.push(gl::Type::Float, 3,
-                        false);  // Normal.
+            layout.push(gl::Type::Float, 3, false);  // Position.
+            layout.push(gl::Type::Float, 2, false);  // Texture coordinates.
+            layout.push(gl::Type::Float, 3, false);  // Normal.
             return Mesh(gl::VAO(vbo, layout), gl::IBO::fromQuads(gl::Usage::StaticDraw, 6), material);
+        }
+
+        Mesh MeshFactory::createGrid(const uint size, Material& material) {
+            const float s = size / 2.0f;
+            const float vertices[] = {
+                // Position, texture coordinates
+                -s, 0.0f, -s, 0.0f, 0.0f, s, 0.0f, -s, 1.0f, 0.0f, s, 0.0f, s, 1.0f, 1.0f, -s, 0.0f, s, 0.0f, 1.0f,
+            };
+
+            gl::VBO vbo(gl::Usage::StaticDraw);
+            vbo.bind();
+            vbo.load(vertices, sizeof(float) * 20);
+
+            gl::VAOLayout layout;
+            layout.push(gl::Type::Float, 3, false);  // Position.
+            layout.push(gl::Type::Float, 2, false);  // Texture coordinates.
+            return Mesh(gl::VAO(vbo, layout), gl::IBO::fromQuads(gl::Usage::StaticDraw, 1), material);
         }
     }  // namespace core::gfx
 }  // namespace cobalt

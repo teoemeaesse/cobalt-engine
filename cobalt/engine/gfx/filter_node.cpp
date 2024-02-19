@@ -12,7 +12,7 @@ namespace cobalt {
               height(defaultTarget.getFBO().getHeight()) {}
 
         void FilterNode::render() {
-            core::gfx::Mesh filterMesh = core::gfx::Mesh::createRectangle(width, height, filter);
+            core::gfx::Mesh filterMesh = core::gfx::MeshFactory::createRectangle(width, height, filter);
             RenderNode::renderMesh(filterMesh);
         }
 
