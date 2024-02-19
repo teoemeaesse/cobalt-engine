@@ -62,6 +62,8 @@ namespace cobalt {
 
         Material& Mesh::getMaterial() { return this->material; }
 
+        gl::Primitive Mesh::getPrimitive() const { return this->primitive; }
+
         Mesh Mesh::createRectangle(const uint width, const uint height, Material& material) {
             const float w = width / 2.0f;
             const float h = height / 2.0f;

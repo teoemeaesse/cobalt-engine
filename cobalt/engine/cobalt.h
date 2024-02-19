@@ -3,10 +3,6 @@
 
 #pragma once
 
-// Precompiled
-// header
-#include "core/pch.h"
-
 // Graphics
 #include "core/gfx/render_graph.h"
 #include "core/gfx/window.h"

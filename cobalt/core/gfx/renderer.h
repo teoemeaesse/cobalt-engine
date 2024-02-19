@@ -53,6 +53,13 @@ namespace cobalt {
              * @return: The texture unit.
              */
             uint bindTexture(const std::string& name, const gl::Texture& texture);
+            /**
+             * @brief: Bind a material's textures to the next available texture units.
+             * Throws an exception if there are no more available texture units.
+             * @param material: The material to bind.
+             * @return: The texture unit.
+             */
+            void bindMaterial(const Material& material);
 
             /**
              * @brief: Send all the bound textures to the shader.

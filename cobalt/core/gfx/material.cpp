@@ -5,30 +5,27 @@
 
 namespace cobalt {
     namespace core::gfx {
-        Material::Material(gl::Shader& shader, const gl::Texture& albedoMap, const gl::Texture& normalMap, const gl::Texture& mraoMap)
-            : shader(shader), albedoMap(albedoMap), normalMap(normalMap), mraoMap(mraoMap) {}
+        Material::Material(gl::Shader& shader, const UMap<std::string, const gl::Texture&>& textures) noexcept : shader(shader), textures(textures) {}
 
-        Material::Material(const Material& other)
-            : shader(other.shader), albedoMap(other.albedoMap), normalMap(other.normalMap), mraoMap(other.mraoMap) {}
+        Material::Material(const Material& other) noexcept : shader(other.shader), textures(other.textures) {}
 
-        bool Material::operator==(const Material& other) const {
-            return shader.getGLHandle() == other.shader.getGLHandle() && albedoMap.getGLHandle() == other.albedoMap.getGLHandle() &&
-                   normalMap.getGLHandle() == other.normalMap.getGLHandle() && mraoMap.getGLHandle() == other.mraoMap.getGLHandle();
+        gl::Shader& Material::getShader() noexcept { return shader; }
+
+        const UMap<std::string, const gl::Texture&>& Material::getTextures() const noexcept { return textures; }
+
+        Material MaterialFactory::createMaterialPBR(gl::Shader& shader, const gl::Texture& albedo, const gl::Texture& normal,
+                                                    const gl::Texture& mrao) noexcept {
+            UMap<std::string, const gl::Texture&> textures;
+            textures.emplace("albedo", albedo);
+            textures.emplace("normal", normal);
+            textures.emplace("mrao", mrao);
+            return Material(shader, textures);
         }
 
-        const Material::Uniform Material::getUniform(const int albedoSlot, const int normalSlot, const int mraoSlot) const {
-            albedoMap.bindToUnit(albedoSlot);
-            normalMap.bindToUnit(normalSlot);
-            mraoMap.bindToUnit(mraoSlot);
-            return {albedoSlot, normalSlot, mraoSlot};
+        Material MaterialFactory::createMaterialUnlit(gl::Shader& shader, const gl::Texture& color) noexcept {
+            UMap<std::string, const gl::Texture&> textures;
+            textures.emplace("color", color);
+            return Material(shader, textures);
         }
-
-        const gl::Texture& Material::getAlbedoMap() const { return albedoMap; }
-
-        const gl::Texture& Material::getNormalMap() const { return normalMap; }
-
-        const gl::Texture& Material::getMRAOMap() const { return mraoMap; }
-
-        gl::Shader& Material::getShader() { return shader; }
     }  // namespace core::gfx
 }  // namespace cobalt

@@ -19,9 +19,7 @@ namespace cobalt {
             for (uint i = 0; i < sources.size(); i++) {
                 uint binding = renderer.bindTexture("source_" + sources[i].getName(), sources[i].getFBO().getColorBuffer().value());
             }
-            renderer.bindTexture("albedo", mesh.getMaterial().getAlbedoMap());
-            renderer.bindTexture("normal", mesh.getMaterial().getNormalMap());
-            renderer.bindTexture("mrao", mesh.getMaterial().getMRAOMap());
+            renderer.bindMaterial(mesh.getMaterial());
             for (uint i = 0; i < targets.size(); i++) {
                 renderer.renderMesh(mesh, targets[i]);
             }

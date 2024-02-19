@@ -67,6 +67,16 @@ namespace cobalt {
             return currentUnit - 1;
         }
 
+        void Renderer::bindMaterial(const Material& material) {
+            if (currentUnit + material.getTextures().size() > gl::Context::queryMaxFragTextureUnits()) {
+                throw GFXException("No more available texture units");
+            }
+            for (const auto& texture : material.getTextures()) {
+                texture.second.bindToUnit(currentUnit);
+                textureUnits[texture.first] = currentUnit++;
+            }
+        }
+
         void Renderer::clearTextureUnits() {
             textureUnits.clear();
             currentUnit = 0;

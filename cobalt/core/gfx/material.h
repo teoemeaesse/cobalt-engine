@@ -10,92 +10,84 @@
 namespace cobalt {
     namespace core::gfx {
         class Material {
-            public:
-            struct Uniform {
-                const int albedoSlot;  // Surface albedo slot.
-                const int normalSlot;  // Surface normal slot.
-                const int mraoSlot;    // Metallic (R), roughness (G) and AO (B) slot.
-            };
+            friend class MaterialFactory;
 
-            /** 
-             * @brief: Creates a new material.
-             * @param shader: The shader program.
-             * @param albedoMap: The surface albedo map.
-             * @param normalMap: The surface normal map.
-             * @param mraoMap: The metallic (R), roughness (G) and AO (B) map.
-             * @return: The material.
-             */
-            Material(gl::Shader& shader, const gl::Texture& albedoMap, const gl::Texture& normalMap, const gl::Texture& mraoMap);
-            /** 
+            public:
+            /**
              * @brief: Destroys the material.
+             * @return: void
              */
-            ~Material() = default;
-            /** 
+            virtual ~Material() noexcept = default;
+            /**
              * @brief: Copy constructor.
              * @param other: The other material.
              * @return: The copied material.
              */
-            Material(const Material& other);
-            /** 
+            Material(const Material& other) noexcept;
+            /**
              * @brief: Move constructor.
              * @param other: The other material.
              * @return: The moved material.
              */
             Material(Material&& other) noexcept = delete;
-            /** 
+            /**
              * @brief: Copy assignment operator.
              * @param other: The other material.
              * @return: The copied material.
              */
-            Material& operator=(const Material& other) = delete;
-            /** 
+            Material& operator=(const Material& other) noexcept = delete;
+            /**
              * @brief: Move assignment operator.
              * @param other: The other material.
              * @return: The moved material.
              */
             Material& operator=(Material&& other) noexcept = delete;
-            /** 
-             * @brief: Equality operator.
-             * @param other: The other material.
-             * @return: True if the materials are equal, false otherwise.
-             */
-            bool operator==(const Material& other) const;
 
-            /** 
-             * @brief: Returns the uniform for this material.
-             * @param colorSlot: The color slot.
-             * @param normalSlot: The normal slot.
-             * @param specularSlot: The specular slot.
-             * @return: The uniform.
-             */
-            const Uniform getUniform(const int colorSlot, const int normalSlot, const int specularSlot) const;
-            /** 
-             * @brief: Get the albedo map.
-             * @return: The albedo map.
-             */
-            const gl::Texture& getAlbedoMap() const;
-            /** 
-             * @brief: Get the normal map.
-             * @return: The normal map.
-             */
-            const gl::Texture& getNormalMap() const;
-            /** 
-             * @brief: Get the metallic (R), roughness (G) and AO (B) map.
-             * @return: The metallic (R), roughness (G) and AO (B) map.
-             */
-            const gl::Texture& getMRAOMap() const;
-
-            /** 
+            /**
              * @brief: Get the shader for this material.
              * @return: The shader.
              */
-            gl::Shader& getShader();
+            gl::Shader& getShader() noexcept;
+            /**
+             * @brief: Get an immutable reference to the textures.
+             * @return: The textures.
+             */
+            const UMap<std::string, const gl::Texture&>& getTextures() const noexcept;
+
+            private:
+            /**
+             * @brief: Creates a new material.
+             * @param shader: The shader program.
+             * @param textures: The textures.
+             * @return: The material.
+             */
+            Material(gl::Shader& shader, const UMap<std::string, const gl::Texture&>& textures) noexcept;
 
             protected:
-            gl::Shader& shader;            // Shader program.
-            const gl::Texture& albedoMap;  // Surface albedo map.
-            const gl::Texture& normalMap;  // Surface normal map.
-            const gl::Texture& mraoMap;    // Metallic (R), roughness (G) and AO (B) map.
+            gl::Shader& shader;                                    // Shader program.
+            const UMap<std::string, const gl::Texture&> textures;  // Textures.
+        };
+
+        class MaterialFactory {
+            public:
+            /**
+             * @brief: Create a new PBR material.
+             * @param shader: The shader program.
+             * @param albedo: The albedo texture.
+             * @param normal: The normal texture.
+             * @param mrao: The mrao texture.
+             * @return: The material.
+             */
+            static Material createMaterialPBR(gl::Shader& shader, const gl::Texture& albedo, const gl::Texture& normal,
+                                              const gl::Texture& mrao) noexcept;
+
+            /**
+             * @brief: Create a new unlit material.
+             * @param shader: The shader program.
+             * @param color: The color texture.
+             * @return: The material.
+             */
+            static Material createMaterialUnlit(gl::Shader& shader, const gl::Texture& color) noexcept;
         };
     }  // namespace core::gfx
 }  // namespace cobalt

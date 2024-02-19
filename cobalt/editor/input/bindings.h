@@ -4,7 +4,6 @@
 #pragma once
 
 #include "editor/editor.h"
-#include "engine/cobalt.h"
 
 namespace cobalt {
     namespace editor {
