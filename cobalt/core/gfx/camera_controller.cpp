@@ -18,7 +18,7 @@ namespace cobalt {
               fov(90.0f),
               aspectRatio(16.0f / 9.0f),
               distance(50.0f),
-              near(1.0f),
+              near(0.01f),
               far(1000.0f),
               left(-100.0f),
               right(100.0f),

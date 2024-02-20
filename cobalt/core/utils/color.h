@@ -7,7 +7,7 @@
 
 namespace cobalt {
     namespace core {
-        typedef glm::vec4 Color;
+        using Color = glm::vec4;
 #define COLOR(r, g, b, a) glm::vec4(r, g, b, a)
 
 #define COLOR_WHITE COLOR(1.0f, 1.0f, 1.0f, 1.0f)

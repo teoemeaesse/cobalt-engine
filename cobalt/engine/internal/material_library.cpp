@@ -3,6 +3,8 @@
 
 #include "engine/internal/material_library.h"
 
+#include "material_library.h"
+
 namespace cobalt {
     namespace engine {
         Scope<MaterialLibrary> MaterialLibrary::instance;
@@ -42,15 +44,35 @@ namespace cobalt {
             return materials.size() - 1;
         }
 
-        const MaterialID MaterialLibrary::makeFromShader(const std::string& name, const ShaderID& shader) {
-            materials.emplace_back(name, core::gfx::MaterialFactory::createMaterialUnlit(CB_SHADER_LIBRARY.getShader(shader),
-                                                                                         CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255)));
+        const MaterialID MaterialLibrary::makeUnlit(const std::string& name, const TextureID& color) {
+            materials.emplace_back(
+                name, core::gfx::MaterialFactory::createMaterialUnlit(CB_SHADER_LIBRARY.getShader("unlit"), CB_TEXTURE_LIBRARY.getTexture2D(color)));
             return materials.size() - 1;
         }
 
-        const MaterialID MaterialLibrary::makeFromShader(const std::string& name, const std::string& shader) {
-            materials.emplace_back(name, core::gfx::MaterialFactory::createMaterialUnlit(CB_SHADER_LIBRARY.getShader(shader),
-                                                                                         CB_TEXTURE_LIBRARY.getTexture2D(255, 255, 255)));
+        const MaterialID MaterialLibrary::makeUnlit(const std::string& name, const core::Color color) {
+            materials.emplace_back(
+                name, core::gfx::MaterialFactory::createMaterialUnlit(CB_SHADER_LIBRARY.getShader("unlit"), CB_TEXTURE_LIBRARY.getTexture2D(color)));
+            return materials.size() - 1;
+        }
+
+        const MaterialID MaterialLibrary::makeFromShader(const std::string& name, const ShaderID& shader,
+                                                         const UMap<std::string, const core::gl::Texture2D&>& textures) {
+            UMap<std::string, const core::gl::Texture&> textureMap;
+            for (auto& texture : textures) {
+                textureMap.emplace(texture.first, texture.second);
+            }
+            materials.emplace_back(name, core::gfx::MaterialFactory::createMaterial(CB_SHADER_LIBRARY.getShader(shader), textureMap));
+            return materials.size() - 1;
+        }
+
+        const MaterialID MaterialLibrary::makeFromShader(const std::string& name, const std::string& shader,
+                                                         const UMap<std::string, const core::gl::Texture2D&>& textures) {
+            UMap<std::string, const core::gl::Texture&> textureMap;
+            for (auto& texture : textures) {
+                textureMap.emplace(texture.first, texture.second);
+            }
+            materials.emplace_back(name, core::gfx::MaterialFactory::createMaterial(CB_SHADER_LIBRARY.getShader(shader), textureMap));
             return materials.size() - 1;
         }
 

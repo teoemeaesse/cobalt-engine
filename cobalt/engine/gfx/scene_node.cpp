@@ -8,12 +8,12 @@
 namespace cobalt {
     namespace engine {
         void SceneNode::render() {
+            if (scene.getSkybox().has_value()) {
+                core::gfx::RenderNode::renderSkybox(scene.getSkybox().value());
+            }
             auto& meshes = scene.getMeshes();
             for (uint i = 0; i < meshes.size(); i++) {
                 core::gfx::RenderNode::renderMesh(meshes[i]);
-            }
-            if (scene.getSkybox().has_value()) {
-                core::gfx::RenderNode::renderSkybox(scene.getSkybox().value());
             }
         }
 

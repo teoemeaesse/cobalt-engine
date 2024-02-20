@@ -62,7 +62,6 @@ namespace cobalt {
              * @return: The material.
              */
             const MaterialID makePBR(const std::string& name, const TextureID& albedo, const TextureID& normal, const TextureID& mrao);
-
             /**
              * @brief: Creates a new PBR material.
              * @param name: The name of the material.
@@ -76,22 +75,42 @@ namespace cobalt {
             const MaterialID makePBR(const std::string& name, const core::Color albedo, const float metallic, const float roughness, const float ao);
 
             /**
-             * @brief: Creates a new material from the given shader.
+             * @brief: Creates a new unlit material.
              * @param name: The name of the material.
-             * @param shader: The shader program.
+             * @param color: The color of the material.
              * @return: The material. TODO: Variadic template for different material
              * types.
              */
-            const MaterialID makeFromShader(const std::string& name, const ShaderID& shader);
+            const MaterialID makeUnlit(const std::string& name, const TextureID& color);
+            /**
+             * @brief: Creates a new unlit material.
+             * @param name: The name of the material.
+             * @param color: The color of the material.
+             * @return: The material. TODO: Variadic template for different material
+             * types.
+             */
+            const MaterialID makeUnlit(const std::string& name, const core::Color color);
 
             /**
              * @brief: Creates a new material from the given shader.
              * @param name: The name of the material.
-             * @param shader: The name of shader program.
-             * @return: The material. TODO: Variadic template for different material
-             * types.
+             * @param shader: The shader program.
+             * @param textures: The uniform textures of the material.
+             * @return: The material. TODO: Variadic template for different material types.
              */
-            const MaterialID makeFromShader(const std::string& name, const std::string& shader);
+            const MaterialID makeFromShader(
+                const std::string& name, const ShaderID& shader,
+                const UMap<std::string, const core::gl::Texture2D&>& textures = UMap<std::string, const core::gl::Texture2D&>());
+            /**
+             * @brief: Creates a new material from the given shader.
+             * @param name: The name of the material.
+             * @param shader: The name of shader program.
+             * @param textures: The uniform textures of the material.
+             * @return: The material. TODO: Variadic template for different material types.
+             */
+            const MaterialID makeFromShader(
+                const std::string& name, const std::string& shader,
+                const UMap<std::string, const core::gl::Texture2D&>& textures = UMap<std::string, const core::gl::Texture2D&>());
 
             /**
              * @brief: Initializes the singleton instance of the material library. This loads the default materials, so it needs to be called after

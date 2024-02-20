@@ -1,17 +1,22 @@
 {
-    "pbr" : {
-        "type" : "render",
-        "vertex" : "pbr.vert",
-        "fragment" : "pbr.frag"
+    "pbr": {
+        "type": "render",
+        "vertex": "pbr.vert",
+        "fragment": "pbr.frag"
     },
-    "filter" : {
-        "type" : "render",
-        "vertex" : "filter.vert",
-        "fragment" : "filter.frag"
+    "filter": {
+        "type": "render",
+        "vertex": "filter.vert",
+        "fragment": "filter.frag"
     },
-    "skybox" : {
-        "type" : "render",
-        "vertex" : "skybox.vert",
-        "fragment" : "skybox.frag"
+    "skybox": {
+        "type": "render",
+        "vertex": "skybox.vert",
+        "fragment": "skybox.frag"
+    },
+    "grid": {
+        "type": "render",
+        "vertex": "grid.vert",
+        "fragment": "grid.frag"
     }
 }

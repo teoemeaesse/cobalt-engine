@@ -110,34 +110,42 @@ namespace cobalt {
             const gl::Texture2D& steelAlbedoTexture = CB_TEXTURE_LIBRARY.getTexture2D(steelAlbedo);
             const gl::Texture2D& steelNormalTexture = CB_TEXTURE_LIBRARY.getTexture2D(steelNormal);
             const gl::Texture2D& steelMraoTexture = CB_TEXTURE_LIBRARY.getTexture2D(steelMrao);
+            const gl::Texture2D& gridTexture = CB_TEXTURE_LIBRARY.getTexture2D(0, 0, 250, 3);
 
             gfx::Material& woodMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("wood", woodAlbedo, woodNormal, woodMrao));
             gfx::Material& steelMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("steel", steelAlbedo, steelNormal, steelMrao));
             gfx::Material& whiteRough = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", COLOR_WHITE, 0.0f, 1.0f, 1.0f));
             gfx::Material& whiteSmooth = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", COLOR_WHITE, 0.0f, 0.0f, 1.0f));
             gfx::Material& orangeMedium = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("orange", COLOR_ORANGE, 0.0f, 0.5f, 1.0f));
-            gfx::Mesh mesh = gfx::MeshFactory::createRectangle(10, 10, woodMaterial);
+            UMap<std::string, const core::gl::Texture2D&> gridTextures = {{"settings", gridTexture}};
+            gfx::Material& gridMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makeFromShader("grid", "grid", gridTextures));
+            gfx::Mesh rotatingCube = gfx::MeshFactory::createCube(5, woodMaterial);
             gfx::Mesh ground = gfx::MeshFactory::createRectangle(100, 100, woodMaterial);
             gfx::Mesh sphere = gfx::MeshFactory::createSphere(5, woodMaterial);
             gfx::Mesh cube0 = gfx::MeshFactory::createCube(10, whiteRough);
             gfx::Mesh cube1 = gfx::MeshFactory::createCube(10, whiteSmooth);
             gfx::Mesh cube2 = gfx::MeshFactory::createCube(10, orangeMedium);
-            ground.translate(glm::vec3(0.0f, -50.0f, 0.0f));
+            ground.translate(glm::vec3(0.0f, 0.0f, 0.0f));
             ground.rotate(glm::vec3(90.0f, 0.0f, 0.0f));
-            sphere.translate(glm::vec3(10.0f, 0.0f, 0.0f));
-            mesh.translate(glm::vec3(-10.0f, 0.0f, 0.0f));
-            cube0.translate(glm::vec3(0.0f, -45.0f, 25.0f));
-            cube1.translate(glm::vec3(-25.0f, -30.0f, 0.0f));
-            cube2.translate(glm::vec3(0.0f, -45.0f, -40.0f));
+            rotatingCube.translate(glm::vec3(-10.0f, 10.0f, 0.0f));
+            cube0.translate(glm::vec3(0.0f, 5.0f, 25.0f));
+            cube1.translate(glm::vec3(-25.0f, 10.0f, 0.0f));
+            cube2.translate(glm::vec3(0.0f, 5.0f, -40.0f));
+            sphere.translate(glm::vec3(10.0f, 5.0f, 0.0f));
             cube0.rotate(glm::vec3(0.0f, 30.0f, 0.0f));
             cube1.rotate(glm::vec3(0.0f, 15.0f, 0.0f));
             cube2.rotate(glm::vec3(0.0f, 45.0f, 0.0f));
-            scene.addMesh(Move(mesh));
+            scene.addMesh(Move(rotatingCube));
             scene.addMesh(Move(ground));
             scene.addMesh(Move(sphere));
             scene.addMesh(Move(cube0));
             scene.addMesh(Move(cube1));
             scene.addMesh(Move(cube2));
+
+            gfx::Mesh grid = gfx::MeshFactory::createGrid(1, gridMaterial);
+            grid.translate(glm::vec3(-10.0f, 0.01f, -10.0f));
+            grid.scale(glm::vec3(10000.0f, 1.0f, 10000.0f));
+            scene.addMesh(Move(grid));
         }
     }  // namespace editor
 }  // namespace cobalt

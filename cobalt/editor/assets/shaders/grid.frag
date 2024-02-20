@@ -2,19 +2,71 @@
 
 out vec4 color;
 
+in vec3 v_world_position;
 in vec2 v_tex_coords;
 
-uniform vec4 u_grid_color;
+uniform sampler2D u_settings;  // Encoded as: FADE_RADIUS = r * 2 ^ 16 + g * 2 ^ 8 + b
+                               //             N = 10 ^ int(a)
+                               // TODO: Make this less hacky
+
+struct CameraStruct {
+    mat4 u_view;
+    mat4 u_projection;
+    vec3 u_cameraPosition;
+    int u_targetWidth;
+    int u_targetHeight;
+    vec3 padding;
+};
+layout (std140) uniform Camera {  
+    CameraStruct u_camera;
+};
+
+const float LINE_WIDTH = 1.0 / 32.0; // This will control the thickness of the lines
+const float AA_WIDTH = LINE_WIDTH * 0.5; // Width for anti-aliasing effect
+
+float edgeFactor(vec2 coords, float width) {
+    float insideDistance = min(coords.x, min(1.0 - coords.x, min(coords.y, 1.0 - coords.y)));
+    return smoothstep(0.0, width, insideDistance);
+}
 
 void main() {
-    float ddx = dFdx(v_tex_coords);
-    float ddy = dFdy(v_tex_coords);
+    vec4 DECODED = vec4(0, 0, 250, 3);// 256 * texture(u_settings, vec2(0.0));
+    float FADE_RADIUS = 65536 * DECODED.r + 256 * DECODED.g + DECODED.b;
+    int N = 1000;
+    
+    vec3 cameraFront = -normalize(vec3(u_camera.u_view[0][2], u_camera.u_view[1][2], u_camera.u_view[2][2]));
+    vec3 toPoint = v_world_position - u_camera.u_cameraPosition;
+    float t = dot(toPoint, cameraFront);
+    vec3 closestPoint = u_camera.u_cameraPosition + t * cameraFront;
+    
+    float dist = length(v_world_position - closestPoint);
 
-    vec2 w = max(abs(ddx), abs(ddy)) + 0.01;
+    float alpha = 1.0 - smoothstep(FADE_RADIUS * 0.3, FADE_RADIUS, dist);
 
-    vec2 a = p + 0.5*w;
-    vec2 b = p - 0.5*w;
-    vec2 i = (floor(a)+min(fract(a)*N,1.0)-floor(b)-min(fract(b)*N,1.0))/(N*w);
+    vec2 modCoords = mod(v_tex_coords * N, 1.0);
+    vec2 gridCoords = v_tex_coords * float(N);
+    
+    float aaFactorX = edgeFactor(modCoords, AA_WIDTH);
+    float aaFactorY = edgeFactor(modCoords.yx, AA_WIDTH);
+    float lineAlpha = min(aaFactorX, aaFactorY);
 
-    color = vec4(1.0, 0.0, 0.0, (1.0-i.x)*(1.0-i.y));
+    bool onXLine = modCoords.x < LINE_WIDTH || 1.0 - modCoords.x < LINE_WIDTH;
+    bool onYLine = modCoords.y < LINE_WIDTH || 1.0 - modCoords.y < LINE_WIDTH;
+    bool onLine = onXLine || onYLine;
+    bool onTenthLine = mod(floor(gridCoords.x - 0.5), 10.0) < LINE_WIDTH && onXLine || mod(floor(gridCoords.y - 0.5), 10.0) < LINE_WIDTH && onYLine;
+    bool onTwentiethLine = mod(floor(gridCoords.x - 0.5), 20.0) < LINE_WIDTH && onXLine || mod(floor(gridCoords.y - 0.5), 20.0) < LINE_WIDTH && onYLine;
+
+    if (alpha < 0.01) {
+        discard;
+    }
+    alpha = alpha * (1.0 - lineAlpha);
+    if (onTwentiethLine) {
+        color = vec4(0.8, 0.8, 0.8, alpha); // Thicker or more highlighted for 20th lines
+    } else if (onTenthLine) {
+        color = vec4(0.4, 0.4, 0.55, alpha); // Slightly highlighted for 10th lines
+    } else if (onLine) {
+        color = vec4(0.15, 0.15, 0.2, alpha); // Default grid appearance
+    } else {
+        discard;
+    }
 }

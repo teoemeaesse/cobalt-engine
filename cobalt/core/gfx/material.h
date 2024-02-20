@@ -88,6 +88,14 @@ namespace cobalt {
              * @return: The material.
              */
             static Material createMaterialUnlit(gl::Shader& shader, const gl::Texture& color) noexcept;
+
+            /**
+             * @brief: Create a new material from the given shader.
+             * @param shader: The shader program.
+             * @param textures: The uniform textures of the material.
+             * @return: The material.
+             */
+            static Material createMaterial(gl::Shader& shader, const UMap<std::string, const gl::Texture&>& textures) noexcept;
         };
     }  // namespace core::gfx
 }  // namespace cobalt

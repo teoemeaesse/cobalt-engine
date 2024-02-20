@@ -7,9 +7,10 @@ out vec3 v_tex_coords;
 struct CameraStruct {
     mat4 u_view;
     mat4 u_projection;
+    vec3 u_cameraPosition;
     int u_targetWidth;
     int u_targetHeight;
-    vec2 padding;
+    vec3 padding;
 };
 layout (std140) uniform Camera {  
     CameraStruct u_camera;

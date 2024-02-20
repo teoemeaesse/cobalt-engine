@@ -27,5 +27,9 @@ namespace cobalt {
             textures.emplace("color", color);
             return Material(shader, textures);
         }
+
+        Material MaterialFactory::createMaterial(gl::Shader& shader, const UMap<std::string, const gl::Texture&>& textures) noexcept {
+            return Material(shader, textures);
+        }
     }  // namespace core::gfx
 }  // namespace cobalt

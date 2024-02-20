@@ -23,7 +23,6 @@ layout (std140) uniform Camera {
     CameraStruct u_camera;
 };
 
-
 void main() {
     v_world_position = vec3(u_model * vec4(position, 1.0));
     v_tex_coords = tex_coords;
