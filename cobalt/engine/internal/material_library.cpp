@@ -40,12 +40,13 @@ namespace cobalt {
                                                   const float ao) {
             TextureID normalID = CB_TEXTURE_LIBRARY.makeTexture("CB_default-normal", (void*)core::gl::Texture2D::DEFAULT_NORMAL,
                                                                 core::gl::TextureEncodings::RGBA::Bits8);
-            uchar albedoData[4] = {(uchar)(albedo.r * 255.0f), (uchar)(albedo.g * 255.0f), (uchar)(albedo.b * 255.0f), 255};
-            TextureID albedoID =
-                CB_TEXTURE_LIBRARY.makeTexture(core::colorToString(albedo), (void*)&albedoData, core::gl::TextureEncodings::RGBA::Bits8);
-            uchar mrao[4] = {(uchar)(metallic * 255.0f), (uchar)(roughness * 255.0f), (uchar)(ao * 255.0f)};
-            core::Color mraoColor = core::Color(mrao[0], mrao[1], mrao[2], 255);
-            TextureID mraoID = CB_TEXTURE_LIBRARY.makeTexture(core::colorToString(mraoColor), (void*)&mrao, core::gl::TextureEncodings::RGB::Bits8);
+            uchar albedoData[4];
+            albedo.toUChar(albedoData);
+            TextureID albedoID = CB_TEXTURE_LIBRARY.makeTexture(albedo.toString(), (void*)&albedoData, core::gl::TextureEncodings::RGBA::Bits8);
+            core::Color mrao(metallic, roughness, ao);
+            uchar mraoData[4];
+            mrao.toUChar(mraoData);
+            TextureID mraoID = CB_TEXTURE_LIBRARY.makeTexture(mrao.toString(), (void*)&mraoData, core::gl::TextureEncodings::RGB::Bits8);
             materials.emplace_back(name, core::gfx::MaterialFactory::createMaterialPBR(CB_SHADER_LIBRARY.getShader("pbr"),
                                                                                        CB_TEXTURE_LIBRARY.getTexture<core::gl::Texture2D>(albedoID),
                                                                                        CB_TEXTURE_LIBRARY.getTexture<core::gl::Texture2D>(normalID),
@@ -60,7 +61,7 @@ namespace cobalt {
         }
 
         const MaterialID MaterialLibrary::makeUnlit(const std::string& name, const core::Color color) {
-            TextureID colorID = CB_TEXTURE_LIBRARY.makeTexture(core::colorToString(color), (void*)&color, core::gl::TextureEncodings::RGBA::Bits8);
+            TextureID colorID = CB_TEXTURE_LIBRARY.makeTexture(color.toString(), (void*)&color, core::gl::TextureEncodings::RGBA::Bits8);
             materials.emplace_back(name, core::gfx::MaterialFactory::createMaterialUnlit(
                                              CB_SHADER_LIBRARY.getShader("unlit"), CB_TEXTURE_LIBRARY.getTexture<core::gl::Texture2D>(colorID)));
             return materials.size() - 1;

@@ -13,7 +13,7 @@ namespace cobalt {
 
         Editor::Editor() : Application(144), configuration(CobaltConfiguration()) {
             configuration.configureWindow(getWindow());
-            getWindow().setClearColor(COLOR(0.2f, 0.2f, 0.2f, 1.0f));
+            getWindow().setClearColor(Color(0.2f, 0.2f, 0.2f));
             getWindow().show();
             world.addHook<ecs::ReadRequest<gfx::Window>, ecs::WriteRequest<DefaultGraph>, ecs::WriteRequest<scene::Scene>>(
                 WindowPlugin::FRAMEBUFFER_RESIZE_EVENT, [](auto window, auto graph, auto scene) {
@@ -113,9 +113,9 @@ namespace cobalt {
 
             gfx::Material& woodMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("wood", woodAlbedo, woodNormal, woodMrao));
             gfx::Material& steelMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("steel", steelAlbedo, steelNormal, steelMrao));
-            gfx::Material& whiteRough = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", COLOR_WHITE, 0.0f, 1.0f, 1.0f));
-            gfx::Material& whiteSmooth = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", COLOR_WHITE, 0.0f, 0.0f, 1.0f));
-            gfx::Material& orangeMedium = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("orange", COLOR_ORANGE, 0.0f, 0.5f, 1.0f));
+            gfx::Material& whiteRough = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", Colors::White, 0.0f, 1.0f, 1.0f));
+            gfx::Material& whiteSmooth = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", Colors::White, 0.0f, 0.0f, 1.0f));
+            gfx::Material& orangeMedium = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("orange", Colors::Orange, 0.0f, 0.5f, 1.0f));
             gfx::Mesh rotatingCube = gfx::MeshFactory::createCube(5, woodMaterial);
             gfx::Mesh ground = gfx::MeshFactory::createRectangle(100, 100, woodMaterial);
             gfx::Mesh sphere = gfx::MeshFactory::createSphere(5, woodMaterial);

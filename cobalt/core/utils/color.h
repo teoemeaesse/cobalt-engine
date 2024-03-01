@@ -3,28 +3,100 @@
 
 #pragma once
 
-#include "core/pch.h"
+#include <string>
 
 namespace cobalt {
     namespace core {
-        using Color = glm::vec4;
-#define COLOR(r, g, b, a) glm::vec4(r, g, b, a)
+        class Color {
+            public:
+            /**
+             * @brief: Default color is black.
+             * @return: Color
+             */
+            Color() noexcept;
+            /**
+             * @brief: Construct a color from 4 floats.
+             * @param r: Red component.
+             * @param g: Green component.
+             * @param b: Blue component.
+             * @param a: Alpha component.
+             * @return: Color
+             */
+            Color(const float r, const float g, const float b, const float a = 1.0f) noexcept;
+            /**
+             * @brief: Construct a color from 4 unsigned chars.
+             * @param r: Red component.
+             * @param g: Green component.
+             * @param b: Blue component.
+             * @param a: Alpha component.
+             * @return: Color
+             */
+            Color(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a = 255) noexcept;
+            /**
+             * @brief: Copy constructor.
+             * @param: Color to copy.
+             * @return: Color
+             */
+            Color(const Color& other) noexcept;
+            /**
+             * @brief: Move constructor. Just copies the values.
+             * @param: Color to move.
+             * @return: Color
+             */
+            Color(Color&& other) noexcept;
+            /**
+             * @brief: Copy assignment.
+             * @param: Color to copy.
+             * @return: Color
+             */
+            Color& operator=(const Color& other) noexcept;
+            /**
+             * @brief: Move assignment. Just copies the values.
+             * @param: Color to move.
+             * @return: Color
+             */
+            Color& operator=(Color&& other) noexcept;
 
-#define COLOR_WHITE COLOR(1.0f, 1.0f, 1.0f, 1.0f)
-#define COLOR_BLACK COLOR(0.0f, 0.0f, 0.0f, 1.0f)
-#define COLOR_RED COLOR(1.0f, 0.0f, 0.0f, 1.0f)
-#define COLOR_ORANGE COLOR(1.0f, 0.5f, 0.0f, 1.0f)
-#define COLOR_GREEN COLOR(0.0f, 1.0f, 0.0f, 1.0f)
-#define COLOR_BLUE COLOR(0.0f, 0.0f, 1.0f, 1.0f)
-#define COLOR_YELLOW COLOR(1.0f, 1.0f, 0.0f, 1.0f)
-#define COLOR_MAGENTA COLOR(1.0f, 0.0f, 1.0f, 1.0f)
-#define COLOR_CYAN COLOR(0.0f, 1.0f, 1.0f, 1.0f)
-#define COLOR_TRANSPARENT COLOR(0.0f, 0.0f, 0.0f, 0.0f)
+            /**
+             * @brief: Equality operator.
+             * @param other: Color to compare.
+             * @return: bool
+             */
+            bool operator==(const Color& other) const noexcept;
+            /**
+             * @brief: Inequality operator.
+             * @param other: Color to compare.
+             * @return: bool
+             */
+            bool operator!=(const Color& other) const noexcept;
 
-        inline std::string colorToString(const Color& color) {
-            std::stringstream ss;
-            ss << "CB_Color(" << color.r << ", " << color.g << ", " << color.b << ", " << color.a << ")";
-            return ss.str();
-        }
-    }  // namespace core
+            /**
+             * @brief: Get a string representation of the color.
+             * @return: std::string
+             */
+            std::string toString() const noexcept;
+
+            /**
+             * @brief: Convert the color to an array of 4 unsigned chars.
+             * @param array: Array to fill.
+             * @return: void
+             */
+            void toUChar(unsigned char* array) const;
+
+            float r, g, b, a;
+        };
+
+        namespace Colors {
+            static inline const Color White = Color(1.0f, 1.0f, 1.0f, 1.0f);
+            static inline const Color Black = Color(0.0f, 0.0f, 0.0f, 1.0f);
+            static inline const Color Red = Color(1.0f, 0.0f, 0.0f, 1.0f);
+            static inline const Color Orange = Color(1.0f, 0.5f, 0.0f, 1.0f);
+            static inline const Color Green = Color(0.0f, 1.0f, 0.0f, 1.0f);
+            static inline const Color Blue = Color(0.0f, 0.0f, 1.0f, 1.0f);
+            static inline const Color Yellow = Color(1.0f, 1.0f, 0.0f, 1.0f);
+            static inline const Color Magenta = Color(1.0f, 0.0f, 1.0f, 1.0f);
+            static inline const Color Cyan = Color(0.0f, 1.0f, 1.0f, 1.0f);
+            static inline const Color Transparent = Color(0.0f, 0.0f, 0.0f, 0.0f);
+        }  // namespace Colors
+    }      // namespace core
 }  // namespace cobalt

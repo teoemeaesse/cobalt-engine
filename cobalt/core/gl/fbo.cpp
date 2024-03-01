@@ -8,7 +8,7 @@
 
 namespace cobalt {
     namespace core::gl {
-        FBO::FBO(const uint width, const uint height, const Vec<Attachment>& attachments) : width(width), height(height), clearColor(COLOR_BLACK) {
+        FBO::FBO(const uint width, const uint height, const Vec<Attachment>& attachments) : width(width), height(height), clearColor(Colors::Black) {
             glGenFramebuffers(1, &buffer);
             glBindFramebuffer(GL_FRAMEBUFFER, buffer);
             for (auto& attachment : attachments) {
@@ -55,7 +55,7 @@ namespace cobalt {
             }
         }
 
-        FBO::FBO() : buffer(0), clearColor(COLOR_GREEN) {
+        FBO::FBO() : buffer(0), clearColor(Colors::Green) {
             int width, height;
             glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
             this->width = (uint)width;
