@@ -45,6 +45,7 @@ namespace cobalt {
         }
 
         void Color::toUChar(unsigned char* array) const {
+            if (array == nullptr) return;
             array[0] = static_cast<unsigned char>(r * 255);
             array[1] = static_cast<unsigned char>(g * 255);
             array[2] = static_cast<unsigned char>(b * 255);
