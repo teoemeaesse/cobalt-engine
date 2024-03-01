@@ -415,6 +415,99 @@ namespace cobalt {
                 }
             }
 
+            using PixelType = Int;
+            namespace PixelTypes {
+                constexpr PixelType Unknown = 0;
+                constexpr PixelType UnsignedByte = GL_UNSIGNED_BYTE;
+                constexpr PixelType UnsignedShort = GL_UNSIGNED_SHORT;
+                constexpr PixelType UnsignedInt = GL_UNSIGNED_INT;
+                constexpr PixelType Byte = GL_BYTE;
+                constexpr PixelType Short = GL_SHORT;
+                constexpr PixelType Int = GL_INT;
+                constexpr PixelType HalfFloat = GL_HALF_FLOAT;
+                constexpr PixelType Float = GL_FLOAT;
+            }  // namespace PixelTypes
+            /**
+             * @brief: Gets the name of a pixel type.
+             * @param type: The pixel type.
+             * @return: The name of the type.
+             */
+            inline std::string getPixelTypeName(const PixelType type) noexcept {
+                switch (type) {
+                    case PixelTypes::UnsignedByte:
+                        return "Unsigned byte";
+                    case PixelTypes::UnsignedShort:
+                        return "Unsigned short";
+                    case PixelTypes::UnsignedInt:
+                        return "Unsigned int";
+                    case PixelTypes::Byte:
+                        return "Byte";
+                    case PixelTypes::Short:
+                        return "Short";
+                    case PixelTypes::Int:
+                        return "Int";
+                    case PixelTypes::HalfFloat:
+                        return "Half float";
+                    case PixelTypes::Float:
+                        return "Float";
+                    case PixelTypes::Unknown:
+                    default:
+                        return "Unknown type";
+                }
+            }
+            /**
+             * @brief: Gets the pixel type for a texture encoding.
+             * @param encoding: The texture encoding.
+             * @return: The pixel type.
+             */
+            inline const PixelType getPixelType(const TextureEncoding encoding) noexcept {
+                switch (encoding) {
+                    case TextureEncodings::R::Unsigned::Bits8:
+                    case TextureEncodings::RG::Unsigned::Bits8:
+                    case TextureEncodings::RGB::Unsigned::Bits8:
+                    case TextureEncodings::RGBA::Unsigned::Bits8:
+                        return PixelTypes::UnsignedByte;
+                    case TextureEncodings::R::Unsigned::Bits16:
+                    case TextureEncodings::RG::Unsigned::Bits16:
+                    case TextureEncodings::RGB::Unsigned::Bits16:
+                    case TextureEncodings::RGBA::Unsigned::Bits16:
+                        return PixelTypes::UnsignedShort;
+                    case TextureEncodings::R::Unsigned::Bits32:
+                    case TextureEncodings::RG::Unsigned::Bits32:
+                    case TextureEncodings::RGB::Unsigned::Bits32:
+                    case TextureEncodings::RGBA::Unsigned::Bits32:
+                        return PixelTypes::UnsignedInt;
+                    case TextureEncodings::R::Integer::Bits8:
+                    case TextureEncodings::RG::Integer::Bits8:
+                    case TextureEncodings::RGB::Integer::Bits8:
+                    case TextureEncodings::RGBA::Integer::Bits8:
+                        return PixelTypes::Byte;
+                    case TextureEncodings::R::Integer::Bits16:
+                    case TextureEncodings::RG::Integer::Bits16:
+                    case TextureEncodings::RGB::Integer::Bits16:
+                    case TextureEncodings::RGBA::Integer::Bits16:
+                        return PixelTypes::Short;
+                    case TextureEncodings::R::Integer::Bits32:
+                    case TextureEncodings::RG::Integer::Bits32:
+                    case TextureEncodings::RGB::Integer::Bits32:
+                    case TextureEncodings::RGBA::Integer::Bits32:
+                        return PixelTypes::Int;
+                    case TextureEncodings::R::Float::Bits16:
+                    case TextureEncodings::RG::Float::Bits16:
+                    case TextureEncodings::RGB::Float::Bits16:
+                    case TextureEncodings::RGBA::Float::Bits16:
+                    case TextureEncodings::Depth::Float::Bits32:
+                        return PixelTypes::HalfFloat;
+                    case TextureEncodings::R::Float::Bits32:
+                    case TextureEncodings::RG::Float::Bits32:
+                    case TextureEncodings::RGB::Float::Bits32:
+                    case TextureEncodings::RGBA::Float::Bits32:
+                        return PixelTypes::Float;
+                    default:
+                        return PixelTypes::UnsignedByte;
+                }
+            }
+
             using TextureFormat = Int;
             namespace TextureFormats {
                 constexpr TextureFormat Unknown = 0;
@@ -422,6 +515,10 @@ namespace cobalt {
                 constexpr TextureFormat RG = GL_RG;
                 constexpr TextureFormat RGB = GL_RGB;
                 constexpr TextureFormat RGBA = GL_RGBA;
+                constexpr TextureFormat RInt = GL_RED_INTEGER;
+                constexpr TextureFormat RGInt = GL_RG_INTEGER;
+                constexpr TextureFormat RGBInt = GL_RGB_INTEGER;
+                constexpr TextureFormat RGBAInt = GL_RGBA_INTEGER;
                 constexpr TextureFormat Depth = GL_DEPTH_COMPONENT;
                 constexpr TextureFormat Stencil = GL_STENCIL_INDEX;  // OpenGL 4.4 or higher.
                 constexpr TextureFormat DepthStencil = GL_DEPTH_STENCIL;
@@ -435,12 +532,20 @@ namespace cobalt {
                 switch (format) {
                     case TextureFormats::R:
                         return "Red";
+                    case TextureFormats::RInt:
+                        return "Red int";
                     case TextureFormats::RG:
                         return "Red + green";
+                    case TextureFormats::RGInt:
+                        return "Red + green int";
                     case TextureFormats::RGB:
                         return "RGB";
+                    case TextureFormats::RGBInt:
+                        return "RGB int";
                     case TextureFormats::RGBA:
                         return "RGBA";
+                    case TextureFormats::RGBAInt:
+                        return "RGBA int";
                     case TextureFormats::Depth:
                         return "Depth";
                     case TextureFormats::Stencil:
@@ -463,58 +568,62 @@ namespace cobalt {
                         return TextureFormats::Unknown;
                     case TextureEncodings::R::Bits8:
                     case TextureEncodings::R::Bits16:
+                    case TextureEncodings::R::Float::Bits16:
+                    case TextureEncodings::R::Float::Bits32:
+                    case TextureEncodings::R::Normalized::Bits8:
+                    case TextureEncodings::R::Normalized::Bits16:
+                        return TextureFormats::R;
                     case TextureEncodings::R::Unsigned::Bits8:
                     case TextureEncodings::R::Unsigned::Bits16:
                     case TextureEncodings::R::Unsigned::Bits32:
                     case TextureEncodings::R::Integer::Bits8:
                     case TextureEncodings::R::Integer::Bits16:
                     case TextureEncodings::R::Integer::Bits32:
-                    case TextureEncodings::R::Float::Bits16:
-                    case TextureEncodings::R::Float::Bits32:
-                    case TextureEncodings::R::Normalized::Bits8:
-                    case TextureEncodings::R::Normalized::Bits16:
-                        return TextureFormats::R;
+                        return TextureFormats::RInt;
                     case TextureEncodings::RG::Bits8:
                     case TextureEncodings::RG::Bits16:
+                    case TextureEncodings::RG::Float::Bits16:
+                    case TextureEncodings::RG::Float::Bits32:
+                    case TextureEncodings::RG::Normalized::Bits8:
+                    case TextureEncodings::RG::Normalized::Bits16:
+                        return TextureFormats::RG;
                     case TextureEncodings::RG::Unsigned::Bits8:
                     case TextureEncodings::RG::Unsigned::Bits16:
                     case TextureEncodings::RG::Unsigned::Bits32:
                     case TextureEncodings::RG::Integer::Bits8:
                     case TextureEncodings::RG::Integer::Bits16:
                     case TextureEncodings::RG::Integer::Bits32:
-                    case TextureEncodings::RG::Float::Bits16:
-                    case TextureEncodings::RG::Float::Bits32:
-                    case TextureEncodings::RG::Normalized::Bits8:
-                    case TextureEncodings::RG::Normalized::Bits16:
-                        return TextureFormats::RG;
+                        return TextureFormats::RGInt;
                     case TextureEncodings::RGB::Bits4:
                     case TextureEncodings::RGB::Bits8:
                     case TextureEncodings::RGB::Bits16:
+                    case TextureEncodings::RGB::Float::Bits16:
+                    case TextureEncodings::RGB::Float::Bits32:
+                    case TextureEncodings::RGB::Normalized::Bits8:
+                    case TextureEncodings::RGB::Normalized::Bits16:
+                        return TextureFormats::RGB;
                     case TextureEncodings::RGB::Unsigned::Bits8:
                     case TextureEncodings::RGB::Unsigned::Bits16:
                     case TextureEncodings::RGB::Unsigned::Bits32:
                     case TextureEncodings::RGB::Integer::Bits8:
                     case TextureEncodings::RGB::Integer::Bits16:
                     case TextureEncodings::RGB::Integer::Bits32:
-                    case TextureEncodings::RGB::Float::Bits16:
-                    case TextureEncodings::RGB::Float::Bits32:
-                    case TextureEncodings::RGB::Normalized::Bits8:
-                    case TextureEncodings::RGB::Normalized::Bits16:
-                        return TextureFormats::RGB;
+                        return TextureFormats::RGBInt;
                     case TextureEncodings::RGBA::Bits4:
                     case TextureEncodings::RGBA::Bits8:
                     case TextureEncodings::RGBA::Bits16:
+                    case TextureEncodings::RGBA::Float::Bits16:
+                    case TextureEncodings::RGBA::Float::Bits32:
+                    case TextureEncodings::RGBA::Normalized::Bits8:
+                    case TextureEncodings::RGBA::Normalized::Bits16:
+                        return TextureFormats::RGBA;
                     case TextureEncodings::RGBA::Unsigned::Bits8:
                     case TextureEncodings::RGBA::Unsigned::Bits16:
                     case TextureEncodings::RGBA::Unsigned::Bits32:
                     case TextureEncodings::RGBA::Integer::Bits8:
                     case TextureEncodings::RGBA::Integer::Bits16:
                     case TextureEncodings::RGBA::Integer::Bits32:
-                    case TextureEncodings::RGBA::Float::Bits16:
-                    case TextureEncodings::RGBA::Float::Bits32:
-                    case TextureEncodings::RGBA::Normalized::Bits8:
-                    case TextureEncodings::RGBA::Normalized::Bits16:
-                        return TextureFormats::RGBA;
+                        return TextureFormats::RGBAInt;
                     case TextureEncodings::SRGB::Bits8:
                         return TextureFormats::RGB;
                     case TextureEncodings::SRGBA::Bits8:

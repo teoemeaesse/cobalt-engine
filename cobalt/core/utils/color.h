@@ -23,7 +23,7 @@ namespace cobalt {
 
         inline std::string colorToString(const Color& color) {
             std::stringstream ss;
-            ss << "Color(" << color.r << ", " << color.g << ", " << color.b << ", " << color.a << ")";
+            ss << "CB_Color(" << color.r << ", " << color.g << ", " << color.b << ", " << color.a << ")";
             return ss.str();
         }
     }  // namespace core

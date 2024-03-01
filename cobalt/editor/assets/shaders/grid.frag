@@ -5,9 +5,7 @@ out vec4 color;
 in vec3 v_world_position;
 in vec2 v_tex_coords;
 
-uniform sampler2D u_settings;  // Encoded as: FADE_RADIUS = r * 2 ^ 16 + g * 2 ^ 8 + b
-                               //             N = 10 ^ int(a)
-                               // TODO: Make this less hacky
+uniform sampler2D u_settings;  // alpha: exponent for N, rgb: FADE_RADIUS
 
 struct CameraStruct {
     mat4 u_view;
@@ -30,9 +28,9 @@ float edgeFactor(vec2 coords, float width) {
 }
 
 void main() {
-    vec4 DECODED = vec4(0, 0, 250, 3);// 256 * texture(u_settings, vec2(0.0));
-    float FADE_RADIUS = 65536 * DECODED.r + 256 * DECODED.g + DECODED.b;
-    int N = 1000;
+    vec4 settings = texture(u_settings, vec2(0.5, 0.5));
+    float FADE_RADIUS = settings.r * 16581375.0 + settings.g * 65025 + settings.b * 255.0;
+    int N = int(pow(10.0, settings.a * 255.0));
     
     vec3 cameraFront = -normalize(vec3(u_camera.u_view[0][2], u_camera.u_view[1][2], u_camera.u_view[2][2]));
     vec3 toPoint = v_world_position - u_camera.u_cameraPosition;
@@ -42,9 +40,12 @@ void main() {
     float dist = length(v_world_position - closestPoint);
 
     float alpha = 1.0 - smoothstep(FADE_RADIUS * 0.3, FADE_RADIUS, dist);
+    if (alpha < 0.01) {
+        discard;
+    }
 
-    vec2 modCoords = mod(v_tex_coords * N, 1.0);
-    vec2 gridCoords = v_tex_coords * float(N);
+    vec2 modCoords = mod(v_tex_coords * N + 1, 1.0);
+    vec2 gridCoords = v_tex_coords * float(N) + 1;
     
     float aaFactorX = edgeFactor(modCoords, AA_WIDTH);
     float aaFactorY = edgeFactor(modCoords.yx, AA_WIDTH);
@@ -56,9 +57,6 @@ void main() {
     bool onTenthLine = mod(floor(gridCoords.x - 0.5), 10.0) < LINE_WIDTH && onXLine || mod(floor(gridCoords.y - 0.5), 10.0) < LINE_WIDTH && onYLine;
     bool onTwentiethLine = mod(floor(gridCoords.x - 0.5), 20.0) < LINE_WIDTH && onXLine || mod(floor(gridCoords.y - 0.5), 20.0) < LINE_WIDTH && onYLine;
 
-    if (alpha < 0.01) {
-        discard;
-    }
     alpha = alpha * (1.0 - lineAlpha);
     if (onTwentiethLine) {
         color = vec4(0.8, 0.8, 0.8, alpha); // Thicker or more highlighted for 20th lines

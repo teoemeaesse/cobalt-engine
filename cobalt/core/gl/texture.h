@@ -12,7 +12,7 @@ namespace cobalt {
             /**
              * @brief: Destroys the texture and frees the memory.
              */
-            ~Texture();
+            virtual ~Texture() = default;
             /**
              * @brief: Copy constructor.
              * @param other: The other texture.
@@ -94,6 +94,7 @@ namespace cobalt {
             std::string source;            // The source of the texture.
             gl::TextureFormat format;      // The pixel format of the texture.
             gl::TextureEncoding encoding;  // The internal format of the texture.
+            gl::PixelType pixelType;       // The type of the pixels in the texture.
             uint width, height;            // The width and height of the texture.
 
             /**
@@ -106,32 +107,37 @@ namespace cobalt {
 
         class Texture2D : public Texture {
             public:
-            /**
-             * @brief: Creates a 1x1 texture from the given color.
-             * @param red: The red component of the color (0-255).
-             * @param green: The green component of the color (0-255).
-             * @param blue: The blue component of the color (0-255).
-             * @param alpha: The alpha component of the color (0-255).
-             * @param filter: The filter mode of the texture.
-             * @param wrap: The wrap mode of the texture.
-             * @return: The created texture.
-             */
-            Texture2D(const uchar red, const uchar green, const uchar blue, const uchar alpha = 255,
-                      const gl::TextureFilter filter = gl::TextureFilters::Linear, const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
+            static constexpr uchar DEFAULT_NORMAL[] = {
+                127,
+                127,
+                255,
+                255,
+            };
 
             /**
              * @brief: Creates a 1x1 texture from the given color.
              * @param color: The color of the texture.
+             * @param encoding: The internal encoding of the texture.
              * @param filter: The filter mode of the texture.
              * @param wrap: The wrap mode of the texture.
              * @return: The created texture.
              */
-            explicit Texture2D(const Color& color, const gl::TextureFilter filter = gl::TextureFilters::Linear,
-                               const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
+            Texture2D(const Color& color, const gl::TextureEncoding encoding, const gl::TextureFilter filter = gl::TextureFilters::Linear,
+                      const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
 
             /**
-             * @brief: Creates an empty 2d texture with the given width and height
-             * and reserves the memory for it.
+             * @brief: Creates a 2d texture from the given data.
+             * @param data: The data of the texture.
+             * @param encoding: The internal encoding of the texture.
+             * @param filter: The filter mode of the texture.
+             * @param wrap: The wrap mode of the texture.
+             * @return: The created texture.
+             */
+            Texture2D(const void* data, const gl::TextureEncoding encoding, const gl::TextureFilter filter = gl::TextureFilters::Linear,
+                      const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
+
+            /**
+             * @brief: Creates an empty 2d texture with the given width and height and reserves the memory for it.
              * @param width: The width of the texture.
              * @param height: The height of the texture.
              * @param encoding: The internal format of the texture.
@@ -152,6 +158,12 @@ namespace cobalt {
              */
             Texture2D(const io::Path& path, const bool srgb, const gl::TextureFilter filter = gl::TextureFilters::Linear,
                       const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
+
+            /**
+             * @brief: Destroys the texture and frees the memory.
+             * @return: void
+             */
+            ~Texture2D() override;
 
             /**
              * @brief: Copy constructor.
@@ -218,27 +230,29 @@ namespace cobalt {
              * @param green: The green component of the color (0-255).
              * @param blue: The blue component of the color (0-255).
              * @param alpha: The alpha component of the color (0-255).
+             * @param encoding: The internal encoding of the texture.
              * @param filter: The filter mode of the texture.
              * @param wrap: The wrap mode of the texture.
              * @return: The created texture.
              */
             Texture3D(const uchar red, const uchar green, const uchar blue, const uchar alpha = 255,
+                      const gl::TextureEncoding encoding = gl::TextureEncodings::RGBA::Bits8,
                       const gl::TextureFilter filter = gl::TextureFilters::Linear, const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
 
             /**
              * @brief: Creates a cubemap texture from the given color.
              * @param color: The color of the texture.
+             * @param encoding: The internal encoding of the texture.
              * @param filter: The filter mode of the texture.
              * @param wrap: The wrap mode of the texture.
              * @return: The created texture.
              */
-            Texture3D(const Color& color, const gl::TextureFilter filter = gl::TextureFilters::Linear,
-                      const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
+            Texture3D(const Color& color, const gl::TextureEncoding encoding = gl::TextureEncodings::RGBA::Bits8,
+                      const gl::TextureFilter filter = gl::TextureFilters::Linear, const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
 
             /**
-             * @brief: Creates an empty cubemap with the given width and height
-             * for the faces and reserves the memory for it.
-             * The format is the internal format of the texture.
+             * @brief: Creates an empty cubemap with the given width and height for the faces and reserves the memory for it. The format is the
+             * internal format of the texture.
              * @param width: The width of the texture.
              * @param height: The height of the texture.
              * @param encoding: The internal format of the texture.
@@ -250,9 +264,8 @@ namespace cobalt {
                       const gl::TextureFilter filter = gl::TextureFilters::Linear, const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
 
             /**
-             * @brief: Creates a cubemap from the given path to a directory containing the faces
-             * in 6 distinct png files: right.png, left.png, top.png, bottom.png,
-             * front.png, back.png.
+             * @brief: Creates a cubemap from the given path to a directory containing the faces in 6 distinct png files: right.png, left.png,
+             * top.png, bottom.png, front.png, back.png.
              * @param path: The path to the texture.
              * @param srgb: Whether the texture should be interpreted as srgb.
              * @param filter: The filter mode of the texture.
@@ -261,6 +274,12 @@ namespace cobalt {
              */
             Texture3D(const io::Path& path, const bool srgb, const gl::TextureFilter filter = gl::TextureFilters::Linear,
                       const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
+
+            /**
+             * @brief: Destroys the texture and frees the memory.
+             * @return: void
+             */
+            ~Texture3D() override;
 
             /**
              * @brief: Copy constructor.

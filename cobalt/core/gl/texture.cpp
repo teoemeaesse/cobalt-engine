@@ -12,13 +12,8 @@
 
 namespace cobalt {
     namespace core::gl {
-        Texture::Texture(const gl::TextureEncoding encoding) : texture(0), format(gl::getTextureFormat(encoding)), encoding(encoding) {}
-
-        Texture::~Texture() {
-            if (texture != 0) {
-                glDeleteTextures(1, &texture);
-            }
-        }
+        Texture::Texture(const gl::TextureEncoding encoding)
+            : texture(0), format(gl::getTextureFormat(encoding)), encoding(encoding), pixelType(gl::getPixelType(encoding)) {}
 
         Texture::Texture(Texture&& other) noexcept {
             texture = other.texture;
@@ -41,50 +36,50 @@ namespace cobalt {
             return *this;
         }
 
-        Texture2D::Texture2D(const uchar red, const uchar green, const uchar blue, const uchar alpha, const gl::TextureFilter filter,
-                             const gl::TextureWrap wrap)
-            : Texture(gl::TextureEncodings::RGBA::Bits8) {
-            source = "";
-            this->width = 1;
-            this->height = 1;
-            uchar data[] = {red, green, blue, alpha};
-            glGenTextures(1, &texture);
-            glBindTexture(GL_TEXTURE_2D, texture);
-            glTexImage2D(GL_TEXTURE_2D, 0, (GLint)encoding, 1, 1, 0, (GLenum)format, GL_UNSIGNED_BYTE, data);
-            setFilter(filter);
-            setWrap(wrap);
-            CB_CORE_INFO("Created 1x1 px 2D texture (GL: {0}) with encoding: {1}, format: {2}", texture, gl::getTextureEncodingName(encoding),
-                         gl::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
-        }
-
-        Texture2D::Texture2D(const Color& color, const gl::TextureFilter filter, const gl::TextureWrap wrap)
-            : Texture(gl::TextureEncodings::RGBA::Bits8) {
+        Texture2D::Texture2D(const Color& color, const gl::TextureEncoding encoding, const gl::TextureFilter filter, const gl::TextureWrap wrap)
+            : Texture(encoding) {
             source = "";
             this->width = 1;
             this->height = 1;
             uchar data[] = {(uchar)(color.r * 255.0f), (uchar)(color.g * 255.0f), (uchar)(color.b * 255.0f), (uchar)(color.a * 255.0f)};
             glGenTextures(1, &texture);
             glBindTexture(GL_TEXTURE_2D, texture);
-            glTexImage2D(GL_TEXTURE_2D, 0, (GLint)encoding, 1, 1, 0, (GLenum)format, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, (GLint)encoding, 1, 1, 0, (GLenum)format, (GLenum)pixelType, data);
             setFilter(filter);
             setWrap(wrap);
-            CB_CORE_INFO("Created 1x1 px 2D texture (GL: {0}) with encoding: {1}, format: {2}", texture, gl::getTextureEncodingName(encoding),
-                         gl::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
+            CB_CORE_INFO("Created {0}x{1} px 2D texture (GL: {2}) with encoding: {3}, format: {4}, pixels: {5}", width, height, texture,
+                         gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format), gl::getPixelTypeName(pixelType));
+            CB_CORE_INFO("Using filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
+        }
+
+        Texture2D::Texture2D(const void* data, const gl::TextureEncoding encoding, const gl::TextureFilter filter, const gl::TextureWrap wrap)
+            : Texture(encoding) {
+            source = "";
+            this->width = 1;
+            this->height = 1;
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexImage2D(GL_TEXTURE_2D, 0, (GLint)encoding, 1, 1, 0, (GLenum)format, (GLenum)pixelType, data);
+            setFilter(filter);
+            setWrap(wrap);
+            CB_CORE_INFO("Created 1x1 px 2D texture (GL: {0}) with encoding: {1}, format: {2}, pixels: {3}", texture,
+                         gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format), gl::getPixelTypeName(pixelType));
+            CB_CORE_INFO("Using filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
         Texture2D::Texture2D(const uint width, const uint height, const gl::TextureEncoding encoding, const gl::TextureFilter filter,
                              const gl::TextureWrap wrap)
             : Texture(encoding) {
             source = "";
+            this->width = width;
+            this->height = height;
             glGenTextures(1, &texture);
             reserve(width, height);
             setFilter(filter);
             setWrap(wrap);
             CB_CORE_INFO("Created {0}x{1} px 2D texture (GL: {2}) with encoding: {3}, format: {4}", width, height, texture,
-                         gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
+                         gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format), gl::getPixelTypeName(pixelType));
+            CB_CORE_INFO("Using filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
         Texture2D::Texture2D(const io::Path& path, const bool srgb, const gl::TextureFilter filter, const gl::TextureWrap wrap)
@@ -98,15 +93,23 @@ namespace cobalt {
             if (!data) {
                 throw GLException("Failed to load texture: " + source);
             }
+            this->width = width;
+            this->height = height;
             glGenTextures(1, &texture);
             glBindTexture(GL_TEXTURE_2D, texture);
-            glTexImage2D(GL_TEXTURE_2D, 0, (GLint)encoding, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, (GLint)encoding, width, height, 0, (GLenum)format, (GLenum)pixelType, data);
             setFilter(filter);
             setWrap(wrap);
             stbi_image_free(data);
             CB_CORE_INFO("Loaded {0}x{1} px 2D texture (GL: {2}) from {3} with encoding: {4}, format: {4}", width, height, texture,
-                         path.getFileName(), gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
+                         path.getFileName(), gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format), gl::getPixelTypeName(pixelType));
+            CB_CORE_INFO("Using filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
+        }
+
+        Texture2D::~Texture2D() {
+            if (texture != 0) {
+                glDeleteTextures(1, &texture);
+            }
         }
 
         Texture2D::Texture2D(Texture2D&& other) noexcept : Texture(Move(other)) {}
@@ -120,7 +123,7 @@ namespace cobalt {
             this->width = width;
             this->height = height;
             glBindTexture(GL_TEXTURE_2D, texture);
-            glTexImage2D(GL_TEXTURE_2D, 0, (GLint)encoding, this->width, this->height, 0, (GLenum)format, GL_UNSIGNED_BYTE, nullptr);
+            glTexImage2D(GL_TEXTURE_2D, 0, (GLint)encoding, this->width, this->height, 0, (GLenum)format, (GLenum)pixelType, nullptr);
             CB_CORE_INFO("Reserved {0}x{1} px for texture (GL: {2})", this->width, this->height, texture);
         }
 
@@ -143,50 +146,56 @@ namespace cobalt {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)filter);
         }
 
-        Texture3D::Texture3D(const uchar red, const uchar green, const uchar blue, const uchar alpha, const gl::TextureFilter filter,
-                             const gl::TextureWrap wrap)
-            : Texture(gl::TextureEncodings::RGBA::Bits8) {
+        Texture3D::Texture3D(const uchar red, const uchar green, const uchar blue, const uchar alpha, const gl::TextureEncoding encoding,
+                             const gl::TextureFilter filter, const gl::TextureWrap wrap)
+            : Texture(encoding) {
             source = "";
+            this->width = 1;
+            this->height = 1;
             GLubyte data[] = {red, green, blue, alpha};
             glGenTextures(1, &texture);
             glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
             for (uint i = 0; i < 6; i++) {
-                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint)encoding, 1, 1, 0, (GLenum)format, GL_UNSIGNED_BYTE, data);
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint)encoding, 1, 1, 0, (GLenum)format, (GLenum)pixelType, data);
             }
             setFilter(filter);
             setWrap(wrap);
-            CB_CORE_INFO("Created 1x1 px/face cubemap (GL: {0}) with encoding: {1}, format: {2}", texture, gl::getTextureEncodingName(encoding),
-                         gl::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
+            CB_CORE_INFO("Created {0}x{1} px/face cubemap (GL: {2}) with encoding: {3}, format: {4}, pixels: {5}", width, height, texture,
+                         gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format), gl::getPixelTypeName(pixelType));
+            CB_CORE_INFO("Using filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
-        Texture3D::Texture3D(const Color& color, const gl::TextureFilter filter, const gl::TextureWrap wrap)
-            : Texture(gl::TextureEncodings::RGBA::Bits8) {
+        Texture3D::Texture3D(const Color& color, const gl::TextureEncoding encoding, const gl::TextureFilter filter, const gl::TextureWrap wrap)
+            : Texture(encoding) {
             source = "";
+            this->width = 1;
+            this->height = 1;
             GLubyte data[] = {(uchar)(color.r * 255.0f), (uchar)(color.g * 255.0f), (uchar)(color.b * 255.0f), (uchar)(color.a * 255.0f)};
             glGenTextures(1, &texture);
             glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
             for (uint i = 0; i < 6; i++) {
-                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint)encoding, 1, 1, 0, (GLenum)format, GL_UNSIGNED_BYTE, data);
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint)encoding, 1, 1, 0, (GLenum)format, (GLenum)pixelType, data);
             }
             setFilter(filter);
             setWrap(wrap);
-            CB_CORE_INFO("Created 1x1 px/face 3D texture (GL: {0}) with encoding: {1}, format: {2}", texture, gl::getTextureEncodingName(encoding),
-                         gl::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
+            CB_CORE_INFO("Created {0}x{1} px/face 3D texture (GL: {2}) with encoding: {3}, format: {4}, pixels: {5}", width, height, texture,
+                         gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format), gl::getPixelTypeName(pixelType));
+            CB_CORE_INFO("Using filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
         Texture3D::Texture3D(const uint width, const uint height, const gl::TextureEncoding encoding, const gl::TextureFilter filter,
                              const gl::TextureWrap wrap)
             : Texture(encoding) {
             source = "";
+            this->width = width;
+            this->height = height;
             glGenTextures(1, &texture);
             reserve(width, height);
             setFilter(filter);
             setWrap(wrap);
             CB_CORE_INFO("Created {0}x{1} px texture (GL: {2}) with encoding: {3}, format: {4}", width, height, texture,
-                         gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
+                         gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format), gl::getPixelTypeName(pixelType));
+            CB_CORE_INFO("Using filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
         Texture3D::Texture3D(const io::Path& path, const bool srgb, const gl::TextureFilter filter, const gl::TextureWrap wrap)
@@ -204,14 +213,22 @@ namespace cobalt {
                 if (!data) {
                     throw GLException("Failed to load texture: " + source);
                 }
-                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint)encoding, width, height, 0, (GLenum)format, GL_UNSIGNED_BYTE, data);
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint)encoding, width, height, 0, (GLenum)format, (GLenum)pixelType, data);
                 stbi_image_free(data);
             }
+            this->width = width;
+            this->height = height;
             CB_CORE_INFO("Loaded {0}x{1} px/face 3D texture (GL: {2}) from {3} with encoding: {4}, format: {4}", width, height, texture,
-                         path.getFileName(), gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format));
-            CB_CORE_INFO("Using default filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
+                         path.getFileName(), gl::getTextureEncodingName(encoding), gl::getTextureFormatName(format), gl::getPixelTypeName(pixelType));
+            CB_CORE_INFO("Using filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
             setFilter(filter);
             setWrap(wrap);
+        }
+
+        Texture3D::~Texture3D() {
+            if (texture != 0) {
+                glDeleteTextures(1, &texture);
+            }
         }
 
         Texture3D::Texture3D(Texture3D&& other) noexcept : Texture(Move(other)) {}
@@ -226,7 +243,7 @@ namespace cobalt {
             this->height = height;
             for (uint i = 0; i < 6; i++) {
                 glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
-                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint)encoding, this->width, this->height, 0, (GLenum)format, GL_UNSIGNED_BYTE,
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint)encoding, this->width, this->height, 0, (GLenum)format, (GLenum)pixelType,
                              nullptr);
             }
             CB_CORE_INFO("Reserved {0}x{1} px/face for 3D texture (GL: {2})", this->width, this->height, texture);
