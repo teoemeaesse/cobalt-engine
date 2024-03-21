@@ -64,21 +64,21 @@ namespace cobalt {
             try {
                 input::Keyboard& keyboard = getInputManager().getPeripheral<input::Keyboard>(input::Keyboard::NAME);
                 scene::Scene& scene = world.getResource<scene::Scene>();
-                keyboard.bind(input::KeyboardInputID::ESCAPE, createScope<Quit>(this));
-                keyboard.bind(input::KeyboardInputID::F9, createScope<Windowed>(this));
-                keyboard.bind(input::KeyboardInputID::F10, createScope<Borderless>(this));
-                keyboard.bind(input::KeyboardInputID::F11, createScope<Fullscreen>(this));
-                keyboard.bind(input::KeyboardInputID::W, createScope<PanIn>(&scene.getCameraController()));
-                keyboard.bind(input::KeyboardInputID::A, createScope<PanLeft>(&scene.getCameraController()));
-                keyboard.bind(input::KeyboardInputID::S, createScope<PanOut>(&scene.getCameraController()));
-                keyboard.bind(input::KeyboardInputID::D, createScope<PanRight>(&scene.getCameraController()));
-                keyboard.bind(input::KeyboardInputID::SPACE, createScope<PanUp>(&scene.getCameraController()));
-                keyboard.bind(input::KeyboardInputID::LCTRL, createScope<PanDown>(&scene.getCameraController()));
-                keyboard.bind(input::KeyboardInputID::UP, createScope<PanUp>(&scene.getCameraController()));
-                keyboard.bind(input::KeyboardInputID::LEFT, createScope<PanLeft>(&scene.getCameraController()));
-                keyboard.bind(input::KeyboardInputID::DOWN, createScope<PanDown>(&scene.getCameraController()));
-                keyboard.bind(input::KeyboardInputID::RIGHT, createScope<PanRight>(&scene.getCameraController()));
-                keyboard.bind(input::KeyboardInputID::P, createScope<Spawn>(&scene));
+                keyboard.bind(input::KeyboardInputID::ESCAPE, createScope<Quit>(world, this));
+                keyboard.bind(input::KeyboardInputID::F9, createScope<Windowed>(world, this));
+                keyboard.bind(input::KeyboardInputID::F10, createScope<Borderless>(world, this));
+                keyboard.bind(input::KeyboardInputID::F11, createScope<Fullscreen>(world, this));
+                keyboard.bind(input::KeyboardInputID::W, createScope<PanIn>(world, &scene.getCameraController()));
+                keyboard.bind(input::KeyboardInputID::A, createScope<PanLeft>(world, &scene.getCameraController()));
+                keyboard.bind(input::KeyboardInputID::S, createScope<PanOut>(world, &scene.getCameraController()));
+                keyboard.bind(input::KeyboardInputID::D, createScope<PanRight>(world, &scene.getCameraController()));
+                keyboard.bind(input::KeyboardInputID::SPACE, createScope<PanUp>(world, &scene.getCameraController()));
+                keyboard.bind(input::KeyboardInputID::LCTRL, createScope<PanDown>(world, &scene.getCameraController()));
+                keyboard.bind(input::KeyboardInputID::UP, createScope<PanUp>(world, &scene.getCameraController()));
+                keyboard.bind(input::KeyboardInputID::LEFT, createScope<PanLeft>(world, &scene.getCameraController()));
+                keyboard.bind(input::KeyboardInputID::DOWN, createScope<PanDown>(world, &scene.getCameraController()));
+                keyboard.bind(input::KeyboardInputID::RIGHT, createScope<PanRight>(world, &scene.getCameraController()));
+                keyboard.bind(input::KeyboardInputID::P, createScope<Spawn>(world, &scene));
             } catch (const input::PeripheralNotFoundException& e) {
                 CB_EDITOR_ERROR(e.what());
             }
@@ -86,9 +86,9 @@ namespace cobalt {
             try {
                 input::Mouse& mouse = getInputManager().getPeripheral<input::Mouse>(input::Mouse::NAME);
                 scene::Scene& scene = world.getResource<scene::Scene>();
-                mouse.bind(input::MouseInputID::RIGHT_X, createScope<RotateX>(&scene.getCameraController()));
-                mouse.bind(input::MouseInputID::RIGHT_Y, createScope<RotateY>(&scene.getCameraController()));
-                mouse.bind(input::MouseInputID::SCROLL_Y, createScope<Zoom>(&scene.getCameraController()));
+                mouse.bind(input::MouseInputID::RIGHT_X, createScope<RotateX>(world, &scene.getCameraController()));
+                mouse.bind(input::MouseInputID::RIGHT_Y, createScope<RotateY>(world, &scene.getCameraController()));
+                mouse.bind(input::MouseInputID::SCROLL_Y, createScope<Zoom>(world, &scene.getCameraController()));
             } catch (const input::PeripheralNotFoundException& e) {
                 CB_EDITOR_ERROR(e.what());
             }

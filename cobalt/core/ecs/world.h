@@ -5,7 +5,6 @@
 
 #include "core/ecs/event/manager.h"
 #include "core/ecs/plugin/plugin.h"
-#include "core/input/input_manager.h"
 
 namespace cobalt {
     namespace core::ecs {

@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "core/ecs/plugin/plugin.h"
 #include "core/ecs/world.h"
 #include "core/gfx/window.h"
 

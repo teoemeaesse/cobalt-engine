@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "core/ecs/world.h"
+
 namespace cobalt {
     namespace core::input {
         struct InputValue {
@@ -57,7 +59,7 @@ namespace cobalt {
 
         /**
          * @brief: Concrete input command. Executes a function on a receiver.
-         * Extend this class to create a new concrete input command.
+         * Extend this class to create a custom input command.
          * @tparam T: The type of the receiver.
          */
         template <typename T>
@@ -65,15 +67,22 @@ namespace cobalt {
             public:
             /**
              * @brief: Create a new concrete input command.
+             * @param world: The ECS world instance.
              * @param target: The receiver of the command.
              * @return: The new concrete input command.
              */
-            ConcreteInputCommand(T* target) : target(target) {}
+            ConcreteInputCommand(core::ecs::World& world, T* target) : world(world), target(target) {}
             /**
              * @brief: Destroy the concrete input command.
+             * @return: void
              */
             virtual ~ConcreteInputCommand() = default;
 
+            /**
+             * @brief: Get the ECS world instance.
+             * @return: The ECS world instance.
+             */
+            core::ecs::World& getWorld() { return world; }
             /**
              * @brief: Get the receiver of the command.
              * @return: The receiver of the command.
@@ -81,7 +90,8 @@ namespace cobalt {
             T* getTarget() const { return target; }
 
             private:
-            T* target;  // The receiver of the command.
+            core::ecs::World& world;  // The ECS world instance.
+            T* target;                // The receiver of the command.
         };
     }  // namespace core::input
 }  // namespace cobalt
