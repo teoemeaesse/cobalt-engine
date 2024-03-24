@@ -146,6 +146,18 @@ namespace cobalt {
             }
 
             /**
+             * @brief: Register a plugin.
+             * @param plugin: The plugin to register
+             * @return: void
+             */
+            void registerPlugin(const Plugin& plugin) noexcept;
+            /**
+             * @brief: Find out if a given plugin is registered. The title must match exactly.
+             * @param title: The title for the plugin.
+             * @return: bool
+             */
+            bool isPlugin(const std::string& title) noexcept;
+            /**
              * @brief: Add a plugin to the world.
              * @tparam PluginType: Plugin type.
              * @return: void
@@ -224,6 +236,7 @@ namespace cobalt {
             void shutdown() noexcept;
 
             private:
+            Vec<std::string> plugins;
             EntityRegistry entityRegistry;
             ComponentRegistry componentRegistry;
             ResourceRegistry resourceRegistry;

@@ -20,6 +20,17 @@ namespace cobalt {
 
         void World::addResource(Scope<Resource>&& resource) noexcept { resourceRegistry.add(Move(resource)); }
 
+        void World::registerPlugin(const Plugin& plugin) noexcept { plugins.emplace_back(plugin.getTitle()); }
+
+        bool World::isPlugin(const std::string& title) noexcept {
+            for (uint i = 0; i < plugins.size(); i++) {
+                if (plugins.at(i) == title) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         void World::startup() noexcept { systemManager.startup(); }
 
         void World::update() noexcept {

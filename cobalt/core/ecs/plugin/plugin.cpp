@@ -21,5 +21,7 @@ namespace cobalt {
             std::string padding(paddingWidth, ' ');
             CB_CORE_INFO("Plugin: {0}{1}{2}", formattedTitle, padding, description);
         }
+
+        const std::string& Plugin::getTitle() const noexcept { return title; }
     }  // namespace core::ecs
 }  // namespace cobalt

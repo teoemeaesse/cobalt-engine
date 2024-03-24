@@ -14,6 +14,7 @@ namespace cobalt {
         InputPlugin::InputPlugin() noexcept : Plugin("Input", "Provides peripheral input state information.") {}
 
         void InputPlugin::onPlug(core::ecs::World& world) const noexcept {
+            world.registerPlugin(*this);
             world.addResource<core::input::InputManager>();
 
             /**
@@ -40,36 +41,36 @@ namespace cobalt {
                     try {
                         manager.getPeripheral<core::input::Keyboard>(core::input::Keyboard::NAME).onKeyPress(key, down);
                     } catch (core::input::InvalidInputException<core::input::KeyboardInputID>& e) {
-                        CB_CORE_ERROR("{}", e.what());
+                        CB_CORE_ERROR(e.what());
                     } catch (core::input::PeripheralNotFoundException& e) {
-                        CB_CORE_ERROR("{}", e.what());
+                        CB_CORE_ERROR(e.what());
                     }
                 });
                 window.get().setMouseButtonCallback([](core::input::InputManager& manager, const core::input::MouseInputID button, const bool down) {
                     try {
                         manager.getPeripheral<core::input::Mouse>(core::input::Mouse::NAME).onButtonPress(button, down);
                     } catch (core::input::InvalidInputException<core::input::MouseInputID>& e) {
-                        CB_CORE_ERROR("{}", e.what());
+                        CB_CORE_ERROR(e.what());
                     } catch (core::input::PeripheralNotFoundException& e) {
-                        CB_CORE_ERROR("{}", e.what());
+                        CB_CORE_ERROR(e.what());
                     }
                 });
                 window.get().setCursorCallback([](core::input::InputManager& manager, const float xpos, const float ypos) {
                     try {
                         manager.getPeripheral<core::input::Mouse>(core::input::Mouse::NAME).onMove(xpos, ypos);
                     } catch (core::input::InvalidInputException<core::input::MouseInputID>& e) {
-                        CB_CORE_ERROR("{}", e.what());
+                        CB_CORE_ERROR(e.what());
                     } catch (core::input::PeripheralNotFoundException& e) {
-                        CB_CORE_ERROR("{}", e.what());
+                        CB_CORE_ERROR(e.what());
                     }
                 });
                 window.get().setScrollCallback([](core::input::InputManager& manager, const float xoffset, const float yoffset) {
                     try {
                         manager.getPeripheral<core::input::Mouse>(core::input::Mouse::NAME).onScroll(xoffset, yoffset);
                     } catch (core::input::InvalidInputException<core::input::MouseInputID>& e) {
-                        CB_CORE_ERROR("{}", e.what());
+                        CB_CORE_ERROR(e.what());
                     } catch (core::input::PeripheralNotFoundException& e) {
-                        CB_CORE_ERROR("{}", e.what());
+                        CB_CORE_ERROR(e.what());
                     }
                 });
             });

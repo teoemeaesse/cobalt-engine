@@ -10,7 +10,6 @@ namespace cobalt {
         DeviceID unknownPeripheral;
 
         void InputManager::pollEvents() {
-            glfwPollEvents();
             for (const auto& [name, id] : peripheralIDs) {
                 if (name != "Unknown") {
                     peripherals[id]->pollEvents();

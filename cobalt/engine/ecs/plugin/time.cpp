@@ -11,6 +11,9 @@ namespace cobalt {
 
         TimePlugin::TimePlugin() noexcept : Plugin("Time", "Provides delta time for frame interpolation and timer support.") {}
 
-        void TimePlugin::onPlug(core::ecs::World& world) const noexcept { world.addResource<Time>(); }
+        void TimePlugin::onPlug(core::ecs::World& world) const noexcept {
+            world.registerPlugin(*this);
+            world.addResource<Time>();
+        }
     }  // namespace engine
 }  // namespace cobalt

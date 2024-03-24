@@ -31,6 +31,12 @@ namespace cobalt {
             virtual ~Application();
 
             /**
+             * @brief: Add every plugin dependency.
+             * @return: void
+             */
+            virtual void addPlugins();
+
+            /**
              * @brief: Fixed time step update. Use this for physics and other things that need to be updated at a fixed rate.
              * @return: void
              */

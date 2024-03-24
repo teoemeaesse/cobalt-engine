@@ -40,6 +40,12 @@ namespace cobalt {
              */
             void log() const noexcept;
 
+            /**
+             * @brief: Get the title for this plugin.
+             * @return: std::string
+             */
+            const std::string& getTitle() const noexcept;
+
             private:
             std::string title;
             std::string description;

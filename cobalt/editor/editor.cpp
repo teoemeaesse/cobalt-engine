@@ -3,6 +3,7 @@
 
 #include "editor/editor.h"
 
+#include "core/input/exception.h"
 #include "editor/input/bindings.h"
 #include "engine/ecs/plugin/window.h"
 
@@ -43,6 +44,8 @@ namespace cobalt {
             configuration.serialize(io::Path("cobalt-config.json", true));
         }
 
+        void Editor::addPlugins() {}
+
         void Editor::fixedTimeStep() {
             world.getResource<scene::Scene>().getCameraController().update();
             getWindow().setTitle("Cobalt Editor - " + std::to_string(getFramerate()) + " FPS");
@@ -79,13 +82,8 @@ namespace cobalt {
                 keyboard.bind(input::KeyboardInputID::DOWN, createScope<PanDown>(world, &scene.getCameraController()));
                 keyboard.bind(input::KeyboardInputID::RIGHT, createScope<PanRight>(world, &scene.getCameraController()));
                 keyboard.bind(input::KeyboardInputID::P, createScope<Spawn>(world, &scene));
-            } catch (const input::PeripheralNotFoundException& e) {
-                CB_EDITOR_ERROR(e.what());
-            }
 
-            try {
                 input::Mouse& mouse = getInputManager().getPeripheral<input::Mouse>(input::Mouse::NAME);
-                scene::Scene& scene = world.getResource<scene::Scene>();
                 mouse.bind(input::MouseInputID::RIGHT_X, createScope<RotateX>(world, &scene.getCameraController()));
                 mouse.bind(input::MouseInputID::RIGHT_Y, createScope<RotateY>(world, &scene.getCameraController()));
                 mouse.bind(input::MouseInputID::SCROLL_Y, createScope<Zoom>(world, &scene.getCameraController()));

@@ -33,6 +33,7 @@ namespace cobalt {
         EulerPlugin::EulerPlugin() noexcept : Plugin("Euler integration", "Provides basic euler integration for linear and angular motion.") {}
 
         void EulerPlugin::onPlug(core::ecs::World& world) const noexcept {
+            world.registerPlugin(*this);
             world.registerComponent<Transform>();
             world.registerComponent<Velocity>();
             world.registerComponent<Acceleration>();

@@ -14,15 +14,17 @@ namespace cobalt {
         Application::Application(const uint framerate)
             : targetFramerate(framerate), estimatedFramerate(0), shouldStop(false), frameCount(0), framerateTimeWindow(1) {
             core::gl::Context::setUserPointer(static_cast<void*>(&world));
-            world.addPlugin<InputPlugin>();
-            world.addPlugin<TimePlugin>();
+            world.addPlugin<TimePlugin>();  // Mandatory dependencies
             world.addPlugin<WindowPlugin>();
+            addPlugins();
             CB_INFO("Created application");
             CB_INFO("Starting up ECS world");
             world.startup();
         }
 
         Application::~Application() { CB_INFO("Destroyed application"); }
+
+        void Application::addPlugins() { world.addPlugin<InputPlugin>(); }
 
         extern bool shutdownInterrupt;
         void Application::run() {
@@ -38,6 +40,7 @@ namespace cobalt {
 
                 while (acc >= delta) {
                     world.update();
+                    glfwPollEvents();
                     fixedTimeStep();
                     acc -= delta;
                 }

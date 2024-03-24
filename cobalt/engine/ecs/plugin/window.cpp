@@ -28,7 +28,13 @@ namespace cobalt {
                                                    })
                                                    .build())));
 
-            world.addSystem<WriteRequest<core::gfx::Window>>(DefaultSchedules::Startup, [](auto window) { window.get().init(); });
+            world.addSystem<WriteRequest<core::gfx::Window>>(DefaultSchedules::Startup, [](auto window) {
+                try {
+                    window.get().init();
+                } catch (const core::ecs::PluginNotFoundException& e) {
+                    CB_CORE_WARN(e.what());
+                }
+            });
         }
     }  // namespace engine
 }  // namespace cobalt

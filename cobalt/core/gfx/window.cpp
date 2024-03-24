@@ -57,6 +57,11 @@ namespace cobalt {
         }
 
         void Window::init() {
+            try {
+                static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
+            } catch (const core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
+                throw core::ecs::PluginNotFoundException("Window");
+            }
             glfwWindowHint(GLFW_RESIZABLE, resizable);
             glfwSetWindowCloseCallback(gl::Context::getGLFWContext(), windowCloseCallback);
             GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
@@ -114,75 +119,48 @@ namespace cobalt {
             glDepthFunc(GL_LEQUAL);
             glEnable(GL_DEPTH_TEST);
             glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-            gl::Context::setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
-                try {
+            if (static_cast<ecs::World*>(core::gl::Context::getUserPointer())->isPlugin("Input")) {
+                gl::Context::setKeyCallback([](GLFWwindow* handle, int key, int scancode, int action, int mods) {
                     core::input::InputManager& manager =
                         static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::input::InputManager>();
                     core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
                     window.onKey(manager, manager.getPeripheral<core::input::Keyboard>(core::input::Keyboard::NAME).glfwToCobalt(key),
                                  action != GLFW_RELEASE);
-                } catch (core::ecs::ResourceNotFoundException<core::input::InputManager>& e) {
-                    throw core::ecs::PluginNotFoundException("Input");
-                } catch (core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
-                    throw core::ecs::PluginNotFoundException("Window");
-                }
-            });
-            gl::Context::setCursorPosCallback([](GLFWwindow* window, double xpos, double ypos) {
-                try {
+                    CB_CORE_ERROR("KAJSDHSKA");
+                });
+                gl::Context::setCursorPosCallback([](GLFWwindow* handle, double xpos, double ypos) {
                     core::input::InputManager& manager =
                         static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::input::InputManager>();
                     core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
                     window.onCursor(manager, (float)xpos, (float)ypos);
-                } catch (core::ecs::ResourceNotFoundException<core::input::InputManager>& e) {
-                    throw core::ecs::PluginNotFoundException("Input");
-                } catch (core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
-                    throw core::ecs::PluginNotFoundException("Window");
-                }
-            });
-            gl::Context::setMouseButtonCallback([](GLFWwindow* window, int button, int action, int mods) {
-                try {
+                });
+                gl::Context::setMouseButtonCallback([](GLFWwindow* handle, int button, int action, int mods) {
                     core::input::InputManager& manager =
                         static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::input::InputManager>();
                     core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
                     window.onMouseButton(manager, manager.getPeripheral<core::input::Mouse>(core::input::Mouse::NAME).glfwToCobalt(button),
                                          action != GLFW_RELEASE);
-                } catch (core::ecs::ResourceNotFoundException<core::input::InputManager>& e) {
-                    throw core::ecs::PluginNotFoundException("Input");
-                } catch (core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
-                    throw core::ecs::PluginNotFoundException("Window");
-                }
-            });
-            gl::Context::setScrollCallback([](GLFWwindow* window, double xoffset, double yoffset) {
-                try {
+                });
+                gl::Context::setScrollCallback([](GLFWwindow* handle, double xoffset, double yoffset) {
                     core::input::InputManager& manager =
                         static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::input::InputManager>();
                     core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
                     window.onScroll(manager, (float)xoffset, (float)yoffset);
-                } catch (core::ecs::ResourceNotFoundException<core::input::InputManager>& e) {
-                    throw core::ecs::PluginNotFoundException("Input");
-                } catch (core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
-                    throw core::ecs::PluginNotFoundException("Window");
-                }
-            });
-            gl::Context::setFramebufferResizeCallback([](GLFWwindow* window, int width, int height) {
-                try {
+                });
+            }
+            if (static_cast<ecs::World*>(core::gl::Context::getUserPointer())->isPlugin("Window")) {
+                gl::Context::setFramebufferResizeCallback([](GLFWwindow* handle, int width, int height) {
                     core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
                     window.getDefaultFBO().resize((uint)width, (uint)height);
                     window.onFramebufferResize((uint)width, (uint)height);
-                } catch (core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
-                    throw core::ecs::PluginNotFoundException("Window");
-                }
-            });
-            gl::Context::setResizeCallback([](GLFWwindow* window, int width, int height) {
-                try {
+                });
+                gl::Context::setResizeCallback([](GLFWwindow* handle, int width, int height) {
                     core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
                     window.setDimensions((uint)width, (uint)height);
                     window.onResize((uint)width, (uint)height);
-                } catch (core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
-                    throw core::ecs::PluginNotFoundException("Window");
-                }
-            });
-            CB_CORE_INFO("Created window");
+                });
+                CB_CORE_INFO("Created window");
+            }
         }
 
         Window::~Window() {
