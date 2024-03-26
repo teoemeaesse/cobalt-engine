@@ -101,7 +101,6 @@ namespace cobalt {
             this->height = height;
             if (buffer == 0) {
                 glViewport(0, 0, width, height);
-                CB_CORE_INFO("Resized default FBO to {0}x{1} px", width, height);
             } else {
                 for (uint i = 0; i < colors.size(); i++) {
                     colors[i].reserve(width, height);
@@ -109,7 +108,6 @@ namespace cobalt {
                 if (depth.has_value()) depth.value().reserve(width, height);
                 if (stencil.has_value()) stencil.value().reserve(width, height);
                 if (depthStencil.has_value()) depthStencil.value().reserve(width, height);
-                CB_CORE_INFO("Resized FBO to {0}x{1} px (GL: {2})", width, height, buffer);
             }
         }
 
