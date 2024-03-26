@@ -17,7 +17,7 @@ namespace cobalt {
             getWindow().setClearColor(Color(0.2f, 0.2f, 0.2f));
             getWindow().show();
             world.addHook<ecs::ReadRequest<gfx::Window>, ecs::WriteRequest<DefaultGraph>, ecs::WriteRequest<scene::Scene>>(
-                WindowPlugin::FRAMEBUFFER_RESIZE_EVENT, [](auto window, auto graph, auto scene) {
+                WindowPlugin::FramebufferResizeEvent, [](auto window, auto graph, auto scene) {
                     const uint width = window.get().getDefaultFBO().getWidth();
                     const uint height = window.get().getDefaultFBO().getHeight();
                     graph.get().onResize(width, height);

@@ -24,6 +24,8 @@ namespace cobalt {
          */
         class TimePlugin : public core::ecs::Plugin {
             public:
+            constexpr static const char* Title = "Time";
+
             /**
              * @brief: Construct the plugin.
              * @return: TimePlugin

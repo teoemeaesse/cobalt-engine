@@ -13,8 +13,10 @@ namespace cobalt {
          */
         class WindowPlugin : public core::ecs::Plugin {
             public:
-            const static std::string FRAMEBUFFER_RESIZE_EVENT;
-            const static std::string FRAMEBUFFER_RESIZE_EVENT_DESCRIPTION;
+            constexpr static const char* Title = "Window";
+
+            constexpr static const char* FramebufferResizeEvent = "WindowResize";
+            constexpr static const char* FramebufferResizeEventDescription = "Called whenever the window is resized.";
 
             /**
              * @brief: Construct the plugin.

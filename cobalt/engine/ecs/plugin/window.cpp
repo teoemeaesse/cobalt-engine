@@ -10,13 +10,10 @@ using namespace cobalt::core::ecs;
 
 namespace cobalt {
     namespace engine {
-        const std::string WindowPlugin::FRAMEBUFFER_RESIZE_EVENT = "WindowResize";
-        const std::string WindowPlugin::FRAMEBUFFER_RESIZE_EVENT_DESCRIPTION = "Called whenever the window is resized.";
-
-        WindowPlugin::WindowPlugin() noexcept : Plugin("Window", "Provides window management functionality.", TimePlugin{}) {}
+        WindowPlugin::WindowPlugin() noexcept : Plugin(Title, "Provides window management functionality.", TimePlugin{}) {}
 
         void WindowPlugin::onPlug(World& world) const noexcept {
-            world.registerEvent(FRAMEBUFFER_RESIZE_EVENT, FRAMEBUFFER_RESIZE_EVENT_DESCRIPTION);
+            world.registerEvent(FramebufferResizeEvent, FramebufferResizeEventDescription);
             world.addResource(Move(
                 createScope<core::gfx::Window>(core::gfx::WindowBuilder()
                                                    .setTitle("Cobalt")
@@ -25,7 +22,7 @@ namespace cobalt {
                                                    .setVsync(true)
                                                    .setFramebufferResizeCallback([](core::gfx::Window& window, const uint width, const uint height) {
                                                        static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())
-                                                           ->triggerEvent(cobalt::engine::WindowPlugin::FRAMEBUFFER_RESIZE_EVENT);
+                                                           ->triggerEvent(cobalt::engine::WindowPlugin::FramebufferResizeEvent);
                                                    })
                                                    .build())));
 

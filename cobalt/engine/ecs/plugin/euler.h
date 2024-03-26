@@ -81,6 +81,8 @@ namespace cobalt {
          */
         class EulerPlugin : public core::ecs::Plugin {
             public:
+            constexpr static const char* Title = "Euler integration";
+
             /**
              * @brief: Construct the plugin.
              * @return: EulerPlugin

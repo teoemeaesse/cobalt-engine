@@ -125,7 +125,6 @@ namespace cobalt {
             this->height = height;
             glBindTexture(GL_TEXTURE_2D, texture);
             glTexImage2D(GL_TEXTURE_2D, 0, (GLint)encoding, this->width, this->height, 0, (GLenum)format, (GLenum)pixelType, nullptr);
-            CB_CORE_INFO("Reserved {0}x{1} px for texture (GL: {2})", this->width, this->height, texture);
         }
 
         void Texture2D::bind() const { glBindTexture(GL_TEXTURE_2D, texture); }
@@ -248,7 +247,6 @@ namespace cobalt {
                 glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint)encoding, this->width, this->height, 0, (GLenum)format, (GLenum)pixelType,
                              nullptr);
             }
-            CB_CORE_INFO("Reserved {0}x{1} px/face for 3D texture (GL: {2})", this->width, this->height, texture);
         }
 
         void Texture3D::bind() const { glBindTexture(GL_TEXTURE_CUBE_MAP, texture); }
