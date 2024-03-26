@@ -6,15 +6,17 @@
 #include "core/ecs/system/commands.h"
 #include "core/gfx/window.h"
 #include "core/input/input_manager.h"
+#include "engine/ecs/plugin/time.h"
+#include "engine/ecs/plugin/window.h"
 
 using namespace cobalt::core::ecs;
 
 namespace cobalt {
     namespace engine {
-        InputPlugin::InputPlugin() noexcept : Plugin("Input", "Provides peripheral input state information.") {}
+        // add the window and time plugin dependencies
+        InputPlugin::InputPlugin() noexcept : Plugin("Input", "Provides input management.", WindowPlugin{}, TimePlugin{}) {}
 
         void InputPlugin::onPlug(core::ecs::World& world) const noexcept {
-            world.registerPlugin(*this);
             world.addResource<core::input::InputManager>();
 
             /**

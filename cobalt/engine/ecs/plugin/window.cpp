@@ -4,6 +4,7 @@
 #include "engine/ecs/plugin/window.h"
 
 #include "core/gl/context.h"
+#include "engine/ecs/plugin/time.h"
 
 using namespace cobalt::core::ecs;
 
@@ -12,7 +13,7 @@ namespace cobalt {
         const std::string WindowPlugin::FRAMEBUFFER_RESIZE_EVENT = "WindowResize";
         const std::string WindowPlugin::FRAMEBUFFER_RESIZE_EVENT_DESCRIPTION = "Called whenever the window is resized.";
 
-        WindowPlugin::WindowPlugin() noexcept : Plugin("Window", "Provides window management functionality.") {}
+        WindowPlugin::WindowPlugin() noexcept : Plugin("Window", "Provides window management functionality.", TimePlugin{}) {}
 
         void WindowPlugin::onPlug(World& world) const noexcept {
             world.registerEvent(FRAMEBUFFER_RESIZE_EVENT, FRAMEBUFFER_RESIZE_EVENT_DESCRIPTION);

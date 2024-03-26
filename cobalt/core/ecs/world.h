@@ -4,7 +4,7 @@
 #pragma once
 
 #include "core/ecs/event/manager.h"
-#include "core/ecs/plugin/plugin.h"
+#include "core/ecs/plugin/manager.h"
 
 namespace cobalt {
     namespace core::ecs {
@@ -146,14 +146,20 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Register a plugin.
-             * @param plugin: The plugin to register
-             * @return: void
+             * @brief: Find out if a given plugin is registered. The title must match exactly.
+             * @tparam PluginType: Plugin to find.
+             * @return: bool
              */
-            void registerPlugin(const Plugin& plugin) noexcept;
+            template <typename PluginType>
+            bool isPlugin() noexcept {
+                static_assert(std::is_base_of<Plugin, PluginType>::value, "PluginType must be a subclass of Plugin.");
+                static_assert(std::is_default_constructible<PluginType>::value, "PluginType must be default constructible.");
+                PluginType plugin;
+                return pluginManager.isPlugin(plugin);
+            }
             /**
              * @brief: Find out if a given plugin is registered. The title must match exactly.
-             * @param title: The title for the plugin.
+             * @param title: Plugin title.
              * @return: bool
              */
             bool isPlugin(const std::string& title) noexcept;
@@ -166,6 +172,7 @@ namespace cobalt {
             void addPlugin() noexcept {
                 static_assert(std::is_base_of<Plugin, PluginType>::value, "PluginType must be a subclass of Plugin.");
                 PluginType plugin;
+                pluginManager.addPlugin(plugin);
                 plugin.onPlug(*this);
                 plugin.log();
             }
@@ -218,7 +225,7 @@ namespace cobalt {
              * @brief: Run the startup schedule.
              * @return: void
              */
-            void startup() noexcept;
+            void startup();
             /**
              * @brief: Run the pre-update, update, and post-update schedules.
              * @return: void
@@ -236,10 +243,10 @@ namespace cobalt {
             void shutdown() noexcept;
 
             private:
-            Vec<std::string> plugins;
             EntityRegistry entityRegistry;
             ComponentRegistry componentRegistry;
             ResourceRegistry resourceRegistry;
+            PluginManager pluginManager;
             SystemManager systemManager;
             EventManager eventManager;
         };

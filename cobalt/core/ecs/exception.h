@@ -58,5 +58,19 @@ namespace cobalt {
             PluginNotFoundException(const std::string& pluginName) : std::runtime_error("Plugin not found: " + pluginName) {}
             ~PluginNotFoundException() = default;
         };
+
+        class PluginDependencyNotFoundException : public std::runtime_error {
+            public:
+            /**
+             * @brief: Create a new plugin dependency not found exception.
+             * @return: The new plugin dependency not found exception.
+             */
+            PluginDependencyNotFoundException(const std::string& pluginName, const Vec<std::string>& dependenciesMissing)
+                : std::runtime_error(
+                      "Plugin dependencies not met: " + pluginName + " -> " +
+                      std::accumulate(dependenciesMissing.begin(), dependenciesMissing.end(), std::string{},
+                                      [](const std::string& accum, const std::string& dep) { return accum.empty() ? dep : accum + ", " + dep; })) {}
+            ~PluginDependencyNotFoundException() = default;
+        };
     }  // namespace core::ecs
 }  // namespace cobalt

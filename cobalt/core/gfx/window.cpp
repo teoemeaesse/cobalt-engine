@@ -126,7 +126,6 @@ namespace cobalt {
                     core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
                     window.onKey(manager, manager.getPeripheral<core::input::Keyboard>(core::input::Keyboard::NAME).glfwToCobalt(key),
                                  action != GLFW_RELEASE);
-                    CB_CORE_ERROR("KAJSDHSKA");
                 });
                 gl::Context::setCursorPosCallback([](GLFWwindow* handle, double xpos, double ypos) {
                     core::input::InputManager& manager =
