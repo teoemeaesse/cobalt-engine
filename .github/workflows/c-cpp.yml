@@ -33,7 +33,6 @@ jobs:
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
-        brew update && brew link --overwrite python@3.12
         brew install gcc cmake \
           freeglut \
           xorgproto \
