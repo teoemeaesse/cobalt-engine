@@ -6,6 +6,7 @@
 // 26-12-2023.
 //
 
+#include "core/ecs/world.h"
 #include "core/input/keyboard.h"
 #include "unity/unity.h"
 
@@ -26,19 +27,20 @@ class TestClass {
     int value;
     bool pressed;
 };
-#define DEFINE_PERIPHERAL_CMD(num)                                                                              \
-    class TestPeripheralCmd##num : public cobalt::core::input::ConcreteInputCommand<TestClass> {                \
-        public:                                                                                                 \
-        TestPeripheralCmd##num(TestClass* test) : cobalt::core::input::ConcreteInputCommand<TestClass>(test) {} \
-        void execute() const override {                                                                         \
-            getTarget()->setValue(num, getInput().active);                                                      \
-            eventCounter++;                                                                                     \
-        }                                                                                                       \
+#define DEFINE_PERIPHERAL_CMD(num)                                                               \
+    class TestPeripheralCmd##num : public cobalt::core::input::ConcreteInputCommand<TestClass> { \
+        public:                                                                                  \
+        TestPeripheralCmd##num(cobalt::core::ecs::World& world, TestClass* test)                 \
+            : cobalt::core::input::ConcreteInputCommand<TestClass>(world, test) {}               \
+        void execute() const override {                                                          \
+            getTarget()->setValue(num, getInput().active);                                       \
+            eventCounter++;                                                                      \
+        }                                                                                        \
     };
-#define BIND_KEY(num, bindptr) \
-    keyboard->bind(static_cast<cobalt::core::input::KeyboardInputID>(num), std::make_unique<TestPeripheralCmd##num>(bindptr));
+#define BIND_KEY(world, num, bindptr) \
+    keyboard->bind(static_cast<cobalt::core::input::KeyboardInputID>(num), std::make_unique<TestPeripheralCmd##num>(world, bindptr));
 #define X(num) DEFINE_PERIPHERAL_CMD(num)
-#define Y(num, bindptr) BIND_KEY(num, bindptr)
+#define Y(world, num, bindptr) BIND_KEY(world, num, bindptr)
 // Goes up
 // to 78.
 // Sue me.
@@ -121,90 +123,90 @@ X(75);
 X(76);
 X(77);
 X(78);
-// And so
-// does
-// this
-// one!
+
+cobalt::core::ecs::World world;
+
+// And so does this one!
 #define BIND_KEYS(bindptr) \
-    Y(0, bindptr);         \
-    Y(1, bindptr);         \
-    Y(2, bindptr);         \
-    Y(3, bindptr);         \
-    Y(4, bindptr);         \
-    Y(5, bindptr);         \
-    Y(6, bindptr);         \
-    Y(7, bindptr);         \
-    Y(8, bindptr);         \
-    Y(9, bindptr);         \
-    Y(10, bindptr);        \
-    Y(11, bindptr);        \
-    Y(12, bindptr);        \
-    Y(13, bindptr);        \
-    Y(14, bindptr);        \
-    Y(15, bindptr);        \
-    Y(16, bindptr);        \
-    Y(17, bindptr);        \
-    Y(18, bindptr);        \
-    Y(19, bindptr);        \
-    Y(20, bindptr);        \
-    Y(21, bindptr);        \
-    Y(22, bindptr);        \
-    Y(23, bindptr);        \
-    Y(24, bindptr);        \
-    Y(25, bindptr);        \
-    Y(26, bindptr);        \
-    Y(27, bindptr);        \
-    Y(28, bindptr);        \
-    Y(29, bindptr);        \
-    Y(30, bindptr);        \
-    Y(31, bindptr);        \
-    Y(32, bindptr);        \
-    Y(33, bindptr);        \
-    Y(34, bindptr);        \
-    Y(35, bindptr);        \
-    Y(36, bindptr);        \
-    Y(37, bindptr);        \
-    Y(38, bindptr);        \
-    Y(39, bindptr);        \
-    Y(40, bindptr);        \
-    Y(41, bindptr);        \
-    Y(42, bindptr);        \
-    Y(43, bindptr);        \
-    Y(44, bindptr);        \
-    Y(45, bindptr);        \
-    Y(46, bindptr);        \
-    Y(47, bindptr);        \
-    Y(48, bindptr);        \
-    Y(49, bindptr);        \
-    Y(50, bindptr);        \
-    Y(51, bindptr);        \
-    Y(52, bindptr);        \
-    Y(53, bindptr);        \
-    Y(54, bindptr);        \
-    Y(55, bindptr);        \
-    Y(56, bindptr);        \
-    Y(57, bindptr);        \
-    Y(58, bindptr);        \
-    Y(59, bindptr);        \
-    Y(60, bindptr);        \
-    Y(61, bindptr);        \
-    Y(62, bindptr);        \
-    Y(63, bindptr);        \
-    Y(64, bindptr);        \
-    Y(65, bindptr);        \
-    Y(66, bindptr);        \
-    Y(67, bindptr);        \
-    Y(68, bindptr);        \
-    Y(69, bindptr);        \
-    Y(70, bindptr);        \
-    Y(71, bindptr);        \
-    Y(72, bindptr);        \
-    Y(73, bindptr);        \
-    Y(74, bindptr);        \
-    Y(75, bindptr);        \
-    Y(76, bindptr);        \
-    Y(77, bindptr);        \
-    Y(78, bindptr);
+    Y(world, 0, bindptr);  \
+    Y(world, 1, bindptr);  \
+    Y(world, 2, bindptr);  \
+    Y(world, 3, bindptr);  \
+    Y(world, 4, bindptr);  \
+    Y(world, 5, bindptr);  \
+    Y(world, 6, bindptr);  \
+    Y(world, 7, bindptr);  \
+    Y(world, 8, bindptr);  \
+    Y(world, 9, bindptr);  \
+    Y(world, 10, bindptr); \
+    Y(world, 11, bindptr); \
+    Y(world, 12, bindptr); \
+    Y(world, 13, bindptr); \
+    Y(world, 14, bindptr); \
+    Y(world, 15, bindptr); \
+    Y(world, 16, bindptr); \
+    Y(world, 17, bindptr); \
+    Y(world, 18, bindptr); \
+    Y(world, 19, bindptr); \
+    Y(world, 20, bindptr); \
+    Y(world, 21, bindptr); \
+    Y(world, 22, bindptr); \
+    Y(world, 23, bindptr); \
+    Y(world, 24, bindptr); \
+    Y(world, 25, bindptr); \
+    Y(world, 26, bindptr); \
+    Y(world, 27, bindptr); \
+    Y(world, 28, bindptr); \
+    Y(world, 29, bindptr); \
+    Y(world, 30, bindptr); \
+    Y(world, 31, bindptr); \
+    Y(world, 32, bindptr); \
+    Y(world, 33, bindptr); \
+    Y(world, 34, bindptr); \
+    Y(world, 35, bindptr); \
+    Y(world, 36, bindptr); \
+    Y(world, 37, bindptr); \
+    Y(world, 38, bindptr); \
+    Y(world, 39, bindptr); \
+    Y(world, 40, bindptr); \
+    Y(world, 41, bindptr); \
+    Y(world, 42, bindptr); \
+    Y(world, 43, bindptr); \
+    Y(world, 44, bindptr); \
+    Y(world, 45, bindptr); \
+    Y(world, 46, bindptr); \
+    Y(world, 47, bindptr); \
+    Y(world, 48, bindptr); \
+    Y(world, 49, bindptr); \
+    Y(world, 50, bindptr); \
+    Y(world, 51, bindptr); \
+    Y(world, 52, bindptr); \
+    Y(world, 53, bindptr); \
+    Y(world, 54, bindptr); \
+    Y(world, 55, bindptr); \
+    Y(world, 56, bindptr); \
+    Y(world, 57, bindptr); \
+    Y(world, 58, bindptr); \
+    Y(world, 59, bindptr); \
+    Y(world, 60, bindptr); \
+    Y(world, 61, bindptr); \
+    Y(world, 62, bindptr); \
+    Y(world, 63, bindptr); \
+    Y(world, 64, bindptr); \
+    Y(world, 65, bindptr); \
+    Y(world, 66, bindptr); \
+    Y(world, 67, bindptr); \
+    Y(world, 68, bindptr); \
+    Y(world, 69, bindptr); \
+    Y(world, 70, bindptr); \
+    Y(world, 71, bindptr); \
+    Y(world, 72, bindptr); \
+    Y(world, 73, bindptr); \
+    Y(world, 74, bindptr); \
+    Y(world, 75, bindptr); \
+    Y(world, 76, bindptr); \
+    Y(world, 77, bindptr); \
+    Y(world, 78, bindptr);
 // Basically just bind every key to a command that sets the value of a TestClass to the key's id.
 
 TestClass testClass;

@@ -30,7 +30,7 @@ namespace cobalt {
             for (const auto& dependency : dependencies) {
                 bool found = false;
                 for (const auto& plugin : plugins) {
-                    if (plugin.getTitle() == dependency.getTitle()) {
+                    if (plugin == dependency) {
                         found = true;
                         break;
                     }
