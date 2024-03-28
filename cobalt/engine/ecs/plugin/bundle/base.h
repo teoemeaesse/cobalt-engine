@@ -4,9 +4,9 @@
 #pragma once
 
 #include "core/ecs/plugin/bundle.h"
-#include "engine/ecs/plugin/input.h"
-#include "engine/ecs/plugin/time.h"
-#include "engine/ecs/plugin/window.h"
+#include "engine/ecs/plugin/gfx/window.h"
+#include "engine/ecs/plugin/input/input.h"
+#include "engine/ecs/plugin/time/time.h"
 
 namespace cobalt {
     namespace engine::ecs {

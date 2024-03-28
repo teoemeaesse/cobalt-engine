@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <stdexcept>
-
 #include "core/input/peripheral.h"
 
 namespace cobalt {

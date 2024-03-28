@@ -22,6 +22,7 @@
 #include <queue>
 #include <sstream>
 #include <stack>
+#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <type_traits>
@@ -190,7 +191,7 @@ namespace cobalt {
                         constexpr TextureEncoding Bits8 = GL_R8_SNORM;
                         constexpr TextureEncoding Bits16 = GL_R16_SNORM;
                     }  // namespace Normalized
-                }      // namespace R
+                }  // namespace R
                 namespace RG {
                     constexpr TextureEncoding Bits8 = GL_RG8;
                     constexpr TextureEncoding Bits16 = GL_RG16;
@@ -212,7 +213,7 @@ namespace cobalt {
                         constexpr TextureEncoding Bits8 = GL_RG8_SNORM;
                         constexpr TextureEncoding Bits16 = GL_RG16_SNORM;
                     }  // namespace Normalized
-                }      // namespace RG
+                }  // namespace RG
                 namespace RGB {
                     constexpr TextureEncoding Bits4 = GL_RGB4;
                     constexpr TextureEncoding Bits8 = GL_RGB8;
@@ -235,7 +236,7 @@ namespace cobalt {
                         constexpr TextureEncoding Bits8 = GL_RGB8_SNORM;
                         constexpr TextureEncoding Bits16 = GL_RGB16_SNORM;
                     }  // namespace Normalized
-                }      // namespace RGB
+                }  // namespace RGB
                 namespace RGBA {
                     constexpr TextureEncoding Bits4 = GL_RGBA4;
                     constexpr TextureEncoding Bits8 = GL_RGBA8;
@@ -258,7 +259,7 @@ namespace cobalt {
                         constexpr TextureEncoding Bits8 = GL_RGBA8_SNORM;
                         constexpr TextureEncoding Bits16 = GL_RGBA16_SNORM;
                     }  // namespace Normalized
-                }      // namespace RGBA
+                }  // namespace RGBA
                 namespace SRGB {
                     constexpr TextureEncoding Bits8 = GL_SRGB8;
                 }
@@ -271,11 +272,11 @@ namespace cobalt {
                     namespace Float {
                         constexpr TextureEncoding Bits32 = GL_DEPTH_COMPONENT32F;
                     }
-                }                    // namespace Depth
+                }  // namespace Depth
                 namespace Stencil {  // OpenGL 4.4 or higher.
                     constexpr TextureEncoding Bits8 = GL_STENCIL_INDEX8;
                     constexpr TextureEncoding Bits16 = GL_STENCIL_INDEX16;
-                }                         // namespace Stencil
+                }  // namespace Stencil
                 namespace DepthStencil {  // Accessing stencil specifically requires OpenGL 4.3
                                           // or higher.
                     constexpr TextureEncoding Bits24_8 = GL_DEPTH24_STENCIL8;
@@ -283,7 +284,7 @@ namespace cobalt {
                         constexpr TextureEncoding Bits32_8 = GL_DEPTH32F_STENCIL8;
                     }
                 }  // namespace DepthStencil
-            }      // namespace TextureEncodings
+            }  // namespace TextureEncodings
             /**
              * @brief: Gets the name of a texture encoding.
              * @param encoding: The texture encoding.
@@ -722,5 +723,5 @@ namespace cobalt {
                 }
             }
         }  // namespace gl
-    }      // namespace core
+    }  // namespace core
 }  // namespace cobalt

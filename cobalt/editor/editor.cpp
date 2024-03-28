@@ -5,7 +5,7 @@
 
 #include "core/input/exception.h"
 #include "editor/input/bindings.h"
-#include "engine/ecs/plugin/window.h"
+#include "engine/ecs/plugin/gfx/window.h"
 
 namespace cobalt {
     namespace editor {

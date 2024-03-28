@@ -3,10 +3,7 @@
 
 #pragma once
 
-#include "core/ecs/world.h"
 #include "core/gfx/window.h"
-#include "core/input/input_manager.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace engine {

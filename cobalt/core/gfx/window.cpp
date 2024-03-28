@@ -144,19 +144,18 @@ namespace cobalt {
                     window.onScroll(manager, (float)xoffset, (float)yoffset);
                 });
             }
-            if (static_cast<ecs::World*>(core::gl::Context::getUserPointer())->isPlugin("Window")) {
-                gl::Context::setFramebufferResizeCallback([](GLFWwindow* handle, int width, int height) {
-                    core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
-                    window.getDefaultFBO().resize((uint)width, (uint)height);
-                    window.onFramebufferResize((uint)width, (uint)height);
-                });
-                gl::Context::setResizeCallback([](GLFWwindow* handle, int width, int height) {
-                    core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
-                    window.setDimensions((uint)width, (uint)height);
-                    window.onResize((uint)width, (uint)height);
-                });
-                CB_CORE_INFO("Created window");
-            }
+
+            gl::Context::setFramebufferResizeCallback([](GLFWwindow* handle, int width, int height) {
+                core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
+                window.getDefaultFBO().resize((uint)width, (uint)height);
+                window.onFramebufferResize((uint)width, (uint)height);
+            });
+            gl::Context::setResizeCallback([](GLFWwindow* handle, int width, int height) {
+                core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
+                window.setDimensions((uint)width, (uint)height);
+                window.onResize((uint)width, (uint)height);
+            });
+            CB_CORE_INFO("Created window");
         }
 
         Window::~Window() {

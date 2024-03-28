@@ -1,7 +1,7 @@
 // Created by tomas on
 // 08-02-2024
 
-#include "engine/ecs/plugin/time.h"
+#include "engine/ecs/plugin/time/time.h"
 
 using namespace cobalt::core::ecs;
 

@@ -4,8 +4,7 @@
 #include "engine/application.h"
 
 #include "core/gl/context.h"
-#include "core/pch.h"
-#include "engine/ecs/bundle/base.h"
+#include "engine/ecs/plugin/bundle/base.h"
 
 namespace cobalt {
     namespace engine {

@@ -1,10 +1,10 @@
 // Created by tomas on
 // 10-02-2024
 
-#include "engine/ecs/plugin/window.h"
+#include "engine/ecs/plugin/gfx/window.h"
 
 #include "core/gl/context.h"
-#include "engine/ecs/plugin/time.h"
+#include "engine/ecs/plugin/time/time.h"
 
 using namespace cobalt::core::ecs;
 
