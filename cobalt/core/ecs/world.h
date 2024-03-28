@@ -4,6 +4,7 @@
 #pragma once
 
 #include "core/ecs/event/manager.h"
+#include "core/ecs/plugin/bundle.h"
 #include "core/ecs/plugin/manager.h"
 
 namespace cobalt {
@@ -189,6 +190,17 @@ namespace cobalt {
                 PluginType plugin(std::forward<Args>(args)...);
                 plugin.onPlug(*this);
                 plugin.log();
+            }
+            /**
+             * @brief: Add a plugin bundle to the world.
+             * @param bundle: Bundle to add.
+             * @return: void
+             */
+            template <typename BundleType>
+            void addBundle() noexcept {
+                static_assert(std::is_base_of<core::ecs::Bundle, BundleType>::value, "BundleType must be a subclass of core::ecs::Bundle.");
+                BundleType bundle;
+                bundle.addPlugins(*this);
             }
 
             /**

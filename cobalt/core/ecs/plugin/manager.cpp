@@ -10,6 +10,8 @@ namespace cobalt {
         void PluginManager::addPlugin(const Plugin& plugin) noexcept {
             if (!isPlugin(plugin)) {
                 plugins.emplace_back(plugin);
+            } else {
+                CB_WARN("Plugin {} already registered", plugin.getTitle());
             }
         }
 
