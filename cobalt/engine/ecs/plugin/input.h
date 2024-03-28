@@ -14,7 +14,7 @@ namespace cobalt {
          */
         class InputPlugin : public core::ecs::Plugin {
             public:
-            constexpr static const char* Title = "Input";
+            static inline constexpr const char* TITLE = "Input";
 
             /**
              * @brief: Construct the plugin.

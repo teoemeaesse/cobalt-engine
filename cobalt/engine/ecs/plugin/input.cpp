@@ -14,7 +14,7 @@ using namespace cobalt::core::ecs;
 namespace cobalt {
     namespace engine {
         // add the window and time plugin dependencies
-        InputPlugin::InputPlugin() noexcept : Plugin(Title, "Provides input management.", WindowPlugin{}, TimePlugin{}) {}
+        InputPlugin::InputPlugin() noexcept : Plugin(TITLE, "Provides input management.", WindowPlugin{}, TimePlugin{}) {}
 
         void InputPlugin::onPlug(core::ecs::World& world) const noexcept {
             world.addResource<core::input::InputManager>();

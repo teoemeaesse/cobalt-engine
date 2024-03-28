@@ -96,12 +96,12 @@ namespace cobalt {
              * @brief: Poll the peripheral for events.
              * @return: void
              */
-            virtual void pollEvents() = 0;
+            virtual void pollEvents() {};
             /**
              * @brief: Clear all queued events from the peripheral.
              * @return: void
              */
-            virtual void clearEvents() = 0;
+            virtual void clearEvents() {};
 
             /**
              * @brief: Bind a command to an input.

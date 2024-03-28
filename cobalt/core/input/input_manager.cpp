@@ -4,10 +4,13 @@
 #include "core/input/input_manager.h"
 
 #include "core/gl/context.h"
+#include "core/input/null.h"
 
 namespace cobalt {
     namespace core::input {
         DeviceID unknownPeripheral;
+
+        InputManager::InputManager() { unknownPeripheral = registerPeripheral<NullDevice>("Unknown"); }
 
         void InputManager::pollEvents() {
             for (const auto& [name, id] : peripheralIDs) {
@@ -23,10 +26,6 @@ namespace cobalt {
                     peripherals[id]->clearEvents();
                 }
             }
-        }
-
-        InputManager::InputManager() {
-            unknownPeripheral = registerPeripheral<Keyboard>("Unknown");  // TODO: Create NULL peripheral type
         }
 
         const std::string& InputManager::peripheralToString(const DeviceID peripheral) {

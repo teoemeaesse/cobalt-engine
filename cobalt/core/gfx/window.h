@@ -5,7 +5,8 @@
 
 #include "core/gl/fbo.h"
 #include "core/input/input_manager.h"
-#include "core/pch.h"
+#include "core/input/keyboard.h"
+#include "core/input/mouse.h"
 
 namespace cobalt {
     namespace core::gfx {

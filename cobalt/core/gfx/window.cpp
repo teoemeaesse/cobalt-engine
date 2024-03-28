@@ -3,10 +3,7 @@
 
 #include "core/gfx/window.h"
 
-#include "core/ecs/world.h"
 #include "core/gl/context.h"
-#include "core/input/input_manager.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::gfx {

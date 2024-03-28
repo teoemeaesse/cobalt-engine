@@ -4,7 +4,6 @@
 #pragma once
 
 #include "core/input/peripheral.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::input {
@@ -117,6 +116,7 @@ namespace cobalt {
             KeyState();
             /**
              * @brief: Destroy the key state.
+             * @return: void
              */
             ~KeyState() = default;
         };
@@ -133,6 +133,7 @@ namespace cobalt {
             explicit Keyboard(const DeviceID id);
             /**
              * @brief: Destroy the keyboard.
+             * @return: void
              */
             ~Keyboard() = default;
 

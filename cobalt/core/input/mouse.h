@@ -4,7 +4,6 @@
 #pragma once
 
 #include "core/input/peripheral.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::input {
@@ -52,6 +51,7 @@ namespace cobalt {
             ButtonState();
             /**
              * @brief: Destroy the button.
+             * @return: void
              */
             ~ButtonState() = default;
         };
@@ -69,6 +69,7 @@ namespace cobalt {
             Mouse(const DeviceID id, const float sensitivity);
             /**
              * @brief: Destroy the mouse.
+             * @return: void
              */
             ~Mouse() = default;
 
@@ -156,6 +157,7 @@ namespace cobalt {
             /**
              * @brief: Set the sensitivity.
              * @param sensitivity: The new sensitivity.
+             * @return: void
              */
             void setSensitivity(const float sensitivity);
 
@@ -171,6 +173,7 @@ namespace cobalt {
              * @brief: Queue an event.
              * @param id: The id of the event.
              * @param value: The value of the event.
+             * @return: void
              */
             void queueEvent(const MouseInputID id, const InputValue value);
 

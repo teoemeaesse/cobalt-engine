@@ -4,7 +4,6 @@
 #pragma once
 
 #include "core/ecs/properties.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::ecs {
@@ -16,7 +15,7 @@ namespace cobalt {
              * @return: True if the resource type is valid.
              */
             template <typename ResourceType>
-            static constexpr bool validate() {
+            static inline constexpr bool validate() {
                 static_assert(std::is_base_of<Resource, ResourceType>::value, "Type must be a resource.");
                 return true;
             }

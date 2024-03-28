@@ -107,7 +107,7 @@ namespace cobalt {
 
         class Texture2D : public Texture {
             public:
-            static constexpr uchar DEFAULT_NORMAL[] = {
+            static inline constexpr uchar DEFAULT_NORMAL[] = {
                 127,
                 127,
                 255,

@@ -9,7 +9,7 @@ namespace cobalt {
     namespace engine {
         Time::Time() noexcept : deltaTime(0.0f), elapsedTime(0.0f) {}
 
-        TimePlugin::TimePlugin() noexcept : Plugin(Title, "Provides delta time for frame interpolation and timer support.") {}
+        TimePlugin::TimePlugin() noexcept : Plugin(TITLE, "Provides delta time for frame interpolation and timer support.") {}
 
         void TimePlugin::onPlug(core::ecs::World& world) const noexcept { world.addResource<Time>(); }
     }  // namespace engine

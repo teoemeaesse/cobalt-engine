@@ -6,9 +6,6 @@
 #include "core/ecs/resource/resource.h"
 #include "core/input/exception.h"
 #include "core/input/input_command.h"
-#include "core/input/keyboard.h"
-#include "core/input/mouse.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::input {
@@ -20,12 +17,12 @@ namespace cobalt {
             public:
             /**
              * @brief: Create a new input manager.
-             * @param mouseSensitivity: The mouse sensitivity.
              * @return: The new input manager.
              */
             InputManager();
             /**
              * @brief: Destroy the input manager.
+             * @return: void
              */
             ~InputManager() = default;
 

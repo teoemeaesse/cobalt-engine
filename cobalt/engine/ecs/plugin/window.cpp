@@ -10,10 +10,10 @@ using namespace cobalt::core::ecs;
 
 namespace cobalt {
     namespace engine {
-        WindowPlugin::WindowPlugin() noexcept : Plugin(Title, "Provides window management functionality.", TimePlugin{}) {}
+        WindowPlugin::WindowPlugin() noexcept : Plugin(TITLE, "Provides window management functionality.", TimePlugin{}) {}
 
         void WindowPlugin::onPlug(World& world) const noexcept {
-            world.registerEvent(FramebufferResizeEvent, FramebufferResizeEventDescription);
+            world.registerEvent(FRAMEBUFFER_RESIZE_EVENT, FRAMEBUFFER_RESIZE_EVENT_DESCRIPTION);
             world.addResource(Move(
                 createScope<core::gfx::Window>(core::gfx::WindowBuilder()
                                                    .setTitle("Cobalt")
@@ -22,7 +22,7 @@ namespace cobalt {
                                                    .setVsync(true)
                                                    .setFramebufferResizeCallback([](core::gfx::Window& window, const uint width, const uint height) {
                                                        static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())
-                                                           ->triggerEvent(cobalt::engine::WindowPlugin::FramebufferResizeEvent);
+                                                           ->triggerEvent(cobalt::engine::WindowPlugin::FRAMEBUFFER_RESIZE_EVENT);
                                                    })
                                                    .build())));
 
