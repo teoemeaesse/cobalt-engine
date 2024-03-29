@@ -31,18 +31,18 @@ namespace cobalt {
              * @param plugin: Plugin to check.
              * @return: bool
              */
-            bool isPlugin(const Plugin& plugin) noexcept;
+            bool isPlugin(const Plugin& plugin) const noexcept;
             /**
              * @brief: Check if a plugin is registered in the manager.
              * @param title: Title of the plugin to check.
              * @return: bool
              */
-            bool isPlugin(const std::string& title) noexcept;
+            bool isPlugin(const std::string& title) const noexcept;
             /**
              * @brief: Check if the dependencies of all the plugins are met.
              * @return: void
              */
-            void checkDependencies();
+            void checkDependencies() const;
 
             private:
             Vec<Plugin> plugins;

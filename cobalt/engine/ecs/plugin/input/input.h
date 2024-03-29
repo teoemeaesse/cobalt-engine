@@ -7,8 +7,6 @@
 
 namespace cobalt {
     namespace engine {
-        struct KeyboardState : public core::ecs::Resource {};
-
         /**
          * @brief: Input plugin. Provides peripheral input state information.
          */

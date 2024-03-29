@@ -11,15 +11,17 @@ namespace cobalt {
         Application::Application(const uint framerate)
             : targetFramerate(framerate), estimatedFramerate(0), shouldStop(false), frameCount(0), framerateTimeWindow(1) {
             core::gl::Context::setUserPointer(static_cast<void*>(&world));
-            addPlugins();
-            CB_INFO("Created application");
-            CB_INFO("Starting up ECS world");
-            world.startup();
         }
 
         Application::~Application() { CB_INFO("Destroyed application"); }
 
-        void Application::addPlugins() { world.addBundle<ecs::BaseBundle>(); }
+        void Application::init() {
+            CB_INFO("Adding plugins");
+            addPlugins();
+            CB_INFO("Starting up ECS world");
+            world.startup();
+            setup();
+        }
 
         extern bool shutdownInterrupt;
         void Application::run() {
@@ -79,6 +81,9 @@ namespace cobalt {
 
         core::gfx::Window& Application::getWindow() {
             try {
+                if (!world.isPlugin("Window")) {
+                    CB_ERROR("Window plugin not found, but requested.");
+                }
                 return world.getResource<core::gfx::Window>();
             } catch (const core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
                 throw core::ecs::PluginNotFoundException("Window");
@@ -87,6 +92,9 @@ namespace cobalt {
 
         const core::gfx::Window& Application::getWindow() const {
             try {
+                if (!world.isPlugin("Window")) {
+                    CB_ERROR("Window plugin not found, but requested.");
+                }
                 return world.getResource<core::gfx::Window>();
             } catch (const core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
                 throw core::ecs::PluginNotFoundException("Window");
@@ -95,6 +103,9 @@ namespace cobalt {
 
         core::input::InputManager& Application::getInputManager() {
             try {
+                if (!world.isPlugin("Input")) {
+                    CB_ERROR("Input plugin not found, but requested.");
+                }
                 return world.getResource<core::input::InputManager>();
             } catch (const core::ecs::ResourceNotFoundException<core::input::InputManager>& e) {
                 throw core::ecs::PluginNotFoundException("Input");
@@ -103,6 +114,9 @@ namespace cobalt {
 
         const core::input::InputManager& Application::getInputManager() const {
             try {
+                if (!world.isPlugin("Input")) {
+                    CB_ERROR("Input plugin not found, but requested.");
+                }
                 return world.getResource<core::input::InputManager>();
             } catch (const core::ecs::ResourceNotFoundException<core::input::InputManager>& e) {
                 throw core::ecs::PluginNotFoundException("Input");

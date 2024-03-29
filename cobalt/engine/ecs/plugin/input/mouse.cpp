@@ -1,13 +1,60 @@
 // Created by tomas on
 // 03-12-2023
 
-#include "core/input/mouse.h"
+#include "engine/ecs/plugin/input/mouse.h"
 
 #include "core/input/exception.h"
+#include "engine/ecs/plugin/gfx/window.h"
+#include "engine/ecs/plugin/input/input.h"
+
+using namespace cobalt::core::ecs;
 
 namespace cobalt {
-    namespace core::input {
-        const std::string Mouse::NAME = "Mouse";
+    namespace engine {
+        MousePlugin::MousePlugin() noexcept : Plugin(TITLE, "Provides mouse input.", InputPlugin{}, WindowPlugin{}) {}
+
+        void MousePlugin::onPlug(core::ecs::World& world) const noexcept {
+            /**
+             * @brief: Add input peripherals to the world.
+             */
+            world.addSystem<WriteRequest<core::input::InputManager>>(
+                DefaultSchedules::Startup, [](auto inputManager) { inputManager.get().template registerPeripheral<Mouse>(Mouse::NAME, 1.0f); });
+
+            /**
+             * @brief: Set input callbacks.
+             */
+            world.addSystem<WriteRequest<core::gfx::Window>>(DefaultSchedules::Startup, [](auto window) {
+                window.get().setMouseButtonCallback([](core::input::InputManager& manager, const int button, const bool down) {
+                    try {
+                        manager.getPeripheral<Mouse>(Mouse::NAME).onButtonPress(static_cast<MouseInputID>(button), down);
+                    } catch (core::input::InvalidInputException<MouseInputID>& e) {
+                        CB_CORE_ERROR(e.what());
+                    } catch (core::input::PeripheralNotFoundException& e) {
+                        CB_CORE_ERROR(e.what());
+                    }
+                });
+                window.get().setCursorCallback([](core::input::InputManager& manager, const float xpos, const float ypos) {
+                    try {
+                        manager.getPeripheral<Mouse>(Mouse::NAME).onMove(xpos, ypos);
+                    } catch (core::input::InvalidInputException<MouseInputID>& e) {
+                        CB_CORE_ERROR(e.what());
+                    } catch (core::input::PeripheralNotFoundException& e) {
+                        CB_CORE_ERROR(e.what());
+                    }
+                });
+                window.get().setScrollCallback([](core::input::InputManager& manager, const float xoffset, const float yoffset) {
+                    try {
+                        manager.getPeripheral<Mouse>(Mouse::NAME).onScroll(xoffset, yoffset);
+                    } catch (core::input::InvalidInputException<MouseInputID>& e) {
+                        CB_CORE_ERROR(e.what());
+                    } catch (core::input::PeripheralNotFoundException& e) {
+                        CB_CORE_ERROR(e.what());
+                    }
+                });
+            });
+        }
+
+        const std::string Mouse::NAME = MousePlugin::TITLE;
 
         ButtonState::ButtonState() : down(false), polled(false) {}
 
@@ -15,7 +62,7 @@ namespace cobalt {
 
         bool ButtonState::isPolled() const { return polled; }
 
-        Mouse::Mouse(const DeviceID id, const float sensitivity)
+        Mouse::Mouse(const core::input::DeviceID id, const float sensitivity)
             : Peripheral(id), sensitivity(sensitivity), x(0.0f), y(0.0f), dx(0.0f), dy(0.0f), dsx(0.0f), dsy(0.0f) {
             for (size_t i = 0; i < static_cast<size_t>(MouseInputID::MIDDLE); i++) {
                 buttonStates[i] = ButtonState();
@@ -36,16 +83,9 @@ namespace cobalt {
 
         void Mouse::onButtonPress(const MouseInputID button, const bool down) {
             if (button == MouseInputID::UNKNOWN) {
-                throw InvalidInputException<MouseInputID>("Invalid button", button, this);
+                throw core::input::InvalidInputException<MouseInputID>("Invalid button", button, this);
             }
             buttonStates[static_cast<size_t>(button)].down = down;
-        }
-
-        void Mouse::queueEvent(const MouseInputID id, const InputValue value) {
-            auto it = bindings.find(id);
-            if (it != bindings.end()) {
-                events.push(it->second.get()->withInput(value));
-            }
         }
 
         void Mouse::pollEvents() {
@@ -130,6 +170,13 @@ namespace cobalt {
             {MouseInputID::MIDDLE_X, "Middle X"}, {MouseInputID::MIDDLE_Y, "Middle Y"}, {MouseInputID::SCROLL_X, "Scroll X"},
             {MouseInputID::SCROLL_Y, "Scroll Y"}, {MouseInputID::COUNT, "Count"},       {MouseInputID::UNKNOWN, "Unknown"}};
 
+        void Mouse::queueEvent(const MouseInputID id, const core::input::InputValue value) {
+            auto it = bindings.find(id);
+            if (it != bindings.end()) {
+                events.push(it->second.get()->withInput(value));
+            }
+        }
+
         const std::string& Mouse::toString() const { return NAME; }
 
         const MouseInputID Mouse::glfwToCobalt(const int glfwCode) const {
@@ -156,5 +203,5 @@ namespace cobalt {
             }
             return CB_TO_STR.at(MouseInputID::UNKNOWN);
         }
-    }  // namespace core::input
+    }  // namespace engine
 }  // namespace cobalt

@@ -1,13 +1,38 @@
 // Created by tomas on
 // 03-12-2023
 
-#include "core/input/keyboard.h"
+#include "engine/ecs/plugin/input/keyboard.h"
 
 #include "core/input/exception.h"
+#include "core/input/input_manager.h"
+#include "engine/ecs/plugin/gfx/window.h"
+#include "engine/ecs/plugin/input/input.h"
+
+using namespace cobalt::core::ecs;
 
 namespace cobalt {
-    namespace core::input {
-        const std::string Keyboard::NAME = "Keyboard";
+    namespace engine {
+        KeyboardPlugin::KeyboardPlugin() noexcept : Plugin(TITLE, "Provides keyboard input.", InputPlugin{}, WindowPlugin{}) {}
+
+        void KeyboardPlugin::onPlug(core::ecs::World& world) const noexcept {
+            world.addSystem<WriteRequest<core::input::InputManager>>(
+                DefaultSchedules::Startup, [](auto inputManager) { inputManager.get().template registerPeripheral<Keyboard>(Keyboard::NAME); });
+
+            world.addSystem<WriteRequest<core::gfx::Window>>(DefaultSchedules::Startup, [](auto window) {
+                window.get().setKeyCallback([](core::input::InputManager& manager, const int key, const bool down) {
+                    try {
+                        Keyboard& keyboard = manager.getPeripheral<Keyboard>(Keyboard::NAME);
+                        keyboard.onKeyPress(keyboard.glfwToCobalt(key), down);
+                    } catch (core::input::InvalidInputException<KeyboardInputID>& e) {
+                        CB_CORE_ERROR(e.what());
+                    } catch (core::input::PeripheralNotFoundException& e) {
+                        CB_CORE_ERROR(e.what());
+                    }
+                });
+            });
+        }
+
+        const std::string Keyboard::NAME = KeyboardPlugin::TITLE;
 
         bool KeyState::isDown() const { return down; }
 
@@ -15,7 +40,7 @@ namespace cobalt {
 
         KeyState::KeyState() : down(false), polled(false) {}
 
-        Keyboard::Keyboard(const DeviceID id) : Peripheral(id) {
+        Keyboard::Keyboard(const core::input::DeviceID id) : Peripheral(id) {
             for (size_t i = 0; i < static_cast<size_t>(KeyboardInputID::COUNT); i++) {
                 keyStates[i] = KeyState();
             }
@@ -23,7 +48,7 @@ namespace cobalt {
 
         void Keyboard::onKeyPress(const KeyboardInputID key, const bool down) {
             if (key == KeyboardInputID::UNKNOWN) {
-                throw InvalidInputException<KeyboardInputID>("Invalid key", key, this);
+                throw core::input::InvalidInputException<KeyboardInputID>("Invalid key", key, this);
             }
             keyStates[static_cast<size_t>(key)].down = down;
         }
@@ -32,19 +57,13 @@ namespace cobalt {
             for (size_t i = 0; i < static_cast<size_t>(KeyboardInputID::COUNT); i++) {
                 KeyState& state = keyStates[i];
                 if (state.down) {
-                    auto it = bindings.find(static_cast<KeyboardInputID>(i));
-                    if (it != bindings.end()) {
-                        events.push(it->second.get()->withInput({state.down, state.polled, 1.0f}));
-                    }
+                    queueEvent(static_cast<KeyboardInputID>(i), {state.down, state.polled, 1.0f});
                     if (!state.polled) {
                         state.polled = true;
                     }
                 } else if (state.polled) {
                     state.polled = false;
-                    auto it = bindings.find(static_cast<KeyboardInputID>(i));
-                    if (it != bindings.end()) {
-                        events.push(it->second.get()->withInput({state.down, state.polled, 1.0f}));
-                    }
+                    queueEvent(static_cast<KeyboardInputID>(i), {state.down, state.polled, 1.0f});
                 }
             }
         }
@@ -217,6 +236,13 @@ namespace cobalt {
                                                                      {KeyboardInputID::COUNT, "Count"},
                                                                      {KeyboardInputID::UNKNOWN, "Unknown"}};
 
+        void Keyboard::queueEvent(const KeyboardInputID id, const core::input::InputValue value) {
+            auto it = bindings.find(id);
+            if (it != bindings.end()) {
+                events.push(it->second.get()->withInput(value));
+            }
+        }
+
         const std::string& Keyboard::toString() const { return NAME; }
 
         const KeyboardInputID Keyboard::glfwToCobalt(const int glfwCode) const {
@@ -243,5 +269,5 @@ namespace cobalt {
             }
             return CB_TO_STR.at(KeyboardInputID::UNKNOWN);
         }
-    }  // namespace core::input
+    }  // namespace engine
 }  // namespace cobalt

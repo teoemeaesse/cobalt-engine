@@ -6,6 +6,8 @@
 #include "core/ecs/plugin/bundle.h"
 #include "engine/ecs/plugin/gfx/window.h"
 #include "engine/ecs/plugin/input/input.h"
+#include "engine/ecs/plugin/input/keyboard.h"
+#include "engine/ecs/plugin/input/mouse.h"
 #include "engine/ecs/plugin/time/time.h"
 
 namespace cobalt {
@@ -16,9 +18,11 @@ namespace cobalt {
             virtual ~BaseBundle() noexcept = default;
 
             void addPlugins(core::ecs::World& world) noexcept override {
-                world.addPlugin<InputPlugin>();
-                world.addPlugin<TimePlugin>();
                 world.addPlugin<WindowPlugin>();
+                world.addPlugin<InputPlugin>();
+                world.addPlugin<KeyboardPlugin>();
+                world.addPlugin<MousePlugin>();
+                world.addPlugin<TimePlugin>();
             }
         };
     }  // namespace engine::ecs

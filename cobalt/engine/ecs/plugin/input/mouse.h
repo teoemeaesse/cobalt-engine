@@ -6,7 +6,28 @@
 #include "core/input/peripheral.h"
 
 namespace cobalt {
-    namespace core::input {
+    namespace engine {
+        /**
+         * @brief: Mouse input plugin. Provides general mouse input.
+         */
+        class MousePlugin : public core::ecs::Plugin {
+            public:
+            static inline constexpr const char* TITLE = "Mouse";
+
+            /**
+             * @brief: Construct the plugin.
+             * @return: MousePlugin
+             */
+            MousePlugin() noexcept;
+
+            /**
+             * @brief: Initializes the plugin.
+             * @param world: World to plug into.
+             * @return: void
+             */
+            void onPlug(core::ecs::World& world) const noexcept override;
+        };
+
         enum class MouseInputID {
             LEFT,
             RIGHT,
@@ -56,7 +77,7 @@ namespace cobalt {
             ~ButtonState() = default;
         };
 
-        class Mouse : public Peripheral<MouseInputID> {
+        class Mouse : public core::input::Peripheral<MouseInputID> {
             public:
             const static std::string NAME;
 
@@ -66,7 +87,7 @@ namespace cobalt {
              * @param sensitivity: The mouse sensitivity.
              * @return: A new mouse.
              */
-            Mouse(const DeviceID id, const float sensitivity);
+            Mouse(const core::input::DeviceID id, const float sensitivity);
             /**
              * @brief: Destroy the mouse.
              * @return: void
@@ -175,7 +196,7 @@ namespace cobalt {
              * @param value: The value of the event.
              * @return: void
              */
-            void queueEvent(const MouseInputID id, const InputValue value);
+            void queueEvent(const MouseInputID id, const core::input::InputValue value);
 
             public:  // ----- DEBUG -----
             /**
@@ -202,5 +223,5 @@ namespace cobalt {
              */
             const std::string& cobaltToStr(const MouseInputID cobaltCode) const override;
         };
-    }  // namespace core::input
+    }  // namespace engine
 }  // namespace cobalt

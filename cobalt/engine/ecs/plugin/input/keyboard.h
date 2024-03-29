@@ -6,7 +6,28 @@
 #include "core/input/peripheral.h"
 
 namespace cobalt {
-    namespace core::input {
+    namespace engine {
+        /**
+         * @brief: Keyboard input plugin. Provides general keyboard input.
+         */
+        class KeyboardPlugin : public core::ecs::Plugin {
+            public:
+            static inline constexpr const char* TITLE = "Keyboard";
+
+            /**
+             * @brief: Construct the plugin.
+             * @return: KeyboardPlugin
+             */
+            KeyboardPlugin() noexcept;
+
+            /**
+             * @brief: Initializes the plugin.
+             * @param world: World to plug into.
+             * @return: void
+             */
+            void onPlug(core::ecs::World& world) const noexcept override;
+        };
+
         enum class KeyboardInputID {
             A,
             B,
@@ -121,7 +142,7 @@ namespace cobalt {
             ~KeyState() = default;
         };
 
-        class Keyboard : public Peripheral<KeyboardInputID> {
+        class Keyboard : public core::input::Peripheral<KeyboardInputID> {
             public:
             const static std::string NAME;
 
@@ -130,7 +151,7 @@ namespace cobalt {
              * @param id: The device id for the keyboard.
              * @return: The new keyboard.
              */
-            explicit Keyboard(const DeviceID id);
+            explicit Keyboard(const core::input::DeviceID id);
             /**
              * @brief: Destroy the keyboard.
              * @return: void
@@ -168,6 +189,14 @@ namespace cobalt {
             private:
             KeyState keyStates[static_cast<size_t>(KeyboardInputID::COUNT)];  // The states of all the keys.
 
+            /**
+             * @brief: Queue an event.
+             * @param id: The id of the event.
+             * @param value: The value of the event.
+             * @return: void
+             */
+            void queueEvent(const KeyboardInputID id, const core::input::InputValue value);
+
             public:  // ----- DEBUG -----
             /**
              * @brief: Get a user-friendly string for the peripheral.
@@ -193,5 +222,5 @@ namespace cobalt {
              */
             const std::string& cobaltToStr(const KeyboardInputID cobaltCode) const override;
         };
-    }  // namespace core::input
+    }  // namespace engine
 }  // namespace cobalt

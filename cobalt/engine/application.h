@@ -8,10 +8,8 @@
 namespace cobalt {
     namespace engine {
         /**
-         * @brief: The base class for all applications.
-         * This class is meant to be extended by the user.
-         * A game loop will be run by the engine that calls the virtual methods of this
-         * class.
+         * @brief: The base class for all applications. This class is meant to be extended by the user.  A game loop will be run by the engine that
+         * calls the update functions of the application.
          */
         class Application {
             public:
@@ -28,10 +26,16 @@ namespace cobalt {
             virtual ~Application();
 
             /**
+             * @brief: Initialize the application. This function MUST be called before the application is run.
+             * @return: void
+             */
+            void init();
+
+            /**
              * @brief: Add every plugin dependency.
              * @return: void
              */
-            virtual void addPlugins();
+            virtual void addPlugins() = 0;
 
             /**
              * @brief: Fixed time step update. Use this for physics and other things that need to be updated at a fixed rate.
@@ -91,20 +95,22 @@ namespace cobalt {
             private:
             bool shouldStop;           // Whether the game loop should stop.
             uint targetFramerate;      // The target framerate of the application.
-            uint estimatedFramerate;   // The estimated framerate of the application. Based
-                                       // on the framerate time window.
-            uint64_t frameCount;       // The number of frames that have been rendered in the
-                                       // framerate time window.
-            uint framerateTimeWindow;  // The time window in which the framerate is
-                                       // calculated, in seconds.
+            uint estimatedFramerate;   // The estimated framerate of the application. Based on the framerate time window.
+            uint64_t frameCount;       // The number of frames that have been rendered in the framerate time window.
+            uint framerateTimeWindow;  // The time window in which the framerate is calculated, in seconds.
 
             protected:
             core::ecs::World world;  // The ECS world.
+
+            /**
+             * @brief: Set up the derived class. Runs after the parent class has been initialized.
+             * @return: void
+             */
+            virtual void setup() = 0;
         };
 
         /**
-         * @brief: Create a new application.
-         * This function should be implemented by the user.
+         * @brief: Create a new application. This function should be implemented by the user.
          * @return: A pointer to the application.
          */
         Application* createApplication();

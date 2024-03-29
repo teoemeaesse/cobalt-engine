@@ -121,8 +121,7 @@ namespace cobalt {
                     core::input::InputManager& manager =
                         static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::input::InputManager>();
                     core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
-                    window.onKey(manager, manager.getPeripheral<core::input::Keyboard>(core::input::Keyboard::NAME).glfwToCobalt(key),
-                                 action != GLFW_RELEASE);
+                    window.onKey(manager, key, action != GLFW_RELEASE);
                 });
                 gl::Context::setCursorPosCallback([](GLFWwindow* handle, double xpos, double ypos) {
                     core::input::InputManager& manager =
@@ -134,8 +133,7 @@ namespace cobalt {
                     core::input::InputManager& manager =
                         static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::input::InputManager>();
                     core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
-                    window.onMouseButton(manager, manager.getPeripheral<core::input::Mouse>(core::input::Mouse::NAME).glfwToCobalt(button),
-                                         action != GLFW_RELEASE);
+                    window.onMouseButton(manager, button, action != GLFW_RELEASE);
                 });
                 gl::Context::setScrollCallback([](GLFWwindow* handle, double xoffset, double yoffset) {
                     core::input::InputManager& manager =
@@ -226,7 +224,7 @@ namespace cobalt {
 
         void Window::setResizeCallback(const ResizeCallback callback) { resizeCallback = callback; }
 
-        void Window::onKey(core::input::InputManager& manager, const core::input::KeyboardInputID key, const bool down) {
+        void Window::onKey(core::input::InputManager& manager, const int key, const bool down) {
             if (keyCallback) {
                 keyCallback(manager, key, down);
             }
@@ -238,7 +236,7 @@ namespace cobalt {
             }
         }
 
-        void Window::onMouseButton(core::input::InputManager& manager, const core::input::MouseInputID button, const bool down) {
+        void Window::onMouseButton(core::input::InputManager& manager, const int button, const bool down) {
             if (mouseButtonCallback) {
                 mouseButtonCallback(manager, button, down);
             }

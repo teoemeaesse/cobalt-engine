@@ -12,6 +12,8 @@ namespace cobalt {
             Editor();
             ~Editor() override;
 
+            void setup() override;
+
             void addPlugins() override;
             void fixedTimeStep() override;
             void variableTimeStep(const float delta) override;

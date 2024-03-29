@@ -15,7 +15,7 @@ namespace cobalt {
             }
         }
 
-        bool PluginManager::isPlugin(const Plugin& plugin) noexcept {
+        bool PluginManager::isPlugin(const Plugin& plugin) const noexcept {
             for (const auto& registered : plugins) {
                 if (registered == plugin) {
                     return true;
@@ -24,7 +24,7 @@ namespace cobalt {
             return false;
         }
 
-        bool PluginManager::isPlugin(const std::string& title) noexcept {
+        bool PluginManager::isPlugin(const std::string& title) const noexcept {
             for (const auto& plugin : plugins) {
                 if (plugin.getTitle() == title) {
                     return true;
@@ -33,7 +33,7 @@ namespace cobalt {
             return false;
         }
 
-        void PluginManager::checkDependencies() {
+        void PluginManager::checkDependencies() const {
             for (const auto& plugin : plugins) {
                 const auto missing = plugin.findMissingDependencies(plugins);
                 if (!missing.empty()) {

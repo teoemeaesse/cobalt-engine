@@ -5,8 +5,6 @@
 
 #include "core/gl/fbo.h"
 #include "core/input/input_manager.h"
-#include "core/input/keyboard.h"
-#include "core/input/mouse.h"
 
 namespace cobalt {
     namespace core::gfx {
@@ -19,9 +17,9 @@ namespace cobalt {
             friend class WindowBuilder;
 
             public:
-            typedef void (*KeyCallback)(core::input::InputManager& manager, const core::input::KeyboardInputID key, const bool down);
+            typedef void (*KeyCallback)(core::input::InputManager& manager, const int key, const bool down);
             typedef void (*CursorCallback)(core::input::InputManager& manager, const float xpos, const float ypos);
-            typedef void (*MouseButtonCallback)(core::input::InputManager& manager, const core::input::MouseInputID button, const bool down);
+            typedef void (*MouseButtonCallback)(core::input::InputManager& manager, const int button, const bool down);
             typedef void (*ScrollCallback)(core::input::InputManager& manager, const float xoffset, const float yoffset);
             typedef void (*FramebufferResizeCallback)(gfx::Window& window, const uint width, const uint height);
             typedef void (*ResizeCallback)(gfx::Window& window, const uint width, const uint height);
@@ -180,11 +178,11 @@ namespace cobalt {
             /**
              * @brief: Callback for when a key is pressed or released.
              * @param manager: The input manager.
-             * @param key: The key that was pressed or released.
+             * @param key: The GLFW code for the key that was pressed or released.
              * @param down: Whether or not the key was pressed or released.
              * @return: void
              */
-            void onKey(input::InputManager& manager, const input::KeyboardInputID key, const bool down);
+            void onKey(input::InputManager& manager, const int key, const bool down);
             /**
              * @brief: Callback for when the cursor is moved.
              * @param manager: The input manager.
@@ -196,11 +194,11 @@ namespace cobalt {
             /**
              * @brief: Callback for when a mouse button is pressed or released.
              * @param manager: The input manager.
-             * @param button: The button that was pressed or released.
+             * @param button: The GLFW code for the button that was pressed or released.
              * @param down: Whether or not the button was pressed or released.
              * @return: void
              */
-            void onMouseButton(input::InputManager& manager, const input::MouseInputID button, const bool down);
+            void onMouseButton(input::InputManager& manager, const int button, const bool down);
             /**
              * @brief: Callback for when the scroll wheel is scrolled.
              * @param manager: The input manager.

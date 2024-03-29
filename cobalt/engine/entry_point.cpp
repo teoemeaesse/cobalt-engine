@@ -43,13 +43,14 @@ int main(int argc, char** argv) {
 
         // Run the application.
         try {
+            app->init();
             app->run();
         } catch (const cobalt::core::gl::GLException& e) {
-            CB_ERROR("GL exception: {0}", e.what());
+            CB_ERROR(e.what());
         } catch (const cobalt::core::gfx::GFXException& e) {
-            CB_ERROR("GFX exception: {0}", e.what());
+            CB_ERROR(e.what());
         } catch (const std::exception& e) {
-            CB_ERROR("Exception: {0}", e.what());
+            CB_ERROR(e.what());
         }
 
         // Cleanup.

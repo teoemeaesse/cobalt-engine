@@ -152,7 +152,7 @@ namespace cobalt {
              * @return: bool
              */
             template <typename PluginType>
-            bool isPlugin() noexcept {
+            bool isPlugin() const noexcept {
                 static_assert(std::is_base_of<Plugin, PluginType>::value, "PluginType must be a subclass of Plugin.");
                 static_assert(std::is_default_constructible<PluginType>::value, "PluginType must be default constructible.");
                 PluginType plugin;
@@ -163,7 +163,7 @@ namespace cobalt {
              * @param title: Plugin title.
              * @return: bool
              */
-            bool isPlugin(const std::string& title) noexcept;
+            bool isPlugin(const std::string& title) const noexcept;
             /**
              * @brief: Add a plugin to the world.
              * @tparam PluginType: Plugin type.
