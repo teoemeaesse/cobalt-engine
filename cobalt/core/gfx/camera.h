@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "core/gl/shader.h"
-
 namespace cobalt {
     namespace core::gfx {
         /**
@@ -254,11 +252,9 @@ namespace cobalt {
             const glm::mat4x4 getProjectionMatrix() const override;
 
             private:
-            float left,
-                right;  // The left and right clipping planes.
-            float bottom,
-                top;           // The bottom and top clipping planes.
-            float zoomFactor;  // The zoom factor of the camera.
+            float left, right;  // The left and right clipping planes.
+            float bottom, top;  // The bottom and top clipping planes.
+            float zoomFactor;   // The zoom factor of the camera.
         };
 
         class FPSCamera : public PerspectiveCamera {
