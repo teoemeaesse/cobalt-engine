@@ -5,8 +5,8 @@
 
 #include "core/input/exception.h"
 #include "editor/input/bindings.h"
-#include "engine/ecs/plugin/bundle/base.h"
-#include "engine/ecs/plugin/gfx/window.h"
+#include "engine/ecs/bundle/base.h"
+#include "engine/ecs/plugin/window/plugin.h"
 
 namespace cobalt {
     namespace editor {

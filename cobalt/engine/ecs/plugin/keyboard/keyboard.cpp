@@ -1,37 +1,15 @@
 // Created by tomas on
 // 03-12-2023
 
-#include "engine/ecs/plugin/input/keyboard.h"
+#include "engine/ecs/plugin/keyboard/keyboard.h"
 
-#include "core/input/exception.h"
-#include "core/input/input_manager.h"
-#include "engine/ecs/plugin/gfx/window.h"
-#include "engine/ecs/plugin/input/input.h"
+#include "engine/ecs/plugin/keyboard/plugin.h"
+#include "engine/ecs/plugin/window/plugin.h"
 
 using namespace cobalt::core::ecs;
 
 namespace cobalt {
     namespace engine {
-        KeyboardPlugin::KeyboardPlugin() noexcept : Plugin(TITLE, "Provides keyboard input.", InputPlugin{}, WindowPlugin{}) {}
-
-        void KeyboardPlugin::onPlug(core::ecs::World& world) const noexcept {
-            world.addSystem<WriteRequest<core::input::InputManager>>(
-                DefaultSchedules::Startup, [](auto inputManager) { inputManager.get().template registerPeripheral<Keyboard>(Keyboard::NAME); });
-
-            world.addSystem<WriteRequest<core::gfx::Window>>(DefaultSchedules::Startup, [](auto window) {
-                window.get().setKeyCallback([](core::input::InputManager& manager, const int key, const bool down) {
-                    try {
-                        Keyboard& keyboard = manager.getPeripheral<Keyboard>(Keyboard::NAME);
-                        keyboard.onKeyPress(keyboard.glfwToCobalt(key), down);
-                    } catch (core::input::InvalidInputException<KeyboardInputID>& e) {
-                        CB_CORE_ERROR(e.what());
-                    } catch (core::input::PeripheralNotFoundException& e) {
-                        CB_CORE_ERROR(e.what());
-                    }
-                });
-            });
-        }
-
         const std::string Keyboard::NAME = KeyboardPlugin::TITLE;
 
         bool KeyState::isDown() const { return down; }

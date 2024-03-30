@@ -18,26 +18,5 @@ namespace cobalt {
             float deltaTime;
             float elapsedTime;
         };
-
-        /**
-         * @brief: Time plugin. Adds the Time resource to the world.
-         */
-        class TimePlugin : public core::ecs::Plugin {
-            public:
-            static inline constexpr const char* TITLE = "Time";
-
-            /**
-             * @brief: Construct the plugin.
-             * @return: TimePlugin
-             */
-            TimePlugin() noexcept;
-
-            /**
-             * @brief: Initialize the plugin.
-             * @param world: World instance.
-             * @return: void
-             */
-            void onPlug(core::ecs::World& world) const noexcept override;
-        };
     }  // namespace engine
 }  // namespace cobalt

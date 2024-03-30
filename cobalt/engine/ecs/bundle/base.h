@@ -4,11 +4,11 @@
 #pragma once
 
 #include "core/ecs/plugin/bundle.h"
-#include "engine/ecs/plugin/gfx/window.h"
-#include "engine/ecs/plugin/input/input.h"
-#include "engine/ecs/plugin/input/keyboard.h"
-#include "engine/ecs/plugin/input/mouse.h"
-#include "engine/ecs/plugin/time/time.h"
+#include "engine/ecs/plugin/input/plugin.h"
+#include "engine/ecs/plugin/keyboard/plugin.h"
+#include "engine/ecs/plugin/mouse/plugin.h"
+#include "engine/ecs/plugin/time/plugin.h"
+#include "engine/ecs/plugin/window/plugin.h"
 
 namespace cobalt {
     namespace engine::ecs {

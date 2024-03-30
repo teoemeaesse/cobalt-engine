@@ -7,27 +7,6 @@
 
 namespace cobalt {
     namespace engine {
-        /**
-         * @brief: Mouse input plugin. Provides general mouse input.
-         */
-        class MousePlugin : public core::ecs::Plugin {
-            public:
-            static inline constexpr const char* TITLE = "Mouse";
-
-            /**
-             * @brief: Construct the plugin.
-             * @return: MousePlugin
-             */
-            MousePlugin() noexcept;
-
-            /**
-             * @brief: Initializes the plugin.
-             * @param world: World to plug into.
-             * @return: void
-             */
-            void onPlug(core::ecs::World& world) const noexcept override;
-        };
-
         enum class MouseInputID {
             LEFT,
             RIGHT,
