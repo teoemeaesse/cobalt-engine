@@ -1,10 +1,10 @@
 // Created by tomas on
 // 28-12-2023
 
-#include "core/gfx/camera_controller.h"
+#include "engine/ecs/plugin/camera/controller.h"
 
 namespace cobalt {
-    namespace core::gfx {
+    namespace engine {
         CameraProperties::CameraProperties()
             : type(Type::Free),
               position(glm::vec3(0.0f)),
@@ -189,21 +189,5 @@ namespace cobalt {
               linearCling(linearCling * linearCling),
               angularCling(angularCling * angularCling),
               zoomCling(zoomCling * zoomCling) {}
-
-        CameraController& CameraManager::getCamera(const CameraID id) {
-            try {
-                return cameras.at(id);
-            } catch (const std::out_of_range& e) {
-                throw GFXException("Camera with id " + std::to_string(id) + " does not exist");
-            }
-        }
-
-        CameraController& CameraManager::getCamera(const std::string& name) {
-            try {
-                return cameras.at(cameraNames.at(name));
-            } catch (const std::out_of_range& e) {
-                throw GFXException("Camera with name " + name + " does not exist");
-            }
-        }
-    }  // namespace core::gfx
+    }  // namespace engine
 }  // namespace cobalt

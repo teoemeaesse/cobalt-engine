@@ -4,7 +4,7 @@
 #pragma once
 
 namespace cobalt {
-    namespace core::gfx {
+    namespace engine {
         /**
          * @brief: A perspective or orthographic camera.
          */
@@ -397,5 +397,5 @@ namespace cobalt {
             float distance;  // The distance from the position of the camera to the the
                              // center point.
         };
-    }  // namespace core::gfx
+    }  // namespace engine
 }  // namespace cobalt

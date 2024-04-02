@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "core/gfx/camera.h"
 #include "core/pch.h"
+#include "engine/ecs/plugin/camera/camera.h"
 
 namespace cobalt {
-    namespace core::gfx {
+    namespace engine {
         using CameraID = uint;
 
         class CameraProperties {
@@ -370,58 +370,11 @@ namespace cobalt {
              */
             CameraController(Scope<Camera> camera, float linearCling, float angularCling, float zoomCling);
         };
-
-        class CameraManager {
-            public:
-            /**
-             * @brief: Create a camera manager.
-             * @return: The camera manager.
-             */
-            CameraManager() = default;
-            /**
-             * @brief: Destroy the camera manager.
-             */
-            ~CameraManager() = default;
-
-            /**
-             * @brief: Add a camera with the given name and properties.
-             * @param name: Name of the camera.
-             * @param properties: Properties of the camera.
-             * @return: The ID of the camera.
-             */
-            template <typename T>
-            CameraID addCamera(const std::string& name, const CameraProperties& properties) {
-                if (cameraNames.contains(name)) {
-                    CB_CORE_ERROR("Camera with name {0} already exists", name);
-                }
-                const CameraID id = cameras.size();
-                cameraNames[name] = id;
-                cameras[id](Move(createScope(properties.getCamera<T>())));
-                return id;
-            }
-
-            /**
-             * @brief: Get the camera with the given ID.
-             * @param id: ID of the camera.
-             * @return: The camera.
-             */
-            CameraController& getCamera(const CameraID id);
-            /**
-             * @brief: Get the camera with the given name.
-             * @param name: Name of the camera.
-             * @return: The camera.
-             */
-            CameraController& getCamera(const std::string& name);
-
-            private:
-            UMap<std::string, CameraID> cameraNames;
-            UMap<CameraID, CameraController> cameras;
-        };
-    }  // namespace core::gfx
+    }  // namespace engine
 }  // namespace cobalt
 
 template <typename T>
-T inline cobalt::core::gfx::CameraProperties::getCamera() const {
+T inline cobalt::engine::CameraProperties::getCamera() const {
     static_assert(std::is_base_of<Camera, T>::value, "T must be a camera type");
     throw GFXException("Invalid camera mode");
 }
@@ -430,7 +383,7 @@ T inline cobalt::core::gfx::CameraProperties::getCamera() const {
  * @return: The camera.
  */
 template <>
-cobalt::core::gfx::OrthographicCamera inline cobalt::core::gfx::CameraProperties::getCamera<cobalt::core::gfx::OrthographicCamera>() const {
+cobalt::engine::OrthographicCamera inline cobalt::engine::CameraProperties::getCamera<cobalt::engine::OrthographicCamera>() const {
     return OrthographicCamera(position, direction, left, right, top, bottom, near, far);
 }
 /**
@@ -438,23 +391,23 @@ cobalt::core::gfx::OrthographicCamera inline cobalt::core::gfx::CameraProperties
  * @return: The camera.
  */
 template <>
-cobalt::core::gfx::FPSCamera inline cobalt::core::gfx::CameraProperties::getCamera<cobalt::core::gfx::FPSCamera>() const {
-    return cobalt::core::gfx::FPSCamera(position, direction, fov, near, far, aspectRatio);
+cobalt::engine::FPSCamera inline cobalt::engine::CameraProperties::getCamera<cobalt::engine::FPSCamera>() const {
+    return cobalt::engine::FPSCamera(position, direction, fov, near, far, aspectRatio);
 }
 /**
  * @brief: Create a pivot camera from the properties.
  * @return: The camera.
  */
 template <>
-cobalt::core::gfx::PivotCamera inline cobalt::core::gfx::CameraProperties::getCamera<cobalt::core::gfx::PivotCamera>() const {
+cobalt::engine::PivotCamera inline cobalt::engine::CameraProperties::getCamera<cobalt::engine::PivotCamera>() const {
     if (center.has_value()) {
-        return cobalt::core::gfx::PivotCamera(position, center.value(), fov, near, far, aspectRatio);
+        return cobalt::engine::PivotCamera(position, center.value(), fov, near, far, aspectRatio);
     } else {
-        return cobalt::core::gfx::PivotCamera(position, direction, distance, fov, near, far, aspectRatio);
+        return cobalt::engine::PivotCamera(position, direction, distance, fov, near, far, aspectRatio);
     }
 }
 template <typename T>
-cobalt::core::gfx::CameraController inline cobalt::core::gfx::CameraController::create(const cobalt::core::gfx::CameraProperties& properties) {
+cobalt::engine::CameraController inline cobalt::engine::CameraController::create(const cobalt::engine::CameraProperties& properties) {
     static_assert(std::is_base_of<Camera, T>::value, "T must be a camera type");
     throw GFXException("Invalid camera mode");
 }
@@ -464,8 +417,8 @@ cobalt::core::gfx::CameraController inline cobalt::core::gfx::CameraController::
  * @return: The camera controller.
  */
 template <>
-cobalt::core::gfx::CameraController inline cobalt::core::gfx::CameraController::create<cobalt::core::gfx::OrthographicCamera>(
-    const cobalt::core::gfx::CameraProperties& properties) {
+cobalt::engine::CameraController inline cobalt::engine::CameraController::create<cobalt::engine::OrthographicCamera>(
+    const cobalt::engine::CameraProperties& properties) {
     return CameraController(Move(cobalt::createScope<OrthographicCamera>(properties.getCamera<OrthographicCamera>())), properties.getLinearCling(),
                             properties.getAngularCling(), properties.getZoomCling());
 }
@@ -475,8 +428,8 @@ cobalt::core::gfx::CameraController inline cobalt::core::gfx::CameraController::
  * @return: The camera controller.
  */
 template <>
-cobalt::core::gfx::CameraController inline cobalt::core::gfx::CameraController::create<cobalt::core::gfx::FPSCamera>(
-    const cobalt::core::gfx::CameraProperties& properties) {
+cobalt::engine::CameraController inline cobalt::engine::CameraController::create<cobalt::engine::FPSCamera>(
+    const cobalt::engine::CameraProperties& properties) {
     return CameraController(Move(cobalt::createScope<FPSCamera>(properties.getCamera<FPSCamera>())), properties.getLinearCling(),
                             properties.getAngularCling(), properties.getZoomCling());
 }
@@ -486,8 +439,8 @@ cobalt::core::gfx::CameraController inline cobalt::core::gfx::CameraController::
  * @return: The camera controller.
  */
 template <>
-cobalt::core::gfx::CameraController inline cobalt::core::gfx::CameraController::create<cobalt::core::gfx::PivotCamera>(
-    const cobalt::core::gfx::CameraProperties& properties) {
+cobalt::engine::CameraController inline cobalt::engine::CameraController::create<cobalt::engine::PivotCamera>(
+    const cobalt::engine::CameraProperties& properties) {
     return CameraController(Move(cobalt::createScope<PivotCamera>(properties.getCamera<PivotCamera>())), properties.getLinearCling(),
                             properties.getAngularCling(), properties.getZoomCling());
 }

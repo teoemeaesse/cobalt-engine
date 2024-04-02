@@ -1,12 +1,12 @@
 // Created by tomas on
 // 05-12-2023
 
-#include "core/gfx/camera.h"
+#include "engine/ecs/plugin/camera/camera.h"
 
 #include "core/pch.h"
 
 namespace cobalt {
-    namespace core::gfx {
+    namespace engine {
         Camera::Camera(const glm::vec3 position, const glm::vec2 direction, const float near, const float far)
             : position(position), direction(direction), near(near), far(far) {}
 
@@ -267,5 +267,5 @@ namespace cobalt {
             position += glm::vec3(0.0f, 1.0f,
                                   0.0f) * amount;  // move up/down
         }
-    }  // namespace core::gfx
+    }  // namespace engine
 }  // namespace cobalt
