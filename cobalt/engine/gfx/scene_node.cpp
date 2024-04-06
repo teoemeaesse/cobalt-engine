@@ -6,14 +6,16 @@
 #include "core/gl/context.h"
 
 namespace cobalt {
+    using namespace core;
+
     namespace engine {
         void SceneNode::render() {
             if (scene.getSkybox().has_value()) {
-                core::gfx::RenderNode::renderSkybox(scene.getSkybox().value());
+                RenderNode::renderSkybox(scene.getSkybox().value());
             }
             auto& meshes = scene.getMeshes();
             for (uint i = 0; i < meshes.size(); i++) {
-                core::gfx::RenderNode::renderMesh(meshes[i]);
+                RenderNode::renderMesh(meshes[i]);
             }
         }
 

@@ -3,7 +3,8 @@
 
 #include "engine/application.h"
 
-#include "engine/ecs/bundle/base.h"
+#include "core/gl/context.h"
+#include "engine/bundle/base.h"
 
 namespace cobalt {
     namespace engine {

@@ -3,11 +3,12 @@
 
 #pragma once
 
-#include "core/gfx/render_graph.h"
+#include "engine/camera/controller.h"
+#include "engine/render/graph.h"
 
 namespace cobalt {
     namespace engine {
-        class DefaultGraph : public core::gfx::RenderGraph {
+        class DefaultGraph : public RenderGraph {
             public:
             /**
              * @brief: Creates a default render graph.
@@ -15,7 +16,7 @@ namespace cobalt {
              * @param defaultFBO: The default FBO to render the final image to.
              * @return: A default render graph.
              */
-            DefaultGraph(core::scene::Scene& scene, core::gl::FBO& defaultFBO);
+            DefaultGraph(Scene& scene, core::gl::FBO& defaultFBO);
             /**
              * @brief: Destroys the default render graph.
              */
@@ -36,11 +37,11 @@ namespace cobalt {
             void onResize(const uint width, const uint height) override;
 
             private:
-            core::gfx::CameraController output;  // The camera used to render the final image.
-            core::gfx::Renderer renderer;        // The renderer used to render the scene.
-            core::gl::FBO& defaultFBO;           // The default FBO to render the final image to.
-            core::gl::FBO sceneFBO;              // The FBO to render the scene to.
-            core::scene::Scene& scene;           // The scene to render.
+            CameraController output;    // The camera used to render the final image.
+            Renderer renderer;          // The renderer used to render the scene.
+            core::gl::FBO& defaultFBO;  // The default FBO to render the final image to.
+            core::gl::FBO sceneFBO;     // The FBO to render the scene to.
+            Scene& scene;               // The scene to render.
         };
     }  // namespace engine
 }  // namespace cobalt

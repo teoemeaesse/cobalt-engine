@@ -3,14 +3,14 @@
 
 #pragma once
 
-#include "core/gfx/render_node.h"
+#include "engine/render/node.h"
 
 namespace cobalt {
     namespace engine {
         /**
          * @brief: Applies a color filter to the final image.
          */
-        class FilterNode : public core::gfx::RenderNode {
+        class FilterNode : public RenderNode {
             public:
             /**
              * @brief: Create a filter node.
@@ -20,7 +20,7 @@ namespace cobalt {
              * @param filter: The material to use for the filter quad.
              * @return: The filter node.
              */
-            FilterNode(core::gfx::Renderer& renderer, core::gfx::RenderTarget&& defaultTarget, core::gfx::Material& filter);
+            FilterNode(Renderer& renderer, RenderTarget&& defaultTarget, core::gfx::Material& filter);
             /**
              * @brief: Destroy the filter node.
              */

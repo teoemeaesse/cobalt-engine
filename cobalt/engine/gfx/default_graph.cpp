@@ -9,17 +9,19 @@
 #include "engine/internal/shader_library.h"
 
 namespace cobalt {
+    using namespace core;
+
     namespace engine {
-        DefaultGraph::DefaultGraph(core::scene::Scene& scene, core::gl::FBO& defaultFBO)
-            : core::gfx::RenderGraph(),
-              output(core::gfx::CameraController::create<core::gfx::OrthographicCamera>(
-                  core::gfx::CameraProperties()
+        DefaultGraph::DefaultGraph(Scene& scene, core::gl::FBO& defaultFBO)
+            : RenderGraph(),
+              output(CameraController::create<OrthographicCamera>(
+                  CameraProperties()
                       .setPosition(glm::vec3(0.0, 0.0, 10.0))
                       .setDirection(glm::vec2(90.0, 90.0))
                       .setOrthoPlanes(-(float)defaultFBO.getWidth() / 2, (float)defaultFBO.getWidth() / 2, -(float)defaultFBO.getHeight() / 2,
                                       (float)defaultFBO.getHeight() / 2)
                       .setClippingPlanes(1.0f, 100.0f))),
-              renderer(core::gfx::Renderer()),
+              renderer(),
               defaultFBO(defaultFBO),
               sceneFBO(defaultFBO.getWidth(), defaultFBO.getHeight(),
                        {{core::gl::TextureEncodings::RGBA::Bits8}, {core::gl::TextureEncodings::Depth::Bits24}}),
@@ -27,11 +29,11 @@ namespace cobalt {
 
         void DefaultGraph::init() {
             core::gfx::Material& filter = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makeFromShader("filterMaterial", "filter"));
-            Scope<SceneNode> sceneNode = createScope<SceneNode>(
-                SceneNode(scene, renderer, core::gfx::RenderTarget(sceneFBO, scene.getCameraController().getCamera(), "scene", 0)));
+            Scope<SceneNode> sceneNode =
+                createScope<SceneNode>(SceneNode(scene, renderer, RenderTarget(sceneFBO, scene.getCameraController().getCamera(), "scene", 0)));
             Scope<FilterNode> filterNode =
-                createScope<FilterNode>(FilterNode(renderer, core::gfx::RenderTarget(defaultFBO, output.getCamera(), "output", 1), filter));
-            filterNode->addSource(core::gfx::RenderTarget(sceneFBO, scene.getCameraController().getCamera(), "scene", 0));
+                createScope<FilterNode>(FilterNode(renderer, RenderTarget(defaultFBO, output.getCamera(), "output", 1), filter));
+            filterNode->addSource(RenderTarget(sceneFBO, scene.getCameraController().getCamera(), "scene", 0));
 
             addNode(Move(sceneNode));
             addNode(Move(filterNode));

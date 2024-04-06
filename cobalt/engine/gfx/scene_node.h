@@ -3,15 +3,15 @@
 
 #pragma once
 
-#include "core/gfx/render_node.h"
-#include "core/scene/scene.h"
+#include "engine/render/node.h"
+#include "engine/scene/scene.h"
 
 namespace cobalt {
     namespace engine {
         /**
          * @brief: Scene node. Renders a full scene.
          */
-        class SceneNode : public core::gfx::RenderNode {
+        class SceneNode : public RenderNode {
             public:
             /**
              * @brief: Create a scene node with a scene.
@@ -20,8 +20,7 @@ namespace cobalt {
              * @return: The scene node.
              */
             template <typename... Targets>
-            SceneNode(core::scene::Scene& scene, core::gfx::Renderer& renderer, Targets&&... targets)
-                : RenderNode(renderer, targets...), scene(scene) {}
+            SceneNode(Scene& scene, Renderer& renderer, Targets&&... targets) : RenderNode(renderer, targets...), scene(scene) {}
             /**
              * @brief: Destroy the scene node.
              */
@@ -41,7 +40,7 @@ namespace cobalt {
             void onResize(const float width, const float height) override;
 
             private:
-            core::scene::Scene& scene;  // The scene to render.
+            Scene& scene;  // The scene to render.
         };
     }  // namespace engine
 }  // namespace cobalt

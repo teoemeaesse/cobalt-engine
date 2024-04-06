@@ -5,7 +5,6 @@
 
 #include "core/gl/shader.h"
 #include "core/gl/texture.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::gfx {

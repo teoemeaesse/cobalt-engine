@@ -5,13 +5,13 @@
 
 #include "core/input/exception.h"
 #include "editor/input/bindings.h"
-#include "engine/ecs/bundle/base.h"
-#include "engine/ecs/plugin/window/plugin.h"
+#include "engine/bundle/base.h"
+#include "engine/window/plugin.h"
 
 namespace cobalt {
     namespace editor {
-        using namespace cobalt::core;
-        using namespace cobalt::engine;
+        using namespace core;
+        using namespace engine;
 
         Editor::Editor() : Application(144), configuration(CobaltConfiguration()) {}
 
@@ -27,7 +27,7 @@ namespace cobalt {
             configuration.configureWindow(getWindow());
             getWindow().setClearColor(Color(0.2f, 0.2f, 0.2f));
             getWindow().show();
-            world.addHook<core::ecs::ReadRequest<gfx::Window>, core::ecs::WriteRequest<DefaultGraph>, core::ecs::WriteRequest<scene::Scene>>(
+            world.addHook<core::ecs::ReadRequest<gfx::Window>, core::ecs::WriteRequest<DefaultGraph>, core::ecs::WriteRequest<engine::Scene>>(
                 WindowPlugin::FRAMEBUFFER_RESIZE_EVENT, [](auto window, auto graph, auto scene) {
                     const uint width = window.get().getDefaultFBO().getWidth();
                     const uint height = window.get().getDefaultFBO().getHeight();
@@ -38,10 +38,10 @@ namespace cobalt {
             CB_TEXTURE_LIBRARY.loadTextures(io::Path("cobalt/editor/assets/textures", true));
             CB_SHADER_LIBRARY.loadShaders(io::Path("cobalt/editor/assets/shaders", true));
 
-            world.addResource<scene::Scene>();
+            world.addResource<engine::Scene>();
             createScene();
 
-            world.addResource<DefaultGraph>(world.getResource<scene::Scene>(), getWindow().getDefaultFBO());
+            world.addResource<DefaultGraph>(world.getResource<engine::Scene>(), getWindow().getDefaultFBO());
             world.getResource<DefaultGraph>().init();
 
             bindInput();
@@ -50,19 +50,19 @@ namespace cobalt {
         void Editor::addPlugins() { world.addBundle<engine::ecs::BaseBundle>(); }
 
         void Editor::fixedTimeStep() {
-            world.getResource<scene::Scene>().getCameraController().update();
+            world.getResource<engine::Scene>().getCameraController().update();
             getWindow().setTitle("Cobalt Editor - " + std::to_string(getFramerate()) + " FPS");
         }
 
         void Editor::variableTimeStep(const float delta) {
-            world.getResource<scene::Scene>().getMeshes()[0].rotate(glm::vec3(30.0f * delta, 5.0f * delta, 20.0f * delta));
+            world.getResource<engine::Scene>().getMeshes()[0].rotate(glm::vec3(30.0f * delta, 5.0f * delta, 20.0f * delta));
             static float cubeXOffset = 0.0f;
             static float cubeYOffset = 0.0f;
             static float time = 0.0f;
             time += delta;
             cubeXOffset = sin(time) * 25.0f * delta;
             cubeYOffset = cos(time) * 25.0f * delta;
-            world.getResource<scene::Scene>().getMeshes()[4].translate(glm::vec3(cubeXOffset, 0.0f, cubeYOffset));
+            world.getResource<engine::Scene>().getMeshes()[4].translate(glm::vec3(cubeXOffset, 0.0f, cubeYOffset));
             world.getResource<DefaultGraph>().execute();
         }
 
@@ -71,7 +71,7 @@ namespace cobalt {
              * Two try-catch blocks are used to catch both the Keyboard and Mouse peripheral exceptions.
              * Likely to be useless since the Keyboard and Mouse peripherals are always present in the engine.
              */
-            scene::Scene& scene = world.getResource<scene::Scene>();
+            engine::Scene& scene = world.getResource<engine::Scene>();
 
             engine::Keyboard& keyboard = getInputManager().getPeripheral<engine::Keyboard>(engine::Keyboard::NAME);
             keyboard.bind(engine::KeyboardInputID::ESCAPE, createScope<Quit>(world, this));
@@ -90,16 +90,16 @@ namespace cobalt {
             keyboard.bind(engine::KeyboardInputID::RIGHT, createScope<PanRight>(world, &scene.getCameraController()));
             keyboard.bind(engine::KeyboardInputID::P, createScope<Spawn>(world, &scene));
 
-            engine::Mouse& mouse = getInputManager().getPeripheral<engine::Mouse>(engine::Mouse::NAME);
-            mouse.bind(engine::MouseInputID::RIGHT_X, createScope<RotateX>(world, &scene.getCameraController()));
-            mouse.bind(engine::MouseInputID::RIGHT_Y, createScope<RotateY>(world, &scene.getCameraController()));
-            mouse.bind(engine::MouseInputID::SCROLL_Y, createScope<Zoom>(world, &scene.getCameraController()));
+            Mouse& mouse = getInputManager().getPeripheral<Mouse>(Mouse::NAME);
+            mouse.bind(MouseInputID::RIGHT_X, createScope<RotateX>(world, &scene.getCameraController()));
+            mouse.bind(MouseInputID::RIGHT_Y, createScope<RotateY>(world, &scene.getCameraController()));
+            mouse.bind(MouseInputID::SCROLL_Y, createScope<Zoom>(world, &scene.getCameraController()));
         }
 
         void Editor::createScene() {
-            scene::Scene& scene = world.getResource<scene::Scene>();
+            engine::Scene& scene = world.getResource<engine::Scene>();
             scene.clear();
-            scene.setSkybox(gfx::Skybox::create(CB_TEXTURE_LIBRARY.getTexture<gl::Texture3D>("skybox"), CB_SHADER_LIBRARY.getShader("skybox")));
+            scene.setSkybox(Skybox::create(CB_TEXTURE_LIBRARY.getTexture<gl::Texture3D>("skybox"), CB_SHADER_LIBRARY.getShader("skybox")));
             const TextureID woodAlbedo = CB_TEXTURE_LIBRARY.getTextureID("wood-albedo");
             const TextureID woodNormal = CB_TEXTURE_LIBRARY.getTextureID("wood-normal");
             const TextureID woodMrao = CB_TEXTURE_LIBRARY.getTextureID("wood-mrao");
@@ -118,12 +118,12 @@ namespace cobalt {
             gfx::Material& whiteRough = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", Colors::White, 0.0f, 1.0f, 1.0f));
             gfx::Material& whiteSmooth = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("white", Colors::White, 0.0f, 0.0f, 1.0f));
             gfx::Material& orangeMedium = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makePBR("orange", Colors::Orange, 0.0f, 0.5f, 1.0f));
-            gfx::Mesh rotatingCube = gfx::MeshFactory::createCube(5, woodMaterial);
-            gfx::Mesh ground = gfx::MeshFactory::createRectangle(100, 100, woodMaterial);
-            gfx::Mesh sphere = gfx::MeshFactory::createSphere(5, woodMaterial);
-            gfx::Mesh cube0 = gfx::MeshFactory::createCube(10, whiteRough);
-            gfx::Mesh cube1 = gfx::MeshFactory::createCube(10, whiteSmooth);
-            gfx::Mesh cube2 = gfx::MeshFactory::createCube(10, orangeMedium);
+            Mesh rotatingCube = MeshFactory::createCube(5, woodMaterial);
+            Mesh ground = MeshFactory::createRectangle(100, 100, woodMaterial);
+            Mesh sphere = MeshFactory::createSphere(5, woodMaterial);
+            Mesh cube0 = MeshFactory::createCube(10, whiteRough);
+            Mesh cube1 = MeshFactory::createCube(10, whiteSmooth);
+            Mesh cube2 = MeshFactory::createCube(10, orangeMedium);
             ground.translate(glm::vec3(0.0f, 0.0f, 0.0f));
             ground.rotate(glm::vec3(90.0f, 0.0f, 0.0f));
             rotatingCube.translate(glm::vec3(-10.0f, 10.0f, 0.0f));
@@ -146,7 +146,7 @@ namespace cobalt {
                 CB_TEXTURE_LIBRARY.getTexture<gl::Texture2D>(CB_TEXTURE_LIBRARY.makeTexture("grid", color, gl::TextureEncodings::RGBA::Bits8));
             UMap<std::string, const core::gl::Texture2D&> gridTextures = {{"settings", gridTexture}};
             gfx::Material& gridMaterial = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makeFromShader("grid", "grid", gridTextures));
-            gfx::Mesh grid = gfx::MeshFactory::createGrid(10000, gridMaterial);
+            Mesh grid = MeshFactory::createGrid(10000, gridMaterial);
             scene.addMesh(Move(grid));
         }
     }  // namespace editor

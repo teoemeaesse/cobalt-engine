@@ -4,15 +4,16 @@
 #include "engine/gfx/filter_node.h"
 
 namespace cobalt {
+    using namespace core;
     namespace engine {
-        FilterNode::FilterNode(core::gfx::Renderer& renderer, core::gfx::RenderTarget&& defaultTarget, core::gfx::Material& filter)
+        FilterNode::FilterNode(Renderer& renderer, RenderTarget&& defaultTarget, gfx::Material& filter)
             : RenderNode(renderer, Move(defaultTarget)),
               filter(filter),
               width(defaultTarget.getFBO().getWidth()),
               height(defaultTarget.getFBO().getHeight()) {}
 
         void FilterNode::render() {
-            core::gfx::Mesh filterMesh = core::gfx::MeshFactory::createRectangle(width, height, filter);
+            Mesh filterMesh = MeshFactory::createRectangle(width, height, filter);
             RenderNode::renderMesh(filterMesh);
         }
 

@@ -4,7 +4,6 @@
 #pragma once
 
 #include "core/gl/vbo.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::gl {

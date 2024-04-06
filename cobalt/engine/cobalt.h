@@ -4,8 +4,8 @@
 #pragma once
 
 // Graphics
-#include "core/gfx/render_graph.h"
 #include "core/gfx/window.h"
+#include "engine/render/graph.h"
 
 // Engine
 #include "engine/entry_point.h"
