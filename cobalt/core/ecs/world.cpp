@@ -18,8 +18,6 @@ namespace cobalt {
 
         void World::triggerEvent(const std::string& eventName) noexcept { eventManager.triggerEvent(eventName); }
 
-        void World::addResource(Scope<Resource>&& resource) noexcept { resourceRegistry.add(Move(resource)); }
-
         bool World::isPlugin(const std::string& title) const noexcept { return pluginManager.isPlugin(title); }
 
         void World::startup() {

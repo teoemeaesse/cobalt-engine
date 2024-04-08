@@ -8,5 +8,9 @@ namespace cobalt {
 
     namespace engine {
         Time::Time() noexcept : deltaTime(0.0f), elapsedTime(0.0f) {}
+
+        float Time::getDeltaTime() const noexcept { return deltaTime; }
+
+        float Time::getElapsedTime() const noexcept { return elapsedTime; }
     }  // namespace engine
 }  // namespace cobalt

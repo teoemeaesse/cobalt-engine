@@ -76,7 +76,7 @@ namespace cobalt {
 
         core::gl::Shader& ShaderLibrary::getShader(const std::string& name) { return getShader(getShaderID(name)); }
 
-        void ShaderLibrary::init() { instance = createScope<ShaderLibrary>(); }
+        void ShaderLibrary::init() { instance = CreateScope<ShaderLibrary>(); }
 
         ShaderLibrary& ShaderLibrary::getShaderLibrary() { return *instance; }
     }  // namespace engine

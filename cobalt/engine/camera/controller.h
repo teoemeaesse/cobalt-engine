@@ -10,6 +10,8 @@ namespace cobalt {
     namespace engine {
         using CameraID = uint;
 
+        class CameraManager;
+
         class CameraProperties {
             public:
             enum class Type {
@@ -17,6 +19,7 @@ namespace cobalt {
                 // Follow,
                 Free
             };
+
             /**
              * @brief: Create a camera properties object with default values.
              * @return: The camera properties.
@@ -257,34 +260,26 @@ namespace cobalt {
             float fov;              // Field of view.
             float aspectRatio;      // Aspect ratio.
             float distance;         // Distance from the camera to the center position.
-            float near,
-                far;  // Near and far planes.
-            float left,
-                right;  // Left and right planes (for orthographic mode).
-            float top,
-                bottom;  // Top and bottom planes (for orthographic mode).
+            float near, far;        // Near and far planes.
+            float left, right;      // Left and right planes (for orthographic mode).
+            float top, bottom;      // Top and bottom planes (for orthographic mode).
         };
 
         class CameraController {
+            friend class CameraManager;
+
             public:
             /**
              * @brief: Destroy the camera controller.
+             * @return: void
              */
-            ~CameraController() = default;
-
+            ~CameraController() noexcept = default;
             /**
-             * @brief: Create a camera controller from the given properties.
-             * @param properties: Properties of the camera.
-             * @return: The camera controller.
+             * @brief: Move the camera controller.
+             * @param other: The camera controller to move.
+             * @return: CameraController
              */
-            template <typename T>
-            static CameraController create(const CameraProperties& properties);
-
-            /**
-             * @brief: Get the camera.
-             * @return: The camera.
-             */
-            Camera& getCamera() const;
+            CameraController(CameraController&& other) noexcept = default;
 
             /**
              * @brief: Update the camera.
@@ -349,6 +344,12 @@ namespace cobalt {
              */
             void panVertical(const float amount);
 
+            /**
+             * @brief: Get the camera.
+             * @return: The camera.
+             */
+            Camera& getCamera() const;
+
             private:
             Scope<Camera> camera;
 
@@ -369,6 +370,14 @@ namespace cobalt {
              * @return: The camera controller.
              */
             CameraController(Scope<Camera> camera, float linearCling, float angularCling, float zoomCling);
+
+            /**
+             * @brief: Create a camera controller from the given properties.
+             * @param properties: Properties of the camera.
+             * @return: The camera controller.
+             */
+            template <typename T>
+            static CameraController create(const CameraProperties& properties);
         };
     }  // namespace engine
 }  // namespace cobalt
@@ -419,7 +428,7 @@ cobalt::engine::CameraController inline cobalt::engine::CameraController::create
 template <>
 cobalt::engine::CameraController inline cobalt::engine::CameraController::create<cobalt::engine::OrthographicCamera>(
     const cobalt::engine::CameraProperties& properties) {
-    return CameraController(Move(cobalt::createScope<OrthographicCamera>(properties.getCamera<OrthographicCamera>())), properties.getLinearCling(),
+    return CameraController(Move(cobalt::CreateScope<OrthographicCamera>(properties.getCamera<OrthographicCamera>())), properties.getLinearCling(),
                             properties.getAngularCling(), properties.getZoomCling());
 }
 /**
@@ -430,7 +439,7 @@ cobalt::engine::CameraController inline cobalt::engine::CameraController::create
 template <>
 cobalt::engine::CameraController inline cobalt::engine::CameraController::create<cobalt::engine::FPSCamera>(
     const cobalt::engine::CameraProperties& properties) {
-    return CameraController(Move(cobalt::createScope<FPSCamera>(properties.getCamera<FPSCamera>())), properties.getLinearCling(),
+    return CameraController(Move(cobalt::CreateScope<FPSCamera>(properties.getCamera<FPSCamera>())), properties.getLinearCling(),
                             properties.getAngularCling(), properties.getZoomCling());
 }
 /**
@@ -441,6 +450,6 @@ cobalt::engine::CameraController inline cobalt::engine::CameraController::create
 template <>
 cobalt::engine::CameraController inline cobalt::engine::CameraController::create<cobalt::engine::PivotCamera>(
     const cobalt::engine::CameraProperties& properties) {
-    return CameraController(Move(cobalt::createScope<PivotCamera>(properties.getCamera<PivotCamera>())), properties.getLinearCling(),
+    return CameraController(Move(cobalt::CreateScope<PivotCamera>(properties.getCamera<PivotCamera>())), properties.getLinearCling(),
                             properties.getAngularCling(), properties.getZoomCling());
 }

@@ -12,12 +12,6 @@ namespace cobalt {
         class RenderGraph : public core::ecs::Resource {
             public:
             /**
-             * @brief: Creates an empty render graph.
-             * The graph is empty, so it is not possible to render anything.
-             * @return: A render graph with no nodes.
-             */
-            RenderGraph() = default;
-            /**
              * @brief: Destroys the render graph.
              */
             ~RenderGraph() = default;
@@ -45,6 +39,12 @@ namespace cobalt {
 
             protected:
             Vec<Scope<RenderNode>> nodes;  // All the nodes in the graph, in topological order.
+
+            /**
+             * @brief: Creates an empty render graph. The graph is empty, so it is not possible to render anything.
+             * @return: A render graph with no nodes.
+             */
+            RenderGraph() = default;
         };
     }  // namespace engine
 }  // namespace cobalt

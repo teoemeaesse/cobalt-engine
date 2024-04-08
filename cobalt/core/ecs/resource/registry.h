@@ -27,7 +27,7 @@ namespace cobalt {
                 static_assert(std::is_default_constructible<ResourceType>::value, "Resource must be default constructible.");
                 const auto type = Resource::getType<ResourceType>();
                 resources.erase(type);
-                resources.emplace(type, Move(createScope<ResourceType>()));
+                resources.emplace(type, Move(CreateScope<ResourceType>()));
             }
             /**
              * @brief: Add a resource to the registry.
@@ -42,14 +42,8 @@ namespace cobalt {
                 static_assert(std::is_constructible<ResourceType, Args...>::value, "Resource must be constructible with the given arguments.");
                 const auto type = Resource::getType<ResourceType>();
                 resources.erase(type);
-                resources.emplace(type, Move(createScope<ResourceType>(std::forward<Args>(args)...)));
+                resources.emplace(type, Move(CreateScope<ResourceType>(std::forward<Args>(args)...)));
             }
-            /**
-             * @brief: Move a resource into the registry.
-             * @param resource: Resource.
-             * @return: void
-             */
-            void add(Scope<Resource>&& resource) noexcept;
 
             /**
              * @brief: Get a resource from the registry.

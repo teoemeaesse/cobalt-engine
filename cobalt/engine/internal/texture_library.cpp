@@ -21,7 +21,7 @@ namespace cobalt {
 
         TextureLibrary::TextureLibrary() {
             store.emplace(std::piecewise_construct, std::forward_as_tuple((TextureID)CB_DEFAULT_TEXTURE_ID),
-                          std::forward_as_tuple((TextureID)CB_DEFAULT_TEXTURE_ID, Move(createScope<core::gl::Texture2D>(1, 1))));
+                          std::forward_as_tuple((TextureID)CB_DEFAULT_TEXTURE_ID, Move(CreateScope<core::gl::Texture2D>(1, 1))));
         }
 
         void TextureLibrary::loadTextures(const core::io::Path& texturesDirectory) {
@@ -45,14 +45,14 @@ namespace cobalt {
                     CB_INFO("Loading 2D texture \"{0}\" @{1}", textureName, texturePath.getFileName());
                     const TextureID id = TextureID((uint)store.size(), TextureID::Type::TEXTURE_2D);
                     store.emplace(std::piecewise_construct, std::forward_as_tuple(id),
-                                  std::forward_as_tuple(id, Move(createScope<core::gl::Texture2D>(texturePath, isSrgb))));
+                                  std::forward_as_tuple(id, Move(CreateScope<core::gl::Texture2D>(texturePath, isSrgb))));
                     mapping.emplace(textureName, id);
                     continue;
                 } else if (textureType == "3d") {
                     CB_INFO("Loading cubemap texture \"{0}\" @{1}", textureName, texturePath.getFileName());
                     const TextureID id = TextureID((uint)store.size(), TextureID::Type::TEXTURE_3D);
                     store.emplace(std::piecewise_construct, std::forward_as_tuple(id),
-                                  std::forward_as_tuple(id, Move(createScope<core::gl::Texture3D>(texturePath, isSrgb))));
+                                  std::forward_as_tuple(id, Move(CreateScope<core::gl::Texture3D>(texturePath, isSrgb))));
                     mapping.emplace(textureName, id);
                     continue;
                 }
@@ -73,12 +73,12 @@ namespace cobalt {
             }
             const TextureID id = TextureID((uint)store.size(), TextureID::Type::TEXTURE_2D);
             store.emplace(std::piecewise_construct, std::forward_as_tuple(id),
-                          std::forward_as_tuple(id, Move(createScope<core::gl::Texture2D>(data, encoding, filter, wrap))));
+                          std::forward_as_tuple(id, Move(CreateScope<core::gl::Texture2D>(data, encoding, filter, wrap))));
             mapping.emplace(name, id);
             return id;
         }
 
-        void TextureLibrary::init() { instance = createScope<TextureLibrary>(); }
+        void TextureLibrary::init() { instance = CreateScope<TextureLibrary>(); }
 
         TextureLibrary& TextureLibrary::getTextureLibrary() { return *instance; }
     }  // namespace engine

@@ -10,11 +10,13 @@ namespace cobalt {
     namespace core::gfx {
         enum class WindowMode { Windowed, Fullscreen, Borderless };
 
+        class WindowProperties;
+
         /**
          * @brief: Wrapper for GLFW window.
          */
         class Window : public core::ecs::Resource {
-            friend class WindowBuilder;
+            friend class WindowProperties;
 
             public:
             typedef void (*KeyCallback)(core::input::InputManager& manager, const int key, const bool down);
@@ -23,6 +25,13 @@ namespace cobalt {
             typedef void (*ScrollCallback)(core::input::InputManager& manager, const float xoffset, const float yoffset);
             typedef void (*FramebufferResizeCallback)(gfx::Window& window, const uint width, const uint height);
             typedef void (*ResizeCallback)(gfx::Window& window, const uint width, const uint height);
+
+            /**
+             * @brief: Creates a new window.
+             * @param properties: The properties of the window.
+             * @return: A new window.
+             */
+            static Window create(const WindowProperties& properties) noexcept;
 
             /**
              * @brief: Destroys the window.
@@ -266,110 +275,106 @@ namespace cobalt {
         };
 
         /**
-         * @brief: Builder for windows.
+         * @brief: Properties of a GLFW window.
          */
-        class WindowBuilder {
+        class WindowProperties {
+            friend class Window;
+
             public:
             /**
-             * @brief: Creates a new window builder with default values.
-             * @return: A new window builder.
+             * @brief: Creates a new window properties with default values.
+             * @return: A new window properties.
              */
-            WindowBuilder();
+            WindowProperties();
             /**
-             * @brief: Destroys the window builder.
+             * @brief: Destroys the window properties.
              */
-            ~WindowBuilder() = default;
+            ~WindowProperties() = default;
 
             /**
              * @brief: Sets the width of the window.
              * @param width: The width of the window.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setWidth(const uint width);
+            WindowProperties& setWidth(const uint width);
             /**
              * @brief: Sets the height of the window.
              * @param height: The height of the window.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setHeight(const uint height);
+            WindowProperties& setHeight(const uint height);
             /**
              * @brief: Sets the title of the window.
              * @param title: The title of the window.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setTitle(const std::string& title);
+            WindowProperties& setTitle(const std::string& title);
             /**
              * @brief: Sets whether or not the window is using vsync.
              * @param vsync: Whether or not the window is using vsync.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setVsync(const bool vsync);
+            WindowProperties& setVsync(const bool vsync);
             /**
              * @brief: Sets the mode of the window.
              * @param mode: The mode of the window.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setMode(const WindowMode mode);
+            WindowProperties& setMode(const WindowMode mode);
             /**
              * @brief: Sets whether or not the window is resizable.
              * @param resizable: Whether or not the window is resizable.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setResizable(const bool resizable);
+            WindowProperties& setResizable(const bool resizable);
             /**
              * @brief: Sets whether or not the window is decorated.
              * @param decorated: Whether or not the window is decorated.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setDecorated(const bool decorated);
+            WindowProperties& setDecorated(const bool decorated);
             /**
              * @brief: Locks the aspect ratio of the window.
              * @param lockAspectRatio: The aspect ratio of the window.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setLockAspectRatio(const bool lockAspectRatio);
+            WindowProperties& setLockAspectRatio(const bool lockAspectRatio);
             /**
              * @brief: Sets the key callback of the window.
              * @param callback: The key callback of the window.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setKeyCallback(const Window::KeyCallback callback);
+            WindowProperties& setKeyCallback(const Window::KeyCallback callback);
             /**
              * @brief: Sets the cursor callback of the window.
              * @param callback: The cursor callback of the window.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setCursorCallback(const Window::CursorCallback callback);
+            WindowProperties& setCursorCallback(const Window::CursorCallback callback);
             /**
              * @brief: Sets the mouse button callback of the window.
              * @param callback: The mouse button callback of the window.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setMouseButtonCallback(const Window::MouseButtonCallback callback);
+            WindowProperties& setMouseButtonCallback(const Window::MouseButtonCallback callback);
             /**
              * @brief: Sets the scroll callback of the window.
              * @param callback: The scroll callback of the window.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setScrollCallback(const Window::ScrollCallback callback);
+            WindowProperties& setScrollCallback(const Window::ScrollCallback callback);
             /**
              * @brief: Sets the framebuffer resize callback of the window.
              * @param callback: The framebuffer resize callback of the window.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setFramebufferResizeCallback(const Window::FramebufferResizeCallback callback);
+            WindowProperties& setFramebufferResizeCallback(const Window::FramebufferResizeCallback callback);
             /**
              * @brief: Sets the resize callback of the window.
              * @param callback: The resize callback of the window.
-             * @return: The window builder.
+             * @return: The window properties.
              */
-            WindowBuilder& setResizeCallback(const Window::ResizeCallback callback);
-
-            /**
-             * @brief: Builds the window.
-             * @return: The window.
-             */
-            Window build() const;
+            WindowProperties& setResizeCallback(const Window::ResizeCallback callback);
 
             private:
             uint width, height;
@@ -385,6 +390,12 @@ namespace cobalt {
             Window::ScrollCallback scrollCallback;
             Window::FramebufferResizeCallback framebufferResizeCallback;
             Window::ResizeCallback resizeCallback;
+
+            /**
+             * @brief: Builds the window.
+             * @return: The window.
+             */
+            Window getWindow() const;
         };
     }  // namespace core::gfx
 }  // namespace cobalt

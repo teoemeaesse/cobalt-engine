@@ -13,10 +13,11 @@ namespace cobalt {
                 int height = get<int>("height");
                 bool vsync = get<bool>("vsync");
                 core::gfx::WindowMode mode = static_cast<core::gfx::WindowMode>(get<int>("mode"));
-                return core::gfx::WindowBuilder().setTitle("Cobalt").setWidth(width).setHeight(height).setVsync(vsync).setMode(mode).build();
+                return core::gfx::Window::create(
+                    core::gfx::WindowProperties().setTitle("Cobalt").setWidth(width).setHeight(height).setVsync(vsync).setMode(mode));
             } catch (const engine::ConfigurationException& e) {
                 CB_WARN("Failed to load Cobalt configuration: {}", e.what());
-                return core::gfx::WindowBuilder().setTitle("Cobalt").setWidth(800).setHeight(600).setVsync(false).build();
+                return core::gfx::Window::create(core::gfx::WindowProperties().setTitle("Cobalt").setWidth(800).setHeight(600).setVsync(false));
             }
         }
 

@@ -14,9 +14,10 @@ namespace cobalt {
             public:
             /**
              * @brief: Creates an empty scene.
+             * @param manager: The camera manager.
              * @return: An empty scene.
              */
-            Scene();
+            Scene(CameraManager& manager);
             /**
              * @brief: Destroys the scene.
              */
@@ -52,18 +53,15 @@ namespace cobalt {
              */
             Opt<Skybox>& getSkybox();
             /**
-             * @brief: Gets the camera controller used to render the scene.
-             * @return: The camera controller used to render the scene.
+             * @brief: Gets the ID for the camera used to render the scene.
+             * @return: CameraID
              */
-            CameraController& getCameraController();
+            const CameraID getCamera();
 
-            private:
-            Vec<Mesh> meshes;    // All the meshes in the scene.
-                                 // This is a massive oversimplification.
-                                 // TODO: Add a proper scene graph.
-            Opt<Skybox> skybox;  // The skybox of the scene.
-
-            CameraController camera;  // The camera used to render the scene.
+            private:                // TODO: Add a proper scene graph.
+            Vec<Mesh> meshes;       // All the meshes in the scene.
+            Opt<Skybox> skybox;     // The skybox of the scene.
+            const CameraID camera;  // The ID for the camera used to render the scene.
         };
     }  // namespace engine
 }  // namespace cobalt

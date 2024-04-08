@@ -4,6 +4,7 @@
 #pragma once
 
 #include "core/ecs/plugin/bundle.h"
+#include "engine/camera/plugin.h"
 #include "engine/input/plugin.h"
 #include "engine/keyboard/plugin.h"
 #include "engine/mouse/plugin.h"
@@ -18,11 +19,12 @@ namespace cobalt {
             virtual ~BaseBundle() noexcept = default;
 
             void addPlugins(core::ecs::World& world) noexcept override {
-                world.addPlugin<WindowPlugin>();
                 world.addPlugin<InputPlugin>();
                 world.addPlugin<KeyboardPlugin>();
                 world.addPlugin<MousePlugin>();
+                world.addPlugin<WindowPlugin>();
                 world.addPlugin<TimePlugin>();
+                world.addPlugin<CameraPlugin>();
             }
         };
     }  // namespace engine::ecs

@@ -14,24 +14,20 @@ namespace cobalt {
 
         void WindowPlugin::onPlug(ecs::World& world) const noexcept {
             world.registerEvent(FRAMEBUFFER_RESIZE_EVENT, FRAMEBUFFER_RESIZE_EVENT_DESCRIPTION);
-            world.addResource(Move(createScope<gfx::Window>(
-                gfx::WindowBuilder()
-                    .setTitle("Cobalt")
-                    .setWidth(1280)
-                    .setHeight(720)
-                    .setVsync(true)
-                    .setFramebufferResizeCallback([](gfx::Window& window, const uint width, const uint height) {
-                        static_cast<ecs::World*>(gl::Context::getUserPointer())->triggerEvent(WindowPlugin::FRAMEBUFFER_RESIZE_EVENT);
-                    })
-                    .build())));
 
-            world.addSystem<ecs::WriteRequest<gfx::Window>>(ecs::DefaultSchedules::Startup, [](auto window) {
-                try {
-                    window.get().init();
-                } catch (const ecs::PluginNotFoundException& e) {
-                    CB_CORE_WARN(e.what());
-                }
-            });
+            world.addResource<gfx::Window>(Move(gfx::Window::create(
+                gfx::WindowProperties().setTitle("Cobalt").setWidth(1280).setHeight(720).setVsync(true).setFramebufferResizeCallback(
+                    [](gfx::Window& window, const uint width, const uint height) {
+                        static_cast<ecs::World*>(gl::Context::getUserPointer())->triggerEvent(WindowPlugin::FRAMEBUFFER_RESIZE_EVENT);
+                    }))));
+
+            // world.addSystem<ecs::WriteRequest<gfx::Window>>(ecs::DefaultSchedules::Startup, [](auto window) {
+            //     try {
+            //         window.get().init();
+            //     } catch (const ecs::PluginNotFoundException& e) {
+            //         CB_CORE_WARN(e.what());
+            //     }
+            // });
         }
     }  // namespace engine
 }  // namespace cobalt

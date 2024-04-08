@@ -7,14 +7,35 @@
 
 namespace cobalt {
     namespace engine {
+        class Application;
+
         /**
          * @brief: Time resource.
          * @param deltaTime: Time since last frame (seconds).
          * @param elapsedTime: Time since application startup (seconds).
          */
-        struct Time : public core::ecs::Resource {
+        class Time : public core::ecs::Resource {
+            friend class Application;
+
+            public:
+            /**
+             * @brief: Creates a new Time resource.
+             * @return: Time
+             */
             Time() noexcept;
 
+            /**
+             * @brief: Returns the time since last frame (seconds).
+             * @return: float
+             */
+            float getDeltaTime() const noexcept;
+            /**
+             * @brief: Returns the time since application startup (seconds).
+             * @return: float
+             */
+            float getElapsedTime() const noexcept;
+
+            private:
             float deltaTime;
             float elapsedTime;
         };

@@ -27,22 +27,25 @@ namespace cobalt {
             configuration.configureWindow(getWindow());
             getWindow().setClearColor(Color(0.2f, 0.2f, 0.2f));
             getWindow().show();
-            world.addHook<core::ecs::ReadRequest<gfx::Window>, core::ecs::WriteRequest<DefaultGraph>, core::ecs::WriteRequest<engine::Scene>>(
-                WindowPlugin::FRAMEBUFFER_RESIZE_EVENT, [](auto window, auto graph, auto scene) {
+            world.addHook<core::ecs::ReadRequest<gfx::Window>, core::ecs::WriteRequest<CameraManager>, core::ecs::WriteRequest<DefaultGraph>,
+                          core::ecs::WriteRequest<engine::Scene>>(
+                WindowPlugin::FRAMEBUFFER_RESIZE_EVENT, [](auto window, auto manager, auto graph, auto scene) {
                     const uint width = window.get().getDefaultFBO().getWidth();
                     const uint height = window.get().getDefaultFBO().getHeight();
                     graph.get().onResize(width, height);
-                    scene.get().getCameraController().resize((float)width / (float)height);
+                    manager.get().getCamera(scene.get().getCamera()).resize((float)width / (float)height);
                 });
 
             CB_TEXTURE_LIBRARY.loadTextures(io::Path("cobalt/editor/assets/textures", true));
             CB_SHADER_LIBRARY.loadShaders(io::Path("cobalt/editor/assets/shaders", true));
 
-            world.addResource<engine::Scene>();
+            CameraManager& cameraManager = world.getResource<engine::CameraManager>();
+
+            world.addResource<engine::Scene>(cameraManager);
             createScene();
 
-            world.addResource<DefaultGraph>(world.getResource<engine::Scene>(), getWindow().getDefaultFBO());
-            world.getResource<DefaultGraph>().init();
+            world.addResource<DefaultGraph>(world.getResource<engine::Scene>(), cameraManager, getWindow().getDefaultFBO());
+            world.getResource<DefaultGraph>().init(world.getResource<engine::CameraManager>());
 
             bindInput();
         }
@@ -50,7 +53,8 @@ namespace cobalt {
         void Editor::addPlugins() { world.addBundle<engine::ecs::BaseBundle>(); }
 
         void Editor::fixedTimeStep() {
-            world.getResource<engine::Scene>().getCameraController().update();
+            CameraManager& manager = world.getResource<CameraManager>();
+            manager.getCamera(world.getResource<engine::Scene>().getCamera()).update();
             getWindow().setTitle("Cobalt Editor - " + std::to_string(getFramerate()) + " FPS");
         }
 
@@ -72,28 +76,29 @@ namespace cobalt {
              * Likely to be useless since the Keyboard and Mouse peripherals are always present in the engine.
              */
             engine::Scene& scene = world.getResource<engine::Scene>();
-
             engine::Keyboard& keyboard = getInputManager().getPeripheral<engine::Keyboard>(engine::Keyboard::NAME);
-            keyboard.bind(engine::KeyboardInputID::ESCAPE, createScope<Quit>(world, this));
-            keyboard.bind(engine::KeyboardInputID::F9, createScope<Windowed>(world, this));
-            keyboard.bind(engine::KeyboardInputID::F10, createScope<Borderless>(world, this));
-            keyboard.bind(engine::KeyboardInputID::F11, createScope<Fullscreen>(world, this));
-            keyboard.bind(engine::KeyboardInputID::W, createScope<PanIn>(world, &scene.getCameraController()));
-            keyboard.bind(engine::KeyboardInputID::A, createScope<PanLeft>(world, &scene.getCameraController()));
-            keyboard.bind(engine::KeyboardInputID::S, createScope<PanOut>(world, &scene.getCameraController()));
-            keyboard.bind(engine::KeyboardInputID::D, createScope<PanRight>(world, &scene.getCameraController()));
-            keyboard.bind(engine::KeyboardInputID::SPACE, createScope<PanUp>(world, &scene.getCameraController()));
-            keyboard.bind(engine::KeyboardInputID::LCTRL, createScope<PanDown>(world, &scene.getCameraController()));
-            keyboard.bind(engine::KeyboardInputID::UP, createScope<PanUp>(world, &scene.getCameraController()));
-            keyboard.bind(engine::KeyboardInputID::LEFT, createScope<PanLeft>(world, &scene.getCameraController()));
-            keyboard.bind(engine::KeyboardInputID::DOWN, createScope<PanDown>(world, &scene.getCameraController()));
-            keyboard.bind(engine::KeyboardInputID::RIGHT, createScope<PanRight>(world, &scene.getCameraController()));
-            keyboard.bind(engine::KeyboardInputID::P, createScope<Spawn>(world, &scene));
+            engine::CameraManager& manager = world.getResource<engine::CameraManager>();
+            engine::CameraController& controller = manager.getCamera(scene.getCamera());
+            keyboard.bind(engine::KeyboardInputID::ESCAPE, CreateScope<Quit>(world, this));
+            keyboard.bind(engine::KeyboardInputID::F9, CreateScope<Windowed>(world, this));
+            keyboard.bind(engine::KeyboardInputID::F10, CreateScope<Borderless>(world, this));
+            keyboard.bind(engine::KeyboardInputID::F11, CreateScope<Fullscreen>(world, this));
+            keyboard.bind(engine::KeyboardInputID::W, CreateScope<PanIn>(world, &controller));
+            keyboard.bind(engine::KeyboardInputID::A, CreateScope<PanLeft>(world, &controller));
+            keyboard.bind(engine::KeyboardInputID::S, CreateScope<PanOut>(world, &controller));
+            keyboard.bind(engine::KeyboardInputID::D, CreateScope<PanRight>(world, &controller));
+            keyboard.bind(engine::KeyboardInputID::SPACE, CreateScope<PanUp>(world, &controller));
+            keyboard.bind(engine::KeyboardInputID::LCTRL, CreateScope<PanDown>(world, &controller));
+            keyboard.bind(engine::KeyboardInputID::UP, CreateScope<PanUp>(world, &controller));
+            keyboard.bind(engine::KeyboardInputID::LEFT, CreateScope<PanLeft>(world, &controller));
+            keyboard.bind(engine::KeyboardInputID::DOWN, CreateScope<PanDown>(world, &controller));
+            keyboard.bind(engine::KeyboardInputID::RIGHT, CreateScope<PanRight>(world, &controller));
+            keyboard.bind(engine::KeyboardInputID::P, CreateScope<Spawn>(world, &scene));
 
             Mouse& mouse = getInputManager().getPeripheral<Mouse>(Mouse::NAME);
-            mouse.bind(MouseInputID::RIGHT_X, createScope<RotateX>(world, &scene.getCameraController()));
-            mouse.bind(MouseInputID::RIGHT_Y, createScope<RotateY>(world, &scene.getCameraController()));
-            mouse.bind(MouseInputID::SCROLL_Y, createScope<Zoom>(world, &scene.getCameraController()));
+            mouse.bind(MouseInputID::RIGHT_X, CreateScope<RotateX>(world, &controller));
+            mouse.bind(MouseInputID::RIGHT_Y, CreateScope<RotateY>(world, &controller));
+            mouse.bind(MouseInputID::SCROLL_Y, CreateScope<Zoom>(world, &controller));
         }
 
         void Editor::createScene() {

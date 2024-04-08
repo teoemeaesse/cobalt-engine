@@ -24,7 +24,7 @@ namespace cobalt {
              * @brief: Destroy the input manager.
              * @return: void
              */
-            ~InputManager() = default;
+            ~InputManager();
 
             /**
              * @brief: Poll all events from the peripherals.
@@ -47,7 +47,7 @@ namespace cobalt {
             template <typename T, typename... Args>
             const DeviceID registerPeripheral(const std::string& name, Args&&... args) {
                 const DeviceID id = peripherals.size();
-                Scope<InputDevice> peripheral = createScope<T>(id, std::forward<Args>(args)...);
+                Scope<InputDevice> peripheral = CreateScope<T>(id, std::forward<Args>(args)...);
                 peripherals[peripheral->getId()] = Move(peripheral);
                 peripheralIDs[name] = id;
                 return id;

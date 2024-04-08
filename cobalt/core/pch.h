@@ -62,17 +62,20 @@
 // Platform.
 #include "core/utils/platform.h"
 
+#define CB_CREATE_SCOPE(T, ...) std::unique_ptr<T>(new T(__VA_ARGS__))
+#define CB_CREATE_SHARED(T, ...) std::shared_ptr<T>(new T(__VA_ARGS__))
+
 namespace cobalt {
     template <typename T>
     using Scope = std::unique_ptr<T>;
     template <typename T, typename... Args>
-    constexpr Scope<T> createScope(Args&&... args) {
+    constexpr Scope<T> CreateScope(Args&&... args) {
         return std::make_unique<T>(std::forward<Args>(args)...);
     }
     template <typename T>
     using Shared = std::shared_ptr<T>;
     template <typename T, typename... Args>
-    constexpr Shared<T> createShared(Args&&... args) {
+    constexpr Shared<T> CreateShared(Args&&... args) {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
     template <typename T>
@@ -147,6 +150,7 @@ namespace cobalt {
         static inline constexpr float SQRT_2 = 1.41421356237309504880f;
         static inline constexpr float SQRT_3 = 1.73205080756887729352f;
     }  // namespace num
+
     namespace core {
         namespace gl {
             using Int = GLint;      // 32-bit integer.

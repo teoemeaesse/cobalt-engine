@@ -57,7 +57,7 @@ namespace cobalt {
                     if (typeIndices.size() >= CB_ECS_MAX_COMPONENTS) {
                         throw ComponentOverflowException<ComponentType>(CB_ECS_MAX_COMPONENTS);
                     }
-                    store[type] = Move(createScope<ComponentStorage<ComponentType>>());
+                    store[type] = Move(CreateScope<ComponentStorage<ComponentType>>());
                     const uint64 index = typeIndices.size();
                     typeIndices[type] = index;
                 }

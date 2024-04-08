@@ -12,6 +12,8 @@ namespace cobalt {
 
         InputManager::InputManager() { unknownPeripheral = registerPeripheral<NullDevice>("Unknown"); }
 
+        InputManager::~InputManager() { CB_CORE_ERROR("InputManager destroyed."); }
+
         void InputManager::pollEvents() {
             for (const auto& [name, id] : peripheralIDs) {
                 if (name != "Unknown") {

@@ -87,7 +87,7 @@ namespace cobalt {
             return materials.size() - 1;
         }
 
-        void MaterialLibrary::init() { instance = createScope<MaterialLibrary>(); }
+        void MaterialLibrary::init() { instance = CreateScope<MaterialLibrary>(); }
 
         MaterialLibrary& MaterialLibrary::getMaterialLibrary() { return *instance; }
     }  // namespace engine

@@ -33,6 +33,8 @@ namespace cobalt {
               framebufferResizeCallback(framebufferResizeCallback),
               resizeCallback(resizeCallback) {}
 
+        Window Window::create(const WindowProperties& properties) noexcept { return properties.getWindow(); }
+
         Window::Window(Window&& other) noexcept
             : width(other.width),
               height(other.height),
@@ -260,7 +262,7 @@ namespace cobalt {
             }
         }
 
-        WindowBuilder::WindowBuilder()
+        WindowProperties::WindowProperties()
             : width(800),
               height(600),
               title("cobalt window"),
@@ -276,77 +278,77 @@ namespace cobalt {
               framebufferResizeCallback(nullptr),
               resizeCallback(nullptr) {}
 
-        WindowBuilder& WindowBuilder::setWidth(const uint width) {
+        WindowProperties& WindowProperties::setWidth(const uint width) {
             this->width = width;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setHeight(const uint height) {
+        WindowProperties& WindowProperties::setHeight(const uint height) {
             this->height = height;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setTitle(const std::string& title) {
+        WindowProperties& WindowProperties::setTitle(const std::string& title) {
             this->title = title;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setVsync(const bool vsync) {
+        WindowProperties& WindowProperties::setVsync(const bool vsync) {
             this->vsync = vsync;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setMode(const WindowMode mode) {
+        WindowProperties& WindowProperties::setMode(const WindowMode mode) {
             this->mode = mode;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setResizable(const bool resizable) {
+        WindowProperties& WindowProperties::setResizable(const bool resizable) {
             this->resizable = resizable;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setDecorated(const bool decorated) {
+        WindowProperties& WindowProperties::setDecorated(const bool decorated) {
             this->decorated = decorated;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setLockAspectRatio(const bool lockAspectRatio) {
+        WindowProperties& WindowProperties::setLockAspectRatio(const bool lockAspectRatio) {
             this->lockAspectRatio = lockAspectRatio;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setKeyCallback(const Window::KeyCallback callback) {
+        WindowProperties& WindowProperties::setKeyCallback(const Window::KeyCallback callback) {
             this->keyCallback = callback;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setCursorCallback(const Window::CursorCallback callback) {
+        WindowProperties& WindowProperties::setCursorCallback(const Window::CursorCallback callback) {
             this->cursorCallback = callback;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setMouseButtonCallback(const Window::MouseButtonCallback callback) {
+        WindowProperties& WindowProperties::setMouseButtonCallback(const Window::MouseButtonCallback callback) {
             this->mouseButtonCallback = callback;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setScrollCallback(const Window::ScrollCallback callback) {
+        WindowProperties& WindowProperties::setScrollCallback(const Window::ScrollCallback callback) {
             this->scrollCallback = callback;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setFramebufferResizeCallback(const Window::FramebufferResizeCallback callback) {
+        WindowProperties& WindowProperties::setFramebufferResizeCallback(const Window::FramebufferResizeCallback callback) {
             this->framebufferResizeCallback = callback;
             return *this;
         }
 
-        WindowBuilder& WindowBuilder::setResizeCallback(const Window::ResizeCallback callback) {
+        WindowProperties& WindowProperties::setResizeCallback(const Window::ResizeCallback callback) {
             this->resizeCallback = callback;
             return *this;
         }
 
-        Window WindowBuilder::build() const {
+        Window WindowProperties::getWindow() const {
             return Window(width, height, title, vsync, mode, resizable, decorated, lockAspectRatio, keyCallback, cursorCallback, mouseButtonCallback,
                           scrollCallback, framebufferResizeCallback, resizeCallback);
         }

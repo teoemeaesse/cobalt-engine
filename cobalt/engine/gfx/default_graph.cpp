@@ -12,28 +12,28 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
-        DefaultGraph::DefaultGraph(Scene& scene, core::gl::FBO& defaultFBO)
+        DefaultGraph::DefaultGraph(Scene& scene, CameraManager& manager, core::gl::FBO& defaultFBO)
             : RenderGraph(),
-              output(CameraController::create<OrthographicCamera>(
-                  CameraProperties()
-                      .setPosition(glm::vec3(0.0, 0.0, 10.0))
-                      .setDirection(glm::vec2(90.0, 90.0))
-                      .setOrthoPlanes(-(float)defaultFBO.getWidth() / 2, (float)defaultFBO.getWidth() / 2, -(float)defaultFBO.getHeight() / 2,
-                                      (float)defaultFBO.getHeight() / 2)
-                      .setClippingPlanes(1.0f, 100.0f))),
+              output(manager.addCamera<OrthographicCamera>("output_camera",
+                                                           CameraProperties()
+                                                               .setPosition(glm::vec3(0.0, 0.0, 10.0))
+                                                               .setDirection(glm::vec2(90.0, 90.0))
+                                                               .setOrthoPlanes(-(float)defaultFBO.getWidth() / 2, (float)defaultFBO.getWidth() / 2,
+                                                                               -(float)defaultFBO.getHeight() / 2, (float)defaultFBO.getHeight() / 2)
+                                                               .setClippingPlanes(1.0f, 100.0f))),
               renderer(),
               defaultFBO(defaultFBO),
               sceneFBO(defaultFBO.getWidth(), defaultFBO.getHeight(),
                        {{core::gl::TextureEncodings::RGBA::Bits8}, {core::gl::TextureEncodings::Depth::Bits24}}),
               scene(scene) {}
 
-        void DefaultGraph::init() {
+        void DefaultGraph::init(CameraManager& manager) {
             core::gfx::Material& filter = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makeFromShader("filterMaterial", "filter"));
             Scope<SceneNode> sceneNode =
-                createScope<SceneNode>(SceneNode(scene, renderer, RenderTarget(sceneFBO, scene.getCameraController().getCamera(), "scene", 0)));
+                CreateScope<SceneNode>(scene, renderer, RenderTarget(sceneFBO, manager.getCamera(output).getCamera(), "scene", 0));
             Scope<FilterNode> filterNode =
-                createScope<FilterNode>(FilterNode(renderer, RenderTarget(defaultFBO, output.getCamera(), "output", 1), filter));
-            filterNode->addSource(RenderTarget(sceneFBO, scene.getCameraController().getCamera(), "scene", 0));
+                CreateScope<FilterNode>(renderer, RenderTarget(defaultFBO, manager.getCamera(output).getCamera(), "output", 1), filter);
+            filterNode->addSource(RenderTarget(sceneFBO, manager.getCamera(output).getCamera(), "scene", 0));
 
             addNode(Move(sceneNode));
             addNode(Move(filterNode));

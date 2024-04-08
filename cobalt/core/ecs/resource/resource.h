@@ -21,6 +21,12 @@ namespace cobalt {
             }
 
             /**
+             * @brief: Create a resource. Overload this function in your resources!
+             * @return: Resource
+             */
+            static Resource create() noexcept { return Resource(); }
+
+            /**
              * @brief: Default constructor.
              * @return: Instance of Resource.
              */

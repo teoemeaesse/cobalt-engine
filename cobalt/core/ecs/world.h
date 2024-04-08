@@ -120,12 +120,6 @@ namespace cobalt {
             void addResource(Args&&... args) noexcept {
                 resourceRegistry.add<ResourceType>(std::forward<Args>(args)...);
             }
-            /**
-             * @brief: Move a resource into the world.
-             * @param resource: Resource.
-             * @return: void
-             */
-            void addResource(Scope<Resource>&& resource) noexcept;
 
             /**
              * @brief: Get a resource.

@@ -9,17 +9,17 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
-        Scene::Scene()
-            : camera(CameraController::create<PivotCamera>(CameraProperties()
-                                                               .setPosition(glm::vec3(-45.0, 15.0, 5.0))
-                                                               .setDirection(glm::vec2(180.0, 70.0))
-                                                               .setDistance(50.0f)
-                                                               .setFOV(90.0f)
-                                                               .setClippingPlanes(0.01f, 1000.0f)
-                                                               .setAspectRatio(16.0f / 9.0f)
-                                                               .setLinearCling(0.3f)
-                                                               .setAngularCling(0.8f)
-                                                               .setZoomCling(0.4f))) {}
+        Scene::Scene(CameraManager& manager)
+            : camera(manager.addCamera<PivotCamera>("scene_camera", CameraProperties()
+                                                                        .setPosition(glm::vec3(-45.0, 15.0, 5.0))
+                                                                        .setDirection(glm::vec2(180.0, 70.0))
+                                                                        .setDistance(50.0f)
+                                                                        .setFOV(90.0f)
+                                                                        .setClippingPlanes(0.01f, 1000.0f)
+                                                                        .setAspectRatio(16.0f / 9.0f)
+                                                                        .setLinearCling(0.3f)
+                                                                        .setAngularCling(0.8f)
+                                                                        .setZoomCling(0.4f))) {}
 
         const uint Scene::addMesh(Mesh&& mesh) {
             meshes.push_back(Move(mesh));
@@ -37,6 +37,6 @@ namespace cobalt {
 
         Opt<Skybox>& Scene::getSkybox() { return skybox; }
 
-        CameraController& Scene::getCameraController() { return camera; }
+        const CameraID Scene::getCamera() { return camera; }
     }  // namespace engine
 }  // namespace cobalt

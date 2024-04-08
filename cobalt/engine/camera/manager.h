@@ -8,6 +8,8 @@
 
 namespace cobalt {
     namespace engine {
+        class CameraPlugin;
+
         class CameraManager : public core::ecs::Resource {
             public:
             /**
@@ -34,7 +36,7 @@ namespace cobalt {
                 }
                 const CameraID id = cameras.size();
                 cameraNames[name] = id;
-                cameras[id](Move(createScope(properties.getCamera<T>())));
+                cameras.emplace(id, CameraController::create<T>(properties));
                 return id;
             }
 
