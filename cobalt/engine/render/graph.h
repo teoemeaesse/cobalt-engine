@@ -35,7 +35,7 @@ namespace cobalt {
              * @brief: Executes the render graph.
              * @return: void
              */
-            void execute();
+            void execute(const CameraManager& cameraManager);
 
             protected:
             Vec<Scope<RenderNode>> nodes;  // All the nodes in the graph, in topological order.

@@ -136,7 +136,7 @@ namespace cobalt {
             virtual const std::string& cobaltToStr(const T cobaltCode) const = 0;
 
             protected:
-            Queue<const InputCommand*> events;                       // The events to execute.
+            Queue<InputCommand*> events;                             // The events to execute.
             UMap<PeripheralInput<T>, Scope<InputCommand>> bindings;  // The bindings for the peripheral.
         };
     }  // namespace core::input

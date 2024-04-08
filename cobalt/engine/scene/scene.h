@@ -56,12 +56,12 @@ namespace cobalt {
              * @brief: Gets the ID for the camera used to render the scene.
              * @return: CameraID
              */
-            const CameraID getCamera();
+            CameraID& getCamera();
 
-            private:                // TODO: Add a proper scene graph.
-            Vec<Mesh> meshes;       // All the meshes in the scene.
-            Opt<Skybox> skybox;     // The skybox of the scene.
-            const CameraID camera;  // The ID for the camera used to render the scene.
+            private:             // TODO: Add a proper scene graph.
+            Vec<Mesh> meshes;    // All the meshes in the scene.
+            Opt<Skybox> skybox;  // The skybox of the scene.
+            CameraID camera;     // The ID for the camera used to render the scene.
         };
     }  // namespace engine
 }  // namespace cobalt

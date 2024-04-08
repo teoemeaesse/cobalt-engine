@@ -16,7 +16,7 @@ namespace cobalt {
             glm::vec3 padding;
         };
 
-        RenderTarget::RenderTarget(const gl::FBO& fbo, const Camera& camera, const std::string& name, const uint cameraUBOBinding)
+        RenderTarget::RenderTarget(const gl::FBO& fbo, const CameraID camera, const std::string& name, const uint cameraUBOBinding)
             : fbo(fbo), camera(camera), name(name), ubo(gl::Usage::StaticDraw, sizeof(CameraUBO), cameraUBOBinding) {
             if (name == "view" || name == "model" || name == "projection") {
                 throw gfx::GFXException("Cannot use reserved name for render target");
@@ -31,8 +31,9 @@ namespace cobalt {
 
         void RenderTarget::bind() const { fbo.bind(); }
 
-        void RenderTarget::sendUBO(const gl::Shader& shader) const {
+        void RenderTarget::sendCameraUBO(const gl::Shader& shader, const CameraManager& cameraManager) const {
             ubo.bindToShader(shader, "Camera");
+            const Camera& camera = cameraManager.getController(this->camera).getCamera();
             CameraUBO cameraUBO = {camera.getViewMatrix(), camera.getProjectionMatrix(), camera.getPosition(),
                                    (int)fbo.getWidth(),    (int)fbo.getHeight(),         glm::vec3(0.0)};
             ubo.load(&cameraUBO, sizeof(CameraUBO), 0);
@@ -42,6 +43,6 @@ namespace cobalt {
 
         const std::string& RenderTarget::getName() const { return name; }
 
-        const Camera& RenderTarget::getCamera() const { return camera; }
+        const CameraID& RenderTarget::getCamera() const { return camera; }
     }  // namespace engine
 }  // namespace cobalt

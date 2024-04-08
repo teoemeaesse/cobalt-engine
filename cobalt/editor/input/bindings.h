@@ -10,7 +10,7 @@ namespace cobalt {
         class Spawn : public core::input::ConcreteInputCommand<engine::Scene> {
             public:
             Spawn(core::ecs::World& world, engine::Scene* target) : core::input::ConcreteInputCommand<engine::Scene>(world, target) {}
-            void execute() const override {
+            void execute() override {
                 if (getInput().held || !getInput().active) return;
                 static int i = 2;
                 const engine::TextureID woodAlbedo = CB_TEXTURE_LIBRARY.getTextureID("wood-albedo");
@@ -26,13 +26,13 @@ namespace cobalt {
         class Quit : public core::input::ConcreteInputCommand<Editor> {
             public:
             Quit(core::ecs::World& world, Editor* target) : core::input::ConcreteInputCommand<Editor>(world, target) {}
-            void execute() const override { getTarget()->stop(); }
+            void execute() override { getTarget()->stop(); }
         };
 
         class Fullscreen : public core::input::ConcreteInputCommand<Editor> {
             public:
             Fullscreen(core::ecs::World& world, Editor* target) : core::input::ConcreteInputCommand<Editor>(world, target) {}
-            void execute() const override {
+            void execute() override {
                 if (!getInput().active) {
                     getTarget()->getWindow().switchMode(core::gfx::WindowMode::Fullscreen);
                     getTarget()->createScene();
@@ -43,7 +43,7 @@ namespace cobalt {
         class Borderless : public core::input::ConcreteInputCommand<Editor> {
             public:
             Borderless(core::ecs::World& world, Editor* target) : core::input::ConcreteInputCommand<Editor>(world, target) {}
-            void execute() const override {
+            void execute() override {
                 if (!getInput().active) {
                     getTarget()->getWindow().switchMode(core::gfx::WindowMode::Borderless);
                     getTarget()->createScene();
@@ -54,7 +54,7 @@ namespace cobalt {
         class Windowed : public core::input::ConcreteInputCommand<Editor> {
             public:
             Windowed(core::ecs::World& world, Editor* target) : core::input::ConcreteInputCommand<Editor>(world, target) {}
-            void execute() const override {
+            void execute() override {
                 if (!getInput().active) {
                     getTarget()->getWindow().switchMode(core::gfx::WindowMode::Windowed);
                     getTarget()->createScene();
@@ -62,67 +62,62 @@ namespace cobalt {
             }
         };
 
-        class PanLeft : public core::input::ConcreteInputCommand<engine::CameraController> {
+        class PanLeft : public core::input::ConcreteInputCommand<engine::CameraID> {
             public:
-            PanLeft(core::ecs::World& world, engine::CameraController* target)
-                : core::input::ConcreteInputCommand<engine::CameraController>(world, target) {}
-            void execute() const override { getTarget()->panHorizontal(-1.0f); }
+            PanLeft(core::ecs::World& world, engine::CameraID* camera) : core::input::ConcreteInputCommand<engine::CameraID>(world, camera) {}
+            void execute() override { getWorld().getResource<engine::CameraManager>().getController(*getTarget()).panHorizontal(-1.0f); }
         };
 
-        class PanRight : public core::input::ConcreteInputCommand<engine::CameraController> {
+        class PanRight : public core::input::ConcreteInputCommand<engine::CameraID> {
             public:
-            PanRight(core::ecs::World& world, engine::CameraController* target)
-                : core::input::ConcreteInputCommand<engine::CameraController>(world, target) {}
-            void execute() const override { getTarget()->panHorizontal(1.0f); }
+            PanRight(core::ecs::World& world, engine::CameraID* camera) : core::input::ConcreteInputCommand<engine::CameraID>(world, camera) {}
+            void execute() override { getWorld().getResource<engine::CameraManager>().getController(*getTarget()).panHorizontal(1.0f); }
         };
 
-        class PanUp : public core::input::ConcreteInputCommand<engine::CameraController> {
+        class PanUp : public core::input::ConcreteInputCommand<engine::CameraID> {
             public:
-            PanUp(core::ecs::World& world, engine::CameraController* target)
-                : core::input::ConcreteInputCommand<engine::CameraController>(world, target) {}
-            void execute() const override { getTarget()->panVertical(1.0f); }
+            PanUp(core::ecs::World& world, engine::CameraID* camera) : core::input::ConcreteInputCommand<engine::CameraID>(world, camera) {}
+            void execute() override { getWorld().getResource<engine::CameraManager>().getController(*getTarget()).panVertical(1.0f); }
         };
 
-        class PanDown : public core::input::ConcreteInputCommand<engine::CameraController> {
+        class PanDown : public core::input::ConcreteInputCommand<engine::CameraID> {
             public:
-            PanDown(core::ecs::World& world, engine::CameraController* target)
-                : core::input::ConcreteInputCommand<engine::CameraController>(world, target) {}
-            void execute() const override { getTarget()->panVertical(-1.0f); }
+            PanDown(core::ecs::World& world, engine::CameraID* camera) : core::input::ConcreteInputCommand<engine::CameraID>(world, camera) {}
+            void execute() override { getWorld().getResource<engine::CameraManager>().getController(*getTarget()).panVertical(-1.0f); }
         };
 
-        class PanIn : public core::input::ConcreteInputCommand<engine::CameraController> {
+        class PanIn : public core::input::ConcreteInputCommand<engine::CameraID> {
             public:
-            PanIn(core::ecs::World& world, engine::CameraController* target)
-                : core::input::ConcreteInputCommand<engine::CameraController>(world, target) {}
-            void execute() const override { getTarget()->panDepth(-1.0f); }
+            PanIn(core::ecs::World& world, engine::CameraID* camera) : core::input::ConcreteInputCommand<engine::CameraID>(world, camera) {}
+            void execute() override { getWorld().getResource<engine::CameraManager>().getController(*getTarget()).panDepth(-1.0f); }
         };
 
-        class PanOut : public core::input::ConcreteInputCommand<engine::CameraController> {
+        class PanOut : public core::input::ConcreteInputCommand<engine::CameraID> {
             public:
-            PanOut(core::ecs::World& world, engine::CameraController* target)
-                : core::input::ConcreteInputCommand<engine::CameraController>(world, target) {}
-            void execute() const override { getTarget()->panDepth(1.0f); }
+            PanOut(core::ecs::World& world, engine::CameraID* camera) : core::input::ConcreteInputCommand<engine::CameraID>(world, camera) {}
+            void execute() override { getWorld().getResource<engine::CameraManager>().getController(*getTarget()).panDepth(1.0f); }
         };
 
-        class RotateY : public core::input::ConcreteInputCommand<engine::CameraController> {
+        class RotateY : public core::input::ConcreteInputCommand<engine::CameraID> {
             public:
-            RotateY(core::ecs::World& world, engine::CameraController* target)
-                : core::input::ConcreteInputCommand<engine::CameraController>(world, target) {}
-            void execute() const override { getTarget()->rotateVertical(-getInput().value * 0.005f); }
+            RotateY(core::ecs::World& world, engine::CameraID* camera) : core::input::ConcreteInputCommand<engine::CameraID>(world, camera) {}
+            void execute() override {
+                getWorld().getResource<engine::CameraManager>().getController(*getTarget()).rotateVertical(-getInput().value * 0.005f);
+            }
         };
 
-        class RotateX : public core::input::ConcreteInputCommand<engine::CameraController> {
+        class RotateX : public core::input::ConcreteInputCommand<engine::CameraID> {
             public:
-            RotateX(core::ecs::World& world, engine::CameraController* target)
-                : core::input::ConcreteInputCommand<engine::CameraController>(world, target) {}
-            void execute() const override { getTarget()->rotateHorizontal(getInput().value * 0.005f); }
+            RotateX(core::ecs::World& world, engine::CameraID* camera) : core::input::ConcreteInputCommand<engine::CameraID>(world, camera) {}
+            void execute() override {
+                getWorld().getResource<engine::CameraManager>().getController(*getTarget()).rotateHorizontal(getInput().value * 0.005f);
+            }
         };
 
-        class Zoom : public core::input::ConcreteInputCommand<engine::CameraController> {
+        class Zoom : public core::input::ConcreteInputCommand<engine::CameraID> {
             public:
-            Zoom(core::ecs::World& world, engine::CameraController* target)
-                : core::input::ConcreteInputCommand<engine::CameraController>(world, target) {}
-            void execute() const override { getTarget()->zoom(-getInput().value * 5.0f); }
+            Zoom(core::ecs::World& world, engine::CameraID* camera) : core::input::ConcreteInputCommand<engine::CameraID>(world, camera) {}
+            void execute() override { getWorld().getResource<engine::CameraManager>().getController(*getTarget()).zoom(-getInput().value * 5.0f); }
         };
     }  // namespace editor
 }  // namespace cobalt

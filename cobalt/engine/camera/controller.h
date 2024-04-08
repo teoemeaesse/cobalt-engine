@@ -348,7 +348,12 @@ namespace cobalt {
              * @brief: Get the camera.
              * @return: The camera.
              */
-            Camera& getCamera() const;
+            Camera& getCamera();
+            /**
+             * @brief: Get the camera.
+             * @return: The camera.
+             */
+            const Camera& getCamera() const;
 
             private:
             Scope<Camera> camera;

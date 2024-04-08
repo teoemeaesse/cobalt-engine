@@ -24,7 +24,7 @@ namespace cobalt {
              * @brief: Destroy the input manager.
              * @return: void
              */
-            ~InputManager();
+            ~InputManager() = default;
 
             /**
              * @brief: Poll all events from the peripherals.

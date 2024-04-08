@@ -5,7 +5,7 @@
 
 namespace cobalt {
     namespace engine {
-        CameraController& CameraManager::getCamera(const CameraID id) {
+        CameraController& CameraManager::getController(const CameraID id) {
             try {
                 return cameras.at(id);
             } catch (const std::out_of_range& e) {
@@ -13,7 +13,23 @@ namespace cobalt {
             }  // TODO: create plugin exception
         }
 
-        CameraController& CameraManager::getCamera(const std::string& name) {
+        const CameraController& CameraManager::getController(const CameraID id) const {
+            try {
+                return cameras.at(id);
+            } catch (const std::out_of_range& e) {
+                throw core::gfx::GFXException("Camera with id " + std::to_string(id) + " does not exist");
+            }
+        }
+
+        CameraController& CameraManager::getController(const std::string& name) {
+            try {
+                return cameras.at(cameraNames.at(name));
+            } catch (const std::out_of_range& e) {
+                throw core::gfx::GFXException("Camera with name " + name + " does not exist");
+            }
+        }
+
+        const CameraController& CameraManager::getController(const std::string& name) const {
             try {
                 return cameras.at(cameraNames.at(name));
             } catch (const std::out_of_range& e) {

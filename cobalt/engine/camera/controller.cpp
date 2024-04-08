@@ -149,7 +149,9 @@ namespace cobalt {
 
         const float CameraProperties::getBottom() const { return bottom; }
 
-        Camera& CameraController::getCamera() const { return *camera; }
+        Camera& CameraController::getCamera() { return *camera; }
+
+        const Camera& CameraController::getCamera() const { return *camera; }
 
         void CameraController::update() {
             camera->zoom(deltaZoom * zoomCling);

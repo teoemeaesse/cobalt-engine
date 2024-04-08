@@ -12,9 +12,9 @@ namespace cobalt {
               width(defaultTarget.getFBO().getWidth()),
               height(defaultTarget.getFBO().getHeight()) {}
 
-        void FilterNode::render() {
+        void FilterNode::render(const CameraManager& cameraManager) {
             Mesh filterMesh = MeshFactory::createRectangle(width, height, filter);
-            RenderNode::renderMesh(filterMesh);
+            RenderNode::renderMesh(filterMesh, cameraManager);
         }
 
         void FilterNode::onResize(const float width, const float height) {

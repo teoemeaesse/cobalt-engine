@@ -5,7 +5,7 @@
 
 #include "core/gl/fbo.h"
 #include "core/gl/ubo.h"
-#include "engine/camera/camera.h"
+#include "engine/camera/plugin.h"
 
 namespace cobalt {
     namespace engine {
@@ -14,12 +14,12 @@ namespace cobalt {
             /**
              * @brief: Create a render target.
              * @param fbo: Frame buffer object to render to.
-             * @param camera: The camera to render with.
+             * @param camera: The ID for the camera to render with.
              * @param name: The name of the render target.
              * @param cameraUBOBinding: The binding point for the camera UBO.
              * @return: The render target.
              */
-            RenderTarget(const core::gl::FBO& fbo, const Camera& camera, const std::string& name, const uint cameraUBOBinding);
+            RenderTarget(const core::gl::FBO& fbo, const CameraID camera, const std::string& name, const uint cameraUBOBinding);
             /**
              * @brief: Destroy the render target.
              */
@@ -56,11 +56,12 @@ namespace cobalt {
             void bind() const;
 
             /**
-             * @brief: Send the render target uniforms to a shader.
+             * @brief: Send the render target's camera UBO to the shader.
              * @param shader: The shader.
+             * @param cameraManager: The camera manager containing the camera.
              * @return: void
              */
-            void sendUBO(const core::gl::Shader& shader) const;
+            void sendCameraUBO(const core::gl::Shader& shader, const CameraManager& cameraManager) const;
 
             /**
              * @brief: Get the FBO.
@@ -76,13 +77,14 @@ namespace cobalt {
              * @brief: Get the camera used to render.
              * @return: The camera.
              */
-            const Camera& getCamera() const;
+            const CameraID& getCamera() const;
 
             private:
             const core::gl::UBO ubo;   // Uniform buffer object.
             const core::gl::FBO& fbo;  // Frame buffer object.
-            const Camera& camera;      // The camera used to render.
-            std::string name;  // Name of the render target. This is used to send uniforms for a render node that has a render target as a source.
+            const CameraID camera;     // The camera used to render.
+            const std::string
+                name;  // Name of the render target. This is used to send uniforms for a render node that has a render target as a source.
         };
     }  // namespace engine
 }  // namespace cobalt

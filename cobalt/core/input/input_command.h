@@ -36,14 +36,14 @@ namespace cobalt {
              * @brief: Execute the command.
              * @return: void
              */
-            virtual void execute() const = 0;
+            virtual void execute() = 0;
 
             /**
              * @brief: Set the input value of the bound input.
              * @param input: The input value of the bound input.
              * @return: This input command.
              */
-            const InputCommand* withInput(InputValue input) {
+            InputCommand* withInput(InputValue input) {
                 this->input = input;
                 return this;
             }
@@ -84,10 +84,20 @@ namespace cobalt {
              */
             core::ecs::World& getWorld() { return world; }
             /**
+             * @brief: Get the ECS world instance.
+             * @return: The ECS world instance.
+             */
+            const core::ecs::World& getWorld() const { return world; }
+            /**
              * @brief: Get the receiver of the command.
              * @return: The receiver of the command.
              */
-            T* getTarget() const { return target; }
+            T* getTarget() { return target; }
+            /**
+             * @brief: Get the receiver of the command.
+             * @return: The receiver of the command.
+             */
+            const T* getTarget() const { return target; }
 
             private:
             core::ecs::World& world;  // The ECS world instance.

@@ -33,7 +33,7 @@ namespace cobalt {
                     const uint width = window.get().getDefaultFBO().getWidth();
                     const uint height = window.get().getDefaultFBO().getHeight();
                     graph.get().onResize(width, height);
-                    manager.get().getCamera(scene.get().getCamera()).resize((float)width / (float)height);
+                    manager.get().getController(scene.get().getCamera()).resize((float)width / (float)height);
                 });
 
             CB_TEXTURE_LIBRARY.loadTextures(io::Path("cobalt/editor/assets/textures", true));
@@ -54,20 +54,22 @@ namespace cobalt {
 
         void Editor::fixedTimeStep() {
             CameraManager& manager = world.getResource<CameraManager>();
-            manager.getCamera(world.getResource<engine::Scene>().getCamera()).update();
+            manager.getController(world.getResource<engine::Scene>().getCamera()).update();
             getWindow().setTitle("Cobalt Editor - " + std::to_string(getFramerate()) + " FPS");
         }
 
         void Editor::variableTimeStep(const float delta) {
-            world.getResource<engine::Scene>().getMeshes()[0].rotate(glm::vec3(30.0f * delta, 5.0f * delta, 20.0f * delta));
+            auto& scene = world.getResource<engine::Scene>();
+            auto& cameraManager = world.getResource<engine::CameraManager>();
+            scene.getMeshes()[0].rotate(glm::vec3(30.0f * delta, 5.0f * delta, 20.0f * delta));
             static float cubeXOffset = 0.0f;
             static float cubeYOffset = 0.0f;
             static float time = 0.0f;
             time += delta;
             cubeXOffset = sin(time) * 25.0f * delta;
             cubeYOffset = cos(time) * 25.0f * delta;
-            world.getResource<engine::Scene>().getMeshes()[4].translate(glm::vec3(cubeXOffset, 0.0f, cubeYOffset));
-            world.getResource<DefaultGraph>().execute();
+            scene.getMeshes()[4].translate(glm::vec3(cubeXOffset, 0.0f, cubeYOffset));
+            world.getResource<DefaultGraph>().execute(cameraManager);
         }
 
         void Editor::bindInput() {
@@ -77,28 +79,27 @@ namespace cobalt {
              */
             engine::Scene& scene = world.getResource<engine::Scene>();
             engine::Keyboard& keyboard = getInputManager().getPeripheral<engine::Keyboard>(engine::Keyboard::NAME);
-            engine::CameraManager& manager = world.getResource<engine::CameraManager>();
-            engine::CameraController& controller = manager.getCamera(scene.getCamera());
+            CameraID* camera = &scene.getCamera();
             keyboard.bind(engine::KeyboardInputID::ESCAPE, CreateScope<Quit>(world, this));
             keyboard.bind(engine::KeyboardInputID::F9, CreateScope<Windowed>(world, this));
             keyboard.bind(engine::KeyboardInputID::F10, CreateScope<Borderless>(world, this));
             keyboard.bind(engine::KeyboardInputID::F11, CreateScope<Fullscreen>(world, this));
-            keyboard.bind(engine::KeyboardInputID::W, CreateScope<PanIn>(world, &controller));
-            keyboard.bind(engine::KeyboardInputID::A, CreateScope<PanLeft>(world, &controller));
-            keyboard.bind(engine::KeyboardInputID::S, CreateScope<PanOut>(world, &controller));
-            keyboard.bind(engine::KeyboardInputID::D, CreateScope<PanRight>(world, &controller));
-            keyboard.bind(engine::KeyboardInputID::SPACE, CreateScope<PanUp>(world, &controller));
-            keyboard.bind(engine::KeyboardInputID::LCTRL, CreateScope<PanDown>(world, &controller));
-            keyboard.bind(engine::KeyboardInputID::UP, CreateScope<PanUp>(world, &controller));
-            keyboard.bind(engine::KeyboardInputID::LEFT, CreateScope<PanLeft>(world, &controller));
-            keyboard.bind(engine::KeyboardInputID::DOWN, CreateScope<PanDown>(world, &controller));
-            keyboard.bind(engine::KeyboardInputID::RIGHT, CreateScope<PanRight>(world, &controller));
+            keyboard.bind(engine::KeyboardInputID::W, CreateScope<PanIn>(world, camera));
+            keyboard.bind(engine::KeyboardInputID::A, CreateScope<PanLeft>(world, camera));
+            keyboard.bind(engine::KeyboardInputID::S, CreateScope<PanOut>(world, camera));
+            keyboard.bind(engine::KeyboardInputID::D, CreateScope<PanRight>(world, camera));
+            keyboard.bind(engine::KeyboardInputID::SPACE, CreateScope<PanUp>(world, camera));
+            keyboard.bind(engine::KeyboardInputID::LCTRL, CreateScope<PanDown>(world, camera));
+            keyboard.bind(engine::KeyboardInputID::UP, CreateScope<PanUp>(world, camera));
+            keyboard.bind(engine::KeyboardInputID::LEFT, CreateScope<PanLeft>(world, camera));
+            keyboard.bind(engine::KeyboardInputID::DOWN, CreateScope<PanDown>(world, camera));
+            keyboard.bind(engine::KeyboardInputID::RIGHT, CreateScope<PanRight>(world, camera));
             keyboard.bind(engine::KeyboardInputID::P, CreateScope<Spawn>(world, &scene));
 
             Mouse& mouse = getInputManager().getPeripheral<Mouse>(Mouse::NAME);
-            mouse.bind(MouseInputID::RIGHT_X, CreateScope<RotateX>(world, &controller));
-            mouse.bind(MouseInputID::RIGHT_Y, CreateScope<RotateY>(world, &controller));
-            mouse.bind(MouseInputID::SCROLL_Y, CreateScope<Zoom>(world, &controller));
+            mouse.bind(MouseInputID::RIGHT_X, CreateScope<RotateX>(world, camera));
+            mouse.bind(MouseInputID::RIGHT_Y, CreateScope<RotateY>(world, camera));
+            mouse.bind(MouseInputID::SCROLL_Y, CreateScope<Zoom>(world, camera));
         }
 
         void Editor::createScene() {

@@ -58,7 +58,7 @@ namespace cobalt {
              * the protected render method.
              * @return: void
              */
-            virtual void render() = 0;
+            virtual void render(const CameraManager& cameraManager) = 0;
             /**
              * @brief: Called when the window is resized.
              * @param width: The new width.
@@ -68,8 +68,7 @@ namespace cobalt {
             virtual void onResize(const float width, const float height) = 0;
 
             /**
-             * @brief: Add a source to the render node. It will be bound
-             * to the next available texture unit.
+             * @brief: Add a source to the render node. It will be bound to the next available texture unit.
              * @param source: The source to add.
              * @return: void
              */
@@ -95,16 +94,18 @@ namespace cobalt {
              * @brief: Render to the targets, binding the sources to the adequate texture units. Each render node should decide how to call this
              * method.
              * @param mesh: The mesh to render.
+             * @param cameraManager: The camera manager.
              * @return: void
              */
-            void renderMesh(Mesh& mesh);
+            void renderMesh(Mesh& mesh, const CameraManager& cameraManager);
 
             /**
              * @brief: Render a skybox to the targets. Each render node should decide how to call this method.
              * @param skybox: The skybox to render.
+             * @param cameraManager: The camera manager.
              * @return: void
              */
-            void renderSkybox(Skybox& skybox);
+            void renderSkybox(Skybox& skybox, const CameraManager& cameraManager);
         };
     }  // namespace engine
 }  // namespace cobalt

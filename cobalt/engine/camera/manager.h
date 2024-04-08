@@ -8,8 +8,6 @@
 
 namespace cobalt {
     namespace engine {
-        class CameraPlugin;
-
         class CameraManager : public core::ecs::Resource {
             public:
             /**
@@ -36,6 +34,7 @@ namespace cobalt {
                 }
                 const CameraID id = cameras.size();
                 cameraNames[name] = id;
+                cameras.erase(id);
                 cameras.emplace(id, CameraController::create<T>(properties));
                 return id;
             }
@@ -43,15 +42,27 @@ namespace cobalt {
             /**
              * @brief: Get the camera with the given ID.
              * @param id: ID of the camera.
-             * @return: The camera.
+             * @return: The camera's controller.
              */
-            CameraController& getCamera(const CameraID id);
+            CameraController& getController(const CameraID id);
+            /**
+             * @brief: Get the camera with the given ID.
+             * @param id: ID of the camera.
+             * @return: The camera's controller.
+             */
+            const CameraController& getController(const CameraID id) const;
             /**
              * @brief: Get the camera with the given name.
              * @param name: Name of the camera.
-             * @return: The camera.
+             * @return: The camera's controller.
              */
-            CameraController& getCamera(const std::string& name);
+            CameraController& getController(const std::string& name);
+            /**
+             * @brief: Get the camera with the given name.
+             * @param name: Name of the camera.
+             * @return: The camera's controller.
+             */
+            const CameraController& getController(const std::string& name) const;
 
             private:
             UMap<std::string, CameraID> cameraNames;

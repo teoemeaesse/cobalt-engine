@@ -25,17 +25,19 @@ namespace cobalt {
              * @brief: Render a mesh.
              * @param mesh: The mesh to render.
              * @param target: The render target to render to.
+             * @param cameraManager: The camera manager.
              * @return: void
              */
-            void renderMesh(Mesh& mesh, RenderTarget& target) const;
+            void renderMesh(Mesh& mesh, RenderTarget& target, const CameraManager& cameraManager) const;
 
             /**
              * @brief: Render a skybox.
              * @param skybox: The skybox to render.
              * @param target: The render target to render to.
+             * @param cameraManager: The camera manager.
              * @return: void
              */
-            void renderSkybox(Skybox& skybox, RenderTarget& target) const;
+            void renderSkybox(Skybox& skybox, RenderTarget& target, const CameraManager& cameraManager) const;
 
             /**
              * @brief: Get the bound texture unit of a given named texture.

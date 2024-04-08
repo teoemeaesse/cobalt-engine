@@ -14,14 +14,14 @@ namespace cobalt {
             return nodes.size() - 1;
         }
 
-        void RenderGraph::execute() {
+        void RenderGraph::execute(const CameraManager& cameraManager) {
             for (uint i = 0; i < nodes.size(); i++) {
                 for (uint j = 0; j < nodes[i]->getTargets().size(); j++) {
                     nodes[i]->getTargets()[j].getFBO().clear();
                 }
             }
             for (uint i = 0; i < nodes.size(); i++) {
-                nodes[i]->render();
+                nodes[i]->render(cameraManager);
             }
         }
     }  // namespace engine

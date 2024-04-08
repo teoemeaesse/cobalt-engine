@@ -11,12 +11,12 @@ namespace cobalt {
     namespace engine {
         Renderer::Renderer() : textureUnits(1), currentUnit(0) {}
 
-        void Renderer::renderMesh(Mesh& mesh, RenderTarget& target) const {
+        void Renderer::renderMesh(Mesh& mesh, RenderTarget& target, const CameraManager& cameraManager) const {
             mesh.bind();
             target.bind();
             gl::Shader& shader = mesh.getMaterial().getShader();
             try {
-                target.sendUBO(shader);
+                target.sendCameraUBO(shader, cameraManager);
                 shader.setUniformVec3("lightPosition", glm::vec3(0.0, 5.0, 0.0));
                 shader.setUniformVec3("lightColor", glm::vec3(10000.0, 5000.0, 5000.0));
                 const glm::mat4& model = mesh.getModelMatrix();
@@ -30,13 +30,13 @@ namespace cobalt {
             mesh.render();
         }
 
-        void Renderer::renderSkybox(Skybox& skybox, RenderTarget& target) const {
+        void Renderer::renderSkybox(Skybox& skybox, RenderTarget& target, const CameraManager& cameraManager) const {
             skybox.bind();
             target.bind();
             gl::Shader& shader = skybox.getShader();
             try {
                 sendUniforms(shader);
-                target.sendUBO(shader);
+                target.sendCameraUBO(shader, cameraManager);
             } catch (const gl::GLException& e) {
                 CB_CORE_WARN(e.what());
             }
