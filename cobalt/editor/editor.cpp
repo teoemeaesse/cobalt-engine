@@ -3,9 +3,9 @@
 
 #include "editor/editor.h"
 
-#include "core/input/exception.h"
 #include "editor/input/bindings.h"
 #include "engine/bundle/base.h"
+#include "engine/input/exception.h"
 #include "engine/window/plugin.h"
 
 namespace cobalt {

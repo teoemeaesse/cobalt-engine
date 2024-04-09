@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "core/input/peripheral.h"
+#include "engine/input/peripheral.h"
 
 namespace cobalt {
     namespace engine {

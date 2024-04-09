@@ -4,7 +4,7 @@
 #pragma once
 
 #include "core/gl/fbo.h"
-#include "core/input/input_manager.h"
+#include "engine/input/input_manager.h"
 
 namespace cobalt {
     namespace core::gfx {

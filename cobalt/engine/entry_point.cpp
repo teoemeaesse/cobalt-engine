@@ -4,7 +4,7 @@
 #include "engine/entry_point.h"
 
 #include "core/gfx/exception.h"
-#include "core/input/exception.h"
+#include "engine/input/exception.h"
 
 namespace cobalt {
     namespace engine {

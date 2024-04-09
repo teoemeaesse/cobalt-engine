@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "core/input/input_command.h"
+#include "engine/input/input_command.h"
 
 namespace cobalt {
     namespace core::input {

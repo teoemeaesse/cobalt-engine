@@ -4,8 +4,8 @@
 #pragma once
 
 #include "core/ecs/resource/resource.h"
-#include "core/input/exception.h"
-#include "core/input/input_command.h"
+#include "engine/input/exception.h"
+#include "engine/input/input_command.h"
 
 namespace cobalt {
     namespace core::input {

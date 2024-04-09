@@ -1,10 +1,10 @@
 // Created by tomas on
 // 03-12-2023
 
-#include "core/input/input_manager.h"
+#include "engine/input/input_manager.h"
 
 #include "core/gl/context.h"
-#include "core/input/null.h"
+#include "engine/input/null.h"
 
 namespace cobalt {
     namespace core::input {
