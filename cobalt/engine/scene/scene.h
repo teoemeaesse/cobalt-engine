@@ -56,7 +56,7 @@ namespace cobalt {
              * @brief: Gets the ID for the camera used to render the scene.
              * @return: CameraID
              */
-            CameraID& getCamera();
+            CameraID& getCameraID();
 
             private:             // TODO: Add a proper scene graph.
             Vec<Mesh> meshes;    // All the meshes in the scene.

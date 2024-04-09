@@ -37,6 +37,6 @@ namespace cobalt {
 
         Opt<Skybox>& Scene::getSkybox() { return skybox; }
 
-        CameraID& Scene::getCamera() { return camera; }
+        CameraID& Scene::getCameraID() { return camera; }
     }  // namespace engine
 }  // namespace cobalt

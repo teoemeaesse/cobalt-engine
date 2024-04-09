@@ -65,19 +65,19 @@ namespace cobalt {
 
             /**
              * @brief: Get the FBO.
-             * @return: The FBO.
+             * @return: FBO
              */
             const core::gl::FBO& getFBO() const;
             /**
              * @brief: Get the name of the render target.
-             * @return: The name.
+             * @return: std::string
              */
             const std::string& getName() const;
             /**
-             * @brief: Get the camera used to render.
-             * @return: The camera.
+             * @brief: Get the ID for the camera used to render.
+             * @return: CameraID
              */
-            const CameraID& getCamera() const;
+            const CameraID& getCameraID() const;
 
             private:
             const core::gl::UBO ubo;   // Uniform buffer object.

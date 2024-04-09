@@ -43,6 +43,6 @@ namespace cobalt {
 
         const std::string& RenderTarget::getName() const { return name; }
 
-        const CameraID& RenderTarget::getCamera() const { return camera; }
+        const CameraID& RenderTarget::getCameraID() const { return camera; }
     }  // namespace engine
 }  // namespace cobalt

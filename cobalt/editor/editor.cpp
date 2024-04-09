@@ -33,7 +33,7 @@ namespace cobalt {
                     const uint width = window.get().getDefaultFBO().getWidth();
                     const uint height = window.get().getDefaultFBO().getHeight();
                     graph.get().onResize(width, height);
-                    manager.get().getController(scene.get().getCamera()).resize((float)width / (float)height);
+                    manager.get().getController(scene.get().getCameraID()).resize((float)width / (float)height);
                 });
 
             CB_TEXTURE_LIBRARY.loadTextures(io::Path("cobalt/editor/assets/textures", true));
@@ -54,7 +54,7 @@ namespace cobalt {
 
         void Editor::fixedTimeStep() {
             CameraManager& manager = world.getResource<CameraManager>();
-            manager.getController(world.getResource<engine::Scene>().getCamera()).update();
+            manager.getController(world.getResource<engine::Scene>().getCameraID()).update();
             getWindow().setTitle("Cobalt Editor - " + std::to_string(getFramerate()) + " FPS");
         }
 
@@ -79,7 +79,7 @@ namespace cobalt {
              */
             engine::Scene& scene = world.getResource<engine::Scene>();
             engine::Keyboard& keyboard = getInputManager().getPeripheral<engine::Keyboard>(engine::Keyboard::NAME);
-            CameraID* camera = &scene.getCamera();
+            CameraID* camera = &scene.getCameraID();
             keyboard.bind(engine::KeyboardInputID::ESCAPE, CreateScope<Quit>(world, this));
             keyboard.bind(engine::KeyboardInputID::F9, CreateScope<Windowed>(world, this));
             keyboard.bind(engine::KeyboardInputID::F10, CreateScope<Borderless>(world, this));

@@ -29,9 +29,9 @@ namespace cobalt {
 
         void DefaultGraph::init(CameraManager& manager) {
             core::gfx::Material& filter = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makeFromShader("filterMaterial", "filter"));
-            Scope<SceneNode> sceneNode = CreateScope<SceneNode>(scene, renderer, RenderTarget(sceneFBO, scene.getCamera(), "scene", 0));
+            Scope<SceneNode> sceneNode = CreateScope<SceneNode>(scene, renderer, RenderTarget(sceneFBO, scene.getCameraID(), "scene", 0));
             Scope<FilterNode> filterNode = CreateScope<FilterNode>(renderer, RenderTarget(defaultFBO, output, "output", 1), filter);
-            filterNode->addSource(RenderTarget(sceneFBO, scene.getCamera(), "scene", 0));
+            filterNode->addSource(RenderTarget(sceneFBO, scene.getCameraID(), "scene", 0));
 
             addNode(Move(sceneNode));
             addNode(Move(filterNode));
