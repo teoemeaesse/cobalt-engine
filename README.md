@@ -6,12 +6,24 @@ A 3D general-purpose game engine for Unix distributions, being used in the game 
 To compile and run you need the following:
 - A GPU with **OpenGL 4.1** minimum support;
 - **CMake 3.10**
+To generate the documentation, you will need a recent version of **Doxygen**
 
-## Build
-Use the provided build scripts to build the tests and editor.
-
+## Installation
+Before anything else, run the setup script. This will get and install all the necessary dependencies.
 ```
 ./setup.sh
+```
+
+## Documentation
+This project uses Doxygen to generate HTML docs. There is no hosted documentation (for now), so to generate it locally:
+```
+./build_docs.sh
+```
+
+## Build
+Use the provided build scripts to build the editor.
+
+```
 ./build_editor.sh
 ```
 
