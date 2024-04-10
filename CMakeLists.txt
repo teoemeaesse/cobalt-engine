@@ -14,6 +14,18 @@ if(TEST_ENVIRONMENT)
   add_definitions(-DTEST_ENVIRONMENT)
 endif()
 
+find_package(Doxygen REQUIRED)
+
+if(DOXYGEN_FOUND)
+  # Define the Doxygen target
+  add_custom_target(doc_doxygen ALL
+      COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/Doxyfile
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+      COMMENT "Generating API documentation with Doxygen"
+      VERBATIM
+  )
+endif()
+
 # Set additional flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -DGL_GLEXT_PROTOTYPES")
 
@@ -29,7 +41,8 @@ include_directories(${INCLUDEDIR})
 # Recursively collect all .cpp files in the core and test directories
 file(GLOB_RECURSE CB_SOURCES ${SOURCEDIR}/*.cpp)
 
-# Add the GLFW subdirectory
+# Add the GLFW and GLEW dependencies
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 add_subdirectory(${LIBDIR}/glfw)
 add_subdirectory(${LIBDIR}/glew/build/cmake)
 

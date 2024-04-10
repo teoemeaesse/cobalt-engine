@@ -55,3 +55,6 @@ lib/glfw/examples
 # Build
 build
 tests/build
+
+# Documentation
+docs
