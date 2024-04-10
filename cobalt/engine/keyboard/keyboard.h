@@ -121,7 +121,7 @@ namespace cobalt {
             ~KeyState() = default;
         };
 
-        class Keyboard : public core::input::Peripheral<KeyboardInputID> {
+        class Keyboard : public Peripheral<KeyboardInputID> {
             public:
             const static std::string NAME;
 
@@ -130,7 +130,7 @@ namespace cobalt {
              * @param id: The device id for the keyboard.
              * @return: The new keyboard.
              */
-            explicit Keyboard(const core::input::DeviceID id);
+            explicit Keyboard(const DeviceID id);
             /**
              * @brief: Destroy the keyboard.
              * @return: void
@@ -174,7 +174,7 @@ namespace cobalt {
              * @param value: The value of the event.
              * @return: void
              */
-            void queueEvent(const KeyboardInputID id, const core::input::InputValue value);
+            void queueEvent(const KeyboardInputID id, const InputValue value);
 
             public:  // ----- DEBUG -----
             /**

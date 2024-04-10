@@ -42,10 +42,6 @@
 
 #include "json/json.hpp"
 
-// Exceptions.
-#include "core/gfx/exception.h"
-#include "core/gl/exception.h"
-
 // Logging.
 #include "core/utils/color.h"
 #include "core/utils/log.h"

@@ -27,7 +27,7 @@ namespace cobalt {
             configuration.configureWindow(getWindow());
             getWindow().setClearColor(Color(0.2f, 0.2f, 0.2f));
             getWindow().show();
-            world.addHook<core::ecs::ReadRequest<gfx::Window>, core::ecs::WriteRequest<CameraManager>, core::ecs::WriteRequest<DefaultGraph>,
+            world.addHook<core::ecs::ReadRequest<Window>, core::ecs::WriteRequest<CameraManager>, core::ecs::WriteRequest<DefaultGraph>,
                           core::ecs::WriteRequest<engine::Scene>>(
                 WindowPlugin::FRAMEBUFFER_RESIZE_EVENT, [](auto window, auto manager, auto graph, auto scene) {
                     const uint width = window.get().getDefaultFBO().getWidth();

@@ -29,6 +29,7 @@ namespace cobalt {
              */
             template <typename T>
             CameraID addCamera(const std::string& name, const CameraProperties& properties) {
+                static_assert(std::is_base_of<Camera, T>::value, "T must be a Camera type.");
                 if (cameraNames.contains(name)) {
                     CB_CORE_ERROR("Camera with name {0} already exists", name);
                 }

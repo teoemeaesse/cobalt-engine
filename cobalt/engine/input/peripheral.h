@@ -6,7 +6,7 @@
 #include "engine/input/input_command.h"
 
 namespace cobalt {
-    namespace core::input {
+    namespace engine {
         using DeviceID = int;
 
         template <typename T>
@@ -139,12 +139,12 @@ namespace cobalt {
             Queue<InputCommand*> events;                             // The events to execute.
             UMap<PeripheralInput<T>, Scope<InputCommand>> bindings;  // The bindings for the peripheral.
         };
-    }  // namespace core::input
+    }  // namespace engine
 }  // namespace cobalt
 
 namespace std {
     template <typename T>
-    struct hash<cobalt::core::input::PeripheralInput<T>> {
-        std::size_t operator()(const cobalt::core::input::PeripheralInput<T>& input) const { return hash<T>()(input.getId()); }
+    struct hash<cobalt::engine::PeripheralInput<T>> {
+        std::size_t operator()(const cobalt::engine::PeripheralInput<T>& input) const { return hash<T>()(input.getId()); }
     };
 }  // namespace std

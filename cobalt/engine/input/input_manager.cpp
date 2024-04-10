@@ -7,7 +7,7 @@
 #include "engine/input/null.h"
 
 namespace cobalt {
-    namespace core::input {
+    namespace engine {
         DeviceID unknownPeripheral;
 
         InputManager::InputManager() { unknownPeripheral = registerPeripheral<NullDevice>("Unknown"); }
@@ -36,5 +36,5 @@ namespace cobalt {
             }
             return peripheralToString(unknownPeripheral);
         }
-    }  // namespace core::input
+    }  // namespace engine
 }  // namespace cobalt

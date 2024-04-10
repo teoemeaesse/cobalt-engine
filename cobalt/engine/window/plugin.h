@@ -4,7 +4,7 @@
 #pragma once
 
 #include "core/ecs/plugin/plugin.h"
-#include "core/gfx/window.h"
+#include "engine/window/window.h"
 
 namespace cobalt {
     namespace engine {

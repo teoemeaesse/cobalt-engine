@@ -4,6 +4,7 @@
 #pragma once
 
 #include "engine/cobalt.h"
+#include "engine/window/plugin.h"
 
 namespace cobalt {
     namespace editor {
@@ -29,14 +30,14 @@ namespace cobalt {
              * @brief: Create a new window from the configuration.
              * @return: A new window.
              */
-            core::gfx::Window createWindow() const;
+            engine::Window createWindow() const;
 
             /**
              * @brief: Configure a window from the configuration.
              * @param window: The window to configure.
              * @return: void
              */
-            void configureWindow(core::gfx::Window& window) const;
+            void configureWindow(engine::Window& window) const;
         };
     }  // namespace editor
 }  // namespace cobalt

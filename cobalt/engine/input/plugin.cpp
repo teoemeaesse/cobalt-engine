@@ -15,9 +15,9 @@ namespace cobalt {
         InputPlugin::InputPlugin() noexcept : Plugin(TITLE, "Provides input management.", WindowPlugin{}, TimePlugin{}) {}
 
         void InputPlugin::onPlug(ecs::World& world) const noexcept {
-            world.addResource<input::InputManager>();
+            world.addResource<InputManager>();
 
-            world.addSystem<ecs::WriteRequest<input::InputManager>>(ecs::DefaultSchedules::PreUpdate, [](auto inputManager) {
+            world.addSystem<ecs::WriteRequest<InputManager>>(ecs::DefaultSchedules::PreUpdate, [](auto inputManager) {
                 inputManager.get().pollEvents();
                 inputManager.get().clearEvents();
             });

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "core/pch.h"
+#include "core/ecs/exception.h"
 #include "engine/camera/camera.h"
 
 namespace cobalt {
@@ -11,6 +11,8 @@ namespace cobalt {
         using CameraID = uint;
 
         class CameraManager;
+
+        class CameraPlugin;
 
         class CameraProperties {
             public:
@@ -270,6 +272,15 @@ namespace cobalt {
 
             public:
             /**
+             * @brief: Create a camera controller for the given camera.
+             * @param camera: The camera to control.
+             * @param linearCling: How fast the camera reacts to a change in position.
+             * @param angularCling: How much the camera reacts to a change in direction.
+             * @param zoomCling: How much the camera reacts to a change in zoom.
+             * @return: The camera controller.
+             */
+            CameraController(Scope<Camera> camera, float linearCling, float angularCling, float zoomCling);
+            /**
              * @brief: Destroy the camera controller.
              * @return: void
              */
@@ -280,6 +291,14 @@ namespace cobalt {
              * @return: CameraController
              */
             CameraController(CameraController&& other) noexcept = default;
+
+            /**
+             * @brief: Create a camera controller from the given properties.
+             * @param properties: Properties of the camera.
+             * @return: The camera controller.
+             */
+            template <typename T>
+            static CameraController create(const CameraProperties& properties);
 
             /**
              * @brief: Update the camera.
@@ -365,24 +384,6 @@ namespace cobalt {
             const float linearCling;
             const float angularCling;
             const float zoomCling;
-
-            /**
-             * @brief: Create a camera controller for the given camera.
-             * @param camera: The camera to control.
-             * @param linearCling: How fast the camera reacts to a change in position.
-             * @param angularCling: How much the camera reacts to a change in direction.
-             * @param zoomCling: How much the camera reacts to a change in zoom.
-             * @return: The camera controller.
-             */
-            CameraController(Scope<Camera> camera, float linearCling, float angularCling, float zoomCling);
-
-            /**
-             * @brief: Create a camera controller from the given properties.
-             * @param properties: Properties of the camera.
-             * @return: The camera controller.
-             */
-            template <typename T>
-            static CameraController create(const CameraProperties& properties);
         };
     }  // namespace engine
 }  // namespace cobalt
@@ -390,7 +391,7 @@ namespace cobalt {
 template <typename T>
 T inline cobalt::engine::CameraProperties::getCamera() const {
     static_assert(std::is_base_of<Camera, T>::value, "T must be a camera type");
-    throw core::gfx::GFXException("Invalid camera mode");
+    throw cobalt::core::ecs::PluginException<CameraPlugin>("Invalid camera mode");  // TODO: idk what to put here
 }
 /**
  * @brief: Create an orthographic camera from the properties.
@@ -423,7 +424,7 @@ cobalt::engine::PivotCamera inline cobalt::engine::CameraProperties::getCamera<c
 template <typename T>
 cobalt::engine::CameraController inline cobalt::engine::CameraController::create(const cobalt::engine::CameraProperties& properties) {
     static_assert(std::is_base_of<Camera, T>::value, "T must be a camera type");
-    throw core::gfx::GFXException("Invalid camera mode");
+    throw core::ecs::PluginException<CameraPlugin>("Invalid camera type: " + demangle(typeid(T).name()));
 }
 /**
  * @brief: Create an orthographic camera controller from the given properties.

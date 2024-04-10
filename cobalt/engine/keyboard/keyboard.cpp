@@ -18,7 +18,7 @@ namespace cobalt {
 
         KeyState::KeyState() : down(false), polled(false) {}
 
-        Keyboard::Keyboard(const core::input::DeviceID id) : Peripheral(id) {
+        Keyboard::Keyboard(const DeviceID id) : Peripheral(id) {
             for (size_t i = 0; i < static_cast<size_t>(KeyboardInputID::COUNT); i++) {
                 keyStates[i] = KeyState();
             }
@@ -26,7 +26,7 @@ namespace cobalt {
 
         void Keyboard::onKeyPress(const KeyboardInputID key, const bool down) {
             if (key == KeyboardInputID::UNKNOWN) {
-                throw core::input::InvalidInputException<KeyboardInputID>("Invalid key", key, this);
+                throw InvalidInputException<KeyboardInputID>("Invalid key", key, this);
             }
             keyStates[static_cast<size_t>(key)].down = down;
         }
@@ -214,7 +214,7 @@ namespace cobalt {
                                                                      {KeyboardInputID::COUNT, "Count"},
                                                                      {KeyboardInputID::UNKNOWN, "Unknown"}};
 
-        void Keyboard::queueEvent(const KeyboardInputID id, const core::input::InputValue value) {
+        void Keyboard::queueEvent(const KeyboardInputID id, const InputValue value) {
             auto it = bindings.find(id);
             if (it != bindings.end()) {
                 events.push(it->second.get()->withInput(value));

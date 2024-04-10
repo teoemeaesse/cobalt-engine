@@ -54,7 +54,7 @@ namespace cobalt {
                 time.deltaTime = delta;
                 time.elapsedTime += delta;
 
-                core::gfx::Window& window = getWindow();
+                Window& window = getWindow();
                 if (window.shouldClose()) {
                     stop();
                 }
@@ -79,46 +79,46 @@ namespace cobalt {
 
         void Application::setFramerateTimeWindow(const uint timeWindow) { framerateTimeWindow = timeWindow; }
 
-        core::gfx::Window& Application::getWindow() {
+        Window& Application::getWindow() {
             try {
                 if (!world.isPlugin("Window")) {
                     CB_ERROR("Window plugin not found, but requested.");
                 }
-                return world.getResource<core::gfx::Window>();
-            } catch (const core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
+                return world.getResource<Window>();
+            } catch (const core::ecs::ResourceNotFoundException<Window>& e) {
                 throw core::ecs::PluginNotFoundException("Window");
             }
         }
 
-        const core::gfx::Window& Application::getWindow() const {
+        const Window& Application::getWindow() const {
             try {
                 if (!world.isPlugin("Window")) {
                     CB_ERROR("Window plugin not found, but requested.");
                 }
-                return world.getResource<core::gfx::Window>();
-            } catch (const core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
+                return world.getResource<Window>();
+            } catch (const core::ecs::ResourceNotFoundException<Window>& e) {
                 throw core::ecs::PluginNotFoundException("Window");
             }
         }
 
-        core::input::InputManager& Application::getInputManager() {
+        InputManager& Application::getInputManager() {
             try {
                 if (!world.isPlugin("Input")) {
                     CB_ERROR("Input plugin not found, but requested.");
                 }
-                return world.getResource<core::input::InputManager>();
-            } catch (const core::ecs::ResourceNotFoundException<core::input::InputManager>& e) {
+                return world.getResource<InputManager>();
+            } catch (const core::ecs::ResourceNotFoundException<InputManager>& e) {
                 throw core::ecs::PluginNotFoundException("Input");
             }
         }
 
-        const core::input::InputManager& Application::getInputManager() const {
+        const InputManager& Application::getInputManager() const {
             try {
                 if (!world.isPlugin("Input")) {
                     CB_ERROR("Input plugin not found, but requested.");
                 }
-                return world.getResource<core::input::InputManager>();
-            } catch (const core::ecs::ResourceNotFoundException<core::input::InputManager>& e) {
+                return world.getResource<InputManager>();
+            } catch (const core::ecs::ResourceNotFoundException<InputManager>& e) {
                 throw core::ecs::PluginNotFoundException("Input");
             }
         }

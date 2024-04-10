@@ -7,7 +7,7 @@
 #include "engine/input/input_manager.h"
 
 namespace cobalt {
-    namespace core::gfx {
+    namespace engine {
         enum class WindowMode { Windowed, Fullscreen, Borderless };
 
         class WindowProperties;
@@ -19,12 +19,12 @@ namespace cobalt {
             friend class WindowProperties;
 
             public:
-            typedef void (*KeyCallback)(core::input::InputManager& manager, const int key, const bool down);
-            typedef void (*CursorCallback)(core::input::InputManager& manager, const float xpos, const float ypos);
-            typedef void (*MouseButtonCallback)(core::input::InputManager& manager, const int button, const bool down);
-            typedef void (*ScrollCallback)(core::input::InputManager& manager, const float xoffset, const float yoffset);
-            typedef void (*FramebufferResizeCallback)(gfx::Window& window, const uint width, const uint height);
-            typedef void (*ResizeCallback)(gfx::Window& window, const uint width, const uint height);
+            typedef void (*KeyCallback)(InputManager& manager, const int key, const bool down);
+            typedef void (*CursorCallback)(InputManager& manager, const float xpos, const float ypos);
+            typedef void (*MouseButtonCallback)(InputManager& manager, const int button, const bool down);
+            typedef void (*ScrollCallback)(InputManager& manager, const float xoffset, const float yoffset);
+            typedef void (*FramebufferResizeCallback)(Window& window, const uint width, const uint height);
+            typedef void (*ResizeCallback)(Window& window, const uint width, const uint height);
 
             /**
              * @brief: Creates a new window.
@@ -84,7 +84,7 @@ namespace cobalt {
              * @param color: The color to clear the screen to.
              * @return: void
              */
-            void setClearColor(const Color& color);
+            void setClearColor(const core::Color& color);
             /**
              * @brief: Call to resize the GLFW window to match this window's dimensions.
              * @return: void
@@ -105,12 +105,12 @@ namespace cobalt {
              * @brief: Gets the default framebuffer object of the window.
              * @return: The default framebuffer object of the window.
              */
-            gl::FBO& getDefaultFBO();
+            core::gl::FBO& getDefaultFBO();
             /**
              * @brief: Gets the default framebuffer object of the window.
              * @return: The default framebuffer object of the window.
              */
-            const gl::FBO& getDefaultFBO() const;
+            const core::gl::FBO& getDefaultFBO() const;
             /**
              * @brief: Gets whether or not the window is using vsync.
              * @return: Whether or not the window is using vsync.
@@ -191,7 +191,7 @@ namespace cobalt {
              * @param down: Whether or not the key was pressed or released.
              * @return: void
              */
-            void onKey(input::InputManager& manager, const int key, const bool down);
+            void onKey(InputManager& manager, const int key, const bool down);
             /**
              * @brief: Callback for when the cursor is moved.
              * @param manager: The input manager.
@@ -199,7 +199,7 @@ namespace cobalt {
              * @param ypos: The new y position of the cursor.
              * @return: void
              */
-            void onCursor(input::InputManager& manager, const float xpos, const float ypos);
+            void onCursor(InputManager& manager, const float xpos, const float ypos);
             /**
              * @brief: Callback for when a mouse button is pressed or released.
              * @param manager: The input manager.
@@ -207,7 +207,7 @@ namespace cobalt {
              * @param down: Whether or not the button was pressed or released.
              * @return: void
              */
-            void onMouseButton(input::InputManager& manager, const int button, const bool down);
+            void onMouseButton(InputManager& manager, const int button, const bool down);
             /**
              * @brief: Callback for when the scroll wheel is scrolled.
              * @param manager: The input manager.
@@ -215,7 +215,7 @@ namespace cobalt {
              * @param yoffset: The y offset of the scroll wheel.
              * @return: void
              */
-            void onScroll(input::InputManager& manager, const float xoffset, const float yoffset);
+            void onScroll(InputManager& manager, const float xoffset, const float yoffset);
             /**
              * @brief: Callback for when the framebuffer is resized.
              * @param width: The new width of the framebuffer.
@@ -255,16 +255,16 @@ namespace cobalt {
                    const MouseButtonCallback mouseButtonCallback, const ScrollCallback scrollCallback,
                    const FramebufferResizeCallback framebufferResizeCallback, const ResizeCallback resizeCallback);
 
-            uint width, height;       // The width and height of the window.
-            gl::FBO defaultFBO;       // The default framebuffer object of the window.
-            std::string title;        // The title of the window.
-            bool vsync;               // Whether or not the window is using vsync.
-            bool resizable;           // Whether or not the window is resizable.
-            bool decorated;           // Whether or not the window is decorated.
-            bool lockAspectRatio;     // Whether or not the aspect ratio of the window is
-                                      // locked.
-            const float aspectRatio;  // The aspect ratio of the window.
-            WindowMode mode;          // The mode of the window.
+            uint width, height;        // The width and height of the window.
+            core::gl::FBO defaultFBO;  // The default framebuffer object of the window.
+            std::string title;         // The title of the window.
+            bool vsync;                // Whether or not the window is using vsync.
+            bool resizable;            // Whether or not the window is resizable.
+            bool decorated;            // Whether or not the window is decorated.
+            bool lockAspectRatio;      // Whether or not the aspect ratio of the window is
+                                       // locked.
+            const float aspectRatio;   // The aspect ratio of the window.
+            WindowMode mode;           // The mode of the window.
 
             KeyCallback keyCallback;                              // The key callback of the window.
             CursorCallback cursorCallback;                        // The cursor callback of the window.
@@ -397,5 +397,5 @@ namespace cobalt {
              */
             Window getWindow() const;
         };
-    }  // namespace core::gfx
+    }  // namespace engine
 }  // namespace cobalt

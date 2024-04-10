@@ -6,7 +6,7 @@
 #include "core/ecs/world.h"
 
 namespace cobalt {
-    namespace core::input {
+    namespace engine {
         struct InputValue {
             bool active;  // Whether the input is active.
             bool held;    // Whether the input is held.
@@ -103,5 +103,5 @@ namespace cobalt {
             core::ecs::World& world;  // The ECS world instance.
             T* target;                // The receiver of the command.
         };
-    }  // namespace core::input
+    }  // namespace engine
 }  // namespace cobalt

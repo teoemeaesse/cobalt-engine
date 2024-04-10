@@ -4,6 +4,7 @@
 #include "engine/renderer3d/renderer.h"
 
 #include "core/gl/context.h"
+#include "core/gl/exception.h"
 
 namespace cobalt {
     using namespace core;
@@ -53,12 +54,13 @@ namespace cobalt {
                     return it->second;
                 }
             }
-            throw gfx::GFXException("Texture not found");
+            // throw gfx::GFXException("Texture not found"); TODO: Throw a plugin exception
+            return 0;
         }
 
         uint Renderer::bindTexture(const std::string& name, const gl::Texture& texture) {
             if (currentUnit >= gl::Context::queryMaxFragTextureUnits()) {
-                throw gfx::GFXException("No more available texture units");
+                // throw gfx::GFXException("No more available texture units"); TODO: Throw a plugin exception
             }
             texture.bindToUnit(currentUnit);
             textureUnits[name] = currentUnit++;
@@ -67,7 +69,7 @@ namespace cobalt {
 
         void Renderer::bindMaterial(const gfx::Material& material) {
             if (currentUnit + material.getTextures().size() > gl::Context::queryMaxFragTextureUnits()) {
-                throw gfx::GFXException("No more available texture units");
+                // throw gfx::GFXException("No more available texture units"); TODO: Throw a plugin exception
             }
             for (const auto& texture : material.getTextures()) {
                 texture.second.bindToUnit(currentUnit);

@@ -6,7 +6,7 @@
 #include "engine/input/peripheral.h"
 
 namespace cobalt {
-    namespace core::input {
+    namespace engine {
         enum class NullInputID { UNKNOWN };
 
         class NullDevice : public Peripheral<NullInputID> {
@@ -49,5 +49,5 @@ namespace cobalt {
              */
             const std::string& cobaltToStr(const NullInputID cobaltCode) const override;
         };
-    }  // namespace core::input
+    }  // namespace engine
 }  // namespace cobalt

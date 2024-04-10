@@ -4,7 +4,6 @@
 #pragma once
 
 #include "core/gfx/material.h"
-#include "core/pch.h"
 #include "engine/internal/shader_library.h"
 #include "engine/internal/texture_library.h"
 

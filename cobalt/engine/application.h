@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "core/gfx/window.h"
+#include "engine/window/window.h"
 
 namespace cobalt {
     namespace engine {
@@ -75,22 +75,22 @@ namespace cobalt {
              * @brief: Get the window of the application.
              * @return: The window of the application.
              */
-            core::gfx::Window& getWindow();
+            Window& getWindow();
             /**
              * @brief: Get the window of the application.
              * @return: The window of the application.
              */
-            const core::gfx::Window& getWindow() const;
+            const Window& getWindow() const;
             /**
              * @brief: Get the input manager of the application.
              * @return: The input manager of the application.
              */
-            core::input::InputManager& getInputManager();
+            InputManager& getInputManager();
             /**
              * @brief: Get the input manager of the application.
              * @return: The input manager of the application.
              */
-            const core::input::InputManager& getInputManager() const;
+            const InputManager& getInputManager() const;
 
             private:
             bool shouldStop;           // Whether the game loop should stop.

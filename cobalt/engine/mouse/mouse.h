@@ -56,7 +56,7 @@ namespace cobalt {
             ~ButtonState() = default;
         };
 
-        class Mouse : public core::input::Peripheral<MouseInputID> {
+        class Mouse : public Peripheral<MouseInputID> {
             public:
             const static std::string NAME;
 
@@ -66,7 +66,7 @@ namespace cobalt {
              * @param sensitivity: The mouse sensitivity.
              * @return: A new mouse.
              */
-            Mouse(const core::input::DeviceID id, const float sensitivity);
+            Mouse(const DeviceID id, const float sensitivity);
             /**
              * @brief: Destroy the mouse.
              * @return: void
@@ -175,7 +175,7 @@ namespace cobalt {
              * @param value: The value of the event.
              * @return: void
              */
-            void queueEvent(const MouseInputID id, const core::input::InputValue value);
+            void queueEvent(const MouseInputID id, const InputValue value);
 
             public:  // ----- DEBUG -----
             /**

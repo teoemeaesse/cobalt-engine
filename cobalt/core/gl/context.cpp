@@ -3,7 +3,7 @@
 
 #include "core/gl/context.h"
 
-#include "core/pch.h"
+#include "core/gl/exception.h"
 
 namespace cobalt {
     namespace core::gl {

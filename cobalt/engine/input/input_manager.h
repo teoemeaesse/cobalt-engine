@@ -8,7 +8,7 @@
 #include "engine/input/input_command.h"
 
 namespace cobalt {
-    namespace core::input {
+    namespace engine {
         /**
          * @brief: The input manager. Handles all input from peripherals such as the keyboard
          * and mouse. It then dispatches events to the appropriate listeners.
@@ -90,5 +90,5 @@ namespace cobalt {
             UMap<std::string, DeviceID> peripheralIDs;       // Map from peripheral names to peripheral ids for easy lookup.
             UMap<DeviceID, Scope<InputDevice>> peripherals;  // The peripherals.
         };
-    }  // namespace core::input
+    }  // namespace engine
 }  // namespace cobalt

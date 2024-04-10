@@ -4,7 +4,7 @@
 #include "engine/input/null.h"
 
 namespace cobalt {
-    namespace core::input {
+    namespace engine {
         const std::string NullDevice::NAME = "Null";
 
         NullDevice::NullDevice(const DeviceID id) : Peripheral<NullInputID>(id) {}
@@ -16,5 +16,5 @@ namespace cobalt {
         const int NullDevice::cobaltToGlfw(const NullInputID cobaltCode) const { return GLFW_KEY_UNKNOWN; }
 
         const std::string& NullDevice::cobaltToStr(const NullInputID cobaltCode) const { return NAME; }
-    }  // namespace core::input
+    }  // namespace engine
 }  // namespace cobalt

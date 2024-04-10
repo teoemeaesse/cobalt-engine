@@ -1,12 +1,13 @@
 // Created by tomas on
 // 02-12-2023
 
-#include "core/gfx/window.h"
+#include "engine/window/window.h"
 
 #include "core/gl/context.h"
+#include "engine/window/plugin.h"
 
 namespace cobalt {
-    namespace core::gfx {
+    namespace engine {
         static void windowCloseCallback(GLFWwindow* window) {
             CB_CORE_WARN("Window closed");
             CB_CORE_WARN("Shutting down");
@@ -57,12 +58,12 @@ namespace cobalt {
 
         void Window::init() {
             try {
-                static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
-            } catch (const core::ecs::ResourceNotFoundException<core::gfx::Window>& e) {
+                static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->getResource<Window>();
+            } catch (const core::ecs::ResourceNotFoundException<Window>& e) {
                 throw core::ecs::PluginNotFoundException("Window");
             }
             glfwWindowHint(GLFW_RESIZABLE, resizable);
-            glfwSetWindowCloseCallback(gl::Context::getGLFWContext(), windowCloseCallback);
+            glfwSetWindowCloseCallback(core::gl::Context::getGLFWContext(), windowCloseCallback);
             GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
             const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
             switch (mode) {
@@ -72,7 +73,7 @@ namespace cobalt {
                     CB_CORE_INFO("Running in windowed mode");
                     break;
                 case WindowMode::Borderless:
-                    if (Platform::isMacOS()) {
+                    if (core::Platform::isMacOS()) {
                         CB_CORE_WARN("Borderless window mode is not supported on macOS");
                         mode = WindowMode::Windowed;
                         init();  // Rewind, go back to windowed mode
@@ -85,7 +86,7 @@ namespace cobalt {
                     CB_CORE_INFO("Running in borderless fullscreen mode");
                     break;
                 case WindowMode::Fullscreen:
-                    if (Platform::isMacOS()) {
+                    if (core::Platform::isMacOS()) {
                         CB_CORE_WARN("Fullscreen window mode is not supported on macOS");
                         mode = WindowMode::Windowed;
                         init();  // Rewind, go back to windowed mode
@@ -97,61 +98,57 @@ namespace cobalt {
                     CB_CORE_INFO("Running in fullscreen mode");
                     break;
                 default:
-                    throw GFXException("Invalid window mode");
+                    throw core::ecs::PluginException<WindowPlugin>("Invalid window mode");
             }
 
-            gl::Context::recreateFromContext(gl::Context::getGLFWContext());
+            core::gl::Context::recreateFromContext(core::gl::Context::getGLFWContext());
             glfwSwapInterval(vsync);
-            glfwSetWindowTitle(gl::Context::getGLFWContext(), title.c_str());
+            glfwSetWindowTitle(core::gl::Context::getGLFWContext(), title.c_str());
             if (lockAspectRatio) {
                 if (mode == WindowMode::Windowed) {
                     this->width = (uint)(this->height * aspectRatio);
                 }
-                glfwSetWindowAspectRatio(gl::Context::getGLFWContext(), this->width, this->height);
+                glfwSetWindowAspectRatio(core::gl::Context::getGLFWContext(), this->width, this->height);
             }
-            glfwSetWindowSize(gl::Context::getGLFWContext(), this->width, this->height);
+            glfwSetWindowSize(core::gl::Context::getGLFWContext(), this->width, this->height);
             int framebufferWidth, framebufferHeight;
-            glfwGetFramebufferSize(gl::Context::getGLFWContext(), &framebufferWidth, &framebufferHeight);
+            glfwGetFramebufferSize(core::gl::Context::getGLFWContext(), &framebufferWidth, &framebufferHeight);
             defaultFBO.resize(framebufferWidth, framebufferHeight);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_BLEND);
             glDepthFunc(GL_LEQUAL);
             glEnable(GL_DEPTH_TEST);
             glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-            if (static_cast<ecs::World*>(core::gl::Context::getUserPointer())->isPlugin("Input")) {
-                gl::Context::setKeyCallback([](GLFWwindow* handle, int key, int scancode, int action, int mods) {
-                    core::input::InputManager& manager =
-                        static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::input::InputManager>();
-                    core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
+            if (static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->isPlugin("Input")) {
+                core::gl::Context::setKeyCallback([](GLFWwindow* handle, int key, int scancode, int action, int mods) {
+                    InputManager& manager = static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->getResource<InputManager>();
+                    Window& window = static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->getResource<Window>();
                     window.onKey(manager, key, action != GLFW_RELEASE);
                 });
-                gl::Context::setCursorPosCallback([](GLFWwindow* handle, double xpos, double ypos) {
-                    core::input::InputManager& manager =
-                        static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::input::InputManager>();
-                    core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
+                core::gl::Context::setCursorPosCallback([](GLFWwindow* handle, double xpos, double ypos) {
+                    InputManager& manager = static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->getResource<InputManager>();
+                    Window& window = static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->getResource<Window>();
                     window.onCursor(manager, (float)xpos, (float)ypos);
                 });
-                gl::Context::setMouseButtonCallback([](GLFWwindow* handle, int button, int action, int mods) {
-                    core::input::InputManager& manager =
-                        static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::input::InputManager>();
-                    core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
+                core::gl::Context::setMouseButtonCallback([](GLFWwindow* handle, int button, int action, int mods) {
+                    InputManager& manager = static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->getResource<InputManager>();
+                    Window& window = static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->getResource<Window>();
                     window.onMouseButton(manager, button, action != GLFW_RELEASE);
                 });
-                gl::Context::setScrollCallback([](GLFWwindow* handle, double xoffset, double yoffset) {
-                    core::input::InputManager& manager =
-                        static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::input::InputManager>();
-                    core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
+                core::gl::Context::setScrollCallback([](GLFWwindow* handle, double xoffset, double yoffset) {
+                    InputManager& manager = static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->getResource<InputManager>();
+                    Window& window = static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->getResource<Window>();
                     window.onScroll(manager, (float)xoffset, (float)yoffset);
                 });
             }
 
-            gl::Context::setFramebufferResizeCallback([](GLFWwindow* handle, int width, int height) {
-                core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
+            core::gl::Context::setFramebufferResizeCallback([](GLFWwindow* handle, int width, int height) {
+                Window& window = static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->getResource<Window>();
                 window.getDefaultFBO().resize((uint)width, (uint)height);
                 window.onFramebufferResize((uint)width, (uint)height);
             });
-            gl::Context::setResizeCallback([](GLFWwindow* handle, int width, int height) {
-                core::gfx::Window& window = static_cast<ecs::World*>(core::gl::Context::getUserPointer())->getResource<core::gfx::Window>();
+            core::gl::Context::setResizeCallback([](GLFWwindow* handle, int width, int height) {
+                Window& window = static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->getResource<Window>();
                 window.setDimensions((uint)width, (uint)height);
                 window.onResize((uint)width, (uint)height);
             });
@@ -161,11 +158,11 @@ namespace cobalt {
         Window::~Window() {
             if (title != "void") {
                 CB_CORE_INFO("Destroyed window");
-                glfwSetWindowShouldClose(gl::Context::getGLFWContext(), GLFW_TRUE);
+                glfwSetWindowShouldClose(core::gl::Context::getGLFWContext(), GLFW_TRUE);
             }
         }
 
-        void Window::swapBuffers() const { glfwSwapBuffers(gl::Context::getGLFWContext()); }
+        void Window::swapBuffers() const { glfwSwapBuffers(core::gl::Context::getGLFWContext()); }
 
         void Window::switchMode(const WindowMode mode) {
             this->mode = mode;
@@ -173,25 +170,25 @@ namespace cobalt {
             show();
         }
 
-        void Window::show() const { glfwShowWindow(gl::Context::getGLFWContext()); }
+        void Window::show() const { glfwShowWindow(core::gl::Context::getGLFWContext()); }
 
-        void Window::hide() const { glfwHideWindow(gl::Context::getGLFWContext()); }
+        void Window::hide() const { glfwHideWindow(core::gl::Context::getGLFWContext()); }
 
         void Window::clear() { defaultFBO.clear(); }
 
-        bool Window::shouldClose() const { return glfwWindowShouldClose(gl::Context::getGLFWContext()); }
+        bool Window::shouldClose() const { return glfwWindowShouldClose(core::gl::Context::getGLFWContext()); }
 
-        void Window::setClearColor(const Color& color) { defaultFBO.setClearColor(color); }
+        void Window::setClearColor(const core::Color& color) { defaultFBO.setClearColor(color); }
 
-        void Window::resize() { glfwSetWindowSize(gl::Context::getGLFWContext(), width, height); }
+        void Window::resize() { glfwSetWindowSize(core::gl::Context::getGLFWContext(), width, height); }
 
         const uint Window::getWidth() const { return width; }
 
         const uint Window::getHeight() const { return height; }
 
-        gl::FBO& Window::getDefaultFBO() { return defaultFBO; }
+        core::gl::FBO& Window::getDefaultFBO() { return defaultFBO; }
 
-        const gl::FBO& Window::getDefaultFBO() const { return defaultFBO; }
+        const core::gl::FBO& Window::getDefaultFBO() const { return defaultFBO; }
 
         const bool Window::isVsync() const { return vsync; }
 
@@ -211,7 +208,7 @@ namespace cobalt {
 
         void Window::setTitle(const std::string& title) {
             this->title = title;
-            glfwSetWindowTitle(gl::Context::getGLFWContext(), title.c_str());
+            glfwSetWindowTitle(core::gl::Context::getGLFWContext(), title.c_str());
         }
 
         void Window::setKeyCallback(const KeyCallback callback) { keyCallback = callback; }
@@ -226,25 +223,25 @@ namespace cobalt {
 
         void Window::setResizeCallback(const ResizeCallback callback) { resizeCallback = callback; }
 
-        void Window::onKey(core::input::InputManager& manager, const int key, const bool down) {
+        void Window::onKey(InputManager& manager, const int key, const bool down) {
             if (keyCallback) {
                 keyCallback(manager, key, down);
             }
         }
 
-        void Window::onCursor(core::input::InputManager& manager, const float xpos, const float ypos) {
+        void Window::onCursor(InputManager& manager, const float xpos, const float ypos) {
             if (cursorCallback) {
                 cursorCallback(manager, xpos, ypos);
             }
         }
 
-        void Window::onMouseButton(core::input::InputManager& manager, const int button, const bool down) {
+        void Window::onMouseButton(InputManager& manager, const int button, const bool down) {
             if (mouseButtonCallback) {
                 mouseButtonCallback(manager, button, down);
             }
         }
 
-        void Window::onScroll(core::input::InputManager& manager, const float xoffset, const float yoffset) {
+        void Window::onScroll(InputManager& manager, const float xoffset, const float yoffset) {
             if (scrollCallback) {
                 scrollCallback(manager, xoffset, yoffset);
             }
@@ -352,5 +349,5 @@ namespace cobalt {
             return Window(width, height, title, vsync, mode, resizable, decorated, lockAspectRatio, keyCallback, cursorCallback, mouseButtonCallback,
                           scrollCallback, framebufferResizeCallback, resizeCallback);
         }
-    }  // namespace core::gfx
+    }  // namespace engine
 }  // namespace cobalt

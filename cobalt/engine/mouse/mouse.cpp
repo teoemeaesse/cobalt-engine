@@ -18,7 +18,7 @@ namespace cobalt {
 
         bool ButtonState::isPolled() const { return polled; }
 
-        Mouse::Mouse(const core::input::DeviceID id, const float sensitivity)
+        Mouse::Mouse(const DeviceID id, const float sensitivity)
             : Peripheral(id), sensitivity(sensitivity), x(0.0f), y(0.0f), dx(0.0f), dy(0.0f), dsx(0.0f), dsy(0.0f) {
             for (size_t i = 0; i < static_cast<size_t>(MouseInputID::MIDDLE); i++) {
                 buttonStates[i] = ButtonState();
@@ -39,7 +39,7 @@ namespace cobalt {
 
         void Mouse::onButtonPress(const MouseInputID button, const bool down) {
             if (button == MouseInputID::UNKNOWN) {
-                throw core::input::InvalidInputException<MouseInputID>("Invalid button", button, this);
+                throw InvalidInputException<MouseInputID>("Invalid button", button, this);
             }
             buttonStates[static_cast<size_t>(button)].down = down;
         }
@@ -126,7 +126,7 @@ namespace cobalt {
             {MouseInputID::MIDDLE_X, "Middle X"}, {MouseInputID::MIDDLE_Y, "Middle Y"}, {MouseInputID::SCROLL_X, "Scroll X"},
             {MouseInputID::SCROLL_Y, "Scroll Y"}, {MouseInputID::COUNT, "Count"},       {MouseInputID::UNKNOWN, "Unknown"}};
 
-        void Mouse::queueEvent(const MouseInputID id, const core::input::InputValue value) {
+        void Mouse::queueEvent(const MouseInputID id, const InputValue value) {
             auto it = bindings.find(id);
             if (it != bindings.end()) {
                 events.push(it->second.get()->withInput(value));

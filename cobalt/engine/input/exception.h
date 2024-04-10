@@ -6,7 +6,7 @@
 #include "engine/input/peripheral.h"
 
 namespace cobalt {
-    namespace core::input {
+    namespace engine {
         template <typename T>
         class InvalidInputException : public std::runtime_error {
             public:
@@ -64,5 +64,5 @@ namespace cobalt {
             PeripheralNotFoundException(const DeviceID id) : std::runtime_error("Peripheral not found for DID: " + std::to_string(id)) {}
             ~PeripheralNotFoundException() = default;
         };
-    }  // namespace core::input
+    }  // namespace engine
 }  // namespace cobalt

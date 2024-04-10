@@ -7,7 +7,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "core/gl/texture.h"
 
-#include "core/pch.h"
+#include "core/gl/exception.h"
 #include "stb_image/stb_image.h"
 
 namespace cobalt {

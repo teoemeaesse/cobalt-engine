@@ -13,17 +13,17 @@ namespace cobalt {
         KeyboardPlugin::KeyboardPlugin() noexcept : Plugin(TITLE, "Provides keyboard input.", InputPlugin{}, WindowPlugin{}) {}
 
         void KeyboardPlugin::onPlug(ecs::World& world) const noexcept {
-            world.addSystem<ecs::WriteRequest<input::InputManager>>(
+            world.addSystem<ecs::WriteRequest<InputManager>>(
                 ecs::DefaultSchedules::Startup, [](auto inputManager) { inputManager.get().template registerPeripheral<Keyboard>(Keyboard::NAME); });
 
-            world.addSystem<ecs::WriteRequest<gfx::Window>>(ecs::DefaultSchedules::Startup, [](auto window) {
-                window.get().setKeyCallback([](input::InputManager& manager, const int key, const bool down) {
+            world.addSystem<ecs::WriteRequest<Window>>(ecs::DefaultSchedules::Startup, [](auto window) {
+                window.get().setKeyCallback([](InputManager& manager, const int key, const bool down) {
                     try {
                         Keyboard& keyboard = manager.getPeripheral<Keyboard>(Keyboard::NAME);
                         keyboard.onKeyPress(keyboard.glfwToCobalt(key), down);
-                    } catch (input::InvalidInputException<KeyboardInputID>& e) {
+                    } catch (InvalidInputException<KeyboardInputID>& e) {
                         CB_CORE_ERROR(e.what());
-                    } catch (input::PeripheralNotFoundException& e) {
+                    } catch (PeripheralNotFoundException& e) {
                         CB_CORE_ERROR(e.what());
                     }
                 });

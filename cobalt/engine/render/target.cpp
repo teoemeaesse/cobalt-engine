@@ -19,7 +19,7 @@ namespace cobalt {
         RenderTarget::RenderTarget(const gl::FBO& fbo, const CameraID camera, const std::string& name, const uint cameraUBOBinding)
             : fbo(fbo), camera(camera), name(name), ubo(gl::Usage::StaticDraw, sizeof(CameraUBO), cameraUBOBinding) {
             if (name == "view" || name == "model" || name == "projection") {
-                throw gfx::GFXException("Cannot use reserved name for render target");
+                // throw gfx::GFXException("Cannot use reserved name for render target"); TODO: Add a plugin exception here
             }
         }
 

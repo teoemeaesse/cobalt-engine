@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "core/pch.h"
+#include "core/ecs/exception.h"
 
 namespace cobalt {
     namespace core::ecs {

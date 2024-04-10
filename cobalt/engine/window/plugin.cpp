@@ -15,13 +15,13 @@ namespace cobalt {
         void WindowPlugin::onPlug(ecs::World& world) const noexcept {
             world.registerEvent(FRAMEBUFFER_RESIZE_EVENT, FRAMEBUFFER_RESIZE_EVENT_DESCRIPTION);
 
-            world.addResource<gfx::Window>(Move(gfx::Window::create(
-                gfx::WindowProperties().setTitle("Cobalt").setWidth(1280).setHeight(720).setVsync(true).setFramebufferResizeCallback(
-                    [](gfx::Window& window, const uint width, const uint height) {
+            world.addResource<Window>(
+                Move(Window::create(WindowProperties().setTitle("Cobalt").setWidth(1280).setHeight(720).setVsync(true).setFramebufferResizeCallback(
+                    [](Window& window, const uint width, const uint height) {
                         static_cast<ecs::World*>(gl::Context::getUserPointer())->triggerEvent(WindowPlugin::FRAMEBUFFER_RESIZE_EVENT);
                     }))));
 
-            // world.addSystem<ecs::WriteRequest<gfx::Window>>(ecs::DefaultSchedules::Startup, [](auto window) {
+            // world.addSystem<ecs::WriteRequest<Window>>(ecs::DefaultSchedules::Startup, [](auto window) {
             //     try {
             //         window.get().init();
             //     } catch (const ecs::PluginNotFoundException& e) {
