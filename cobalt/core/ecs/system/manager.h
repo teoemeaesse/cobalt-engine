@@ -16,19 +16,18 @@ namespace cobalt {
         class SystemManager {
             public:
             /**
-             * @brief: Default constructor.
-             * @param entityRegistry: Entity registry.
-             * @param resourceRegistry: Resource registry.
-             * @param eventManager: Event manager.
-             * @return: SystemManager instance.
+             * @brief Default constructor.
+             * @param entityRegistry Entity registry.
+             * @param resourceRegistry Resource registry.
+             * @param eventManager Event manager.
+             * @return SystemManager instance.
              */
             SystemManager(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, EventManager& eventManager) noexcept;
 
             /**
-             * @brief: Add a system to a schedule.
+             * @brief Add a system to a schedule.
              * @tparam SystemType: System type.
-             * @param schedule: Schedule to add the system to.
-             * @return: void
+             * @param schedule Schedule to add the system to.
              */
             template <typename SystemType>
             void addSystem(DefaultSchedules schedule) noexcept {
@@ -36,12 +35,11 @@ namespace cobalt {
                 systems[schedule]->addSystem<SystemType>();
             }
             /**
-             * @brief: Add a system to a schedule.
+             * @brief Add a system to a schedule.
              * @tparam Params...: Lambda function parameters.
              * @tparam Func: Lambda function type.
-             * @param schedule: Schedule to add the system to.
-             * @param func: Lambda function.
-             * @return: void
+             * @param schedule Schedule to add the system to.
+             * @param func Lambda function.
              */
             template <typename... Params, typename Func>
             void addSystem(DefaultSchedules schedule, Func func) noexcept {
@@ -50,23 +48,19 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Run the startup schedule.
-             * @return: void
+             * @brief Run the startup schedule.
              */
             void startup() noexcept;
             /**
-             * @brief: Run the pre-update, update, and post-update schedules.
-             * @return: void
+             * @brief Run the pre-update, update, and post-update schedules.
              */
             void update() noexcept;
             /**
-             * @brief: Run the pre-render, render, and post-render schedules.
-             * @return: void
+             * @brief Run the pre-render, render, and post-render schedules.
              */
             void render() noexcept;
             /**
-             * @brief: Run the shutdown schedule.
-             * @return: void
+             * @brief Run the shutdown schedule.
              */
             void shutdown() noexcept;
 

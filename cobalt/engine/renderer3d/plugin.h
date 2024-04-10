@@ -9,22 +9,21 @@
 namespace cobalt {
     namespace engine {
         /**
-         * @brief: 3D renderer plugin. Allows rendering 3D meshes.
+         * @brief 3D renderer plugin. Allows rendering 3D meshes.
          */
         class Renderer3DPlugin : public core::ecs::Plugin {
             public:
             static inline constexpr const char* TITLE = "Renderer3D";
 
             /**
-             * @brief: Construct the plugin.
-             * @return: Renderer3DPlugin
+             * @brief Construct the plugin.
+             * @return Renderer3DPlugin
              */
             Renderer3DPlugin() noexcept;
 
             /**
-             * @brief: Initialize the plugin.
-             * @param world: World instance.
-             * @return: void
+             * @brief Initialize the plugin.
+             * @param world World instance.
              */
             void onPlug(core::ecs::World& world) const noexcept override;
         };

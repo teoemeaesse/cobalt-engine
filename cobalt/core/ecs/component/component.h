@@ -11,9 +11,9 @@ namespace cobalt {
         class Component {
             public:
             /**
-             * @brief: Validate a set of component types.
+             * @brief Validate a set of component types.
              * @tparam Components...: Component types.
-             * @return: True if the component type is valid.
+             * @return True if the component type is valid.
              */
             template <typename... Components>
             static constexpr bool validate() {
@@ -24,14 +24,14 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Get the component's type. This is a unique identifier, lazy-generated based on the component class' name.
-             * @return: Component type identifier.
+             * @brief Get the component's type. This is a unique identifier, lazy-generated based on the component class' name.
+             * @return Component type identifier.
              */
             virtual const ComponentProperties::Type getType() const noexcept;
             /**
-             * @brief: Get the component's type. This is a unique identifier, generated at compile time based on the component class' name.
+             * @brief Get the component's type. This is a unique identifier, generated at compile time based on the component class' name.
              * @tparam ComponentType: Component type.
-             * @return: Component type identifier.
+             * @return Component type identifier.
              */
             template <typename ComponentType>
             static const ComponentProperties::Type getType() noexcept {
@@ -40,14 +40,14 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Get the component's type name.
-             * @return: Component type name.
+             * @brief Get the component's type name.
+             * @return Component type name.
              */
             virtual const std::string& getTypeName() const noexcept;
             /**
-             * @brief: Get the component's type name.
+             * @brief Get the component's type name.
              * @tparam ComponentType: Component type.
-             * @return: Component type name.
+             * @return Component type name.
              */
             template <typename ComponentType>
             static const std::string& getTypeName() noexcept {

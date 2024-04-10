@@ -286,9 +286,9 @@ namespace cobalt {
                 }  // namespace DepthStencil
             }  // namespace TextureEncodings
             /**
-             * @brief: Gets the name of a texture encoding.
-             * @param encoding: The texture encoding.
-             * @return: The name of the encoding.
+             * @brief Gets the name of a texture encoding.
+             * @param encoding The texture encoding.
+             * @return The name of the encoding.
              */
             inline std::string getTextureEncodingName(const TextureEncoding encoding) noexcept {
                 switch (encoding) {
@@ -429,9 +429,9 @@ namespace cobalt {
                 constexpr PixelType Float = GL_FLOAT;
             }  // namespace PixelTypes
             /**
-             * @brief: Gets the name of a pixel type.
-             * @param type: The pixel type.
-             * @return: The name of the type.
+             * @brief Gets the name of a pixel type.
+             * @param type The pixel type.
+             * @return The name of the type.
              */
             inline std::string getPixelTypeName(const PixelType type) noexcept {
                 switch (type) {
@@ -457,9 +457,9 @@ namespace cobalt {
                 }
             }
             /**
-             * @brief: Gets the pixel type for a texture encoding.
-             * @param encoding: The texture encoding.
-             * @return: The pixel type.
+             * @brief Gets the pixel type for a texture encoding.
+             * @param encoding The texture encoding.
+             * @return The pixel type.
              */
             inline const PixelType getPixelType(const TextureEncoding encoding) noexcept {
                 switch (encoding) {
@@ -525,9 +525,9 @@ namespace cobalt {
                 constexpr TextureFormat DepthStencil = GL_DEPTH_STENCIL;
             }  // namespace TextureFormats
             /**
-             * @brief: Gets the name of a texture format.
-             * @param format: The texture format.
-             * @return: The name of the format.
+             * @brief Gets the name of a texture format.
+             * @param format The texture format.
+             * @return The name of the format.
              */
             inline std::string getTextureFormatName(const TextureFormat format) noexcept {
                 switch (format) {
@@ -559,9 +559,9 @@ namespace cobalt {
                 }
             }
             /**
-             * @brief: Gets the texture format for a texture encoding.
-             * @param encoding: The texture encoding.
-             * @return: The texture format.
+             * @brief Gets the texture format for a texture encoding.
+             * @param encoding The texture encoding.
+             * @return The texture format.
              */
             inline const TextureFormat getTextureFormat(const TextureEncoding encoding) noexcept {
                 switch (encoding) {
@@ -651,9 +651,9 @@ namespace cobalt {
                 constexpr TextureWrap ClampToBorder = GL_CLAMP_TO_BORDER;
             }  // namespace TextureWraps
             /**
-             * @brief: Gets the name of a texture wrap.
-             * @param wrap: The wrap.
-             * @return: The name of the wrap.
+             * @brief Gets the name of a texture wrap.
+             * @param wrap The wrap.
+             * @return The name of the wrap.
              */
             inline std::string getTextureWrapName(const TextureWrap wrap) noexcept {
                 switch (wrap) {
@@ -678,9 +678,9 @@ namespace cobalt {
                 constexpr TextureFilter Linear = GL_LINEAR;
             }  // namespace TextureFilters
             /**
-             * @brief: Gets the name of a texture filter.
-             * @param filter: The filter.
-             * @return: The name of the filter.
+             * @brief Gets the name of a texture filter.
+             * @param filter The filter.
+             * @return The name of the filter.
              */
             inline std::string getTextureFilterName(const TextureFilter filter) noexcept {
                 switch (filter) {
@@ -704,9 +704,9 @@ namespace cobalt {
                 TriangleFan = GL_TRIANGLE_FAN       // Triangle fan.
             };
             /**
-             * @brief: Gets the size of a GL Type.
-             * @param type: The GL Type.
-             * @return: The size in bytes of the GL Type.
+             * @brief Gets the size of a GL Type.
+             * @param type The GL Type.
+             * @return The size in bytes of the GL Type.
              */
             inline const size_t getTypeSize(const Type type) noexcept {
                 switch (type) {

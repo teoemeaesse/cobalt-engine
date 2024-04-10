@@ -8,41 +8,41 @@
 namespace cobalt {
     namespace core::memory {
         /**
-         * @brief: An arena allocator is a memory allocator that allocates
+         * @brief An arena allocator is a memory allocator that allocates
          * memory in variable-sized blocks. It is useful for allocating many objects
          * of different types (e.g. entities in an ECS) that are not freed individually.
          */
         class ArenaAllocator : public Allocator {
             public:
             /**
-             * @brief: Creates an arena allocator with a given initial size.
-             * @param initial_size: The initial size of the arena.
+             * @brief Creates an arena allocator with a given initial size.
+             * @param initial_size The initial size of the arena.
              */
             ArenaAllocator(const size_t initial_size);
             /**
-             * @brief: Destroys an arena allocator.
+             * @brief Destroys an arena allocator.
              */
             ~ArenaAllocator();
 
             /**
-             * @brief: Allocates a block of memory from the arena.
-             * @param size: The size of the block to allocate.
-             * @return: A pointer to the allocated block.
+             * @brief Allocates a block of memory from the arena.
+             * @param size The size of the block to allocate.
+             * @return A pointer to the allocated block.
              */
             void* grab(const size_t size);
             /**
-             * @brief: Resizes a block of memory from the arena.
+             * @brief Resizes a block of memory from the arena.
              * Since the arena allocator does not resize individual blocks,
              * this function simply allocates a new block.
              * Calling this multiple times will result in memory leaks.
-             * @param ptr: The pointer to the block to resize.
-             * @param size: The new size of the block.
-             * @return: A pointer to the resized block.
+             * @param ptr The pointer to the block to resize.
+             * @param size The new size of the block.
+             * @return A pointer to the resized block.
              */
             void* resize(void* ptr, const size_t size);
             /**
-             * @brief: Calculate the allocated size of the arena.
-             * @return: The allocated size of the arena in bytes.
+             * @brief Calculate the allocated size of the arena.
+             * @return The allocated size of the arena in bytes.
              */
             size_t getSize();
 
@@ -59,42 +59,40 @@ namespace cobalt {
             size_t arena_size;   // The size of the arena.
 
             /**
-             * @brief: Allocates a block of memory from the arena.
-             * @param size: The size of the block to allocate.
-             * @return: A pointer to the allocated block.
+             * @brief Allocates a block of memory from the arena.
+             * @param size The size of the block to allocate.
+             * @return A pointer to the allocated block.
              */
             void* alloc(const size_t size) override;
             /**
-             * @brief: Frees a block of memory from the arena.
+             * @brief Frees a block of memory from the arena.
              * Since the arena allocator does not free individual blocks,
              * this function throws an error.
-             * @param ptr: The pointer to the block to free.
-             * @return: void
+             * @param ptr The pointer to the block to free.
              */
             void free(void* ptr) override;
             /**
-             * @brief: Resizes a block of memory from the arena.
+             * @brief Resizes a block of memory from the arena.
              * Since the arena allocator does not resize individual blocks,
              * this function simply allocates a new block.
              * Calling this multiple times will result in memory leaks.
-             * @param ptr: The pointer to the block to resize.
-             * @param size: The new size of the block.
-             * @return: A pointer to the resized block.
+             * @param ptr The pointer to the block to resize.
+             * @param size The new size of the block.
+             * @return A pointer to the resized block.
              */
             void* realloc(void* ptr, const size_t size) override;
 
             /**
-             * @brief: Creates an arena block with a given size.
-             * @param heap: The heap allocator of the arena.
-             * @param size: The size of the block to create.
-             * @return: The created arena block.
+             * @brief Creates an arena block with a given size.
+             * @param heap The heap allocator of the arena.
+             * @param size The size of the block to create.
+             * @return The created arena block.
              */
             ArenaBlock arenaBlockCreate(HeapAllocator& heap, const size_t size);
             /**
-             * @brief: Destroys an arena block.
-             * @param heap: The heap allocator of the arena.
-             * @param block: The block to destroy.
-             * @return: void
+             * @brief Destroys an arena block.
+             * @param heap The heap allocator of the arena.
+             * @param block The block to destroy.
              */
             void arenaBlockDestroy(HeapAllocator& heap, ArenaBlock* block);
         };

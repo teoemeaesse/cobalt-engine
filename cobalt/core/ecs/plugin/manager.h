@@ -10,37 +10,34 @@ namespace cobalt {
         class PluginManager {
             public:
             /**
-             * @brief: Default constructor.
-             * @return: PluginManager instance.
+             * @brief Default constructor.
+             * @return PluginManager instance.
              */
             PluginManager() noexcept = default;
             /**
-             * @brief: Default destructor.
-             * @return: void
+             * @brief Default destructor.
              */
             ~PluginManager() noexcept = default;
 
             /**
-             * @brief: Add a plugin to the manager.
-             * @param plugin: Plugin to add.
-             * @return: void
+             * @brief Add a plugin to the manager.
+             * @param plugin Plugin to add.
              */
             void addPlugin(const Plugin& plugin) noexcept;
             /**
-             * @brief: Check if a plugin is registered in the manager.
-             * @param plugin: Plugin to check.
-             * @return: bool
+             * @brief Check if a plugin is registered in the manager.
+             * @param plugin Plugin to check.
+             * @return bool
              */
             bool isPlugin(const Plugin& plugin) const noexcept;
             /**
-             * @brief: Check if a plugin is registered in the manager.
-             * @param title: Title of the plugin to check.
-             * @return: bool
+             * @brief Check if a plugin is registered in the manager.
+             * @param title Title of the plugin to check.
+             * @return bool
              */
             bool isPlugin(const std::string& title) const noexcept;
             /**
-             * @brief: Check if the dependencies of all the plugins are met.
-             * @return: void
+             * @brief Check if the dependencies of all the plugins are met.
              */
             void checkDependencies() const;
 

@@ -38,7 +38,7 @@ layout (std140) uniform Light {
 };
 
 /** 
-             * @brief: Get normal from normal map.
+             * @brief Get normal from normal map.
  * https://learnopengl.com/#!PBR/Lighting
  */
 vec3 getNormalFromMap() {
@@ -58,11 +58,11 @@ vec3 getNormalFromMap() {
 }
 
 /** 
-             * @brief: Trowbridge-Reitz GGX Normal Distribution Function.
+             * @brief Trowbridge-Reitz GGX Normal Distribution Function.
  * https://learnopengl.com/#!PBR/Lighting
- * @param n: normal.
- * @param h: half vector.
- * @param a: roughness.
+ * @param n normal.
+ * @param h half vector.
+ * @param a roughness.
  */
 float normalDist(vec3 n, vec3 h, float a) {
     float a2     = a * a;
@@ -75,13 +75,13 @@ float normalDist(vec3 n, vec3 h, float a) {
 }
 
 /** 
-             * @brief: Smith's method using the Schlick-Beckmann.
+             * @brief Smith's method using the Schlick-Beckmann.
  * approximation of the Geometric Shadowing Function.
  * https://learnopengl.com/#!PBR/Lighting
- * @param n: normal.
- * @param v: view vector.
- * @param l: light vector.
- * @param a: roughness.
+ * @param n normal.
+ * @param v view vector.
+ * @param l light vector.
+ * @param a roughness.
  */
 float geometrySchlickGGX(float NdotV, float a) {
     float r = (a + 1.0);
@@ -102,10 +102,10 @@ float geometrySmith(vec3 N, vec3 V, vec3 L, float a) {
 }
 
 /** 
-             * @brief: Fresnel-Schlick approximation.
+             * @brief Fresnel-Schlick approximation.
  * https://learnopengl.com/#!PBR/Lighting
- * @param cosTheta: cosine of the angle between the normal and the view vector.
- * @param f0: base reflectivity.
+ * @param cosTheta cosine of the angle between the normal and the view vector.
+ * @param f0 base reflectivity.
  */
 vec3 fresnelSchlick(float cosTheta, vec3 f0) {
     return f0 + (1.0 - f0) * pow(1.0 - cosTheta, 5.0);

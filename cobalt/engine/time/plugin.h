@@ -9,22 +9,21 @@
 namespace cobalt {
     namespace engine {
         /**
-         * @brief: Time integration plugin. Provides basic time integration for linear and angular motion.
+         * @brief Time integration plugin. Provides basic time integration for linear and angular motion.
          */
         class TimePlugin : public core::ecs::Plugin {
             public:
             static inline constexpr const char* TITLE = "Time";
 
             /**
-             * @brief: Construct the plugin.
-             * @return: TimePlugin
+             * @brief Construct the plugin.
+             * @return TimePlugin
              */
             TimePlugin() noexcept;
 
             /**
-             * @brief: Initialize the plugin.
-             * @param world: World instance.
-             * @return: void
+             * @brief Initialize the plugin.
+             * @param world World instance.
              */
             void onPlug(core::ecs::World& world) const noexcept override;
         };

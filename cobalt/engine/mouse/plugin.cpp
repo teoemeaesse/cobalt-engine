@@ -14,13 +14,13 @@ namespace cobalt {
 
         void MousePlugin::onPlug(ecs::World& world) const noexcept {
             /**
-             * @brief: Add input peripherals to the world.
+             * @brief Add input peripherals to the world.
              */
             world.addSystem<ecs::WriteRequest<InputManager>>(
                 ecs::DefaultSchedules::Startup, [](auto inputManager) { inputManager.get().template registerPeripheral<Mouse>(Mouse::NAME, 1.0f); });
 
             /**
-             * @brief: Set input callbacks.
+             * @brief Set input callbacks.
              */
             world.addSystem<ecs::WriteRequest<Window>>(ecs::DefaultSchedules::Startup, [](auto window) {
                 window.get().setMouseButtonCallback([](InputManager& manager, const int button, const bool down) {

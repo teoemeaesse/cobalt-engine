@@ -20,7 +20,7 @@ namespace cobalt {
             world.registerComponent<AngularAcceleration>();
 
             /**
-             * @brief: Euler integration system.
+             * @brief Euler integration system.
              */
             world.addSystem<ecs::Query<RefMut<Transform>, Ref<Velocity>>, ecs::ReadRequest<Time>>(
                 ecs::DefaultSchedules::Update, [](auto query, auto time) {
@@ -32,7 +32,7 @@ namespace cobalt {
                     }
                 });
             /**
-             * @brief: Euler integration system.
+             * @brief Euler integration system.
              */
             world.addSystem<ecs::Query<RefMut<Velocity>, Ref<Acceleration>>, ecs::ReadRequest<Time>>(
                 ecs::DefaultSchedules::Update, [](auto query, auto time) {
@@ -44,7 +44,7 @@ namespace cobalt {
                     }
                 });
             /**
-             * @brief: Euler integration system.
+             * @brief Euler integration system.
              */
             world.addSystem<ecs::Query<RefMut<Transform>, Ref<AngularVelocity>>, ecs::ReadRequest<Time>>(
                 ecs::DefaultSchedules::Update, [](auto query, auto time) {
@@ -56,7 +56,7 @@ namespace cobalt {
                     }
                 });
             /**
-             * @brief: Euler integration system.
+             * @brief Euler integration system.
              */
             world.addSystem<ecs::Query<RefMut<AngularVelocity>, Ref<AngularAcceleration>>, ecs::ReadRequest<Time>>(
                 ecs::DefaultSchedules::Update, [](auto query, auto time) {

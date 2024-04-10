@@ -10,14 +10,14 @@ namespace cobalt {
         namespace EntityProperties {
             using ID = uint64;       // Entity ID - unique between all entities.
             using Version = uint64;  // Entity version - incremented every time an entity with this ID is destroyed.
-        };                           // namespace EntityProperties
+        };  // namespace EntityProperties
 
         namespace ComponentProperties {
             using Type = uint64;  // Component type - unique between different component types.
-        };                        // namespace ComponentProperties
+        };  // namespace ComponentProperties
 
         namespace ResourceProperties {
             using Type = uint64;  // Resource type - unique between different resource types.
-        };                        // namespace ResourceProperties
-    }                             // namespace core::ecs
+        };  // namespace ResourceProperties
+    }  // namespace core::ecs
 }  // namespace cobalt

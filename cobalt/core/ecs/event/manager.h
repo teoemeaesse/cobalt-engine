@@ -9,48 +9,44 @@
 namespace cobalt {
     namespace core::ecs {
         /**
-         * @brief: The event manager is responsible for managing events and their associated systems.
+         * @brief The event manager is responsible for managing events and their associated systems.
          */
         class EventManager {
             public:
             /**
-             * @brief: Default constructor.
-             * @param entityRegistry: Entity registry.
-             * @param resourceRegistry: Resource registry.
-             * @param systemManager: System manager.
-             * @return: EventManager instance.
+             * @brief Default constructor.
+             * @param entityRegistry Entity registry.
+             * @param resourceRegistry Resource registry.
+             * @param systemManager System manager.
+             * @return EventManager instance.
              */
             EventManager(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager) noexcept;
             /**
-             * @brief: Default destructor.
-             * @return: void
+             * @brief Default destructor.
              */
             ~EventManager() noexcept = default;
 
             /**
-             * @brief: Register an event.
-             * @param name: Event name.
-             * @param description: Event description.
-             * @return: Event instance.
+             * @brief Register an event.
+             * @param name Event name.
+             * @param description Event description.
+             * @return Event instance.
              */
             const Event& registerEvent(const std::string& name, const std::string& description) noexcept;
             /**
-             * @brief: Trigger an event.
-             * @param name: Event name.
-             * @return: void
+             * @brief Trigger an event.
+             * @param name Event name.
              */
             void triggerEvent(const std::string& name) noexcept;
             /**
-             * @brief: Process the event queue.
-             * @return: void
+             * @brief Process the event queue.
              */
             void clearQueue() noexcept;
 
             /**
-             * @brief: Hook a system to an event.
+             * @brief Hook a system to an event.
              * @tparam SystemType: System type.
-             * @param eventName: Event to hook into.
-             * @return: void
+             * @param eventName Event to hook into.
              */
             template <typename SystemType>
             void addHook(const std::string& eventName) noexcept {
@@ -58,12 +54,11 @@ namespace cobalt {
                 hooks.emplace(eventName, Move(CreateScope<SystemType>(entityRegistry, resourceRegistry, systemManager, *this)));
             }
             /**
-             * @brief: Hook a system to an event.
+             * @brief Hook a system to an event.
              * @tparam Params...: Lambda function parameters.
              * @tparam Func: Lambda function type.
-             * @param eventName: Event to hook into.
-             * @param func: Lambda function.
-             * @return: void
+             * @param eventName Event to hook into.
+             * @param func Lambda function.
              */
             template <typename... Params, typename Func>
             void addHook(const std::string& eventName, Func func) noexcept {

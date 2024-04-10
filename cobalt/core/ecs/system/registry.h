@@ -14,20 +14,19 @@ namespace cobalt {
         class SystemRegistry {
             public:
             /**
-             * @brief: Default constructor.
-             * @param entityRegistry: Entity registry.
-             * @param resourceRegistry: Resource registry.
-             * @param systemManager: System manager.
-             * @param eventManager: Event manager.
-             * @return: SystemRegistry instance.
+             * @brief Default constructor.
+             * @param entityRegistry Entity registry.
+             * @param resourceRegistry Resource registry.
+             * @param systemManager System manager.
+             * @param eventManager Event manager.
+             * @return SystemRegistry instance.
              */
             SystemRegistry(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
                            EventManager& eventManager) noexcept;
 
             /**
-             * @brief: Add a system to the registry.
+             * @brief Add a system to the registry.
              * @tparam SystemType: System type.
-             * @return: void
              */
             template <typename SystemType>
             void addSystem() noexcept {
@@ -35,11 +34,10 @@ namespace cobalt {
                 systems.push_back(Move(CreateScope<SystemType>(entityRegistry, resourceRegistry, systemManager, eventManager)));
             }
             /**
-             * @brief: Add a system to the registry.
+             * @brief Add a system to the registry.
              * @tparam Params...: Lambda function parameters.
              * @tparam Func: Lambda function type.
-             * @param func: Lambda function.
-             * @return: void
+             * @param func Lambda function.
              */
             template <typename... Params, typename Func>
             void addSystem(Func func) noexcept {
@@ -49,8 +47,7 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Run all systems in the registry.
-             * @return: void
+             * @brief Run all systems in the registry.
              */
             void run() noexcept;
 

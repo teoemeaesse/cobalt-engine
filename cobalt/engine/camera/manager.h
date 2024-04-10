@@ -11,21 +11,20 @@ namespace cobalt {
         class CameraManager : public core::ecs::Resource {
             public:
             /**
-             * @brief: Create a camera manager.
-             * @return: The camera manager.
+             * @brief Create a camera manager.
+             * @return The camera manager.
              */
             CameraManager() = default;
             /**
-             * @brief: Destroy the camera manager.
-             * @return: void
+             * @brief Destroy the camera manager.
              */
             ~CameraManager() = default;
 
             /**
-             * @brief: Add a camera with the given name and properties.
-             * @param name: Name of the camera.
-             * @param properties: Properties of the camera.
-             * @return: The ID of the camera.
+             * @brief Add a camera with the given name and properties.
+             * @param name Name of the camera.
+             * @param properties Properties of the camera.
+             * @return The ID of the camera.
              */
             template <typename T>
             CameraID addCamera(const std::string& name, const CameraProperties& properties) {
@@ -41,27 +40,27 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Get the camera with the given ID.
-             * @param id: ID of the camera.
-             * @return: The camera's controller.
+             * @brief Get the camera with the given ID.
+             * @param id ID of the camera.
+             * @return The camera's controller.
              */
             CameraController& getController(const CameraID id);
             /**
-             * @brief: Get the camera with the given ID.
-             * @param id: ID of the camera.
-             * @return: The camera's controller.
+             * @brief Get the camera with the given ID.
+             * @param id ID of the camera.
+             * @return The camera's controller.
              */
             const CameraController& getController(const CameraID id) const;
             /**
-             * @brief: Get the camera with the given name.
-             * @param name: Name of the camera.
-             * @return: The camera's controller.
+             * @brief Get the camera with the given name.
+             * @param name Name of the camera.
+             * @return The camera's controller.
              */
             CameraController& getController(const std::string& name);
             /**
-             * @brief: Get the camera with the given name.
-             * @param name: Name of the camera.
-             * @return: The camera's controller.
+             * @brief Get the camera with the given name.
+             * @param name Name of the camera.
+             * @return The camera's controller.
              */
             const CameraController& getController(const std::string& name) const;
 

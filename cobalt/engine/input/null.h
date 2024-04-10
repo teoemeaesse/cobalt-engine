@@ -14,38 +14,37 @@ namespace cobalt {
             const static std::string NAME;
 
             /**
-             * @brief: Create a new null peripheral device.
-             * @param id: The device id.
-             * @return: NullDevice
+             * @brief Create a new null peripheral device.
+             * @param id The device id.
+             * @return NullDevice
              */
             NullDevice(const DeviceID id);
             /**
-             * @brief: Destroy the null peripheral device.
-             * @return: void
+             * @brief Destroy the null peripheral device.
              */
             ~NullDevice() = default;
 
             /**
-             * @brief: Get a user-friendly string for the peripheral.
-             * @return: The converted string.
+             * @brief Get a user-friendly string for the peripheral.
+             * @return The converted string.
              */
             const std::string& toString() const override;
             /**
-             * @brief: Convert a GLFW key code to a Cobalt key code.
-             * @param glfwCode: The GLFW key code.
-             * @return: The Cobalt key code.
+             * @brief Convert a GLFW key code to a Cobalt key code.
+             * @param glfwCode The GLFW key code.
+             * @return The Cobalt key code.
              */
             const NullInputID glfwToCobalt(const int glfwCode) const override;
             /**
-             * @brief: Convert a Cobalt key code to a GLFW key code.
-             * @param cobaltCode: The Cobalt key code.
-             * @return: The GLFW key code.
+             * @brief Convert a Cobalt key code to a GLFW key code.
+             * @param cobaltCode The Cobalt key code.
+             * @return The GLFW key code.
              */
             const int cobaltToGlfw(const NullInputID cobaltCode) const override;
             /**
-             * @brief: Convert a Cobalt key code to a user-friendly string.
-             * @param cobaltCode: The Cobalt key code.
-             * @return: The converted string.
+             * @brief Convert a Cobalt key code to a user-friendly string.
+             * @param cobaltCode The Cobalt key code.
+             * @return The converted string.
              */
             const std::string& cobaltToStr(const NullInputID cobaltCode) const override;
         };

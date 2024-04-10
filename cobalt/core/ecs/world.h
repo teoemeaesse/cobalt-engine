@@ -12,25 +12,24 @@ namespace cobalt {
         class World {
             public:
             /**
-             * @brief: Default constructor.
-             * @return: World instance.
+             * @brief Default constructor.
+             * @return World instance.
              */
             World() noexcept;
             /**
-             * @brief: Default destructor.
+             * @brief Default destructor.
              */
             ~World() noexcept = default;
 
             /**
-             * @brief: Spawn a new entity.
-             * @return: Entity instance.
+             * @brief Spawn a new entity.
+             * @return Entity instance.
              */
             Entity& spawn() noexcept;
 
             /**
-             * @brief: Register a component.
+             * @brief Register a component.
              * @tparam ComponentType: Component type.
-             * @return: void
              */
             template <typename ComponentType>
             void registerComponent() noexcept {
@@ -38,10 +37,9 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Add a system to the world.
+             * @brief Add a system to the world.
              * @tparam SystemType: System type.
-             * @param schedule: Schedule to add the system to.
-             * @return: void
+             * @param schedule Schedule to add the system to.
              */
             template <typename SystemType>
             void addSystem(DefaultSchedules schedule) noexcept {
@@ -49,12 +47,11 @@ namespace cobalt {
                 systemManager.addSystem<SystemType>(schedule);
             }
             /**
-             * @brief: Add a system to the world.
+             * @brief Add a system to the world.
              * @tparam Params...: Lambda function parameters.
              * @tparam Func: Lambda function type.
-             * @param schedule: Schedule to add the system to.
-             * @param func: Lambda function.
-             * @return: void
+             * @param schedule Schedule to add the system to.
+             * @param func Lambda function.
              */
             template <typename... Params, typename Func>
             void addSystem(DefaultSchedules schedule, Func func) noexcept {
@@ -63,10 +60,9 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Hook a system to an event.
+             * @brief Hook a system to an event.
              * @tparam SystemType: System type.
-             * @param eventName: Event to hook into.
-             * @return: void
+             * @param eventName Event to hook into.
              */
             template <typename SystemType>
             void addHook(const std::string& eventName) noexcept {
@@ -74,12 +70,11 @@ namespace cobalt {
                 eventManager.addHook<SystemType>(eventName);
             }
             /**
-             * @brief: Hook a system to an event.
+             * @brief Hook a system to an event.
              * @tparam Params...: Lambda function parameters.
              * @tparam Func: Lambda function type.
-             * @param eventName: Event to hook into.
-             * @param func: Lambda function.
-             * @return: void
+             * @param eventName Event to hook into.
+             * @param func Lambda function.
              */
             template <typename... Params, typename Func>
             void addHook(const std::string& eventName, Func func) noexcept {
@@ -87,34 +82,30 @@ namespace cobalt {
                 eventManager.addHook<Params...>(eventName, func);
             }
             /**
-             * @brief: Register an event.
-             * @param name: Event name.
-             * @param description: Event description.
-             * @return: void
+             * @brief Register an event.
+             * @param name Event name.
+             * @param description Event description.
              */
             void registerEvent(const std::string& name, const std::string& description) noexcept;
             /**
-             * @brief: Trigger an event.
-             * @param eventName: Event to trigger.
-             * @return: void
+             * @brief Trigger an event.
+             * @param eventName Event to trigger.
              */
             void triggerEvent(const std::string& eventName) noexcept;
 
             /**
-             * @brief: Add a unique resource.
+             * @brief Add a unique resource.
              * @tparam ResourceType: Resource type.
-             * @return: void
              */
             template <typename ResourceType>
             void addResource() noexcept {
                 resourceRegistry.add<ResourceType>();
             }
             /**
-             * @brief: Add a resource with constructor arguments.
+             * @brief Add a resource with constructor arguments.
              * @tparam ResourceType: Resource type.
              * @tparam Args...: Resource constructor arguments.
-             * @param args: Resource constructor arguments.
-             * @return: void
+             * @param args Resource constructor arguments.
              */
             template <typename ResourceType, typename... Args>
             void addResource(Args&&... args) noexcept {
@@ -122,18 +113,18 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Get a resource.
+             * @brief Get a resource.
              * @tparam ResourceType: Resource type.
-             * @return: ResourceType reference.
+             * @return ResourceType reference.
              */
             template <typename ResourceType>
             ResourceType& getResource() {
                 return resourceRegistry.get<ResourceType&>();
             }
             /**
-             * @brief: Get a resource.
+             * @brief Get a resource.
              * @tparam ResourceType: Resource type.
-             * @return: ResourceType reference.
+             * @return ResourceType reference.
              */
             template <typename ResourceType>
             const ResourceType& getResource() const {
@@ -141,9 +132,9 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Find out if a given plugin is registered. The title must match exactly.
+             * @brief Find out if a given plugin is registered. The title must match exactly.
              * @tparam PluginType: Plugin to find.
-             * @return: bool
+             * @return bool
              */
             template <typename PluginType>
             bool isPlugin() const noexcept {
@@ -153,15 +144,14 @@ namespace cobalt {
                 return pluginManager.isPlugin(plugin);
             }
             /**
-             * @brief: Find out if a given plugin is registered. The title must match exactly.
-             * @param title: Plugin title.
-             * @return: bool
+             * @brief Find out if a given plugin is registered. The title must match exactly.
+             * @param title Plugin title.
+             * @return bool
              */
             bool isPlugin(const std::string& title) const noexcept;
             /**
-             * @brief: Add a plugin to the world.
+             * @brief Add a plugin to the world.
              * @tparam PluginType: Plugin type.
-             * @return: void
              */
             template <typename PluginType>
             void addPlugin() noexcept {
@@ -172,11 +162,10 @@ namespace cobalt {
                 plugin.log();
             }
             /**
-             * @brief: Add a plugin to the world.
+             * @brief Add a plugin to the world.
              * @tparam PluginType: Plugin type.
              * @tparam Args...: Plugin constructor arguments.
-             * @param args: Plugin constructor arguments.
-             * @return: void
+             * @param args Plugin constructor arguments.
              */
             template <typename PluginType, typename... Args>
             void addPlugin(Args&&... args) noexcept {
@@ -186,9 +175,8 @@ namespace cobalt {
                 plugin.log();
             }
             /**
-             * @brief: Add a plugin bundle to the world.
-             * @param bundle: Bundle to add.
-             * @return: void
+             * @brief Add a plugin bundle to the world.
+             * @param bundle Bundle to add.
              */
             template <typename BundleType>
             void addBundle() noexcept {
@@ -198,9 +186,9 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Make a query.
+             * @brief Make a query.
              * @tparam QueryComponents...: The query's components.
-             * @return: QueryType instance.
+             * @return QueryType instance.
              */
             template <typename... QueryComponents>
             Query<QueryComponents...> makeQuery() noexcept {
@@ -209,18 +197,18 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Read a resource.
+             * @brief Read a resource.
              * @tparam ResourceType: Resource type.
-             * @return: ReadRequest<ResourceType> instance.
+             * @return ReadRequest<ResourceType> instance.
              */
             template <typename ResourceType>
             ReadRequest<ResourceType> read() noexcept {
                 return ReadRequest<ResourceType>(entityRegistry, resourceRegistry, systemManager, eventManager);
             }
             /**
-             * @brief: Write to a resource.
+             * @brief Write to a resource.
              * @tparam ResourceType: Resource type.
-             * @return: WriteRequest<ResourceType> instance.
+             * @return WriteRequest<ResourceType> instance.
              */
             template <typename ResourceType>
             WriteRequest<ResourceType> write() noexcept {
@@ -228,23 +216,19 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Run the startup schedule.
-             * @return: void
+             * @brief Run the startup schedule.
              */
             void startup();
             /**
-             * @brief: Run the pre-update, update, and post-update schedules.
-             * @return: void
+             * @brief Run the pre-update, update, and post-update schedules.
              */
             void update() noexcept;
             /**
-             * @brief: Run the pre-render, render, and post-render schedules.
-             * @return: void
+             * @brief Run the pre-render, render, and post-render schedules.
              */
             void render() noexcept;
             /**
-             * @brief: Run the shutdown schedule.
-             * @return: void
+             * @brief Run the shutdown schedule.
              */
             void shutdown() noexcept;
 

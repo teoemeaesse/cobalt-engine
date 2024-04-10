@@ -10,9 +10,9 @@ namespace cobalt {
         class Resource {
             public:
             /**
-             * @brief: Validate a resource type.
+             * @brief Validate a resource type.
              * @tparam ResourceType: Resource type.
-             * @return: True if the resource type is valid.
+             * @return True if the resource type is valid.
              */
             template <typename ResourceType>
             static inline constexpr bool validate() {
@@ -21,55 +21,54 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Create a resource. Overload this function in your resources!
-             * @return: Resource
+             * @brief Create a resource. Overload this function in your resources!
+             * @return Resource
              */
             static Resource create() noexcept { return Resource(); }
 
             /**
-             * @brief: Default constructor.
-             * @return: Instance of Resource.
+             * @brief Default constructor.
+             * @return Instance of Resource.
              */
             Resource() noexcept = default;
             /**
-             * @brief: Default destructor.
-             * @return: void
+             * @brief Default destructor.
              */
             virtual ~Resource() noexcept = default;
             /**
-             * @brief: Copy constructor.
-             * @param: Resource to copy.
-             * @return: Instance of Resource.
+             * @brief Copy constructor.
+             * @param Resource to copy.
+             * @return Instance of Resource.
              */
             Resource(const Resource&) noexcept = default;
             /**
-             * @brief: Move constructor.
-             * @param: Resource to move.
-             * @return: Instance of Resource.
+             * @brief Move constructor.
+             * @param Resource to move.
+             * @return Instance of Resource.
              */
             Resource(Resource&&) noexcept = default;
             /**
-             * @brief: Copy assignment operator.
-             * @param: Resource to copy.
-             * @return: Resource reference.
+             * @brief Copy assignment operator.
+             * @param Resource to copy.
+             * @return Resource reference.
              */
             Resource& operator=(const Resource&) noexcept = default;
             /**
-             * @brief: Move assignment operator.
-             * @param: Resource to move.
-             * @return: Resource reference.
+             * @brief Move assignment operator.
+             * @param Resource to move.
+             * @return Resource reference.
              */
             Resource& operator=(Resource&&) = default;
 
             /**
-             * @brief: Get the resource's type. This is a unique identifier, lazy-generated based on the resource class' name.
-             * @return: Resource type identifier.
+             * @brief Get the resource's type. This is a unique identifier, lazy-generated based on the resource class' name.
+             * @return Resource type identifier.
              */
             virtual const ResourceProperties::Type getType() const noexcept;
             /**
-             * @brief: Get the resource's type. This is a unique identifier, generated at compile time based on the resource class' name.
+             * @brief Get the resource's type. This is a unique identifier, generated at compile time based on the resource class' name.
              * @tparam ResourceType: Resource type.
-             * @return: Resource type identifier.
+             * @return Resource type identifier.
              */
             template <typename ResourceType>
             static const ResourceProperties::Type getType() noexcept {
@@ -78,14 +77,14 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Get the resource's type name.
-             * @return: Resource type name.
+             * @brief Get the resource's type name.
+             * @return Resource type name.
              */
             virtual const std::string& getTypeName() const noexcept;
             /**
-             * @brief: Get the resource's type name.
+             * @brief Get the resource's type name.
              * @tparam ResourceType: Resource type.
-             * @return: Resource type name.
+             * @return Resource type name.
              */
             template <typename ResourceType>
             static const std::string& getTypeName() noexcept {

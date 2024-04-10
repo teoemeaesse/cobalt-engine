@@ -39,9 +39,9 @@ namespace cobalt {
     namespace core {
         class Platform {
             public:
-            /** 
-             * @brief: Get the name of the platform
-             * @return: The name of the platform
+            /**
+             * @brief Get the name of the platform
+             * @return The name of the platform
              */
             inline static const char* getName() { return PLATFORM_NAME; }
 
@@ -58,21 +58,21 @@ namespace cobalt {
                 }
             }
 
-            /** 
-             * @brief: Check if the platform is windows
-             * @return: True if the platform is windows, false otherwise
+            /**
+             * @brief Check if the platform is windows
+             * @return True if the platform is windows, false otherwise
              */
             inline static bool isWindows() { return strcmp(getName(), "Windows") == 0; }
 
-            /** 
-             * @brief: Check if the platform is macos
-             * @return: True if the platform is macos, false otherwise
+            /**
+             * @brief Check if the platform is macos
+             * @return True if the platform is macos, false otherwise
              */
             inline static bool isMacOS() { return strcmp(getName(), "MacOS") == 0; }
 
-            /** 
-             * @brief: Check if the platform is unix-like
-             * @return: True if the platform is unix-like, false otherwise
+            /**
+             * @brief Check if the platform is unix-like
+             * @return True if the platform is unix-like, false otherwise
              */
             inline static bool isUnixLike() { return strcmp(getName(), "Unix-like") == 0; }
         };

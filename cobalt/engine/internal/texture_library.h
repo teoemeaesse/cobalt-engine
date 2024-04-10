@@ -28,47 +28,47 @@ namespace cobalt {
         class TextureEntry {
             public:
             /**
-             * @brief: Creates an empty texture entry.
-             * @return: The texture entry.
+             * @brief Creates an empty texture entry.
+             * @return The texture entry.
              */
             TextureEntry() noexcept;
             /**
-             * @brief: Creates a new texture entry.
-             * @param id: The ID of the texture.
-             * @param texture: The texture itself.
-             * @return: The texture entry.
+             * @brief Creates a new texture entry.
+             * @param id The ID of the texture.
+             * @param texture The texture itself.
+             * @return The texture entry.
              */
             TextureEntry(const TextureID& id, Scope<core::gl::Texture>&& texture) noexcept;
             /**
-             * @brief: Copy constructor.
-             * @param other: The other texture entry.
-             * @return: The new texture entry.
+             * @brief Copy constructor.
+             * @param other The other texture entry.
+             * @return The new texture entry.
              */
             TextureEntry(const TextureEntry& other) noexcept = delete;
             /**
-             * @brief: Copy assignment operator.
-             * @param other: The other texture entry.
-             * @return: The new texture entry.
+             * @brief Copy assignment operator.
+             * @param other The other texture entry.
+             * @return The new texture entry.
              */
             TextureEntry& operator=(const TextureEntry& other) noexcept = delete;
 
             /**
-             * @brief: Move constructor.
-             * @param other: The other texture entry.
-             * @return: The new texture entry.
+             * @brief Move constructor.
+             * @param other The other texture entry.
+             * @return The new texture entry.
              */
             TextureEntry(TextureEntry&& other) noexcept;
             /**
-             * @brief: Move assignment operator.
-             * @param other: The other texture entry.
-             * @return: The new texture entry.
+             * @brief Move assignment operator.
+             * @param other The other texture entry.
+             * @return The new texture entry.
              */
             TextureEntry& operator=(TextureEntry&& other) noexcept = delete;
 
             /**
-             * @brief: Casts the texture to a given type.
+             * @brief Casts the texture to a given type.
              * @tparam TextureType: The type of the texture.
-             * @return: The texture.
+             * @return The texture.
              */
             template <typename TextureType>
             const TextureType& getTexture() const {
@@ -76,8 +76,8 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Returns the ID of the texture.
-             * @return: The ID.
+             * @brief Returns the ID of the texture.
+             * @return The ID.
              */
             const TextureID getID() const;
 
@@ -100,35 +100,34 @@ namespace cobalt {
         class TextureLibrary {
             public:
             /**
-             * @brief: Creates an empty texture library.
-             * @return: The texture library.
+             * @brief Creates an empty texture library.
+             * @return The texture library.
              */
             TextureLibrary();
             /**
-             * @brief: Destroys the texture library and all textures it contains.
+             * @brief Destroys the texture library and all textures it contains.
              */
             ~TextureLibrary() = default;
 
             /**
-             * @brief: Loads all textures from the given directory. This directory should contain a file called "textures.json" which contains a list
+             * @brief Loads all textures from the given directory. This directory should contain a file called "textures.json" which contains a list
              * of internal texture names and their corresponding texture files.
-             * @param texturesDirectory: The directory containing the texture files.
-             * @return: void
+             * @param texturesDirectory The directory containing the texture files.
              */
             void loadTextures(const core::io::Path& texturesDirectory);
 
             /**
-             * @brief: Returns the texture ID of the texture with the given name. If the texture does not exist, returns the default texture ID.
-             * @param name: The name of the texture.
-             * @return: The texture ID.
+             * @brief Returns the texture ID of the texture with the given name. If the texture does not exist, returns the default texture ID.
+             * @param name The name of the texture.
+             * @return The texture ID.
              */
             const TextureID getTextureID(const std::string& name);
 
             /**
-             * @brief: Returns the texture with the given ID. If the texture does not exist, returns a default texture.
+             * @brief Returns the texture with the given ID. If the texture does not exist, returns a default texture.
              * @tparam TextureType: The type of the texture.
-             * @param id: The ID of the texture.
-             * @return: The texture.
+             * @param id The ID of the texture.
+             * @return The texture.
              */
             template <typename TextureType>
             const TextureType& getTexture(const TextureID id) {
@@ -139,10 +138,10 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Returns the texture with the given name. If the texture does not exist, returns a default texture.
+             * @brief Returns the texture with the given name. If the texture does not exist, returns a default texture.
              * @tparam TextureType: The type of the texture.
-             * @param name: The name of the texture.
-             * @return: The texture.
+             * @param name The name of the texture.
+             * @return The texture.
              */
             template <typename TextureType>
             const TextureType& getTexture(const std::string& name) {
@@ -150,26 +149,25 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Creates a new texture and adds it to the library.
-             * @param name: The name of the texture.
-             * @param data: The data of the texture.
-             * @param encoding: The encoding of the texture.
-             * @param filter: The filter of the texture.
-             * @param wrap: The wrap of the texture.
-             * @return: The ID of the new texture.
+             * @brief Creates a new texture and adds it to the library.
+             * @param name The name of the texture.
+             * @param data The data of the texture.
+             * @param encoding The encoding of the texture.
+             * @param filter The filter of the texture.
+             * @param wrap The wrap of the texture.
+             * @return The ID of the new texture.
              */
             const TextureID makeTexture(const std::string& name, const void* data, const core::gl::TextureEncoding encoding,
                                         const core::gl::TextureFilter filter = core::gl::TextureFilters::Linear,
                                         const core::gl::TextureWrap wrap = core::gl::TextureWraps::Repeat);
 
             /**
-             * @brief: Initializes the singleton instance of the texture library.
-             * @return: void
+             * @brief Initializes the singleton instance of the texture library.
              */
             static void init();
             /**
-             * @brief: Returns the singleton instance of the texture library.
-             * @return: The texture library.
+             * @brief Returns the singleton instance of the texture library.
+             * @return The texture library.
              */
             static TextureLibrary& getTextureLibrary();
 

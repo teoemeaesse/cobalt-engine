@@ -18,38 +18,37 @@ namespace cobalt {
         };
 
         /**
-         * @brief: Any command to perform in reaction to an input.
+         * @brief Any command to perform in reaction to an input.
          */
         class InputCommand {
             public:
             /**
-             * @brief: Create a new input command.
-             * @return: The new input command.
+             * @brief Create a new input command.
+             * @return The new input command.
              */
             InputCommand() : input({false, false, 0.0f}) {}
             /**
-             * @brief: Destroy the input command.
+             * @brief Destroy the input command.
              */
             virtual ~InputCommand() = default;
 
             /**
-             * @brief: Execute the command.
-             * @return: void
+             * @brief Execute the command.
              */
             virtual void execute() = 0;
 
             /**
-             * @brief: Set the input value of the bound input.
-             * @param input: The input value of the bound input.
-             * @return: This input command.
+             * @brief Set the input value of the bound input.
+             * @param input The input value of the bound input.
+             * @return This input command.
              */
             InputCommand* withInput(InputValue input) {
                 this->input = input;
                 return this;
             }
             /**
-             * @brief: Get the input value of the bound input.
-             * @return: The input value of the bound input.
+             * @brief Get the input value of the bound input.
+             * @return The input value of the bound input.
              */
             InputValue getInput() const { return input; }
 
@@ -58,7 +57,7 @@ namespace cobalt {
         };
 
         /**
-         * @brief: Concrete input command. Executes a function on a receiver.
+         * @brief Concrete input command. Executes a function on a receiver.
          * Extend this class to create a custom input command.
          * @tparam T: The type of the receiver.
          */
@@ -66,36 +65,35 @@ namespace cobalt {
         class ConcreteInputCommand : public InputCommand {
             public:
             /**
-             * @brief: Create a new concrete input command.
-             * @param world: The ECS world instance.
-             * @param target: The receiver of the command.
-             * @return: The new concrete input command.
+             * @brief Create a new concrete input command.
+             * @param world The ECS world instance.
+             * @param target The receiver of the command.
+             * @return The new concrete input command.
              */
             ConcreteInputCommand(core::ecs::World& world, T* target) : world(world), target(target) {}
             /**
-             * @brief: Destroy the concrete input command.
-             * @return: void
+             * @brief Destroy the concrete input command.
              */
             virtual ~ConcreteInputCommand() = default;
 
             /**
-             * @brief: Get the ECS world instance.
-             * @return: The ECS world instance.
+             * @brief Get the ECS world instance.
+             * @return The ECS world instance.
              */
             core::ecs::World& getWorld() { return world; }
             /**
-             * @brief: Get the ECS world instance.
-             * @return: The ECS world instance.
+             * @brief Get the ECS world instance.
+             * @return The ECS world instance.
              */
             const core::ecs::World& getWorld() const { return world; }
             /**
-             * @brief: Get the receiver of the command.
-             * @return: The receiver of the command.
+             * @brief Get the receiver of the command.
+             * @return The receiver of the command.
              */
             T* getTarget() { return target; }
             /**
-             * @brief: Get the receiver of the command.
-             * @return: The receiver of the command.
+             * @brief Get the receiver of the command.
+             * @return The receiver of the command.
              */
             const T* getTarget() const { return target; }
 

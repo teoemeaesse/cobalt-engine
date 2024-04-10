@@ -8,7 +8,7 @@
 namespace cobalt {
     namespace core::ecs {
         /**
-         * @brief: Interface for component storage.
+         * @brief Interface for component storage.
          * TODO: This uses virtual functions, which might not be ideal for this performance-critical code.
          */
         class ComponentStorageInterface {
@@ -16,37 +16,35 @@ namespace cobalt {
             virtual ~ComponentStorageInterface() = default;
 
             /**
-             * @brief: Adds a component to the storage.
-             * @param entityID: The ID of its entity.
-             * @param component: Component to add.
-             * @return: void
+             * @brief Adds a component to the storage.
+             * @param entityID The ID of its entity.
+             * @param component Component to add.
              */
             virtual void add(const EntityProperties::ID& entityID, const Component& component) noexcept = 0;
 
             /**
-             * @brief: Removes a component from the storage.
-             * @param entityID: The ID of its entity.
-             * @return: void
+             * @brief Removes a component from the storage.
+             * @param entityID The ID of its entity.
              */
             virtual void remove(const EntityProperties::ID& entityID) noexcept = 0;
 
             /**
-             * @brief: Gets a component from the storage.
-             * @param entityID: The ID of its entity.
-             * @return: A reference to the component.
+             * @brief Gets a component from the storage.
+             * @param entityID The ID of its entity.
+             * @return A reference to the component.
              */
             virtual Component& get(const EntityProperties::ID& entityID) = 0;
 
             /**
-             * @brief: Gets a component from the storage.
-             * @param entityID: The ID of its entity.
-             * @return: A const reference to the component.
+             * @brief Gets a component from the storage.
+             * @param entityID The ID of its entity.
+             * @return A const reference to the component.
              */
             virtual const Component& get(const EntityProperties::ID& entityID) const = 0;
         };
 
         /**
-         * @brief: Packed array of components. Maps entity IDs to components.
+         * @brief Packed array of components. Maps entity IDs to components.
          * @tparam T: Component type.
          */
         template <typename T>
@@ -63,10 +61,9 @@ namespace cobalt {
 
             private:
             /**
-             * @brief: Adds a component to the storage.
-             * @param entity: The entity to which the component belongs.
-             * @param component: Component to add.
-             * @return: void
+             * @brief Adds a component to the storage.
+             * @param entity The entity to which the component belongs.
+             * @param component Component to add.
              */
             void add(const EntityProperties::ID& entityID, const Component& component) noexcept override {
                 if (entityToIndex.find(entityID) != entityToIndex.end()) {
@@ -77,9 +74,8 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Removes a component from the storage.
-             * @param entity: The entity to which the component belongs.
-             * @return: void
+             * @brief Removes a component from the storage.
+             * @param entity The entity to which the component belongs.
              */
             void remove(const EntityProperties::ID& entityID) noexcept override {
                 if (entityToIndex.find(entityID) == entityToIndex.end()) {
@@ -94,16 +90,16 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Gets a component from the storage.
-             * @param entity: The entity to which the component belongs.
-             * @return: A reference to the component.
+             * @brief Gets a component from the storage.
+             * @param entity The entity to which the component belongs.
+             * @return A reference to the component.
              */
             Component& get(const EntityProperties::ID& entityID) override { return components[entityToIndex.at(entityID)]; }
 
             /**
-             * @brief: Gets a component from the storage.
-             * @param entity: The entity to which the component belongs.
-             * @return: A const reference to the component.
+             * @brief Gets a component from the storage.
+             * @param entity The entity to which the component belongs.
+             * @return A const reference to the component.
              */
             const Component& get(const EntityProperties::ID& entityID) const override { return components[entityToIndex.at(entityID)]; }
 

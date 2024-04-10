@@ -12,7 +12,7 @@ namespace cobalt {
         class SystemManager;
 
         /**
-         * @brief: Query class. Used to iterate over entities with specific components.
+         * @brief Query class. Used to iterate over entities with specific components.
          * @tparam Components...: Components to query for. Must be reference types (use cobalt::RefMut<T> or cobalt::Ref<T>). Must be registered in
          * the world.
          */
@@ -22,12 +22,12 @@ namespace cobalt {
 
             public:
             /**
-             * @brief: Creates a new query.
-             * @param entityRegistry: The entity registry that the query will run on.
-             * @param resourceRegistry: The resource registry that the query will run on. Unused.
-             * @param systemManager: The system manager that the query will run on. Unused.
-             * @param eventManager: The event manager that the query will run on. Unused.
-             * @return: A new query.
+             * @brief Creates a new query.
+             * @param entityRegistry The entity registry that the query will run on.
+             * @param resourceRegistry The resource registry that the query will run on. Unused.
+             * @param systemManager The system manager that the query will run on. Unused.
+             * @param eventManager The event manager that the query will run on. Unused.
+             * @return A new query.
              */
             explicit Query(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
                            EventManager& eventManager) noexcept
@@ -36,13 +36,12 @@ namespace cobalt {
                 Component::validate<RemoveConstRef<Components>...>();
             }
             /**
-             * @brief: Destroys the query.
-             * @return: void
+             * @brief Destroys the query.
              */
             ~Query() noexcept = default;
 
             /**
-             * @brief: Iterator for the queried entities.
+             * @brief Iterator for the queried entities.
              */
             class Iterator {
                 public:
@@ -78,12 +77,12 @@ namespace cobalt {
 
             public:
             /**
-             * @brief: Creates a new query.
-             * @param entityRegistry: The entity registry that the query will run on.
-             * @param resourceRegistry: The resource registry that the query will run on. Unused.
-             * @param systemManager: The system manager that the query will run on. Unused.
-             * @param eventManager: The event manager that the query will run on. Unused.
-             * @return: A new query.
+             * @brief Creates a new query.
+             * @param entityRegistry The entity registry that the query will run on.
+             * @param resourceRegistry The resource registry that the query will run on. Unused.
+             * @param systemManager The system manager that the query will run on. Unused.
+             * @param eventManager The event manager that the query will run on. Unused.
+             * @return A new query.
              */
             explicit Query(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
                            EventManager& eventManager) noexcept
@@ -91,7 +90,7 @@ namespace cobalt {
                   componentTuples(entityRegistry.getWithEntity<Components...>()) {}
 
             /**
-             * @brief: Iterator for the queried entities.
+             * @brief Iterator for the queried entities.
              */
             class Iterator {
                 public:

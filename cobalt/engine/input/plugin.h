@@ -9,22 +9,21 @@
 namespace cobalt {
     namespace engine {
         /**
-         * @brief: Input plugin. Provides peripheral input state information.
+         * @brief Input plugin. Provides peripheral input state information.
          */
         class InputPlugin : public core::ecs::Plugin {
             public:
             static inline constexpr const char* TITLE = "Input";
 
             /**
-             * @brief: Construct the plugin.
-             * @return: InputPlugin
+             * @brief Construct the plugin.
+             * @return InputPlugin
              */
             InputPlugin() noexcept;
 
             /**
-             * @brief: Initializes the plugin.
-             * @param world: World to plug into.
-             * @return: void
+             * @brief Initializes the plugin.
+             * @param world World to plug into.
              */
             void onPlug(core::ecs::World& world) const noexcept override;
         };

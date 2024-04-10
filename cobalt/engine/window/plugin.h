@@ -9,7 +9,7 @@
 namespace cobalt {
     namespace engine {
         /**
-         * @brief: Window plugin. Adds the window resource to the world.
+         * @brief Window plugin. Adds the window resource to the world.
          */
         class WindowPlugin : public core::ecs::Plugin {
             public:
@@ -19,15 +19,14 @@ namespace cobalt {
             static inline constexpr const char* FRAMEBUFFER_RESIZE_EVENT_DESCRIPTION = "Called whenever the window is resized.";
 
             /**
-             * @brief: Construct the plugin.
-             * @return: WindowPlugin
+             * @brief Construct the plugin.
+             * @return WindowPlugin
              */
             WindowPlugin() noexcept;
 
             /**
-             * @brief: Initialize the plugin.
-             * @param world: World instance.
-             * @return: void
+             * @brief Initialize the plugin.
+             * @param world World instance.
              */
             void onPlug(core::ecs::World& world) const noexcept override;
         };

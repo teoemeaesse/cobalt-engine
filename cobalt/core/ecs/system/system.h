@@ -11,32 +11,29 @@ namespace cobalt {
         class EventManager;
 
         /**
-         * @brief: Interface for all systems. Used to store systems in a vector via type erasure.
+         * @brief Interface for all systems. Used to store systems in a vector via type erasure.
          */
         class SystemInterface {
             public:
             /**
-             * @brief: Default virtual destructor.
-             * @return: void
+             * @brief Default virtual destructor.
              */
             virtual ~SystemInterface() noexcept = default;
 
             /**
-             * @brief: Runs the system.
-             * @return: void
+             * @brief Runs the system.
              */
             virtual void run() = 0;
 
             protected:
             /**
-             * @brief: Default constructor.
-             * @return: void
+             * @brief Default constructor.
              */
             SystemInterface() noexcept = default;
         };
 
         /**
-         * @brief: System class. Used to run logic on entities with specific components.
+         * @brief System class. Used to run logic on entities with specific components.
          * @tparam Params...: System parameters. Can be queries or resources.
          */
         template <typename... Params>
@@ -48,32 +45,29 @@ namespace cobalt {
 
             public:
             /**
-             * @brief: Creates a new system.
-             * @param entityRegistry: The entity registry that the system will run on.
-             * @param resourceRegistry: The resource registry that the system will run on.
-             * @param systemManager: The system manager that the system will run on.
-             * @param eventManager: The event manager that the system will run on.
-             * @return: A new system.
+             * @brief Creates a new system.
+             * @param entityRegistry The entity registry that the system will run on.
+             * @param resourceRegistry The resource registry that the system will run on.
+             * @param systemManager The system manager that the system will run on.
+             * @param eventManager The event manager that the system will run on.
+             * @return A new system.
              */
             explicit System(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
                             EventManager& eventManager) noexcept
                 : entityRegistry(entityRegistry), resourceRegistry(resourceRegistry), systemManager(systemManager), eventManager(eventManager) {}
             /**
-             * @brief: Destroys the system.
-             * @return: void
+             * @brief Destroys the system.
              */
             virtual ~System() noexcept = default;
 
             /**
-             * @brief: Runs the system.
-             * @return: void
+             * @brief Runs the system.
              */
             void run() override { populateParams(std::make_index_sequence<sizeof...(Params)>{}); }
 
             /**
-             * @brief: Runs the system on the given system parameters. Overload this function to implement custom logic.
-             * @param params: The system parameters to run on.
-             * @return: void
+             * @brief Runs the system on the given system parameters. Overload this function to implement custom logic.
+             * @param params The system parameters to run on.
              */
             virtual void run(Params... params) = 0;
 
@@ -84,9 +78,8 @@ namespace cobalt {
             EventManager& eventManager;
 
             /**
-             * @brief: Template magic.
+             * @brief Template magic.
              * @tparam ...Is: Indices.
-             * @return: void
              */
             template <size_t... Is>
             void populateParams(std::index_sequence<Is...>) {
@@ -95,7 +88,7 @@ namespace cobalt {
         };
 
         /**
-         * @brief: Lambda system class. Used to run logic on entities with specific components using a lambda function.
+         * @brief Lambda system class. Used to run logic on entities with specific components using a lambda function.
          * @tparam Func: The lambda function type.
          * @tparam Params...: System parameters. Can be queries or resources.
          */
@@ -105,22 +98,21 @@ namespace cobalt {
             Func func;
 
             /**
-             * @brief: Creates a new lambda system.
-             * @param func: The lambda function to run.
-             * @param entityRegistry: The entity registry that the system will run on.
-             * @param resourceRegistry: The resource registry that the system will run on.
-             * @param systemManager: The system manager that the system will run on.
-             * @param eventManager: The event manager that the system will run on.
-             * @return: A new lambda system.
+             * @brief Creates a new lambda system.
+             * @param func The lambda function to run.
+             * @param entityRegistry The entity registry that the system will run on.
+             * @param resourceRegistry The resource registry that the system will run on.
+             * @param systemManager The system manager that the system will run on.
+             * @param eventManager The event manager that the system will run on.
+             * @return A new lambda system.
              */
             LambdaSystem(Func func, EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
                          EventManager& eventManager)
                 : System<Params...>(entityRegistry, resourceRegistry, systemManager, eventManager), func(func) {}
 
             /**
-             * @brief: Runs the lambda system on the given system parameters.
-             * @param params: The system parameters to run on.
-             * @return: void
+             * @brief Runs the lambda system on the given system parameters.
+             * @param params The system parameters to run on.
              */
             void run(Params... params) override { func(std::forward<Params>(params)...); }
         };

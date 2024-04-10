@@ -8,7 +8,7 @@
 namespace cobalt {
     namespace core::gl {
         /**
-         * @brief: FrameBuffer Object (FBO). Used for rendering to texture (off-screen
+         * @brief FrameBuffer Object (FBO). Used for rendering to texture (off-screen
          * rendering and post-processing effects).
          */
         class FBO {
@@ -20,102 +20,98 @@ namespace cobalt {
             };
 
             /**
-             * @brief: Creates a new FBO with the given buffer attachments.
-             * @param width: The width of the FBO.
-             * @param height: The height of the FBO.
-             * @param attachments: The attachments of the FBO.
-             * @return: A new FBO.
+             * @brief Creates a new FBO with the given buffer attachments.
+             * @param width The width of the FBO.
+             * @param height The height of the FBO.
+             * @param attachments The attachments of the FBO.
+             * @return A new FBO.
              */
             FBO(const uint width, const uint height, const Vec<Attachment>& attachments);
             /**
-             * @brief: Creates a handle to the Default FBO.
-             * @return: The Default FBO.
+             * @brief Creates a handle to the Default FBO.
+             * @return The Default FBO.
              */
             FBO();
             /**
-             * @brief: Creates a new FBO from an existing FBO.
-             * @param other: The other FBO.
-             * @return: The new FBO.
+             * @brief Creates a new FBO from an existing FBO.
+             * @param other The other FBO.
+             * @return The new FBO.
              */
             FBO(const FBO&) = delete;
             /**
-             * @brief: Moves the FBO.
-             * @param other: The other FBO.
-             * @return: The moved FBO.
+             * @brief Moves the FBO.
+             * @param other The other FBO.
+             * @return The moved FBO.
              */
             FBO(FBO&&) noexcept;
             /**
-             * @brief: Copy assignment.
-             * @param other: The other FBO.
-             * @return: The FBO.
+             * @brief Copy assignment.
+             * @param other The other FBO.
+             * @return The FBO.
              */
             FBO& operator=(const FBO&) = delete;
             /**
-             * @brief: Move assignment.
-             * @param other: The other FBO.
-             * @return: The FBO.
+             * @brief Move assignment.
+             * @param other The other FBO.
+             * @return The FBO.
              */
             FBO& operator=(FBO&&) noexcept;
             /**
-             * @brief: Destroys the FBO.
+             * @brief Destroys the FBO.
              */
             ~FBO();
 
             /**
-             * @brief: Resizes the FBO.
-             * @param width: The new width of the FBO.
-             * @param height: The new height of the FBO.
-             * @return: void
+             * @brief Resizes the FBO.
+             * @param width The new width of the FBO.
+             * @param height The new height of the FBO.
              */
             void resize(const uint width, const uint height);
             /**
-             * @brief: Binds the FBO.
-             * @return: void
+             * @brief Binds the FBO.
              */
             void bind() const;
             /**
-             * @brief: Clears the FBO.
+             * @brief Clears the FBO.
              * Must be called after binding the FBO.
-             * @return: void
              */
             void clear() const;
 
             /**
-             * @brief: Sets the color to clear the FBO with.
-             * @param color: The color to clear the FBO with.
-             * @return: void
+             * @brief Sets the color to clear the FBO with.
+             * @param color The color to clear the FBO with.
              */
             void setClearColor(const Color& color);
 
             /**
-             * @brief: Returns the i-th color texture attached to the FBO.
-             * @param i: The index of the color texture.
-             * @return: The texture at the designated color buffer.
+             * @brief Returns the i-th color texture attached to the FBO.
+             * @param i The index of the color texture.
+             * @return The texture at the designated color buffer.
              */
             const Opt<Wrap<const Texture2D>> getColorBuffer(uint i) const;
             /**
-             * @brief: Returns the first color texture attached to the FBO.
-             * @return: The texture at the first color buffer.
+             * @brief Returns the first color texture attached to the FBO.
+             * @return The texture at the first color buffer.
              */
             const Opt<Wrap<const Texture2D>> getColorBuffer() const;
             /**
-             * @brief: Returns the depth texture attached to the FBO. Optionally returns the depth-stencil texture.
-             * @return: The depth texture attached to the FBO.
+             * @brief Returns the depth texture attached to the FBO. Optionally returns the depth-stencil texture.
+             * @return The depth texture attached to the FBO.
              */
             const Opt<Wrap<const Texture2D>> getDepthBuffer() const;
             /**
-             * @brief: Returns the stencil texture attached to the FBO. Optionally returns the depth-stencil texture.
-             * @return: The stencil texture attached to the FBO.
+             * @brief Returns the stencil texture attached to the FBO. Optionally returns the depth-stencil texture.
+             * @return The stencil texture attached to the FBO.
              */
             const Opt<Wrap<const Texture2D>> getStencilBuffer() const;
             /**
-             * @brief: Returns the width of the FBO.
-             * @return: The width of the FBO.
+             * @brief Returns the width of the FBO.
+             * @return The width of the FBO.
              */
             const uint getWidth() const;
             /**
-             * @brief: Returns the height of the FBO.
-             * @return: The height of the FBO.
+             * @brief Returns the height of the FBO.
+             * @return The height of the FBO.
              */
             const uint getHeight() const;
 

@@ -13,41 +13,40 @@ namespace cobalt {
         class ComponentRegistry {
             public:
             /**
-             * @brief: Default constructor.
-             * @return: ComponentRegistry instance.
+             * @brief Default constructor.
+             * @return ComponentRegistry instance.
              */
             ComponentRegistry() noexcept = default;
             /**
-             * @brief: Default destructor.
+             * @brief Default destructor.
              */
             ~ComponentRegistry() = default;
             /**
-             * @brief: Copy constructor.
-             * @param other: ComponentRegistry instance to copy.
+             * @brief Copy constructor.
+             * @param other ComponentRegistry instance to copy.
              */
             ComponentRegistry(const ComponentRegistry&) noexcept = delete;
             /**
-             * @brief: Move constructor.
-             * @param other: ComponentRegistry instance to move.
+             * @brief Move constructor.
+             * @param other ComponentRegistry instance to move.
              */
             ComponentRegistry(ComponentRegistry&&) noexcept = delete;
             /**
-             * @brief: Copy assignment operator.
-             * @param other: ComponentRegistry instance to copy.
-             * @return: Reference to this.
+             * @brief Copy assignment operator.
+             * @param other ComponentRegistry instance to copy.
+             * @return Reference to this.
              */
             ComponentRegistry& operator=(const ComponentRegistry&) noexcept = delete;
             /**
-             * @brief: Move assignment operator.
-             * @param other: ComponentRegistry instance to move.
-             * @return: Reference to this.
+             * @brief Move assignment operator.
+             * @param other ComponentRegistry instance to move.
+             * @return Reference to this.
              */
             ComponentRegistry& operator=(ComponentRegistry&&) noexcept = delete;
 
             /**
-             * @brief: Register a component type.
+             * @brief Register a component type.
              * @tparam ComponentType: Component type.
-             * @return: void
              */
             template <typename ComponentType>
             void registerComponent() {
@@ -64,10 +63,9 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Add a component to an entity.
+             * @brief Add a component to an entity.
              * @tparam ComponentType: Component type.
-             * @param entityID: The entity ID.
-             * @return: void
+             * @param entityID The entity ID.
              */
             template <typename ComponentType>
             void add(const EntityProperties::ID& entityID) noexcept {
@@ -81,11 +79,10 @@ namespace cobalt {
                 signatures[entityID].set(typeIndices[type]);
             }
             /**
-             * @brief: Add a component to an entity.
+             * @brief Add a component to an entity.
              * @tparam ComponentType: Component type.
-             * @param entityID: The entity ID.
-             * @param args: Component's constructor arguments.
-             * @return: void
+             * @param entityID The entity ID.
+             * @param args Component's constructor arguments.
              */
             template <typename ComponentType, typename... Args>
             void add(const EntityProperties::ID& entityID, Args&&... args) noexcept {
@@ -101,10 +98,9 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Remove a set of components from an entity.
+             * @brief Remove a set of components from an entity.
              * @tparam ComponentTypes...: Component types.
-             * @param entityID: The entity ID.
-             * @return: void
+             * @param entityID The entity ID.
              */
             template <typename... ComponentTypes>
             void remove(const EntityProperties::ID& entityID) noexcept {
@@ -118,17 +114,16 @@ namespace cobalt {
                 (signatures[entityID].reset(typeIndices.at(Component::template getType<ComponentTypes>())), ...);
             }
             /**
-             * @brief: Remove all components from an entity.
-             * @param entityID: The entity ID.
-             * @return: void
+             * @brief Remove all components from an entity.
+             * @param entityID The entity ID.
              */
             void removeAll(const EntityProperties::ID& entityID) noexcept;
 
             /**
-             * @brief: Get a component from an entity.
+             * @brief Get a component from an entity.
              * @tparam ComponentRef: Component type.
-             * @param entityID: The entity ID.
-             * @return: Component reference.
+             * @param entityID The entity ID.
+             * @return Component reference.
              */
             template <typename ComponentRef>
             ComponentRef get(const EntityProperties::ID& entityID) {
@@ -139,10 +134,10 @@ namespace cobalt {
                 }
             }
             /**
-             * @brief: Get a component from an entity.
+             * @brief Get a component from an entity.
              * @tparam ComponentRef: Component type.
-             * @param entityID: The entity ID.
-             * @return: Component reference.
+             * @param entityID The entity ID.
+             * @return Component reference.
              */
             template <typename ComponentRef>
             ComponentRef get(const EntityProperties::ID& entityID) const {
@@ -154,10 +149,10 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Get a set of components from an entity.
+             * @brief Get a set of components from an entity.
              * @tparam ComponentRefs...: Component types.
-             * @param entityID: The entity ID.
-             * @return: Component reference.
+             * @param entityID The entity ID.
+             * @return Component reference.
              */
             template <typename... ComponentRefs>
             Tuple<ComponentRefs...> getMany(const EntityProperties::ID& entityID) const {
@@ -166,10 +161,10 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Check if an entity has a set of components.
+             * @brief Check if an entity has a set of components.
              * @tparam ComponentTypes...: Component types.
-             * @param entityID: The entity ID.
-             * @return: True if the entity has the components, false otherwise.
+             * @param entityID The entity ID.
+             * @return True if the entity has the components, false otherwise.
              */
             template <typename... ComponentTypes>
             const bool has(const EntityProperties::ID& entityID) const {

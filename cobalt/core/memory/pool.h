@@ -9,7 +9,7 @@
 namespace cobalt {
     namespace core::memory {
         /**
-         * @brief: A pool allocator is a memory allocator that allocates
+         * @brief A pool allocator is a memory allocator that allocates
          * memory in blocks of a fixed size. It is useful for allocating many objects
          * of the same type (e.g. components in an ECS).
          */
@@ -17,15 +17,15 @@ namespace cobalt {
         class PoolAllocator : public Allocator {
             public:
             /**
-             * @brief: Creates a pool allocator with a given block capacity and block count.
-             * @param block_capacity: The number of blocks in the pool.
+             * @brief Creates a pool allocator with a given block capacity and block count.
+             * @param block_capacity The number of blocks in the pool.
              */
             PoolAllocator(const uint block_capacity) : heap(), chunk_count(1), block_count(0) {
                 chunks = (PoolChunk*)heap.grab(sizeof(PoolChunk));
                 chunks[0] = poolChunkCreate(heap, block_capacity);
             }
             /**
-             * @brief: Destroys a pool allocator.
+             * @brief Destroys a pool allocator.
              */
             ~PoolAllocator() {
                 for (uint i = 0; i < chunk_count; i++) {
@@ -35,8 +35,8 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Allocates a block of memory from the pool.
-             * @return: A pointer to the allocated block.
+             * @brief Allocates a block of memory from the pool.
+             * @return A pointer to the allocated block.
              */
             T* grab() {
                 block_count++;
@@ -51,9 +51,8 @@ namespace cobalt {
                 return (T*)((char*)chunks[chunk_count - 1].data + chunks[chunk_count - 1].block_count++ * sizeof(T));
             }
             /**
-             * @brief: Frees a block of memory from the pool.
-             * @param ptr: The pointer to the block to free.
-             * @return: void
+             * @brief Frees a block of memory from the pool.
+             * @param ptr The pointer to the block to free.
              */
             void drop(T* ptr) {
                 block_count--;
@@ -65,8 +64,8 @@ namespace cobalt {
                 }
             }
             /**
-             * @brief: Calculate the allocated size of the pool.
-             * @return: The allocated size of the pool in bytes.
+             * @brief Calculate the allocated size of the pool.
+             * @return The allocated size of the pool in bytes.
              */
             size_t getSize() { return block_count * sizeof(T); }
 
@@ -84,29 +83,28 @@ namespace cobalt {
             uint block_count;    // The number of blocks allocated by the pool.
 
             /**
-             * @brief: Allocates a block of memory from the pool.
-             * @param size: The size of the block to allocate. This parameter is ignored.
-             * @return: A pointer to the allocated block.
+             * @brief Allocates a block of memory from the pool.
+             * @param size The size of the block to allocate. This parameter is ignored.
+             * @return A pointer to the allocated block.
              */
             void* alloc(const size_t size) override { return grab(); }
             /**
-             * @brief: Frees a block of memory from the pool.
-             * @param ptr: The pointer to the block to free.
-             * @return: void
+             * @brief Frees a block of memory from the pool.
+             * @param ptr The pointer to the block to free.
              */
             void free(void* ptr) override { drop((T*)ptr); }
             /**
-             * @brief: Reallocates a block of memory from the pool.
+             * @brief Reallocates a block of memory from the pool.
              * Since the pool allocator does not support variable block sizes, this
              * function simply throws an error.
-             * @param ptr: The pointer to the block to reallocate.
-             * @return: A pointer to the reallocated block.
+             * @param ptr The pointer to the block to reallocate.
+             * @return A pointer to the reallocated block.
              */
             void* realloc(void* ptr, const size_t size) override { return nullptr; }
             /**
-             * @brief: Creates a pool chunk with a given block capacity.
-             * @param block_capacity: The number of blocks in the chunk.
-             * @return: The created chunk.
+             * @brief Creates a pool chunk with a given block capacity.
+             * @param block_capacity The number of blocks in the chunk.
+             * @return The created chunk.
              */
             PoolChunk poolChunkCreate(HeapAllocator& heap, const uint block_capacity) {
                 PoolChunk chunk = {.data = heap.grab(block_capacity * sizeof(T)),
@@ -119,9 +117,8 @@ namespace cobalt {
                 return chunk;
             }
             /**
-             * @brief: Destroys a pool chunk.
-             * @param chunk: The chunk to destroy.
-             * @return: void
+             * @brief Destroys a pool chunk.
+             * @param chunk The chunk to destroy.
              */
             void poolChunkDestroy(HeapAllocator& heap, PoolChunk* chunk) {
                 heap.drop(chunk->data);

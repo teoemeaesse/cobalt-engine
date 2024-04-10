@@ -8,35 +8,33 @@
 namespace cobalt {
     namespace engine {
         /**
-         * @brief: Applies a color filter to the final image.
+         * @brief Applies a color filter to the final image.
          */
         class FilterNode : public RenderNode {
             public:
             /**
-             * @brief: Create a filter node.
-             * @param renderer: The renderer to use.
-             * @param defaultTarget: The default target to render to. This is the target
+             * @brief Create a filter node.
+             * @param renderer The renderer to use.
+             * @param defaultTarget The default target to render to. This is the target
              *                       that contains the final image.
-             * @param filter: The material to use for the filter quad.
-             * @return: The filter node.
+             * @param filter The material to use for the filter quad.
+             * @return The filter node.
              */
             FilterNode(Renderer& renderer, RenderTarget&& defaultTarget, core::gfx::Material& filter);
             /**
-             * @brief: Destroy the filter node.
+             * @brief Destroy the filter node.
              */
             ~FilterNode() = default;
 
             /**
-             * @brief: Render the filter to the final image.
-             * @param cameraManager: The camera manager.
-             * @return: void
+             * @brief Render the filter to the final image.
+             * @param cameraManager The camera manager.
              */
             void render(const CameraManager& cameraManager) override;
             /**
-             * @brief: Called upon window resize.
-             * @param width: The new width of the render graph.
-             * @param height: The new height of the render graph.
-             * @return: void
+             * @brief Called upon window resize.
+             * @param width The new width of the render graph.
+             * @param height The new height of the render graph.
              */
             void onResize(const float width, const float height) override;
 

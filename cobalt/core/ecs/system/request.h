@@ -11,19 +11,19 @@ namespace cobalt {
         class SystemManager;
 
         /**
-         * @brief: Resource request. Facilitates read-only access to resources.
+         * @brief Resource request. Facilitates read-only access to resources.
          * @tparam ResourceType: Resource type.
          */
         template <typename ResourceType>
         class ReadRequest : SystemParameter {
             public:
             /**
-             * @brief: Constructor.
-             * @param entityRegistry: Entity registry. Unused.
-             * @param resourceRegistry: Resource registry.
-             * @param systemManager: System manager. Unused.
-             * @param eventManager: Event manager. Unused.
-             * @return: Read request instance.
+             * @brief Constructor.
+             * @param entityRegistry Entity registry. Unused.
+             * @param resourceRegistry Resource registry.
+             * @param systemManager System manager. Unused.
+             * @param eventManager Event manager. Unused.
+             * @return Read request instance.
              */
             ReadRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager, EventManager& eventManager)
                 : SystemParameter(entityRegistry, resourceRegistry, systemManager, eventManager),
@@ -31,14 +31,13 @@ namespace cobalt {
                 Resource::validate<ResourceType>();
             }
             /**
-             * @brief: Destructor.
-             * @return: void
+             * @brief Destructor.
              */
             ~ReadRequest() noexcept = default;
 
             /**
-             * @brief: Get resource.
-             * @return: Resource.
+             * @brief Get resource.
+             * @return Resource.
              */
             const ResourceType& get() const { return resource; }
 
@@ -47,19 +46,19 @@ namespace cobalt {
         };
 
         /**
-         * @brief: Resource request. Facilitates read-write access to resources.
+         * @brief Resource request. Facilitates read-write access to resources.
          * @tparam ResourceType: Resource type.
          */
         template <typename ResourceType>
         class WriteRequest : SystemParameter {
             public:
             /**
-             * @brief: Constructor.
-             * @param entityRegistry: Entity registry. Unused.
-             * @param resourceRegistry: Resource registry.
-             * @param systemManager: System manager. Unused.
-             * @param eventManager: Event manager. Unused.
-             * @return: Write request instance.
+             * @brief Constructor.
+             * @param entityRegistry Entity registry. Unused.
+             * @param resourceRegistry Resource registry.
+             * @param systemManager System manager. Unused.
+             * @param eventManager Event manager. Unused.
+             * @return Write request instance.
              */
             explicit WriteRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
                                   EventManager& eventManager)
@@ -67,14 +66,13 @@ namespace cobalt {
                 Resource::validate<ResourceType>();
             }
             /**
-             * @brief: Destructor.
-             * @return: void
+             * @brief Destructor.
              */
             ~WriteRequest() noexcept = default;
 
             /**
-             * @brief: Get resource.
-             * @return: Resource.
+             * @brief Get resource.
+             * @return Resource.
              */
             ResourceType& get() { return resource; }
 

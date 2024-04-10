@@ -95,13 +95,13 @@ namespace cobalt {
 
             public:
             /**
-             * @brief: Check if the key is currently down.
-             * @return: Whether the key is currently down.
+             * @brief Check if the key is currently down.
+             * @return Whether the key is currently down.
              */
             bool isDown() const;
             /**
-             * @brief: Check if the key has been polled since the last frame.
-             * @return: Whether the key has been polled since the last frame.
+             * @brief Check if the key has been polled since the last frame.
+             * @return Whether the key has been polled since the last frame.
              */
             bool isPolled() const;
 
@@ -110,13 +110,12 @@ namespace cobalt {
             bool polled = true;  // Whether the key has been polled since the last frame.
 
             /**
-             * @brief: Create a new key state.
-             * @return: The new key state.
+             * @brief Create a new key state.
+             * @return The new key state.
              */
             KeyState();
             /**
-             * @brief: Destroy the key state.
-             * @return: void
+             * @brief Destroy the key state.
              */
             ~KeyState() = default;
         };
@@ -126,42 +125,38 @@ namespace cobalt {
             const static std::string NAME;
 
             /**
-             * @brief: Create a new keyboard.
-             * @param id: The device id for the keyboard.
-             * @return: The new keyboard.
+             * @brief Create a new keyboard.
+             * @param id The device id for the keyboard.
+             * @return The new keyboard.
              */
             explicit Keyboard(const DeviceID id);
             /**
-             * @brief: Destroy the keyboard.
-             * @return: void
+             * @brief Destroy the keyboard.
              */
             ~Keyboard() = default;
 
             /**
-             * @brief: Callback for when a key is pressed.
-             * @param key: The key that was pressed.
-             * @param down: Whether the key was pressed down or released.
-             * @return: void
+             * @brief Callback for when a key is pressed.
+             * @param key The key that was pressed.
+             * @param down Whether the key was pressed down or released.
              */
             void onKeyPress(const KeyboardInputID key, const bool down);
             /**
-             * @brief: Poll the keyboard for events.
+             * @brief Poll the keyboard for events.
              * This generates peripheral events for all keys
              * that are currently down or just released.
-             * @return: void
              */
             void pollEvents() override;
             /**
-             * @brief: Clear all events from the keyboard.
+             * @brief Clear all events from the keyboard.
              * Executes all pending input events.
-             * @return: void
              */
             void clearEvents() override;
 
             /**
-             * @brief: Get the state of a key.
-             * @param key: The key to get the state of.
-             * @return: The state of the key.
+             * @brief Get the state of a key.
+             * @param key The key to get the state of.
+             * @return The state of the key.
              */
             KeyState& getKey(const KeyboardInputID key);
 
@@ -169,35 +164,34 @@ namespace cobalt {
             KeyState keyStates[static_cast<size_t>(KeyboardInputID::COUNT)];  // The states of all the keys.
 
             /**
-             * @brief: Queue an event.
-             * @param id: The id of the event.
-             * @param value: The value of the event.
-             * @return: void
+             * @brief Queue an event.
+             * @param id The id of the event.
+             * @param value The value of the event.
              */
             void queueEvent(const KeyboardInputID id, const InputValue value);
 
             public:  // ----- DEBUG -----
             /**
-             * @brief: Get a user-friendly string for the peripheral.
-             * @return: The converted string.
+             * @brief Get a user-friendly string for the peripheral.
+             * @return The converted string.
              */
             const std::string& toString() const override;
             /**
-             * @brief: Convert a GLFW key code to a Cobalt key code.
-             * @param glfwCode: The GLFW key code.
-             * @return: The Cobalt key code.
+             * @brief Convert a GLFW key code to a Cobalt key code.
+             * @param glfwCode The GLFW key code.
+             * @return The Cobalt key code.
              */
             const KeyboardInputID glfwToCobalt(const int glfwCode) const override;
             /**
-             * @brief: Convert a Cobalt key code to a GLFW key code.
-             * @param cobaltCode: The Cobalt key code.
-             * @return: The GLFW key code.
+             * @brief Convert a Cobalt key code to a GLFW key code.
+             * @param cobaltCode The Cobalt key code.
+             * @return The GLFW key code.
              */
             const int cobaltToGlfw(const KeyboardInputID cobaltCode) const override;
             /**
-             * @brief: Convert a Cobalt key code to a user-friendly string.
-             * @param cobaltCode: The Cobalt key code.
-             * @return: The converted string.
+             * @brief Convert a Cobalt key code to a user-friendly string.
+             * @param cobaltCode The Cobalt key code.
+             * @return The converted string.
              */
             const std::string& cobaltToStr(const KeyboardInputID cobaltCode) const override;
         };

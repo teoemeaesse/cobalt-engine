@@ -14,7 +14,7 @@ if(TEST_ENVIRONMENT)
   add_definitions(-DTEST_ENVIRONMENT)
 endif()
 
-find_package(Doxygen REQUIRED)
+find_package(Doxygen)
 
 if(DOXYGEN_FOUND)
   # Define the Doxygen target

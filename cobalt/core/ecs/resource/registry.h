@@ -9,7 +9,7 @@
 namespace cobalt {
     namespace core::ecs {
         /**
-         * @brief: Resource registry. Responsible for managing ECS resources. Resources are globally unique and accessible by systems.
+         * @brief Resource registry. Responsible for managing ECS resources. Resources are globally unique and accessible by systems.
          */
         class ResourceRegistry {
             public:
@@ -17,9 +17,8 @@ namespace cobalt {
             ~ResourceRegistry() noexcept = default;
 
             /**
-             * @brief: Add a resource to the registry.
+             * @brief Add a resource to the registry.
              * @tparam ResourceType: Resource type.
-             * @return: void
              */
             template <typename ResourceType>
             void add() noexcept {
@@ -30,11 +29,10 @@ namespace cobalt {
                 resources.emplace(type, Move(CreateScope<ResourceType>()));
             }
             /**
-             * @brief: Add a resource to the registry.
+             * @brief Add a resource to the registry.
              * @tparam ResourceType: Resource type.
              * @tparam Args...: Resource constructor arguments.
-             * @param: args: Resource constructor arguments.
-             * @return: void
+             * @param args Resource constructor arguments.
              */
             template <typename ResourceType, typename... Args>
             void add(Args&&... args) noexcept {
@@ -46,9 +44,9 @@ namespace cobalt {
             }
 
             /**
-             * @brief: Get a resource from the registry.
+             * @brief Get a resource from the registry.
              * @tparam ResourceRef: Resource reference.
-             * @return: Resource reference.
+             * @return Resource reference.
              */
             template <typename ResourceRef>
             ResourceRef get() {
@@ -59,9 +57,9 @@ namespace cobalt {
                 }
             }
             /**
-             * @brief: Get a resource from the registry.
+             * @brief Get a resource from the registry.
              * @tparam ResourceRef: Resource reference.
-             * @return: Resource reference.
+             * @return Resource reference.
              */
             template <typename ResourceRef>
             ResourceRef get() const {

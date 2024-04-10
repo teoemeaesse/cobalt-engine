@@ -8,22 +8,21 @@
 namespace cobalt {
     namespace engine {
         /**
-         * @brief: Euler integration plugin. Provides basic euler integration for linear and angular motion.
+         * @brief Euler integration plugin. Provides basic euler integration for linear and angular motion.
          */
         class EulerPlugin : public core::ecs::Plugin {
             public:
             static inline constexpr const char* TITLE = "Euler integration";
 
             /**
-             * @brief: Construct the plugin.
-             * @return: EulerPlugin
+             * @brief Construct the plugin.
+             * @return EulerPlugin
              */
             EulerPlugin() noexcept;
 
             /**
-             * @brief: Initialize the plugin.
-             * @param world: World instance.
-             * @return: void
+             * @brief Initialize the plugin.
+             * @param world World instance.
              */
             void onPlug(core::ecs::World& world) const noexcept override;
         };
