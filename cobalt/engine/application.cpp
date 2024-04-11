@@ -26,7 +26,7 @@ namespace cobalt {
         extern bool shutdownInterrupt;
         void Application::run() {
             int framebufferWidth, framebufferHeight;
-            glfwGetFramebufferSize(core::gl::Context::getGLFWContext(), &framebufferWidth, &framebufferHeight);
+            glfwGetFramebufferSize(core::gl::Context::getGLContext(), &framebufferWidth, &framebufferHeight);
             CB_INFO("Starting up game loop");
 
             uint64_t delta = 1000000 / targetFramerate, acc = 0, frametime = 0, counter = 0;

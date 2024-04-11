@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
 
     // Cleanup.
     delete app;
-    cobalt::core::gl::Context::destroy();
+    cobalt::core::gl::Context::finish();
 
     return EXIT_SUCCESS;
 }

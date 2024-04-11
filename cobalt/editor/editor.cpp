@@ -41,7 +41,6 @@ namespace cobalt {
 
             CameraManager& cameraManager = world.getResource<engine::CameraManager>();
 
-            world.addResource<engine::Scene>(cameraManager);
             createScene();
 
             world.addResource<DefaultGraph>(world.getResource<engine::Scene>(), cameraManager, getWindow().getDefaultFBO());

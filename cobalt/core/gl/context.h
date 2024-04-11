@@ -10,40 +10,33 @@ namespace cobalt {
         using GLFWContext = GLFWwindow*;
 
         /**
-         * @brief Singleton class for a GL render context.
-         * The render context is the context that is used for rendering.
-         * It is shared between all windows and thread-local.
-         * Don't attempt to call GLFW functions or OpenGL functions before initializing
-         * the render context with init() or alternatively init(GLFWContext), in
-         * multithreaded applications.
+         * @brief The render context exposes the underlying OpenGL context.  It is shared between all windows in any given process and is inexorably
+         * tied to one GLFW window. Don't attempt to call GLFW or OpenGL bindings before initializing the render context using init(). For
+         * multi-threaded applications, use init(GLFWContext) before any GL calls in the calling thread.
          */
         class Context {
             public:
             /**
-             * @brief Initializes the render context.
+             * @brief Initializes GLFW, GLEW and creates a main render context. Use this before any GL calls.
              */
             static void init();
             /**
-             * @brief Initializes the render context, given a GLFW context.
-             * Use when sharing resources between threads.
-             * @param window The GLFW context.
+             * @brief Initializes the render context using a previous one. Mostly for multi-threaded applications. Use this before any
+             * GL calls in the calling thread.
+             * @param context The GL context.
              */
             static void init(GLFWContext context);
             /**
              * @brief Destroys the render context.
              */
-            static void destroy();
+            static void finish();
             /**
-             * @brief Recreates the render context. Call this to apply changes to window hints.
-             * This has the side effect of resetting any windows' dimensions to 1x1 and
-             * title to an empty string. Make sure to set these again after calling this.
+             * @brief Destroys the current render context and rebuilds it.
              */
-            static void recreate();
+            static void reset();
             /**
-             * @brief Recreates the render context, given a GLFW context.
-             * Use when sharing resources between threads, or when the underlying OpenGL
-             * context is still valid.
-             * @param oldContext The old GLFW context.
+             * @brief Recreates the render context. Requires a previously valid context and invalidates it.
+             * @param oldContext The old GL context.
              */
             static void recreateFromContext(GLFWContext oldContext);
 
@@ -130,10 +123,10 @@ namespace cobalt {
             static Shared<Context>& getInstance();
 
             /**
-             * @brief Gets the GLFW context.
-             * @return The GLFW context.
+             * @brief Gets the GL context.
+             * @return The GL context.
              */
-            static GLFWContext getGLFWContext();
+            static GLFWContext getGLContext();
 
             // -- OpenGL queries --
 
@@ -191,14 +184,13 @@ namespace cobalt {
 
             /**
              * @brief Creates a new GL render context.
-             * @param context The GLFW context.
              * @return A new GL render context.
              */
             Context();
             /**
-             * @brief Creates a new GL render context, given a GLFW context.
-             * @param context The GLFW context.
+             * @brief Creates a new GL render context, given a previously valid context.
              * @return A new GL render context.
+             * @param context The GL context.
              */
             explicit Context(GLFWContext context);
             /**
@@ -207,7 +199,7 @@ namespace cobalt {
             ~Context();
 
             private:
-            GLFWContext context;  // The GLFW context.
+            GLFWContext context;  // The GL context.
 
             static Shared<Context> instance;  // The current GL render context.
         };

@@ -24,6 +24,12 @@ namespace cobalt {
             glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
             instance = CreateShared<Context>();
             glewExperimental = GL_TRUE;  // Needed for core profile
+            glfwMakeContextCurrent(instance->getGLContext());
+            GLenum err = glewInit();
+            if (err != GLEW_OK) {
+                throw GLException("Failed to initialize GLEW: " + std::string((const char*)glewGetErrorString(err)));
+            }
+            logQueries();
             CB_CORE_INFO("Initialized render context");
         }
 
@@ -32,16 +38,20 @@ namespace cobalt {
                 throw GLException("Render context already initialized");
             }
             instance = CreateShared<Context>(context);
-            CB_CORE_INFO("Initialized render context from GLFW context");
+            if (!instance->getGLContext()) {
+                throw GLException("Failed to create render context");
+            }
+            glfwMakeContextCurrent(context);
+            CB_CORE_INFO("Reinitialized render context");
         }
 
-        void Context::destroy() {
+        void Context::finish() {
             glfwTerminate();
             instance.reset();
             instance = nullptr;
         }
 
-        void Context::recreate() {
+        void Context::reset() {
             void* pointer = nullptr;
             if (instance && instance->context) {
                 pointer = instance->getUserPointer();
@@ -50,7 +60,6 @@ namespace cobalt {
             }
             instance->context = glfwCreateWindow(1, 1, "", nullptr, nullptr);
             if (!instance->context) {
-                // check for glfw errors
                 const char* error;
                 glfwGetError(&error);
                 throw GLException("Failed to recreate render context: " + std::string(error));
@@ -121,7 +130,7 @@ namespace cobalt {
             return instance;
         }
 
-        GLFWContext Context::getGLFWContext() {
+        GLFWContext Context::getGLContext() {
             if (!instance) {
                 throw GLException("Render context not initialized");
             }
@@ -186,20 +195,9 @@ namespace cobalt {
             if (!context) {
                 throw GLException("Failed to create render context");
             }
-            glfwMakeContextCurrent(context);
-            GLenum err = glewInit();
-            if (err != GLEW_OK) {
-                throw GLException("Failed to initialize GLEW: " + std::string((const char*)glewGetErrorString(err)));
-            }
-            logQueries();
         }
 
-        Context::Context(GLFWContext context) : context(context) {
-            if (!context) {
-                throw GLException("Failed to create render context");
-            }
-            glfwMakeContextCurrent(context);
-        }
+        Context::Context(GLFWContext context) : context(context) {}
 
         Context::~Context() { glfwDestroyWindow(context); }
     }  // namespace core::gl

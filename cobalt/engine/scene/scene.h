@@ -14,10 +14,10 @@ namespace cobalt {
             public:
             /**
              * @brief Creates an empty scene.
-             * @param manager The camera manager.
+             * @param world The ecs world.
              * @return An empty scene.
              */
-            Scene(CameraManager& manager);
+            Scene(core::ecs::World& world);
             /**
              * @brief Destroys the scene.
              */

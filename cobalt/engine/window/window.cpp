@@ -63,7 +63,7 @@ namespace cobalt {
                 throw core::ecs::PluginNotFoundException("Window");
             }
             glfwWindowHint(GLFW_RESIZABLE, resizable);
-            glfwSetWindowCloseCallback(core::gl::Context::getGLFWContext(), windowCloseCallback);
+            glfwSetWindowCloseCallback(core::gl::Context::getGLContext(), windowCloseCallback);
             GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
             const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
             switch (mode) {
@@ -101,18 +101,18 @@ namespace cobalt {
                     throw core::ecs::PluginException<WindowPlugin>("Invalid window mode");
             }
 
-            core::gl::Context::recreateFromContext(core::gl::Context::getGLFWContext());
+            core::gl::Context::recreateFromContext(core::gl::Context::getGLContext());
             glfwSwapInterval(vsync);
-            glfwSetWindowTitle(core::gl::Context::getGLFWContext(), title.c_str());
+            glfwSetWindowTitle(core::gl::Context::getGLContext(), title.c_str());
             if (lockAspectRatio) {
                 if (mode == WindowMode::Windowed) {
                     this->width = (uint)(this->height * aspectRatio);
                 }
-                glfwSetWindowAspectRatio(core::gl::Context::getGLFWContext(), this->width, this->height);
+                glfwSetWindowAspectRatio(core::gl::Context::getGLContext(), this->width, this->height);
             }
-            glfwSetWindowSize(core::gl::Context::getGLFWContext(), this->width, this->height);
+            glfwSetWindowSize(core::gl::Context::getGLContext(), this->width, this->height);
             int framebufferWidth, framebufferHeight;
-            glfwGetFramebufferSize(core::gl::Context::getGLFWContext(), &framebufferWidth, &framebufferHeight);
+            glfwGetFramebufferSize(core::gl::Context::getGLContext(), &framebufferWidth, &framebufferHeight);
             defaultFBO.resize(framebufferWidth, framebufferHeight);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_BLEND);
@@ -158,11 +158,11 @@ namespace cobalt {
         Window::~Window() {
             if (title != "void") {
                 CB_CORE_INFO("Destroyed window");
-                glfwSetWindowShouldClose(core::gl::Context::getGLFWContext(), GLFW_TRUE);
+                glfwSetWindowShouldClose(core::gl::Context::getGLContext(), GLFW_TRUE);
             }
         }
 
-        void Window::swapBuffers() const { glfwSwapBuffers(core::gl::Context::getGLFWContext()); }
+        void Window::swapBuffers() const { glfwSwapBuffers(core::gl::Context::getGLContext()); }
 
         void Window::switchMode(const WindowMode mode) {
             this->mode = mode;
@@ -170,17 +170,17 @@ namespace cobalt {
             show();
         }
 
-        void Window::show() const { glfwShowWindow(core::gl::Context::getGLFWContext()); }
+        void Window::show() const { glfwShowWindow(core::gl::Context::getGLContext()); }
 
-        void Window::hide() const { glfwHideWindow(core::gl::Context::getGLFWContext()); }
+        void Window::hide() const { glfwHideWindow(core::gl::Context::getGLContext()); }
 
         void Window::clear() { defaultFBO.clear(); }
 
-        bool Window::shouldClose() const { return glfwWindowShouldClose(core::gl::Context::getGLFWContext()); }
+        bool Window::shouldClose() const { return glfwWindowShouldClose(core::gl::Context::getGLContext()); }
 
         void Window::setClearColor(const core::Color& color) { defaultFBO.setClearColor(color); }
 
-        void Window::resize() { glfwSetWindowSize(core::gl::Context::getGLFWContext(), width, height); }
+        void Window::resize() { glfwSetWindowSize(core::gl::Context::getGLContext(), width, height); }
 
         const uint Window::getWidth() const { return width; }
 
@@ -208,7 +208,7 @@ namespace cobalt {
 
         void Window::setTitle(const std::string& title) {
             this->title = title;
-            glfwSetWindowTitle(core::gl::Context::getGLFWContext(), title.c_str());
+            glfwSetWindowTitle(core::gl::Context::getGLContext(), title.c_str());
         }
 
         void Window::setKeyCallback(const KeyCallback callback) { keyCallback = callback; }
