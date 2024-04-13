@@ -10,6 +10,8 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
+        class Renderer3DPlugin;
+
         Renderer::Renderer() : textureUnits(1), currentUnit(0) {}
 
         void Renderer::renderMesh(Mesh& mesh, RenderTarget& target, const CameraManager& cameraManager) const {
@@ -54,13 +56,13 @@ namespace cobalt {
                     return it->second;
                 }
             }
-            // throw gfx::GFXException("Texture not found"); TODO: Throw a plugin exception
+            throw core::ecs::PluginException<Renderer3DPlugin>("Named texture unit not found: " + name);
             return 0;
         }
 
         uint Renderer::bindTexture(const std::string& name, const gl::Texture& texture) {
             if (currentUnit >= gl::Context::queryMaxFragTextureUnits()) {
-                // throw gfx::GFXException("No more available texture units"); TODO: Throw a plugin exception
+                throw core::ecs::PluginException<Renderer3DPlugin>("Maximum number of texture units exceeded");
             }
             texture.bindToUnit(currentUnit);
             textureUnits[name] = currentUnit++;
@@ -69,7 +71,7 @@ namespace cobalt {
 
         void Renderer::bindMaterial(const gfx::Material& material) {
             if (currentUnit + material.getTextures().size() > gl::Context::queryMaxFragTextureUnits()) {
-                // throw gfx::GFXException("No more available texture units"); TODO: Throw a plugin exception
+                throw core::ecs::PluginException<Renderer3DPlugin>("Maximum number of texture units exceeded");
             }
             for (const auto& texture : material.getTextures()) {
                 texture.second.bindToUnit(currentUnit);
