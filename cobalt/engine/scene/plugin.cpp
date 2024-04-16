@@ -5,7 +5,6 @@
 
 #include "core/ecs/world.h"
 #include "engine/camera/plugin.h"
-#include "engine/scene/scene.h"
 
 namespace cobalt {
     namespace engine {

@@ -5,7 +5,6 @@
 
 #include "core/ecs/resource/resource.h"
 #include "engine/render/node.h"
-#include "engine/scene/scene.h"
 
 namespace cobalt {
     namespace engine {

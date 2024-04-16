@@ -5,14 +5,13 @@
 
 #include "core/gl/context.h"
 #include "core/gl/exception.h"
+#include "engine/renderer3d/plugin.h"
 
 namespace cobalt {
     using namespace core;
 
     namespace engine {
-        class Renderer3DPlugin;
-
-        Renderer::Renderer() : textureUnits(1), currentUnit(0) {}
+        Renderer::Renderer() noexcept : textureUnits(1), currentUnit(0) {}
 
         void Renderer::renderMesh(Mesh& mesh, RenderTarget& target, const CameraManager& cameraManager) const {
             mesh.bind();
@@ -57,7 +56,6 @@ namespace cobalt {
                 }
             }
             throw core::ecs::PluginException<Renderer3DPlugin>("Named texture unit not found: " + name);
-            return 0;
         }
 
         uint Renderer::bindTexture(const std::string& name, const gl::Texture& texture) {

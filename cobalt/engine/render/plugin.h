@@ -1,22 +1,22 @@
 // Created by tomas on
-// 10-04-2024
+// 16-04-2024
 
 #pragma once
 
 #include "core/ecs/plugin/plugin.h"
-#include "engine/scene/scene.h"
+#include "engine/render/target.h"
 
 namespace cobalt {
     namespace engine {
-        class ScenePlugin : public core::ecs::Plugin {
+        class RenderPlugin : core::ecs::Plugin {
             public:
-            static inline constexpr const char* TITLE = "Scene";
+            static inline constexpr const char* TITLE = "Render";
 
             /**
              * @brief Construct the plugin.
-             * @return ScenePlugin
+             * @return RenderPlugin
              */
-            ScenePlugin() noexcept;
+            RenderPlugin() noexcept;
 
             /**
              * @brief Initializes the plugin.

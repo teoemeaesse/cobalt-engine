@@ -5,7 +5,7 @@
 
 namespace cobalt {
     namespace engine {
-        Renderer3DPlugin::Renderer3DPlugin() : core::ecs::Plugin(TITLE, "Adds a raster 3D renderer.") {}
+        Renderer3DPlugin::Renderer3DPlugin() noexcept : core::ecs::Plugin(TITLE, "Adds a raster 3D renderer.") {}
 
         void Renderer3DPlugin::onPlug(core::ecs::World& world) const noexcept {}
     }  // namespace engine

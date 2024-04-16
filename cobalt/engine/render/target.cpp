@@ -3,6 +3,8 @@
 
 #include "engine/render/target.h"
 
+#include "engine/renderer3d/plugin.h"
+
 namespace cobalt {
     using namespace core;
 
@@ -19,7 +21,7 @@ namespace cobalt {
         RenderTarget::RenderTarget(const gl::FBO& fbo, const CameraID camera, const std::string& name, const uint cameraUBOBinding)
             : fbo(fbo), camera(camera), name(name), ubo(gl::Usage::StaticDraw, sizeof(CameraUBO), cameraUBOBinding) {
             if (name == "view" || name == "model" || name == "projection") {
-                // throw gfx::GFXException("Cannot use reserved name for render target"); TODO: Add a plugin exception here
+                throw ecs::PluginException<Renderer3DPlugin>("Cannot use reserved name for render target");
             }
         }
 

@@ -15,11 +15,11 @@ namespace cobalt {
              * @brief Create a renderer.
              * @return The renderer.
              */
-            Renderer();
+            Renderer() noexcept;
             /**
              * @brief Destroy the renderer.
              */
-            ~Renderer() = default;
+            ~Renderer() noexcept = default;
 
             /**
              * @brief Render a mesh.

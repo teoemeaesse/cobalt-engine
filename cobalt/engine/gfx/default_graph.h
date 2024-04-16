@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "engine/camera/controller.h"
 #include "engine/render/graph.h"
+#include "engine/scene/plugin.h"
 
 namespace cobalt {
     namespace engine {
