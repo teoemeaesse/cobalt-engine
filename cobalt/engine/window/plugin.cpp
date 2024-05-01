@@ -23,7 +23,7 @@ namespace cobalt {
 
             // world.addSystem<ecs::WriteRequest<Window>>(ecs::DefaultSchedules::Startup, [](auto window) {
             //     try {
-            //         window.get().init();
+            //         window->init();
             //     } catch (const ecs::PluginNotFoundException& e) {
             //         CB_CORE_WARN(e.what());
             //     }

@@ -31,15 +31,20 @@ namespace cobalt {
                 Resource::validate<ResourceType>();
             }
             /**
-             * @brief Destructor.
+             * @brief Destroys the request.
              */
             ~ReadRequest() noexcept = default;
 
             /**
-             * @brief Get resource.
-             * @return Resource.
+             * @brief Dereferences into the underlying resource directly.
+             * @return The requested resource.
              */
-            const ResourceType& get() const { return resource; }
+            const ResourceType& operator*() const { return resource; }
+            /**
+             * @brief Dereferences into the underlying resource directly.
+             * @return The requested resource.
+             */
+            const ResourceType* operator->() const { return &resource; }
 
             private:
             const ResourceType& resource;
@@ -66,15 +71,20 @@ namespace cobalt {
                 Resource::validate<ResourceType>();
             }
             /**
-             * @brief Destructor.
+             * @brief Destroys the request.
              */
             ~WriteRequest() noexcept = default;
 
             /**
-             * @brief Get resource.
-             * @return Resource.
+             * @brief Dereferences into the underlying resource directly.
+             * @return The requested resource.
              */
-            ResourceType& get() { return resource; }
+            ResourceType& operator*() { return resource; }
+            /**
+             * @brief Dereferences into the underlying resource directly.
+             * @return The requested resource.
+             */
+            ResourceType* operator->() { return &resource; }
 
             private:
             ResourceType& resource;

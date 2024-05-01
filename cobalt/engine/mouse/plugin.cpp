@@ -17,13 +17,13 @@ namespace cobalt {
              * @brief Add input peripherals to the world.
              */
             world.addSystem<ecs::WriteRequest<InputManager>>(
-                ecs::DefaultSchedules::Startup, [](auto inputManager) { inputManager.get().template registerPeripheral<Mouse>(Mouse::NAME, 1.0f); });
+                ecs::DefaultSchedules::Startup, [](auto inputManager) { inputManager->template registerPeripheral<Mouse>(Mouse::NAME, 1.0f); });
 
             /**
              * @brief Set input callbacks.
              */
             world.addSystem<ecs::WriteRequest<Window>>(ecs::DefaultSchedules::Startup, [](auto window) {
-                window.get().setMouseButtonCallback([](InputManager& manager, const int button, const bool down) {
+                window->setMouseButtonCallback([](InputManager& manager, const int button, const bool down) {
                     try {
                         manager.getPeripheral<Mouse>(Mouse::NAME).onButtonPress(static_cast<MouseInputID>(button), down);
                     } catch (InvalidInputException<MouseInputID>& e) {
@@ -32,7 +32,7 @@ namespace cobalt {
                         CB_CORE_ERROR(e.what());
                     }
                 });
-                window.get().setCursorCallback([](InputManager& manager, const float xpos, const float ypos) {
+                window->setCursorCallback([](InputManager& manager, const float xpos, const float ypos) {
                     try {
                         manager.getPeripheral<Mouse>(Mouse::NAME).onMove(xpos, ypos);
                     } catch (InvalidInputException<MouseInputID>& e) {
@@ -41,7 +41,7 @@ namespace cobalt {
                         CB_CORE_ERROR(e.what());
                     }
                 });
-                window.get().setScrollCallback([](InputManager& manager, const float xoffset, const float yoffset) {
+                window->setScrollCallback([](InputManager& manager, const float xoffset, const float yoffset) {
                     try {
                         manager.getPeripheral<Mouse>(Mouse::NAME).onScroll(xoffset, yoffset);
                     } catch (InvalidInputException<MouseInputID>& e) {

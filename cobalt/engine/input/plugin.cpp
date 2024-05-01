@@ -18,8 +18,8 @@ namespace cobalt {
             world.addResource<InputManager>();
 
             world.addSystem<ecs::WriteRequest<InputManager>>(ecs::DefaultSchedules::PreUpdate, [](auto inputManager) {
-                inputManager.get().pollEvents();
-                inputManager.get().clearEvents();
+                inputManager->pollEvents();
+                inputManager->clearEvents();
             });
         }
     }  // namespace engine

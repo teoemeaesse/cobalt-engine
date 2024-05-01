@@ -14,10 +14,10 @@ namespace cobalt {
 
         void KeyboardPlugin::onPlug(ecs::World& world) const noexcept {
             world.addSystem<ecs::WriteRequest<InputManager>>(
-                ecs::DefaultSchedules::Startup, [](auto inputManager) { inputManager.get().template registerPeripheral<Keyboard>(Keyboard::NAME); });
+                ecs::DefaultSchedules::Startup, [](auto inputManager) { inputManager->template registerPeripheral<Keyboard>(Keyboard::NAME); });
 
             world.addSystem<ecs::WriteRequest<Window>>(ecs::DefaultSchedules::Startup, [](auto window) {
-                window.get().setKeyCallback([](InputManager& manager, const int key, const bool down) {
+                window->setKeyCallback([](InputManager& manager, const int key, const bool down) {
                     try {
                         Keyboard& keyboard = manager.getPeripheral<Keyboard>(Keyboard::NAME);
                         keyboard.onKeyPress(keyboard.glfwToCobalt(key), down);

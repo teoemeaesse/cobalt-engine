@@ -28,13 +28,13 @@ namespace cobalt {
             getWindow().setClearColor(Color(0.2f, 0.2f, 0.2f));
             getWindow().show();
             world.addHook<core::ecs::ReadRequest<Window>, core::ecs::WriteRequest<CameraManager>, core::ecs::WriteRequest<DefaultGraph>,
-                          core::ecs::WriteRequest<engine::Scene>>(
-                WindowPlugin::FRAMEBUFFER_RESIZE_EVENT, [](auto window, auto manager, auto graph, auto scene) {
-                    const uint width = window.get().getDefaultFBO().getWidth();
-                    const uint height = window.get().getDefaultFBO().getHeight();
-                    graph.get().onResize(width, height);
-                    manager.get().getController(scene.get().getCameraID()).resize((float)width / (float)height);
-                });
+                          core::ecs::WriteRequest<Scene>>(WindowPlugin::FRAMEBUFFER_RESIZE_EVENT,
+                                                          [](auto window, auto manager, auto graph, auto scene) {
+                                                              const uint width = window->getDefaultFBO().getWidth();
+                                                              const uint height = window->getDefaultFBO().getHeight();
+                                                              graph->onResize(width, height);
+                                                              manager->getController(scene->getCameraID()).resize((float)width / (float)height);
+                                                          });
 
             CB_TEXTURE_LIBRARY.loadTextures(io::Path("cobalt/editor/assets/textures", true));
             CB_SHADER_LIBRARY.loadShaders(io::Path("cobalt/editor/assets/shaders", true));
@@ -43,7 +43,7 @@ namespace cobalt {
 
             createScene();
 
-            world.addResource<DefaultGraph>(world.getResource<engine::Scene>(), cameraManager, getWindow().getDefaultFBO());
+            world.addResource<DefaultGraph>(world.getResource<Scene>(), cameraManager, getWindow().getDefaultFBO());
             world.getResource<DefaultGraph>().init(world.getResource<engine::CameraManager>());
 
             bindInput();
@@ -53,12 +53,12 @@ namespace cobalt {
 
         void Editor::fixedTimeStep() {
             CameraManager& manager = world.getResource<CameraManager>();
-            manager.getController(world.getResource<engine::Scene>().getCameraID()).update();
+            manager.getController(world.getResource<Scene>().getCameraID()).update();
             getWindow().setTitle("Cobalt Editor - " + std::to_string(getFramerate()) + " FPS");
         }
 
         void Editor::variableTimeStep(const float delta) {
-            auto& scene = world.getResource<engine::Scene>();
+            auto& scene = world.getResource<Scene>();
             auto& cameraManager = world.getResource<engine::CameraManager>();
             scene.getMeshes()[0].rotate(glm::vec3(30.0f * delta, 5.0f * delta, 20.0f * delta));
             static float cubeXOffset = 0.0f;
@@ -76,7 +76,7 @@ namespace cobalt {
              * Two try-catch blocks are used to catch both the Keyboard and Mouse peripheral exceptions.
              * Likely to be useless since the Keyboard and Mouse peripherals are always present in the engine.
              */
-            engine::Scene& scene = world.getResource<engine::Scene>();
+            Scene& scene = world.getResource<Scene>();
             engine::Keyboard& keyboard = getInputManager().getPeripheral<engine::Keyboard>(engine::Keyboard::NAME);
             CameraID* camera = &scene.getCameraID();
             keyboard.bind(engine::KeyboardInputID::ESCAPE, CreateScope<Quit>(world, this));
@@ -102,7 +102,7 @@ namespace cobalt {
         }
 
         void Editor::createScene() {
-            engine::Scene& scene = world.getResource<engine::Scene>();
+            Scene& scene = world.getResource<Scene>();
             scene.clear();
             scene.setSkybox(Skybox::create(CB_TEXTURE_LIBRARY.getTexture<gl::Texture3D>("skybox"), CB_SHADER_LIBRARY.getShader("skybox")));
             const TextureID woodAlbedo = CB_TEXTURE_LIBRARY.getTextureID("wood-albedo");
