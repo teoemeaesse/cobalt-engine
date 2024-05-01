@@ -18,7 +18,7 @@ find_package(Doxygen)
 
 if(DOXYGEN_FOUND)
   # Define the Doxygen target
-  add_custom_target(doc_doxygen ALL
+  add_custom_target(doc_doxygen
       COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/Doxyfile
       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
       COMMENT "Generating API documentation with Doxygen"
