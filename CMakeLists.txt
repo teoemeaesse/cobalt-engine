@@ -26,8 +26,12 @@ if(DOXYGEN_FOUND)
   )
 endif()
 
-# Set additional flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -DGL_GLEXT_PROTOTYPES")
+# Conditional flags based on build type
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG") # Set release flags to optimize and remove debug info
+else()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g") # Debug flags
+endif()
 
 # Set the build directory
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
