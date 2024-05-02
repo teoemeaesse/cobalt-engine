@@ -8,11 +8,17 @@
 namespace cobalt {
     namespace core::gl {
         /**
-         * @brief FrameBuffer Object (FBO). Used for rendering to texture (off-screen
-         * rendering and post-processing effects).
+         * @brief A Frame Buffer Object (FBO) holds shader output data in 1 or more Attachment's. You can use this for live or off-screen
+         * rendering.
          */
         class FBO {
             public:
+            /**
+             * @brief Configuration for a GL texture attachment.
+             * @param encoding See gl::TextureEncoding.
+             * @param filter See gl::TextureFilter.
+             * @param wrap See gl::TextureWrap.
+             */
             struct Attachment {
                 gl::TextureEncoding encoding;
                 gl::TextureFilter filter = gl::TextureFilters::Linear;
