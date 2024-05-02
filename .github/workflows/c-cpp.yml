@@ -31,7 +31,8 @@ jobs:
           libxinerama-dev \
           libxcursor-dev \
           libxi-dev \
-          libxxf86vm-dev
+          libxxf86vm-dev \
+          libwayland-dev
 
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
