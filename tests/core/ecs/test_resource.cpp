@@ -25,13 +25,13 @@ void test_read() {
     world.addResource<MyResource>();
 
     auto request = world.read<MyResource>();
-    const MyResource& resource = request.get();
+    const MyResource& resource = *request;
     TEST_ASSERT_EQUAL(0, resource.valueInt);
     TEST_ASSERT_EQUAL_FLOAT(3.141, resource.valueFloat);
 
     world.addResource<MyResource>(1);
     auto request2 = world.read<MyResource>();
-    const MyResource& resource2 = request2.get();
+    const MyResource& resource2 = *request2;
     TEST_ASSERT_EQUAL(1, resource2.valueInt);
     TEST_ASSERT_EQUAL_FLOAT(0.577, resource2.valueFloat);
 }
@@ -41,12 +41,12 @@ void test_write() {
     world.addResource<MyResource>();
 
     auto request = world.write<MyResource>();
-    MyResource& resource = request.get();
+    MyResource& resource = *request;
     resource.valueInt = 50;
     resource.valueFloat = 42;
 
     auto request2 = world.read<MyResource>();
-    const MyResource& resource2 = request2.get();
+    const MyResource& resource2 = *request2;
     TEST_ASSERT_EQUAL(50, resource2.valueInt);
     TEST_ASSERT_EQUAL_FLOAT(42, resource2.valueFloat);
 }

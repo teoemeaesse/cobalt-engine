@@ -41,7 +41,8 @@ add_library(cobalt_core STATIC ${CORE_SOURCES})
 target_precompile_headers(cobalt_core PRIVATE ${SOURCEDIR}/core/pch.h)
 target_include_directories(cobalt_core PUBLIC ${SOURCEDIR} ${LIBDIR}/glew/include ${LIBDIR}/glfw/include)
 
-# Add the GLFW subdirectory
+# Add the GLFW and GLEW dependencies
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 add_subdirectory(${LIBDIR}/glfw glfw_build)
 add_subdirectory(${LIBDIR}/glew/build/cmake glew_build)
 
