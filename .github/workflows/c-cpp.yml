@@ -14,7 +14,10 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'  # This option ensures all submodules are checked out
 
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
