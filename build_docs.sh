@@ -1,7 +1,11 @@
 #!/bin/bash
 
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m'
+
 usage() {
-    echo "Usage: $0 [options]"
+    echo -e "Usage: $0 [options]"
     echo "Options:"
     echo "  --open, -o       Open the generated documentation in the default browser."
     echo "  --help, -h       Display this help message."
@@ -12,29 +16,33 @@ for arg in "$@"; do
     case $arg in
         --open|-o)
             OPEN=1
-            shift # Remove --open or -o from processing
+            shift
             ;;
         --help|-h)
             usage
             exit 0
             ;;
         *)
-            # Unknown option
-            echo "Unknown option: $arg"
+            echo -e "${RED}Unknown option: $arg${NC}"
             usage
             exit 1
             ;;
     esac
 done
 
+echo -e "${GREEN}Creating documentation directories...${NC}"
 mkdir -p docs
 mkdir -p build
-cd build || exit 1
+cd build || (echo -e "${RED}Failed to enter build directory. Exiting...${NC}" && exit 1)
 
+echo -e "${GREEN}Building documentation with Doxygen...${NC}"
 cmake --build . --target doc_doxygen
 
 cd ..
 
 if [ "$OPEN" -eq 1 ]; then
+    echo -e "${GREEN}Opening the generated documentation in the default browser...${NC}"
     open docs/html/index.html
 fi
+
+echo -e "${GREEN}Documentation build script completed.${NC}"
