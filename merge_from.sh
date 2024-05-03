@@ -39,9 +39,10 @@ for BRANCH in "${BRANCHES[@]}"; do
         git push origin $BRANCH --force-with-lease
         echo "$BRANCH successfully updated and pushed."
 
+
         git stash pop
         echo "Restored previously stashed changes."
     fi
-don
+done
 git checkout $UPDATE_BRANCH
 echo "All branches updated successfully."
