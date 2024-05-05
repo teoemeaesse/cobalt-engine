@@ -10,7 +10,7 @@ cd lib
 
 
 echo -e "${GREEN}Creating a symlink for python3 executable as 'python'...${NC}"
-ln -s $(which python3) $(dirname $(which python3))/python
+sudo ln -s $(which python3) $(dirname $(which python3))/python
 
 echo -e "${GREEN}Building GLEW from the submodule...${NC}"
 cd glew/auto && sudo make
@@ -23,7 +23,7 @@ echo -e "${GREEN}GLEW library installed system-wide.${NC}"
 
 
 echo -e "${GREEN}Returning to lib directory...${NC}"
-cd ../..
+cd ..
 
 
 echo -e "${GREEN}Configuring and building GLFW from the submodule...${NC}"

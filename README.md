@@ -8,6 +8,9 @@ To compile and run you need the following:
 - **CMake 3.10**
 To generate the documentation, you will need a recent version of **Doxygen**
 
+## Download
+Clone with ```git clone --recurse-submodules https://github.com/teoemeaesse/cobalt-engine.git``` to include all the depency submodules.
+
 ## Installation
 Before anything else, run the setup script. This will get and install all the necessary dependencies.
 ```
