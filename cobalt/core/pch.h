@@ -1,5 +1,9 @@
-// Created by tomas on
-// 22-12-2023
+/**
+ * @file pch.h
+ * @brief Precompiled main library interfaces for the Cobalt core, providing various utilities such as STL and OpenGL wrappers.
+ * @author Tomás Marques
+ * @date 22-12-2023
+ */
 
 #pragma once
 
@@ -40,251 +44,512 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "json/json.hpp"
-
-// Logging.
-#include "core/utils/color.h"
-#include "core/utils/log.h"
-
-// IO.
 #include "core/io/file.h"
 #include "core/io/path.h"
-
-// Memory.
 #include "core/memory/arena.h"
 #include "core/memory/heap.h"
 #include "core/memory/pool.h"
-
-// Platform.
+#include "core/utils/color.h"
+#include "core/utils/log.h"
 #include "core/utils/platform.h"
+#include "json/json.hpp"
 
+/**
+ * @brief Macro to create a new scoped pointer.
+ */
 #define CB_CREATE_SCOPE(T, ...) std::unique_ptr<T>(new T(__VA_ARGS__))
+/**
+ * @brief Macro to create a new shared pointer.
+ */
 #define CB_CREATE_SHARED(T, ...) std::shared_ptr<T>(new T(__VA_ARGS__))
 
+/**
+ * @brief The Cobalt namespace encapsulates all functionality of the Cobalt engine.
+ */
 namespace cobalt {
+    /**
+     * @brief Scoped pointer for automatic resource management.
+     * @tparam T Type of the object managed by the scope.
+     */
     template <typename T>
     using Scope = std::unique_ptr<T>;
+    /**
+     * @brief Creates a new scoped pointer.
+     * @tparam T Type of the object managed by the scope.
+     * @tparam Args Types of the arguments to pass to the constructor.
+     * @param args Arguments to pass to the constructor.
+     * @return The new scoped pointer.
+     */
     template <typename T, typename... Args>
     constexpr Scope<T> CreateScope(Args&&... args) {
         return std::make_unique<T>(std::forward<Args>(args)...);
     }
+    /**
+     * @brief Shared pointer for shared resource management.
+     * @tparam T Type of the object managed by the shared pointer.
+     */
     template <typename T>
     using Shared = std::shared_ptr<T>;
+    /**
+     * @brief Creates a new shared pointer.
+     * @tparam T Type of the object managed by the shared pointer.
+     * @tparam Args Types of the arguments to pass to the constructor.
+     * @param args Arguments to pass to the constructor.
+     * @return The new shared pointer.
+     */
     template <typename T, typename... Args>
     constexpr Shared<T> CreateShared(Args&&... args) {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
+    /**
+     * @brief Reference wrapper for reference management.
+     * @tparam T Type of the object managed by the reference wrapper.
+     */
     template <typename T>
     using Wrap = std::reference_wrapper<T>;
+    /**
+     * @brief Creates a new reference wrapper.
+     * @tparam T Type of the object managed by the reference wrapper.
+     * @param ref Reference to wrap.
+     * @return The new reference wrapper.
+     */
     template <typename T>
-    constexpr Wrap<T> createWrap(T& ref) {
+    constexpr Wrap<T> CreateWrap(T& ref) {
         return std::ref(ref);
     }
+    /**
+     * @brief Wrapper for std::unordered_map.
+     * @tparam T Type of the key.
+     * @tparam S Type of the value.
+     */
     template <typename T, typename S>
     using UMap = std::unordered_map<T, S>;
+    /**
+     * @brief Wrapper for std::unordered_set.
+     * @tparam T Type of the element.
+     * @tparam S Type of the hash function.
+     */
     template <typename T, typename S>
     using USet = std::unordered_set<T, S>;
+    /**
+     * @brief Wrapper for std::optional.
+     * @tparam T Type of the object managed by the optional.
+     */
     template <typename T>
     using Opt = std::optional<T>;
+    /**
+     * @brief Wrapper for std::nullopt.
+     */
     inline constexpr auto& None = std::nullopt;
+    /**
+     * @brief Wrapper for std::tuple.
+     * @tparam T Types of the elements.
+     */
     template <typename... T>
     using Tuple = std::tuple<T...>;
+    /**
+     * @brief Wrapper for std::vector.
+     * @tparam T Type of the elements.
+     */
     template <typename T>
     using Vec = std::vector<T>;
+    /**
+     * @brief Wrapper for std::list.
+     * @tparam T Type of the elements.
+     */
     template <typename T>
     using List = std::list<T>;
+    /**
+     * @brief Wrapper for std::deque.
+     * @tparam T Type of the elements.
+     */
     template <typename T>
     using Deque = std::deque<T>;
+    /**
+     * @brief Wrapper for std::stack.
+     * @tparam T Type of the elements.
+     */
     template <typename T>
     using Stack = std::stack<T>;
+    /**
+     * @brief Wrapper for std::queue.
+     * @tparam T Type of the elements.
+     */
     template <typename T>
     using Queue = std::queue<T>;
+    /**
+     * @brief Wrapper for std::bitset.
+     * @tparam N Number of bits.
+     */
     template <unsigned int N>
     using Mask = std::bitset<N>;
+    /**
+     * @brief Alias for an unsigned char.
+     */
     using uchar = unsigned char;
+    /**
+     * @brief Alias for a signed 64-bit integer.
+     */
     using int64 = int64_t;
+    /**
+     * @brief Alias for an unsigned 64-bit integer.
+     */
     using uint64 = uint64_t;
-    using uint = unsigned int;
+    /**
+     * @brief Alias for an unsigned 32-bit integer.
+     */
+    using uint = uint32_t;
 
+    /**
+     * @brief Removes the const and reference qualifiers from a type.
+     * @tparam T Type to remove the qualifiers from.
+     */
     template <typename T>
     using RemoveConstRef = std::remove_const_t<std::remove_reference_t<T>>;
-    template <typename T>
-    struct IsConst : std::integral_constant<bool, std::is_const<T>::value || std::is_const<typename std::remove_reference<T>::type>::value> {};
+    // /**
+    //  * @brief Checks if a type is const qualified.
+    //  * @tparam T Type to check.
+    //  */
+    // template <typename T>
+    // struct IsConst : std::integral_constant<bool, std::is_const<T>::value || std::is_const<typename std::remove_reference<T>::type>::value> {};
+    /**
+     * @brief Const reference type wrapper.
+     * @tparam T Type of the object.
+     */
     template <typename T>
     using Ref = const T&;
+    /**
+     * @brief Mutable reference type wrapper.
+     * @tparam T Type of the object.
+     */
     template <typename T>
     using RefMut = T&;
+    /**
+     * @brief Wrapper for std::move.
+     * @tparam T Type of the object.
+     * @param arg Object to move.
+     * @return The moved object.
+     */
     template <typename T>
     constexpr typename std::remove_reference<T>::type&& Move(T&& arg) noexcept {
         return std::move(arg);
     }
-
+    /**
+     * @brief Demangles the type name string (from typeid(T).name()).
+     * @param name The mangled name to demangle.
+     * @return A string containing the demangled name.
+     */
     static inline const std::string demangle(const char* name) noexcept {
         int status = 42;
         std::unique_ptr<char, void (*)(void*)> res{abi::__cxa_demangle(name, nullptr, nullptr, &status), std::free};
         return (status == 0) ? res.get() : name;
     }
 
+    /**
+     * @brief Namespace for numerical constants.
+     *
+     * This namespace includes a series of numeric limits for different data types,
+     * as well as some mathematical constants.
+     */
     namespace num {
-        static inline constexpr uint64_t MAX_UINT64 = std::numeric_limits<uint64_t>::max();
-        static inline constexpr int64_t MAX_INT64 = std::numeric_limits<int64_t>::max();
-        static inline constexpr uint64_t MIN_UINT64 = std::numeric_limits<uint64_t>::min();
-        static inline constexpr int64_t MIN_INT64 = std::numeric_limits<int64_t>::min();
-        static inline constexpr uint MAX_UINT = std::numeric_limits<uint>::max();
-        static inline constexpr int MAX_INT = std::numeric_limits<int>::max();
-        static inline constexpr uint MIN_UINT = std::numeric_limits<uint>::min();
-        static inline constexpr int MIN_INT = std::numeric_limits<int>::min();
-        static inline constexpr float MAX_FLOAT = std::numeric_limits<float>::max();
-        static inline constexpr float MIN_FLOAT = std::numeric_limits<float>::min();
-        static inline constexpr double MAX_DOUBLE = std::numeric_limits<double>::max();
-        static inline constexpr double MIN_DOUBLE = std::numeric_limits<double>::min();
-        static inline constexpr float PI = 3.14159265358979323846f;
-        static inline constexpr float TWO_PI = 6.28318530717958647692f;
-        static inline constexpr float HALF_PI = 1.57079632679489661923f;
-        static inline constexpr float QUARTER_PI = 0.78539816339744830961f;
-        static inline constexpr float E = 2.71828182845904523536f;
-        static inline constexpr float SQRT_2 = 1.41421356237309504880f;
+        static inline constexpr uint64_t MAX_UINT64 = std::numeric_limits<uint64_t>::max();  ///< Maximum possible value for uint64_t.
+        static inline constexpr int64_t MAX_INT64 = std::numeric_limits<int64_t>::max();     ///< Maximum possible value for int64_t.
+        static inline constexpr uint64_t MIN_UINT64 = std::numeric_limits<uint64_t>::min();  ///< Minimum possible value for uint64_t.
+        static inline constexpr int64_t MIN_INT64 = std::numeric_limits<int64_t>::min();     ///< Minimum possible value for int64_t.
+        static inline constexpr uint32_t MAX_UINT32 = std::numeric_limits<uint32_t>::max();  ///< Maximum possible value for uint32_t.
+        static inline constexpr int32_t MAX_INT32 = std::numeric_limits<int32_t>::max();     ///< Maximum possible value for int32_t.
+        static inline constexpr uint32_t MIN_UINT32 = std::numeric_limits<uint32_t>::min();  ///< Minimum possible value for uint32_t.
+        static inline constexpr int32_t MIN_INT32 = std::numeric_limits<int32_t>::min();     ///< Minimum possible value for int32_t.
+        static inline constexpr float MAX_FLOAT = std::numeric_limits<float>::max();         ///< Maximum possible value for float.
+        static inline constexpr float MIN_FLOAT = std::numeric_limits<float>::min();         ///< Minimum possible value for float.
+        static inline constexpr double MAX_DOUBLE = std::numeric_limits<double>::max();      ///< Maximum possible value for double.
+        static inline constexpr double MIN_DOUBLE = std::numeric_limits<double>::min();      ///< Minimum possible value for double.
+        static inline constexpr float PI = 3.14159265358979323846f;                          ///< Value of Pi.
+        static inline constexpr float TWO_PI = 6.28318530717958647692f;                      ///< Value of two times Pi.
+        static inline constexpr float HALF_PI = 1.57079632679489661923f;                     ///< Value of half Pi.
+        static inline constexpr float QUARTER_PI = 0.78539816339744830961f;                  ///< Value of a quarter Pi.
+        static inline constexpr float E = 2.71828182845904523536f;                           ///< Euler's number.
+        static inline constexpr float SQRT_2 = 1.41421356237309504880f;                      ///< Square root of 2.
         static inline constexpr float SQRT_3 = 1.73205080756887729352f;
     }  // namespace num
 
     namespace core {
         namespace gl {
-            using Int = GLint;      // 32-bit integer.
-            using UInt = GLuint;    // 32-bit unsigned integer.
-            using Float = GLfloat;  // 32-bit floating point.
-            using Handle = UInt;    // OpenGL handle type.
+            /**
+             * @brief 32-bit integer type for OpenGL.
+             * Uses GLint which is commonly a 32-bit signed integer.
+             */
+            using Int = GLint;
+            /**
+             * @brief 32-bit unsigned integer type for OpenGL.
+             * Uses GLuint which is commonly a 32-bit unsigned integer.
+             */
+            using UInt = GLuint;
+            /**
+             * @brief 32-bit floating point type for OpenGL.
+             * Uses GLfloat which is commonly a 32-bit floating point number.
+             */
+            using Float = GLfloat;
+            /**
+             * @brief Represents an OpenGL handle type, defined as a 32-bit unsigned integer.
+             */
+            using Handle = UInt;
 
+            /**
+             * @enum Usage
+             * @brief Enum class for buffer data usage hints in OpenGL.
+             */
             enum class Usage {
-                StaticDraw = GL_STATIC_DRAW,    // Buffer data will be modified once and used many times.
-                DynamicDraw = GL_DYNAMIC_DRAW,  // Buffer data will be modified repeatedly and used many times.
-                StreamDraw = GL_STREAM_DRAW     // Buffer data will be modified once and used a few times.
+                StaticDraw = GL_STATIC_DRAW,    ///< Buffer data will be modified once and used many times.
+                DynamicDraw = GL_DYNAMIC_DRAW,  ///< Buffer data will be modified repeatedly and used many times.
+                StreamDraw = GL_STREAM_DRAW     ///< Buffer data will be modified once and used a few times.
             };
 
+            /**
+             * @enum Type
+             * @brief Enum class for specifying the data types in OpenGL operations.
+             */
             enum class Type {
-                Float = GL_FLOAT,                 // 32-bit floating point.
-                Int = GL_INT,                     // 32-bit integer.
-                UnsignedByte = GL_UNSIGNED_BYTE,  // Unsigned 8-bit integer.
-                UnsignedInt = GL_UNSIGNED_INT     // Unsigned 32-bit integer.
+                Float = GL_FLOAT,                 ///< 32-bit floating point.
+                Int = GL_INT,                     ///< 32-bit integer.
+                UnsignedByte = GL_UNSIGNED_BYTE,  ///< Unsigned 8-bit integer.
+                UnsignedInt = GL_UNSIGNED_INT     ///< Unsigned 32-bit integer.
             };
 
+            /**
+             * @brief Represents an OpenGL texture encoding type as an integer.
+             */
             using TextureEncoding = Int;
+
+            /**
+             * @brief Contains constants for texture encodings in OpenGL.
+             */
             namespace TextureEncodings {
-                constexpr TextureEncoding Unknown = 0;
+                constexpr TextureEncoding Unknown = 0;  ///< Represents an unknown texture encoding.
+
+                /**
+                 * @brief Texture encodings for one-component (red) OpenGL textures.
+                 *
+                 * It defines standard, unsigned integer, signed integer, floating-point, and normalized versions for 8, 16, and 32 bits per component
+                 * where applicable.
+                 */
                 namespace R {
-                    constexpr TextureEncoding Bits8 = GL_R8;
-                    constexpr TextureEncoding Bits16 = GL_R16;
+                    constexpr TextureEncoding Bits8 = GL_R8;    ///< 8-bit red component.
+                    constexpr TextureEncoding Bits16 = GL_R16;  ///< 16-bit red component.
+
+                    /**
+                     * @brief Unsigned integer texture encodings for one-component textures.
+                     */
                     namespace Unsigned {
-                        constexpr TextureEncoding Bits8 = GL_R8UI;
-                        constexpr TextureEncoding Bits16 = GL_R16UI;
-                        constexpr TextureEncoding Bits32 = GL_R32UI;
+                        constexpr TextureEncoding Bits8 = GL_R8UI;    ///< 8-bit unsigned integer.
+                        constexpr TextureEncoding Bits16 = GL_R16UI;  ///< 16-bit unsigned integer.
+                        constexpr TextureEncoding Bits32 = GL_R32UI;  ///< 32-bit unsigned integer.
                     }  // namespace Unsigned
+                    /**
+                     * @brief Signed integer texture encodings for one-component textures.
+                     */
                     namespace Integer {
-                        constexpr TextureEncoding Bits8 = GL_R8I;
-                        constexpr TextureEncoding Bits16 = GL_R16I;
-                        constexpr TextureEncoding Bits32 = GL_R32I;
+                        constexpr TextureEncoding Bits8 = GL_R8I;    ///< 8-bit signed integer.
+                        constexpr TextureEncoding Bits16 = GL_R16I;  ///< 16-bit signed integer.
+                        constexpr TextureEncoding Bits32 = GL_R32I;  ///< 32-bit signed integer.
                     }  // namespace Integer
+                    /**
+                     * @brief Floating-point texture encodings for one-component textures.
+                     */
                     namespace Float {
-                        constexpr TextureEncoding Bits16 = GL_R16F;
-                        constexpr TextureEncoding Bits32 = GL_R32F;
+                        constexpr TextureEncoding Bits16 = GL_R16F;  ///< 16-bit floating point.
+                        constexpr TextureEncoding Bits32 = GL_R32F;  ///< 32-bit floating point.
                     }  // namespace Float
+                    /**
+                     * @brief Normalized texture encodings for one-component textures.
+                     */
                     namespace Normalized {
-                        constexpr TextureEncoding Bits8 = GL_R8_SNORM;
-                        constexpr TextureEncoding Bits16 = GL_R16_SNORM;
+                        constexpr TextureEncoding Bits8 = GL_R8_SNORM;    ///< 8-bit normalized signed integer.
+                        constexpr TextureEncoding Bits16 = GL_R16_SNORM;  ///< 16-bit normalized signed integer.
                     }  // namespace Normalized
                 }  // namespace R
+                /**
+                 * @brief Namespace RG contains texture encodings for two-component (red-green) OpenGL textures.
+                 *
+                 * It defines standard, unsigned integer, signed integer, floating-point, and normalized versions
+                 * for 8, 16, and 32 bits per component where applicable.
+                 */
                 namespace RG {
-                    constexpr TextureEncoding Bits8 = GL_RG8;
-                    constexpr TextureEncoding Bits16 = GL_RG16;
+                    constexpr TextureEncoding Bits8 = GL_RG8;    ///< 8-bit red-green components.
+                    constexpr TextureEncoding Bits16 = GL_RG16;  ///< 16-bit red-green components.
+
+                    /**
+                     * @brief Unsigned integer texture encodings for two-component textures.
+                     */
                     namespace Unsigned {
-                        constexpr TextureEncoding Bits8 = GL_RG8UI;
-                        constexpr TextureEncoding Bits16 = GL_RG16UI;
-                        constexpr TextureEncoding Bits32 = GL_RG32UI;
+                        constexpr TextureEncoding Bits8 = GL_RG8UI;    ///< 8-bit unsigned integer red-green components.
+                        constexpr TextureEncoding Bits16 = GL_RG16UI;  ///< 16-bit unsigned integer red-green components.
+                        constexpr TextureEncoding Bits32 = GL_RG32UI;  ///< 32-bit unsigned integer red-green components.
                     }  // namespace Unsigned
+                    /**
+                     * @brief Signed integer texture encodings for two-component textures.
+                     */
                     namespace Integer {
-                        constexpr TextureEncoding Bits8 = GL_RG8I;
-                        constexpr TextureEncoding Bits16 = GL_RG16I;
-                        constexpr TextureEncoding Bits32 = GL_RG32I;
+                        constexpr TextureEncoding Bits8 = GL_RG8I;    ///< 8-bit signed integer red-green components.
+                        constexpr TextureEncoding Bits16 = GL_RG16I;  ///< 16-bit signed integer red-green components.
+                        constexpr TextureEncoding Bits32 = GL_RG32I;  ///< 32-bit signed integer red-green components.
                     }  // namespace Integer
+                    /**
+                     * @brief Floating-point texture encodings for two-component textures.
+                     */
                     namespace Float {
-                        constexpr TextureEncoding Bits16 = GL_RG16F;
-                        constexpr TextureEncoding Bits32 = GL_RG32F;
+                        constexpr TextureEncoding Bits16 = GL_RG16F;  ///< 16-bit floating point red-green components.
+                        constexpr TextureEncoding Bits32 = GL_RG32F;  ///< 32-bit floating point red-green components.
                     }  // namespace Float
+                    /**
+                     * @brief Normalized texture encodings for two-component textures.
+                     */
                     namespace Normalized {
-                        constexpr TextureEncoding Bits8 = GL_RG8_SNORM;
-                        constexpr TextureEncoding Bits16 = GL_RG16_SNORM;
+                        constexpr TextureEncoding Bits8 = GL_RG8_SNORM;    ///< 8-bit normalized signed integer red-green components.
+                        constexpr TextureEncoding Bits16 = GL_RG16_SNORM;  ///< 16-bit normalized signed integer red-green components.
                     }  // namespace Normalized
                 }  // namespace RG
+                /**
+                 * @brief Namespace RGB contains texture encodings for three-component (red-green-blue) OpenGL textures.
+                 *
+                 * It defines standard, unsigned integer, signed integer, floating-point, and normalized versions
+                 * for 4, 8, 16, and 32 bits per component where applicable.
+                 */
                 namespace RGB {
-                    constexpr TextureEncoding Bits4 = GL_RGB4;
-                    constexpr TextureEncoding Bits8 = GL_RGB8;
-                    constexpr TextureEncoding Bits16 = GL_RGB16;
+                    constexpr TextureEncoding Bits4 = GL_RGB4;    ///< 4-bit red-green-blue components.
+                    constexpr TextureEncoding Bits8 = GL_RGB8;    ///< 8-bit red-green-blue components.
+                    constexpr TextureEncoding Bits16 = GL_RGB16;  ///< 16-bit red-green-blue components.
+
+                    /**
+                     * @brief Unsigned integer texture encodings for three-component textures.
+                     */
                     namespace Unsigned {
-                        constexpr TextureEncoding Bits8 = GL_RGB8UI;
-                        constexpr TextureEncoding Bits16 = GL_RGB16UI;
-                        constexpr TextureEncoding Bits32 = GL_RGB32UI;
+                        constexpr TextureEncoding Bits8 = GL_RGB8UI;    ///< 8-bit unsigned integer red-green-blue components.
+                        constexpr TextureEncoding Bits16 = GL_RGB16UI;  ///< 16-bit unsigned integer red-green-blue components.
+                        constexpr TextureEncoding Bits32 = GL_RGB32UI;  ///< 32-bit unsigned integer red-green-blue components.
                     }  // namespace Unsigned
+                    /**
+                     * @brief Signed integer texture encodings for three-component textures.
+                     */
                     namespace Integer {
-                        constexpr TextureEncoding Bits8 = GL_RGB8I;
-                        constexpr TextureEncoding Bits16 = GL_RGB16I;
-                        constexpr TextureEncoding Bits32 = GL_RGB32I;
+                        constexpr TextureEncoding Bits8 = GL_RGB8I;    ///< 8-bit signed integer red-green-blue components.
+                        constexpr TextureEncoding Bits16 = GL_RGB16I;  ///< 16-bit signed integer red-green-blue components.
+                        constexpr TextureEncoding Bits32 = GL_RGB32I;  ///< 32-bit signed integer red-green-blue components.
                     }  // namespace Integer
+                    /**
+                     * @brief Floating-point texture encodings for three-component textures.
+                     */
                     namespace Float {
-                        constexpr TextureEncoding Bits16 = GL_RGB16F;
-                        constexpr TextureEncoding Bits32 = GL_RGB32F;
+                        constexpr TextureEncoding Bits16 = GL_RGB16F;  ///< 16-bit floating point red-green-blue components.
+                        constexpr TextureEncoding Bits32 = GL_RGB32F;  ///< 32-bit floating point red-green-blue components.
                     }  // namespace Float
+                    /**
+                     * @brief Normalized texture encodings for three-component textures.
+                     */
                     namespace Normalized {
-                        constexpr TextureEncoding Bits8 = GL_RGB8_SNORM;
-                        constexpr TextureEncoding Bits16 = GL_RGB16_SNORM;
+                        constexpr TextureEncoding Bits8 = GL_RGB8_SNORM;    ///< 8-bit normalized signed integer red-green-blue components.
+                        constexpr TextureEncoding Bits16 = GL_RGB16_SNORM;  ///< 16-bit normalized signed integer red-green-blue components.
                     }  // namespace Normalized
                 }  // namespace RGB
+
+                /**
+                 * @brief Namespace RGBA contains texture encodings for four-component (red-green-blue-alpha) OpenGL textures.
+                 *
+                 * It defines standard, unsigned integer, signed integer, floating-point, and normalized versions
+                 * for 4, 8, 16, and 32 bits per component where applicable.
+                 */
                 namespace RGBA {
-                    constexpr TextureEncoding Bits4 = GL_RGBA4;
-                    constexpr TextureEncoding Bits8 = GL_RGBA8;
-                    constexpr TextureEncoding Bits16 = GL_RGBA16;
+                    constexpr TextureEncoding Bits4 = GL_RGBA4;    ///< 4-bit red-green-blue-alpha components.
+                    constexpr TextureEncoding Bits8 = GL_RGBA8;    ///< 8-bit red-green-blue-alpha components.
+                    constexpr TextureEncoding Bits16 = GL_RGBA16;  ///< 16-bit red-green-blue-alpha components.
+
+                    /**
+                     * @brief Unsigned integer texture encodings for four-component textures.
+                     */
                     namespace Unsigned {
-                        constexpr TextureEncoding Bits8 = GL_RGBA8UI;
-                        constexpr TextureEncoding Bits16 = GL_RGBA16UI;
-                        constexpr TextureEncoding Bits32 = GL_RGBA32UI;
+                        constexpr TextureEncoding Bits8 = GL_RGBA8UI;    ///< 8-bit unsigned integer red-green-blue-alpha components.
+                        constexpr TextureEncoding Bits16 = GL_RGBA16UI;  ///< 16-bit unsigned integer red-green-blue-alpha components.
+                        constexpr TextureEncoding Bits32 = GL_RGBA32UI;  ///< 32-bit unsigned integer red-green-blue-alpha components.
                     }  // namespace Unsigned
+                    /**
+                     * @brief Signed integer texture encodings for four-component textures.
+                     */
                     namespace Integer {
-                        constexpr TextureEncoding Bits8 = GL_RGBA8I;
-                        constexpr TextureEncoding Bits16 = GL_RGBA16I;
-                        constexpr TextureEncoding Bits32 = GL_RGBA32I;
+                        constexpr TextureEncoding Bits8 = GL_RGBA8I;    ///< 8-bit signed integer red-green-blue-alpha components.
+                        constexpr TextureEncoding Bits16 = GL_RGBA16I;  ///< 16-bit signed integer red-green-blue-alpha components.
+                        constexpr TextureEncoding Bits32 = GL_RGBA32I;  ///< 32-bit signed integer red-green-blue-alpha components.
                     }  // namespace Integer
+                    /**
+                     * @brief Floating-point texture encodings for four-component textures.
+                     */
                     namespace Float {
-                        constexpr TextureEncoding Bits16 = GL_RGBA16F;
-                        constexpr TextureEncoding Bits32 = GL_RGBA32F;
+                        constexpr TextureEncoding Bits16 = GL_RGBA16F;  ///< 16-bit floating point red-green-blue-alpha components.
+                        constexpr TextureEncoding Bits32 = GL_RGBA32F;  ///< 32-bit floating point red-green-blue-alpha components.
                     }  // namespace Float
+                    /**
+                     * @brief Normalized texture encodings for four-component textures.
+                     */
                     namespace Normalized {
-                        constexpr TextureEncoding Bits8 = GL_RGBA8_SNORM;
-                        constexpr TextureEncoding Bits16 = GL_RGBA16_SNORM;
+                        constexpr TextureEncoding Bits8 = GL_RGBA8_SNORM;    ///< 8-bit normalized signed integer red-green-blue-alpha components.
+                        constexpr TextureEncoding Bits16 = GL_RGBA16_SNORM;  ///< 16-bit normalized signed integer red-green-blue-alpha components.
                     }  // namespace Normalized
                 }  // namespace RGBA
+
+                /**
+                 * @brief Namespace SRGB contains texture encodings for standard RGB color space OpenGL textures.
+                 */
                 namespace SRGB {
-                    constexpr TextureEncoding Bits8 = GL_SRGB8;
+                    constexpr TextureEncoding Bits8 = GL_SRGB8;  ///< 8-bit standard RGB color space.
                 }
+
+                /**
+                 * @brief Namespace SRGBA contains texture encodings for standard RGB color space with alpha component OpenGL textures.
+                 */
                 namespace SRGBA {
-                    constexpr TextureEncoding Bits8 = GL_SRGB8_ALPHA8;
+                    constexpr TextureEncoding Bits8 = GL_SRGB8_ALPHA8;  ///< 8-bit standard RGB color space with alpha.
                 }
+
+                /**
+                 * @brief Namespace Depth contains texture encodings for depth component OpenGL textures.
+                 */
                 namespace Depth {
-                    constexpr TextureEncoding Bits16 = GL_DEPTH_COMPONENT16;
-                    constexpr TextureEncoding Bits24 = GL_DEPTH_COMPONENT24;
+                    constexpr TextureEncoding Bits16 = GL_DEPTH_COMPONENT16;  ///< 16-bit depth component.
+                    constexpr TextureEncoding Bits24 = GL_DEPTH_COMPONENT24;  ///< 24-bit depth component.
+
+                    /**
+                     * @brief Floating-point texture encodings for depth component textures.
+                     */
                     namespace Float {
-                        constexpr TextureEncoding Bits32 = GL_DEPTH_COMPONENT32F;
-                    }
+                        constexpr TextureEncoding Bits32 = GL_DEPTH_COMPONENT32F;  ///< 32-bit floating point depth component.
+                    }  // namespace Float
                 }  // namespace Depth
-                namespace Stencil {  // OpenGL 4.4 or higher.
-                    constexpr TextureEncoding Bits8 = GL_STENCIL_INDEX8;
-                    constexpr TextureEncoding Bits16 = GL_STENCIL_INDEX16;
+
+                /**
+                 * @brief Namespace Stencil contains texture encodings for stencil component OpenGL textures, requiring OpenGL 4.4 or higher.
+                 */
+                namespace Stencil {
+                    constexpr TextureEncoding Bits8 = GL_STENCIL_INDEX8;    ///< 8-bit stencil component.
+                    constexpr TextureEncoding Bits16 = GL_STENCIL_INDEX16;  ///< 16-bit stencil component.
                 }  // namespace Stencil
-                namespace DepthStencil {  // Accessing stencil specifically requires OpenGL 4.3
-                                          // or higher.
-                    constexpr TextureEncoding Bits24_8 = GL_DEPTH24_STENCIL8;
+
+                /**
+                 * @brief Namespace DepthStencil contains texture encodings for combined depth and stencil components OpenGL textures, requiring
+                 * OpenGL 4.3 or higher.
+                 */
+                namespace DepthStencil {
+                    constexpr TextureEncoding Bits24_8 = GL_DEPTH24_STENCIL8;  ///< 24-bit depth and 8-bit stencil components combined.
+
+                    /**
+                     * @brief Floating-point texture encodings for combined depth and stencil components.
+                     */
                     namespace Float {
-                        constexpr TextureEncoding Bits32_8 = GL_DEPTH32F_STENCIL8;
-                    }
+                        constexpr TextureEncoding Bits32_8 =
+                            GL_DEPTH32F_STENCIL8;  ///< 32-bit floating point depth and 8-bit stencil components combined.
+                    }  // namespace Float
                 }  // namespace DepthStencil
+
             }  // namespace TextureEncodings
+
             /**
              * @brief Gets the name of a texture encoding.
              * @param encoding The texture encoding.

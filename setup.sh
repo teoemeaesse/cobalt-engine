@@ -27,6 +27,7 @@ cd ..
 
 
 echo -e "${GREEN}Configuring and building GLFW from the submodule...${NC}"
+ls
 cd glfw 
 echo -e "${GREEN}Configuring GLFW build settings...${NC}"
 cmake -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF -S . -B build

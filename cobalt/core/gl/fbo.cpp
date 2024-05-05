@@ -135,7 +135,7 @@ namespace cobalt {
             if (i >= colors.size() || colors.empty()) {
                 return None;
             }
-            return createWrap(colors[i]);
+            return CreateWrap(colors[i]);
         }
 
         const Opt<Wrap<const Texture2D>> FBO::getColorBuffer() const { return getColorBuffer(0); }
@@ -145,9 +145,9 @@ namespace cobalt {
                 if (!depthStencil.has_value()) {
                     return None;
                 }
-                return createWrap(depthStencil.value());
+                return CreateWrap(depthStencil.value());
             }
-            return createWrap(depth.value());
+            return CreateWrap(depth.value());
         }
 
         const Opt<Wrap<const Texture2D>> FBO::getStencilBuffer() const {
@@ -155,9 +155,9 @@ namespace cobalt {
                 if (!depthStencil.has_value()) {
                     return None;
                 }
-                return createWrap(depthStencil.value());
+                return CreateWrap(depthStencil.value());
             }
-            return createWrap(stencil.value());
+            return CreateWrap(stencil.value());
         }
 
         const uint FBO::getWidth() const { return width; }
