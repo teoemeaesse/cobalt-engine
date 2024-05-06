@@ -28,9 +28,9 @@ endif()
 
 # Conditional flags based on build type
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG") # Set release flags to optimize and remove debug info
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG -DGL_GLEXT_PROTOTYPES") # Set release flags to optimize and remove debug info
 else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g") # Debug flags
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -DGL_GLEXT_PROTOTYPES") # Debug flags
 endif()
 
 # Set the build directory

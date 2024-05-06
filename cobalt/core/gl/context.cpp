@@ -23,8 +23,8 @@ namespace cobalt {
             glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
             glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
             instance = CreateShared<Context>();
-            glewExperimental = GL_TRUE;  // Needed for core profile
             glfwMakeContextCurrent(instance->getGLContext());
+            glewExperimental = GL_TRUE;  // Needed for core profile
             GLenum err = glewInit();
             if (err != GLEW_OK) {
                 throw GLException("Failed to initialize GLEW: " + std::string((const char*)glewGetErrorString(err)));

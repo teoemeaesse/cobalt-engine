@@ -4,6 +4,9 @@
 #ifdef TEST_ENVIRONMENT
 #define STBI_NO_SIMD
 #endif
+#ifndef __APPLE__
+#define STBI_NO_SIMD
+#endif
 #define STB_IMAGE_IMPLEMENTATION
 #include "core/gl/texture.h"
 
