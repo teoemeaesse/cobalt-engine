@@ -1,5 +1,9 @@
-// Created by tomas on
-// 30-11-2023
+/**
+ * @file shader.h
+ * @brief Shader class for creating and managing OpenGL shader programs.
+ * @author Tomás Marques
+ * @date 30-11-2023
+ */
 
 #pragma once
 
@@ -7,17 +11,25 @@
 
 namespace cobalt {
     namespace core::gl {
-        enum class ShaderStep { Vertex, Fragment, Geometry, Compute };
+        /**
+         * @brief Shader steps that can be added to a shader program.
+         */
+        enum class ShaderStep {
+            Vertex,    ///< Vertex shader.
+            Fragment,  ///< Fragment (or pixel) shader.
+            Geometry,  ///< Geometry shader.
+            Compute    ///< Compute shader.
+        };
 
         /**
-         * @brief A shader program. Can be used to render, compute, etc.
+         * @brief A shader program. Can be used to render or, in the case of a compute shader, to create parallel programs on the gpu.
          */
         class Shader {
             friend class ShaderBuilder;
 
             public:
             /**
-             * @brief Destroys the shader program.
+             * @brief Destroys the shader and frees the shader resources.
              */
             virtual ~Shader();
             /**
@@ -46,19 +58,19 @@ namespace cobalt {
             Shader& operator=(Shader&& other) noexcept;
 
             /**
-             * @brief Binds the shader program.
+             * @brief Binds the shader program to the current context.
              */
             void use() const;
+
             /**
-             * @brief Gets the index of a uniform block object with the given name in the
-             * shader.
+             * @brief Gets the index of a uniform block object with the given name in the shader.
              * @param name The name of the uniform block object.
              * @return The index of the uniform block object.
              */
             const GLuint getUBIndex(const std::string& name) const;
             /**
-             * @brief Gets the OpenGL program handle.
-             * @return The OpenGL program handle.
+             * @brief Gets the OpenGL handle to the shader program.
+             * @return The OpenGL handle to the shader program.
              */
             const gl::Handle getGLHandle() const;
 
@@ -168,8 +180,7 @@ namespace cobalt {
             void setUniformMat4v(const std::string& name, const GLsizei count, const glm::mat4* value);
 
             private:
-            UMap<std::string,
-                 GLuint> uniformLocations;  // The uniform block indices.
+            UMap<std::string, GLuint> uniformLocations;  ///< The locations for each uniform.
 
             /**
              * @brief Gets the location of a uniform with the given name.
@@ -179,7 +190,7 @@ namespace cobalt {
             const GLuint getUniformLocation(const std::string& name);
 
             protected:
-            gl::Handle program;  // The OpenGL program handle.
+            gl::Handle program;  ///< The OpenGL shader program handle.
 
             /**
              * @brief Creates a new shader program.
@@ -192,51 +203,17 @@ namespace cobalt {
              * @param shader The shader handle.
              * @param source The source code of the shader.
              */
-            static void compileShader(const gl::Handle shader, const std::string& source);
+            static void compile(const gl::Handle shader, const std::string& source);
+
             /**
              * @brief Links a shader.
              * @param shader The shader handle.
              */
-            static void linkShader(const gl::Handle shader);
+            static void link(const gl::Handle shader);
         };
 
         /**
-         * @brief A shader program that can be used to render.
-         */
-        class RenderShader : public Shader {
-            public:
-            /**
-             * @brief Creates a new render shader.
-             * @param vertexSource The source code of the vertex shader.
-             * @param fragmentSource The source code of the fragment shader.
-             * @return The render shader.
-             */
-            RenderShader(std::string& vertexSource, std::string& fragmentSource);
-            /**
-             * @brief Creates a new render shader.
-             * @param vertexSource The source code of the vertex shader.
-             * @param fragmentSource The source code of the fragment shader.
-             * @param geometrySource The source code of the geometry shader.v
-             * @return The render shader.
-             */
-            RenderShader(std::string& vertexSource, std::string& fragmentSource, std::string& geometrySource);
-        };
-        /**
-         * @brief A shader program that can be used to compute.
-         */
-        class ComputeShader : public Shader {
-            public:
-            /**
-             * @brief Creates a new compute shader.
-             * @param computeSource The source code of the compute shader.
-             * @return The compute shader.
-             */
-            ComputeShader(std::string& computeSource);
-        };
-
-        /**
-         * @brief A builder for shaders. Can be used to create a render, compute or geometry
-         * shader, for example.
+         * @brief A builder for shaders. Can be used to create a render, compute or geometry shader, for example.
          */
         class ShaderBuilder {
             public:
@@ -251,12 +228,12 @@ namespace cobalt {
              * @brief Builds a render shader.
              * @return The render shader.
              */
-            RenderShader buildRenderShader() const;
+            Shader buildRenderShader() const;
             /**
              * @brief Builds a compute shader.
              * @return The compute shader.
              */
-            ComputeShader buildComputeShader() const;
+            Shader buildComputeShader() const;
 
             private:
             UMap<ShaderStep, std::string> sources;  // The shader sources.

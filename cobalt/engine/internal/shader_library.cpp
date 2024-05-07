@@ -3,14 +3,12 @@
 
 #include "engine/internal/shader_library.h"
 
-#include "core/gl/shader.h"
-#include "core/pch.h"
-
 namespace cobalt {
     namespace engine {
         Scope<ShaderLibrary> ShaderLibrary::instance;
 
-        static core::gl::RenderShader parseRenderShader(nlohmann::json& shaderJson, const core::io::Path& shadersDirectory) {
+        static core::gl::Shader parseRenderShader(nlohmann::json& shaderJson, const core::io::Path& shadersDirectory, const std::string& shaderName) {
+            CB_INFO("Loading render shader: {}", shaderName);
             core::gl::ShaderBuilder builder;
             std::string vertexName = shaderJson["vertex"].get<std::string>();
             std::string fragmentName = shaderJson["fragment"].get<std::string>();
@@ -29,7 +27,9 @@ namespace cobalt {
             return builder.buildRenderShader();
         }
 
-        static core::gl::ComputeShader parseComputeShader(nlohmann::json& shaderJson, const core::io::Path& shadersDirectory) {
+        static core::gl::Shader parseComputeShader(nlohmann::json& shaderJson, const core::io::Path& shadersDirectory,
+                                                   const std::string& shaderName) {
+            CB_INFO("Loading compute shader: {}", shaderName);
             core::gl::ShaderBuilder builder;
             std::string computeName = shaderJson["compute"].get<std::string>();
             core::io::File computeFile(shadersDirectory + computeName);
@@ -53,11 +53,9 @@ namespace cobalt {
                 std::string shaderName = it.key();
                 nlohmann::json shaderJson = it.value();
                 if (shaderJson["type"].get<std::string>() == "render") {
-                    CB_INFO("Loading render shader: {}", shaderName);
-                    shaders.emplace_back(shaderName, Move(parseRenderShader(shaderJson, shadersDirectory)));
+                    shaders.emplace_back(shaderName, Move(parseRenderShader(shaderJson, shadersDirectory, shaderName)));
                 } else if (shaderJson["type"].get<std::string>() == "compute") {
-                    CB_INFO("Loading compute shader: {}", shaderName);
-                    shaders.emplace_back(shaderName, Move(parseComputeShader(shaderJson, shadersDirectory)));
+                    shaders.emplace_back(shaderName, Move(parseComputeShader(shaderJson, shadersDirectory, shaderName)));
                 }
             }
         }

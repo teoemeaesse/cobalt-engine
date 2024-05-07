@@ -108,7 +108,7 @@ namespace cobalt {
             glUniformMatrix4fv(getUniformLocation(name), count, GL_FALSE, (GLfloat*)value);
         }
 
-        void Shader::compileShader(const gl::Handle shader, const std::string& source) {
+        void Shader::compile(const gl::Handle shader, const std::string& source) {
             const char* sourcePtr = source.c_str();
             glShaderSource(shader, 1, &sourcePtr, nullptr);
             glCompileShader(shader);
@@ -124,7 +124,7 @@ namespace cobalt {
             }
         }
 
-        void Shader::linkShader(const gl::Handle shader) {
+        void Shader::link(const gl::Handle shader) {
             glLinkProgram(shader);
             GLint success;
             glGetProgramiv(shader, GL_LINK_STATUS, &success);
@@ -138,94 +138,55 @@ namespace cobalt {
             }
         }
 
-        RenderShader::RenderShader(std::string& vertexSource, std::string& fragmentSource) : Shader(glCreateProgram()) {
-            CB_CORE_INFO("Compiling render shader...");
-            gl::Handle vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            gl::Handle fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            const char* vertexSourcePtr = vertexSource.c_str();
-            const char* fragmentSourcePtr = fragmentSource.c_str();
-            glShaderSource(vertexShader, 1, &vertexSourcePtr, NULL);
-            glShaderSource(fragmentShader, 1, &fragmentSourcePtr, NULL);
-            compileShader(vertexShader, vertexSource);
-            compileShader(fragmentShader, fragmentSource);
-            CB_CORE_INFO("Linking render shader...");
-            glAttachShader(program, vertexShader);
-            glAttachShader(program, fragmentShader);
-            glValidateProgram(program);
-            linkShader(program);
-            glDeleteShader(vertexShader);
-            glDeleteShader(fragmentShader);
-        }
-
-        RenderShader::RenderShader(std::string& vertexSource, std::string& fragmentSource, std::string& geometrySource) : Shader(glCreateProgram()) {
-            CB_CORE_INFO("Compiling render shader...");
-            gl::Handle vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            gl::Handle fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            gl::Handle geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
-            const char* vertexSourcePtr = vertexSource.c_str();
-            const char* fragmentSourcePtr = fragmentSource.c_str();
-            const char* geometrySourcePtr = geometrySource.c_str();
-            glShaderSource(vertexShader, 1, &vertexSourcePtr, NULL);
-            glShaderSource(fragmentShader, 1, &fragmentSourcePtr, NULL);
-            glShaderSource(geometryShader, 1, &geometrySourcePtr, NULL);
-            compileShader(vertexShader, vertexSource);
-            compileShader(fragmentShader, fragmentSource);
-            compileShader(geometryShader, geometrySource);
-            CB_CORE_INFO("Linking render shader...");
-            glAttachShader(program, vertexShader);
-            glAttachShader(program, fragmentShader);
-            glAttachShader(program, geometryShader);
-            glValidateProgram(program);
-            linkShader(program);
-            glDeleteShader(vertexShader);
-            glDeleteShader(fragmentShader);
-            glDeleteShader(geometryShader);
-        }
-
-        ComputeShader::ComputeShader(std::string& computeSource) : Shader(glCreateProgram()) {
-            CB_CORE_INFO("Compiling compute shader...");
-            gl::Handle computeShader = glCreateShader(GL_COMPUTE_SHADER);
-            const char* computeSourcePtr = computeSource.c_str();
-            glShaderSource(computeShader, 1, &computeSourcePtr, NULL);
-            compileShader(computeShader, computeSource);
-            CB_CORE_INFO("Linking compute shader...");
-            glAttachShader(program, computeShader);
-            glValidateProgram(program);
-            linkShader(program);
-            glDeleteShader(computeShader);
-        }
-
         ShaderBuilder& ShaderBuilder::addShaderStep(const ShaderStep step, const std::string& source) {
             sources.insert(std::make_pair(step, source));
             return *this;
         }
 
-        RenderShader ShaderBuilder::buildRenderShader() const {
-            std::string vertexSource;
-            std::string fragmentSource;
+        Shader ShaderBuilder::buildRenderShader() const {
+            gl::Handle vertexShader = 0, fragmentShader = 0, geometryShader = 0;
+            gl::Handle program = glCreateProgram();
             try {
-                vertexSource = sources.at(ShaderStep::Vertex);
-                fragmentSource = sources.at(ShaderStep::Fragment);
+                vertexShader = glCreateShader(GL_VERTEX_SHADER);
+                fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+                Shader::compile(vertexShader, sources.at(ShaderStep::Vertex));
+                Shader::compile(fragmentShader, sources.at(ShaderStep::Fragment));
+                glAttachShader(program, vertexShader);
+                glAttachShader(program, fragmentShader);
             } catch (std::out_of_range& e) {
-                throw GLException(
-                    "A render shader must have at least a vertex and a "
-                    "fragment shader source");
+                throw GLException("A render shader must have at least a vertex and a fragment shader source");
             }
             try {
-                std::string geometrySource = sources.at(ShaderStep::Geometry);
-                return RenderShader(vertexSource, fragmentSource, geometrySource);
+                geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+                Shader::compile(geometryShader, sources.at(ShaderStep::Geometry));
+                glAttachShader(program, geometryShader);
             } catch (std::out_of_range& e) {
-                return RenderShader(vertexSource, fragmentSource);
+                // No geometry shader
             }
+            glValidateProgram(program);
+            Shader::link(program);
+            glDeleteShader(vertexShader);
+            glDeleteShader(fragmentShader);
+            if (geometryShader != 0) glDeleteShader(geometryShader);
+
+            return Shader(program);
         }
 
-        ComputeShader ShaderBuilder::buildComputeShader() const {
+        Shader ShaderBuilder::buildComputeShader() const {
+            gl::Handle computeShader = 0;
+            gl::Handle program = glCreateProgram();
             try {
-                std::string computeSource = sources.at(ShaderStep::Compute);
-                return ComputeShader(computeSource);
+                computeShader = glCreateShader(GL_COMPUTE_SHADER);
+                Shader::compile(computeShader, sources.at(ShaderStep::Compute));
+                glAttachShader(program, computeShader);
             } catch (std::out_of_range& e) {
                 throw GLException("A compute shader must have a compute shader source");
             }
+            glValidateProgram(program);
+            Shader::link(program);
+            glDeleteShader(computeShader);
+
+            return Shader(program);
         }
     }  // namespace core::gl
 }  // namespace cobalt
