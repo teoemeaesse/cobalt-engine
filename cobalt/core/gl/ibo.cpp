@@ -7,10 +7,10 @@ namespace cobalt {
     namespace core::gl {
         IBO::IBO(const gl::Usage usage, const uint indexCount) : usage(usage), indexCount(indexCount) { glGenBuffers(1, &buffer); }
 
-        IBO::IBO(const gl::Usage usage, const uint* data, const uint indexCount) : usage(usage), indexCount(indexCount) {
+        IBO::IBO(const gl::Usage usage, const uint* indices, const uint indexCount) : usage(usage), indexCount(indexCount) {
             glGenBuffers(1, &buffer);
             bind();
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(uint), data, (GLenum)usage);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(uint), indices, (GLenum)usage);
         }
 
         IBO::~IBO() {
