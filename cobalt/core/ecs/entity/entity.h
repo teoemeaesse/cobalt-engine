@@ -118,7 +118,8 @@ namespace cobalt {
              */
             template <typename ComponentRef>
             ComponentRef get() {
-                static_assert(std::is_reference<ComponentRef>::value, "Component type must be a reference type.");
+                static_assert(std::is_reference<ComponentRef>::value,
+                              "cobalt::core::ecs::ComponentRegistry threw: Component type must be a reference type.");
                 return componentRegistry.get<ComponentRef>(id);
             }
 

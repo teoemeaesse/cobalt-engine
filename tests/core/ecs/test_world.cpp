@@ -50,7 +50,7 @@ void test_entity() {
         entity.get<Ref<Position>>();
         TEST_FAIL();
     } catch (const std::exception& e) {
-        TEST_ASSERT_EQUAL_STRING("Component not found for entity (0) with component: Position", e.what());
+        TEST_ASSERT_EQUAL_STRING("cobalt::core::ecs::ComponentRegistry threw: Component not found for entity (0) with component: Position", e.what());
     }
     entity.kill();
     entity.kill();

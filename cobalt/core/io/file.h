@@ -1,5 +1,9 @@
-// Created by tomas on
-// 07-12-2023
+/**
+ * @file file.h
+ * @brief File class to handle file I/O.
+ * @author Tomás Marques
+ * @date 07-12-2023
+ */
 
 #pragma once
 
@@ -12,7 +16,6 @@ namespace cobalt {
             /**
              * @brief Create a file from a path.
              * @param path The path to the file.
-             * @return The file.
              */
             explicit File(const Path& path);
             /**
