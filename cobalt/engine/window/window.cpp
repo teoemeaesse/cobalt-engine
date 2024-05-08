@@ -3,6 +3,7 @@
 
 #include "engine/window/window.h"
 
+#include "core/exception.h"
 #include "core/gl/context.h"
 #include "engine/window/plugin.h"
 
@@ -59,8 +60,8 @@ namespace cobalt {
         void Window::init() {
             try {
                 static_cast<core::ecs::World*>(core::gl::Context::getUserPointer())->getResource<Window>();
-            } catch (const core::ecs::ResourceNotFoundException<Window>& e) {
-                throw core::ecs::PluginNotFoundException("Window");
+            } catch (const core::CoreExceptionInterface& e) {
+                throw core::ecs::PluginNotFoundException<Window>("Window");
             }
             glfwWindowHint(GLFW_RESIZABLE, resizable);
             glfwSetWindowCloseCallback(core::gl::Context::getGLContext(), windowCloseCallback);
@@ -98,7 +99,7 @@ namespace cobalt {
                     CB_CORE_INFO("Running in fullscreen mode");
                     break;
                 default:
-                    throw core::ecs::PluginException<WindowPlugin>("Invalid window mode");
+                    throw core::ecs::PluginException<WindowPlugin, Window>("Invalid window mode");
             }
 
             core::gl::Context::recreateFromContext(core::gl::Context::getGLContext());

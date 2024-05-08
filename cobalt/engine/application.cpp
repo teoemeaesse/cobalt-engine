@@ -3,6 +3,7 @@
 
 #include "engine/application.h"
 
+#include "core/exception.h"
 #include "core/gl/context.h"
 #include "engine/bundle/base.h"
 
@@ -85,8 +86,8 @@ namespace cobalt {
                     CB_ERROR("Window plugin not found, but requested.");
                 }
                 return world.getResource<Window>();
-            } catch (const core::ecs::ResourceNotFoundException<Window>& e) {
-                throw core::ecs::PluginNotFoundException("Window");
+            } catch (const core::CoreExceptionInterface& e) {
+                throw core::ecs::PluginNotFoundException<Application>("Window");
             }
         }
 
@@ -96,8 +97,8 @@ namespace cobalt {
                     CB_ERROR("Window plugin not found, but requested.");
                 }
                 return world.getResource<Window>();
-            } catch (const core::ecs::ResourceNotFoundException<Window>& e) {
-                throw core::ecs::PluginNotFoundException("Window");
+            } catch (const core::CoreExceptionInterface& e) {
+                throw core::ecs::PluginNotFoundException<Application>("Window");
             }
         }
 
@@ -107,8 +108,8 @@ namespace cobalt {
                     CB_ERROR("Input plugin not found, but requested.");
                 }
                 return world.getResource<InputManager>();
-            } catch (const core::ecs::ResourceNotFoundException<InputManager>& e) {
-                throw core::ecs::PluginNotFoundException("Input");
+            } catch (const core::CoreExceptionInterface& e) {
+                throw core::ecs::PluginNotFoundException<Application>("Input");
             }
         }
 
@@ -118,8 +119,8 @@ namespace cobalt {
                     CB_ERROR("Input plugin not found, but requested.");
                 }
                 return world.getResource<InputManager>();
-            } catch (const core::ecs::ResourceNotFoundException<InputManager>& e) {
-                throw core::ecs::PluginNotFoundException("Input");
+            } catch (const core::CoreExceptionInterface& e) {
+                throw core::ecs::PluginNotFoundException<Application>("Input");
             }
         }
     }  // namespace engine

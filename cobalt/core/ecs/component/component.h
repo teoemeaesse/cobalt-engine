@@ -4,7 +4,6 @@
 #pragma once
 
 #include "core/ecs/properties.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::ecs {

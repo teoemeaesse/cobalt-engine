@@ -54,7 +54,7 @@ namespace cobalt {
                 const ComponentProperties::Type type = Component::template getType<ComponentType>();
                 if (store.find(type) == store.end()) {
                     if (typeIndices.size() >= CB_ECS_MAX_COMPONENTS) {
-                        throw ComponentOverflowException<ComponentType>(CB_ECS_MAX_COMPONENTS);
+                        throw ComponentOverflowException<ComponentType, ComponentRegistry>(CB_ECS_MAX_COMPONENTS);
                     }
                     store[type] = Move(CreateScope<ComponentStorage<ComponentType>>());
                     const uint64 index = typeIndices.size();
@@ -130,7 +130,7 @@ namespace cobalt {
                 try {
                     return dynamic_cast<ComponentRef>(store.at(Component::template getType<RemoveConstRef<ComponentRef>>())->get(entityID));
                 } catch (const std::out_of_range& e) {
-                    throw ComponentNotFoundException<RemoveConstRef<ComponentRef>>(entityID);
+                    throw ComponentNotFoundException<RemoveConstRef<ComponentRef>, ComponentRegistry>(entityID);
                 }
             }
             /**
@@ -144,7 +144,7 @@ namespace cobalt {
                 try {
                     return dynamic_cast<ComponentRef>(store.at(Component::template getType<RemoveConstRef<ComponentRef>>())->get(entityID));
                 } catch (const std::out_of_range& e) {
-                    throw ComponentNotFoundException<RemoveConstRef<ComponentRef>>(entityID);
+                    throw ComponentNotFoundException<RemoveConstRef<ComponentRef>, ComponentRegistry>(entityID);
                 }
             }
 

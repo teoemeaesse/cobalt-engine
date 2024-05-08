@@ -37,7 +37,7 @@ namespace cobalt {
             for (const auto& plugin : plugins) {
                 const auto missing = plugin.findMissingDependencies(plugins);
                 if (!missing.empty()) {
-                    throw PluginDependencyNotFoundException(plugin.getTitle(), missing);
+                    throw PluginDependencyNotFoundException<PluginManager>(plugin.getTitle(), missing);
                 }
             }
         }

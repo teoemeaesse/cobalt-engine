@@ -381,7 +381,7 @@ namespace cobalt {
 template <typename T>
 T inline cobalt::engine::CameraProperties::getCamera() const {
     static_assert(std::is_base_of<Camera, T>::value, "T must be a camera type");
-    throw cobalt::core::ecs::PluginException<CameraPlugin>("Invalid camera mode");  // TODO: idk what to put here
+    throw cobalt::core::ecs::PluginException<CameraPlugin, cobalt::engine::CameraProperties>("Invalid camera mode");  // TODO: idk what to put here
 }
 /**
  * @brief Create an orthographic camera from the properties.
@@ -414,7 +414,7 @@ cobalt::engine::PivotCamera inline cobalt::engine::CameraProperties::getCamera<c
 template <typename T>
 cobalt::engine::CameraController inline cobalt::engine::CameraController::create(const cobalt::engine::CameraProperties& properties) {
     static_assert(std::is_base_of<Camera, T>::value, "T must be a camera type");
-    throw core::ecs::PluginException<CameraPlugin>("Invalid camera type: " + demangle(typeid(T).name()));
+    throw core::ecs::PluginException<CameraPlugin, cobalt::engine::CameraController>("Invalid camera type: " + demangle(typeid(T).name()));
 }
 /**
  * @brief Create an orthographic camera controller from the given properties.

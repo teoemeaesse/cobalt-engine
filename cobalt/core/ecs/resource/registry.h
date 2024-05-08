@@ -53,7 +53,7 @@ namespace cobalt {
                 try {
                     return *dynamic_cast<RemoveConstRef<ResourceRef>*>(resources.at(Resource::getType<RemoveConstRef<ResourceRef>>()).get());
                 } catch (const std::out_of_range& e) {
-                    throw ResourceNotFoundException<RemoveConstRef<ResourceRef>>();
+                    throw ResourceNotFoundException<RemoveConstRef<ResourceRef>, ResourceRegistry>();
                 }
             }
             /**
@@ -66,7 +66,7 @@ namespace cobalt {
                 try {
                     return *dynamic_cast<RemoveConstRef<ResourceRef>*>(resources.at(Resource::getType<RemoveConstRef<ResourceRef>>()).get());
                 } catch (const std::out_of_range& e) {
-                    throw ResourceNotFoundException<RemoveConstRef<ResourceRef>>();
+                    throw ResourceNotFoundException<RemoveConstRef<ResourceRef>, ResourceRegistry>();
                 }
             }
 

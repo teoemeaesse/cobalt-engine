@@ -46,12 +46,7 @@ int main(int argc, char** argv) {
         app->init();
         app->run();
     } catch (const cobalt::core::CoreExceptionInterface& e) {
-        CB_ERROR(e.what());
-    } catch (const cobalt::core::ecs::PluginDependencyNotFoundException& e) {
-        CB_ERROR(e.what());
-        return EXIT_FAILURE;
-    } catch (const cobalt::core::ecs::ECSException& e) {
-        CB_ERROR(e.what());
+        CB_CORE_ERROR(e.what());
     } catch (const std::exception& e) {
         CB_ERROR(e.what());
     }

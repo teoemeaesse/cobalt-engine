@@ -11,7 +11,7 @@ namespace cobalt {
             try {
                 return cameras.at(id);
             } catch (const std::out_of_range& e) {
-                throw core::ecs::PluginException<CameraPlugin>("Camera with id " + std::to_string(id) + " does not exist");
+                throw core::ecs::PluginException<CameraPlugin, CameraManager>("Camera with id " + std::to_string(id) + " does not exist");
             }
         }
 
@@ -19,7 +19,7 @@ namespace cobalt {
             try {
                 return cameras.at(id);
             } catch (const std::out_of_range& e) {
-                throw core::ecs::PluginException<CameraPlugin>("Camera with id " + std::to_string(id) + " does not exist");
+                throw core::ecs::PluginException<CameraPlugin, CameraManager>("Camera with id " + std::to_string(id) + " does not exist");
             }
         }
 
@@ -27,7 +27,7 @@ namespace cobalt {
             try {
                 return cameras.at(cameraNames.at(name));
             } catch (const std::out_of_range& e) {
-                throw core::ecs::PluginException<CameraPlugin>("Camera with name " + name + " does not exist");
+                throw core::ecs::PluginException<CameraPlugin, CameraManager>("Camera with name " + name + " does not exist");
             }
         }
 
@@ -35,7 +35,7 @@ namespace cobalt {
             try {
                 return cameras.at(cameraNames.at(name));
             } catch (const std::out_of_range& e) {
-                throw core::ecs::PluginException<CameraPlugin>("Camera with name " + name + " does not exist");
+                throw core::ecs::PluginException<CameraPlugin, CameraManager>("Camera with name " + name + " does not exist");
             }
         }
     }  // namespace engine
