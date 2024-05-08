@@ -1,5 +1,9 @@
-// Created by tomas on
-// 01-12-2023
+/**
+ * @file vao.h
+ * @brief Vertex Array Object (VAO) specifies the format of the vertex data as well as the vertex buffer objects (VBOs) that contain the vertex data.
+ * @author Tomás Marques
+ * @date 01-12-2023
+ */
 
 #pragma once
 
@@ -8,8 +12,7 @@
 namespace cobalt {
     namespace core::gl {
         /**
-         * @brief VAO layout specifies the format of the vertex data.
-         * It is a list of vertex attributes and their layout.
+         * @brief VAO layout specifies the format of the vertex data. It is a list of vertex attributes and their layout.
          */
         class VAOLayout {
             friend class VAO;
@@ -40,68 +43,60 @@ namespace cobalt {
 
             private:
             struct Attribute {
-                uint count;       // The number of elements in the attribute.
-                gl::Type type;    // The type of the elements in the attribute.
-                bool normalized;  // Whether the attribute should be normalized.
-                size_t stride;    // The stride of the attribute.
+                uint count;       ///< The number of elements in the attribute.
+                gl::Type type;    ///< The type of the elements in the attribute.
+                bool normalized;  ///< Whether the attribute should be normalized.
+                size_t stride;    ///< The stride of the attribute.
 
                 /**
                  * @brief Creates an attribute.
                  * @param count The number of elements in the attribute.
                  * @param type The type of the elements in the attribute.
-                 * @param normalized Whether the attribute should be normalized.
-                 * @param stride The stride of the attribute.
-                 * @return An attribute.
+                 * @param normalized Whether the attribute should be
                  */
                 Attribute(const uint count, const gl::Type type, const bool normalized, const size_t stride)
                     : count(count), type(type), normalized(normalized), stride(stride) {}
             };
 
-            List<Attribute> attributes;  // The list of attributes.
-            size_t stride;               // The current stride of the vertex data.
+            List<Attribute> attributes;  ///< The list of attributes.
+            size_t stride;               ///< The current stride of the vertex data.
         };
 
         /**
-         * @brief Vertex Array Object (VAO) specifies the format of the vertex data as well as
-         * the vertex buffer objects (VBOs) that contain the vertex data.
+         * @brief Vertex Array Object (VAO) specifies the format of the vertex data as well as the vertex buffer objects (VBOs) that contain the
+         * vertex data.
          */
         class VAO {
             public:
             /**
-             * @brief Creates a VAO from a VBO and a VAO layout.
-             * The VAO layout specifies the format of the vertex data.
-             * The VBO contains the vertex data.
+             * @brief Creates a VAO from a VBO and a VAO layout. The VAO layout specifies the format of the vertex data. The VBO contains the vertex
+             * data.
              * @param vbo The VBO containing the vertex data.
              * @param layout The VAO layout specifying the format of the vertex data.
-             * @return A VAO.
              */
             VAO(const VBO& vbo, const VAOLayout& layout);
             /**
-             * @brief Destroys the VAO.
+             * @brief Destroys the VAO and releases its OpenGL resources.
              */
             ~VAO();
             /**
              * @brief Copy constructor.
              * @param other The VAO to copy.
-             * @return A VAO.
              */
             VAO(const VAO& other) = delete;
             /**
              * @brief Move constructor.
              * @param other The VAO to move.
-             * @return A VAO.
              */
             VAO(VAO&& other) noexcept;
             /**
              * @brief Copy assignment operator.
              * @param other The VAO to copy.
-             * @return The copied VAO.
              */
             VAO& operator=(const VAO& other) = delete;
             /**
              * @brief Move assignment operator.
              * @param other The VAO to move.
-             * @return The moved VAO.
              */
             VAO& operator=(VAO&& other) noexcept;
 
@@ -115,7 +110,7 @@ namespace cobalt {
             void unbind() const;
 
             private:
-            gl::Handle buffer;  // The VAO handle.
+            gl::Handle buffer;  ///< The VAO handle.
         };
     }  // namespace core::gl
 }  // namespace cobalt

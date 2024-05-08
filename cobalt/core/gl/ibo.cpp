@@ -1,5 +1,9 @@
-// Created by tomas on
-// 30-11-2023
+/**
+ * @file ibo.cpp
+ * @brief Index Buffer Object (IBO) class for indexed rendering in OpenGL.
+ * @author Tomás Marques
+ * @date 30-11-2023
+ */
 
 #include "core/gl/ibo.h"
 

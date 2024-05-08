@@ -1,5 +1,9 @@
-// Created by tomas on
-// 01-12-2023
+/**
+ * @file vao.cpp
+ * @brief Vertex Array Object (VAO) specifies the format of the vertex data as well as the vertex buffer objects (VBOs) that contain the vertex data.
+ * @author Tomás Marques
+ * @date 01-12-2023
+ */
 
 #include "core/gl/vao.h"
 

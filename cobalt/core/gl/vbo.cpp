@@ -1,5 +1,9 @@
-// Created by tomas on
-// 30-11-2023
+/**
+ * @file vbo.cpp
+ * @brief Vertex Buffer Object (VBO) class for storing vertex data in OpenGL buffers. This class manages the resources associated with VBOs,
+ * @author Tomás Marques
+ * @date 30-11-2023
+ */
 
 #include "core/gl/vbo.h"
 

@@ -40,7 +40,7 @@ namespace cobalt {
              */
             FBO();
             /**
-             * @brief Destructor which cleans up the FBO resources.
+             * @brief Destroys the FBO and cleans up its OpenGL resources.
              */
             ~FBO();
             /**
@@ -59,7 +59,6 @@ namespace cobalt {
             /**
              * @brief Move assignment operator to transfer ownership of FBO resources.
              * @param other The other FBO to move.
-             * @return Reference to this FBO.
              */
             FBO& operator=(FBO&&) noexcept;
 

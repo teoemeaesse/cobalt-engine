@@ -1,5 +1,9 @@
-// Created by tomas on
-// 30-11-2023
+/**
+ * @file ubo.cpp
+ * @brief Uniform Buffer Object (UBO) class. Wraps around OpenGL UBOs.
+ * @author Tomás Marques
+ * @date 30-11-2023
+ */
 
 #include "core/gl/ubo.h"
 

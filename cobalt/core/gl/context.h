@@ -1,5 +1,9 @@
-// Created by tomas on
-// 02-12-2023
+/**
+ * @file context.h
+ * @brief OpenGL context class. Wraps around GLFW and GLEW, and provides a shared context for all windows in a process. Also provides OpenGL queries.
+ * @author Tomás Marques
+ * @date 02-12-2023
+ */
 
 #pragma once
 
@@ -27,7 +31,7 @@ namespace cobalt {
              */
             static void init(GLFWContext context);
             /**
-             * @brief Destroys the render context.
+             * @brief Destroys the render context and releases any resources allocated by GLFW and GLEW.
              */
             static void finish();
             /**
@@ -199,9 +203,9 @@ namespace cobalt {
             ~Context();
 
             private:
-            GLFWContext context;  // The GL context.
+            GLFWContext context;  ///< The GL context.
 
-            static Shared<Context> instance;  // The current GL render context.
+            static Shared<Context> instance;  ///< The current GL render context.
         };
     }  // namespace core::gl
 }  // namespace cobalt

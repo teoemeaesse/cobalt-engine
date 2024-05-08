@@ -51,7 +51,6 @@ namespace cobalt {
             /**
              * @brief Move assignment operator to transfer ownership of IBO resources.
              * @param other The IBO to move.
-             * @return Reference to this IBO.
              */
             IBO& operator=(IBO&&) noexcept;
 
@@ -59,7 +58,6 @@ namespace cobalt {
              * @brief Binds this IBO to the current context.
              */
             void bind() const;
-
             /**
              * @brief Unbinds this IBO from the current context.
              */

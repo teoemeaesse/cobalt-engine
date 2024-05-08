@@ -3,8 +3,8 @@
 
 #include "engine/renderer3d/renderer.h"
 
+#include "core/exception.h"
 #include "core/gl/context.h"
-#include "core/gl/exception.h"
 #include "engine/renderer3d/plugin.h"
 
 namespace cobalt {
@@ -25,7 +25,7 @@ namespace cobalt {
                 shader.setUniformMat4("u_model", model);
                 shader.setUniformMat3("u_normal_matrix", glm::transpose(glm::inverse(glm::mat3(model))));
                 sendUniforms(shader);
-            } catch (const gl::GLException& e) {
+            } catch (const CoreException<Renderer>& e) {
                 CB_CORE_WARN(e.what());
             }
             // TODO: inject uniforms into shader. use UBOs.
@@ -39,7 +39,7 @@ namespace cobalt {
             try {
                 sendUniforms(shader);
                 target.sendCameraUBO(shader, cameraManager);
-            } catch (const gl::GLException& e) {
+            } catch (const CoreException<Renderer>& e) {
                 CB_CORE_WARN(e.what());
             }
             gl::Context::disableDepthWriting();

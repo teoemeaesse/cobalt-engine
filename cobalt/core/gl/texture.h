@@ -1,5 +1,9 @@
-// Created by tomas on
-// 01-12-2023
+/**
+ * @file texture.h
+ * @brief Texture classes for building and managing OpenGL textures.
+ * @author Tomás Marques
+ * @date 01-12-2023
+ */
 
 #pragma once
 
@@ -7,6 +11,9 @@
 
 namespace cobalt {
     namespace core::gl {
+        /**
+         * @brief A generic texture class for building and managing OpenGL textures.
+         */
         class Texture {
             public:
             /**
@@ -16,25 +23,21 @@ namespace cobalt {
             /**
              * @brief Copy constructor.
              * @param other The other texture.
-             * @return The copied texture.
              */
             Texture(const Texture& other) = delete;
             /**
              * @brief Move constructor.
              * @param other The other texture.
-             * @return The moved texture.
              */
             Texture(Texture&& other) noexcept;
             /**
              * @brief Copy assignment operator.
              * @param other The other texture.
-             * @return The copied texture.
              */
             Texture& operator=(const Texture& other) = delete;
             /**
              * @brief Move assignment operator.
              * @param other The other texture.
-             * @return The moved texture.
              */
             Texture& operator=(Texture&& other) noexcept;
 
@@ -86,12 +89,12 @@ namespace cobalt {
             inline gl::TextureEncoding getEncoding() const { return encoding; }
 
             protected:
-            gl::Handle texture;            // The OpenGL handle to the texture.
-            std::string source;            // The source of the texture.
-            gl::TextureFormat format;      // The pixel format of the texture.
-            gl::TextureEncoding encoding;  // The internal format of the texture.
-            gl::PixelType pixelType;       // The type of the pixels in the texture.
-            uint width, height;            // The width and height of the texture.
+            gl::Handle texture;            ///< The OpenGL handle to the texture.
+            std::string source;            ///< The source of the texture.
+            gl::TextureFormat format;      ///< The pixel format of the texture.
+            gl::TextureEncoding encoding;  ///< The internal format of the texture.
+            gl::PixelType pixelType;       ///< The type of the pixels in the texture.
+            uint width, height;            ///< The width and height of the texture.
 
             /**
              * @brief Creates an OpenGL texture.
@@ -101,8 +104,14 @@ namespace cobalt {
             Texture(const gl::TextureEncoding encoding);
         };
 
+        /**
+         * @brief A 2D texture class for building and managing 2D OpenGL textures.
+         */
         class Texture2D : public Texture {
             public:
+            /**
+             * @brief The default normal map. Points upwards from a flat surface.
+             */
             static inline constexpr uchar DEFAULT_NORMAL[] = {
                 127,
                 127,
@@ -116,22 +125,18 @@ namespace cobalt {
              * @param encoding The internal encoding of the texture.
              * @param filter The filter mode of the texture.
              * @param wrap The wrap mode of the texture.
-             * @return The created texture.
              */
             Texture2D(const Color& color, const gl::TextureEncoding encoding, const gl::TextureFilter filter = gl::TextureFilters::Linear,
                       const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
-
             /**
              * @brief Creates a 2d texture from the given data.
              * @param data The data of the texture.
              * @param encoding The internal encoding of the texture.
              * @param filter The filter mode of the texture.
              * @param wrap The wrap mode of the texture.
-             * @return The created texture.
              */
             Texture2D(const void* data, const gl::TextureEncoding encoding, const gl::TextureFilter filter = gl::TextureFilters::Linear,
                       const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
-
             /**
              * @brief Creates an empty 2d texture with the given width and height and reserves the memory for it.
              * @param width The width of the texture.
@@ -139,49 +144,40 @@ namespace cobalt {
              * @param encoding The internal format of the texture.
              * @param filter The filter mode of the texture.
              * @param wrap The wrap mode of the texture.
-             * @return The created texture.
              */
             Texture2D(const uint width, const uint height, const gl::TextureEncoding encoding = gl::TextureEncodings::RGBA::Bits8,
                       const gl::TextureFilter filter = gl::TextureFilters::Linear, const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
-
             /**
              * @brief Creates a 2d texture from the given path to a file.
              * @param path The path to the texture.
              * @param srgb Whether the texture should be interpreted as srgb.
              * @param filter The filter mode of the texture.
              * @param wrap The wrap mode of the texture.
-             * @return The created texture.
              */
             Texture2D(const io::Path& path, const bool srgb, const gl::TextureFilter filter = gl::TextureFilters::Linear,
                       const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
-
             /**
              * @brief Destroys the texture and frees the memory.
              */
             ~Texture2D() override;
-
             /**
              * @brief Copy constructor.
              * @param other The other texture.
-             * @return The copied texture.
              */
             Texture2D(const Texture2D&) = delete;
             /**
              * @brief Move constructor.
              * @param other The other texture.
-             * @return The moved texture.
              */
             Texture2D(Texture2D&&) noexcept;
             /**
              * @brief Copy assignment operator.
              * @param other The other texture.
-             * @return The copied texture.
              */
             Texture2D& operator=(const Texture2D&) = delete;
             /**
              * @brief Move assignment operator.
              * @param other The other texture.
-             * @return The moved texture.
              */
             Texture2D& operator=(Texture2D&&) noexcept;
 
@@ -212,6 +208,9 @@ namespace cobalt {
             void setFilter(const gl::TextureFilter filter) override;
         };
 
+        /**
+         * @brief A 3D texture class for building and managing 3D OpenGL textures.
+         */
         class Texture3D : public Texture {
             public:
             /**
@@ -223,23 +222,19 @@ namespace cobalt {
              * @param encoding The internal encoding of the texture.
              * @param filter The filter mode of the texture.
              * @param wrap The wrap mode of the texture.
-             * @return The created texture.
              */
             Texture3D(const uchar red, const uchar green, const uchar blue, const uchar alpha = 255,
                       const gl::TextureEncoding encoding = gl::TextureEncodings::RGBA::Bits8,
                       const gl::TextureFilter filter = gl::TextureFilters::Linear, const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
-
             /**
              * @brief Creates a cubemap texture from the given color.
              * @param color The color of the texture.
              * @param encoding The internal encoding of the texture.
              * @param filter The filter mode of the texture.
              * @param wrap The wrap mode of the texture.
-             * @return The created texture.
              */
             Texture3D(const Color& color, const gl::TextureEncoding encoding = gl::TextureEncodings::RGBA::Bits8,
                       const gl::TextureFilter filter = gl::TextureFilters::Linear, const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
-
             /**
              * @brief Creates an empty cubemap with the given width and height for the faces and reserves the memory for it. The format is the
              * internal format of the texture.
@@ -248,11 +243,9 @@ namespace cobalt {
              * @param encoding The internal format of the texture.
              * @param filter The filter mode of the texture.
              * @param wrap The wrap mode of the texture.
-             * @return The created texture.
              */
             Texture3D(const uint width, const uint height, const gl::TextureEncoding encoding = gl::TextureEncodings::RGBA::Bits8,
                       const gl::TextureFilter filter = gl::TextureFilters::Linear, const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
-
             /**
              * @brief Creates a cubemap from the given path to a directory containing the faces in 6 distinct png files: right.png, left.png,
              * top.png, bottom.png, front.png, back.png.
@@ -260,38 +253,31 @@ namespace cobalt {
              * @param srgb Whether the texture should be interpreted as srgb.
              * @param filter The filter mode of the texture.
              * @param wrap The wrap mode of the texture.
-             * @return The created texture.
              */
             Texture3D(const io::Path& path, const bool srgb, const gl::TextureFilter filter = gl::TextureFilters::Linear,
                       const gl::TextureWrap wrap = gl::TextureWraps::Repeat);
-
             /**
              * @brief Destroys the texture and frees the memory.
              */
             ~Texture3D() override;
-
             /**
              * @brief Copy constructor.
              * @param other The other texture.
-             * @return The copied texture.
              */
             Texture3D(const Texture3D&) = delete;
             /**
              * @brief Move constructor.
              * @param other The other texture.
-             * @return The moved texture.
              */
             Texture3D(Texture3D&&) noexcept;
             /**
              * @brief Copy assignment operator.
              * @param other The other texture.
-             * @return The copied texture.
              */
             Texture3D& operator=(const Texture3D&) = delete;
             /**
              * @brief Move assignment operator.
              * @param other The other texture.
-             * @return The moved texture.
              */
             Texture3D& operator=(Texture3D&&) noexcept;
 

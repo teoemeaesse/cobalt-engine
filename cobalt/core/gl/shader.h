@@ -29,31 +29,27 @@ namespace cobalt {
 
             public:
             /**
-             * @brief Destroys the shader and frees the shader resources.
+             * @brief Destroys the shader and frees its OpenGL resources.
              */
             virtual ~Shader();
             /**
              * @brief Copy constructor.
              * @param other The shader to copy.
-             * @return The copied shader.
              */
             Shader(const Shader& other) = delete;
             /**
              * @brief Move constructor.
              * @param other The shader to move.
-             * @return The moved shader.
              */
             Shader(Shader&& other) noexcept;
             /**
              * @brief Copy assignment operator.
              * @param other The shader to copy.
-             * @return The copied shader.
              */
             Shader& operator=(const Shader& other) = delete;
             /**
              * @brief Move assignment operator.
              * @param other The shader to move.
-             * @return The moved shader.
              */
             Shader& operator=(Shader&& other) noexcept;
 
@@ -221,7 +217,6 @@ namespace cobalt {
              * @brief Adds a shader step to the shader.
              * @param step The type of shader step to add.
              * @param source The source code of the shader.
-             * @return The shader builder.
              */
             ShaderBuilder& addShaderStep(const ShaderStep step, const std::string& source);
             /**
@@ -236,7 +231,7 @@ namespace cobalt {
             Shader buildComputeShader() const;
 
             private:
-            UMap<ShaderStep, std::string> sources;  // The shader sources.
+            UMap<ShaderStep, std::string> sources;  ///< The shader sources.
         };
     }  // namespace core::gl
 }  // namespace cobalt

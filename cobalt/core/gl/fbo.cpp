@@ -1,10 +1,14 @@
-// Created by tomas on
-// 02-12-2023
+/**
+ * @file fbo.cpp
+ * @brief Frame Buffer Object (FBO) class for rendering.
+ * @author Tomás Marques
+ * @date 02-12-2023
+ */
 
 #include "core/gl/fbo.h"
 
+#include "core/exception.h"
 #include "core/gl/context.h"
-#include "core/gl/exception.h"
 
 namespace cobalt {
     namespace core::gl {
@@ -49,7 +53,7 @@ namespace cobalt {
                         break;
                 }
                 if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-                    throw GLException("Failed to create FBO");
+                    throw CoreException<FBO>("Failed to create FBO");
                 }
                 CB_CORE_INFO("Created a {0}x{1} px FBO", width, height);
             }

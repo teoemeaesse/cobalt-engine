@@ -1,9 +1,13 @@
-// Created by tomas on
-// 30-11-2023
+/**
+ * @file shader.cpp
+ * @brief Shader class for creating and managing OpenGL shader programs.
+ * @author Tomás Marques
+ * @date 30-11-2023
+ */
 
 #include "core/gl/shader.h"
 
-#include "core/gl/exception.h"
+#include "core/exception.h"
 
 namespace cobalt {
     namespace core::gl {
@@ -29,7 +33,7 @@ namespace cobalt {
         const GLuint Shader::getUBIndex(const std::string& name) const {
             GLuint index = glGetUniformBlockIndex(program, name.c_str());
             if (index == GL_INVALID_INDEX) {
-                throw GLException("Uniform block " + name + " not found in shader");
+                throw CoreException<Shader>("Uniform block " + name + " not found in shader");
             }
             return index;
         }
@@ -120,7 +124,7 @@ namespace cobalt {
                 GLchar log[logLength];
                 glGetShaderInfoLog(shader, logLength, nullptr, log);
                 std::string logString(log);
-                throw GLException("Failed to compile shader: " + logString);
+                throw CoreException<Shader>("Failed to compile shader: " + logString);
             }
         }
 
@@ -134,7 +138,7 @@ namespace cobalt {
                 GLchar log[logLength];
                 glGetProgramInfoLog(shader, logLength, nullptr, log);
                 std::string logString(log);
-                throw GLException("Failed to link shader: " + logString);
+                throw CoreException<Shader>("Failed to link shader: " + logString);
             }
         }
 
@@ -154,7 +158,7 @@ namespace cobalt {
                 glAttachShader(program, vertexShader);
                 glAttachShader(program, fragmentShader);
             } catch (std::out_of_range& e) {
-                throw GLException("A render shader must have at least a vertex and a fragment shader source");
+                throw CoreException<Shader>("A render shader must have at least a vertex and a fragment shader source");
             }
             try {
                 geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
@@ -180,7 +184,7 @@ namespace cobalt {
                 Shader::compile(computeShader, sources.at(ShaderStep::Compute));
                 glAttachShader(program, computeShader);
             } catch (std::out_of_range& e) {
-                throw GLException("A compute shader must have a compute shader source");
+                throw CoreException<Shader>("A compute shader must have a compute shader source");
             }
             glValidateProgram(program);
             Shader::link(program);

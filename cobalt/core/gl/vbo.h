@@ -1,5 +1,9 @@
-// Created by tomas on
-// 30-11-2023
+/**
+ * @file vbo.h
+ * @brief Vertex Buffer Object (VBO) class for storing vertex data in OpenGL buffers. This class manages the resources associated with VBOs,
+ * @author Tomás Marques
+ * @date 30-11-2023
+ */
 
 #pragma once
 
@@ -8,14 +12,13 @@
 namespace cobalt {
     namespace core::gl {
         /**
-         * @brief Vertex buffer object, used to store vertex data.
+         * @brief Vertex Buffer Object, used to store and manage vertex data.
          */
         class VBO {
             public:
             /**
              * @brief Creates a vertex buffer object.
-             * @param usage GL_STATIC_DRAW, GL_DYNAMIC_DRAW, GL_STREAM_DRAW.
-             * @return VBO.
+             * @param usage gl::Usage::StaticDraw, gl::Usage::DynamicDraw, or gl::Usage::StreamDraw.
              */
             VBO(const gl::Usage usage);
             /**
@@ -25,25 +28,21 @@ namespace cobalt {
             /**
              * @brief Copy constructor.
              * @param other The VBO to copy.
-             * @return VBO.
              */
             VBO(const VBO&);
             /**
              * @brief Move constructor.
              * @param vbo The VBO to move.
-             * @return VBO.
              */
             VBO(VBO&&) noexcept;
             /**
              * @brief Copy assignment operator.
              * @param other The VBO to copy.
-             * @return The copied VBO.
              */
             VBO& operator=(const VBO&);
             /**
              * @brief Move assignment operator.
              * @param other The VBO to move.
-             * @return The moved VBO.
              */
             VBO& operator=(VBO&&) noexcept;
 
@@ -55,11 +54,13 @@ namespace cobalt {
              * @brief Unbinds the VBO from the current context.
              */
             void unbind() const;
+
             /**
              * @brief Reserves space in the VBO. Bind before calling.
              * @param size The number of bytes to reserve.
              */
             void reserve(const size_t size) const;
+
             /**
              * @brief Loads data into the VBO. Bind before calling.
              * @param data The data to load.
@@ -75,8 +76,8 @@ namespace cobalt {
             void load(const void* data, const size_t size, const size_t offset) const;
 
             private:
-            gl::Handle buffer;  // The OpenGL buffer handle.
-            gl::Usage usage;    // The usage of the buffer.
+            gl::Handle buffer;  ///< The OpenGL buffer handle.
+            gl::Usage usage;    ///< The usage of the buffer.
         };
     }  // namespace core::gl
 }  // namespace cobalt

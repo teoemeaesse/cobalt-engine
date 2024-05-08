@@ -1,5 +1,9 @@
-// Created by tomas on
-// 01-12-2023
+/**
+ * @file texture.cpp
+ * @brief Texture classes for building and managing OpenGL textures.
+ * @author Tomás Marques
+ * @date 01-12-2023
+ */
 
 #ifdef TEST_ENVIRONMENT
 #define STBI_NO_SIMD
@@ -10,7 +14,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "core/gl/texture.h"
 
-#include "core/gl/exception.h"
+#include "core/exception.h"
 #include "stb_image/stb_image.h"
 
 namespace cobalt {
@@ -95,7 +99,7 @@ namespace cobalt {
             stbi_set_flip_vertically_on_load(true);
             uchar* data = stbi_load(path.getPath().c_str(), &width, &height, &channels, STBI_rgb_alpha);
             if (!data) {
-                throw GLException("Failed to load texture: " + source);
+                throw CoreException<Texture2D>("Failed to load texture: " + source);
             }
             this->width = width;
             this->height = height;
@@ -215,7 +219,7 @@ namespace cobalt {
             for (uint i = 0; i < 6; i++) {
                 uchar* data = stbi_load((path + faces[i]).getPath().c_str(), &width, &height, &channels, STBI_rgb_alpha);
                 if (!data) {
-                    throw GLException("Failed to load texture: " + source);
+                    throw CoreException<Texture3D>("Failed to load texture: " + source);
                 }
                 glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint)encoding, width, height, 0, (GLenum)format, (GLenum)pixelType, data);
                 stbi_image_free(data);

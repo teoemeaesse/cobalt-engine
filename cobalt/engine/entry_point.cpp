@@ -4,7 +4,7 @@
 #include "engine/entry_point.h"
 
 #include "core/ecs/exception.h"
-#include "core/gl/exception.h"
+#include "core/exception.h"
 #include "engine/input/exception.h"
 
 namespace cobalt {
@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
     try {
         app->init();
         app->run();
-    } catch (const cobalt::core::gl::GLException& e) {
+    } catch (const cobalt::core::CoreExceptionInterface& e) {
         CB_ERROR(e.what());
     } catch (const cobalt::core::ecs::PluginDependencyNotFoundException& e) {
         CB_ERROR(e.what());
