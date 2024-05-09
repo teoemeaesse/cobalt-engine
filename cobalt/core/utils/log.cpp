@@ -1,5 +1,9 @@
-// Created by tomas on
-// 29-11-2023
+/**
+ * @file log.h
+ * @brief Logging utilities using spdlog.
+ * @author Tomás Marques
+ * @date 29-11-2023
+ */
 
 #include "core/utils/log.h"
 

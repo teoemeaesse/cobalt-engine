@@ -1,17 +1,24 @@
-// Created by tomas on
-// 02-12-2023
+/**
+ * @file color.cpp
+ * @brief Color class to represent RGBA colors.
+ * @author Tomás Marques
+ * @date 02-12-2023
+ */
 
 #pragma once
 
+#include <glm/glm.hpp>
 #include <string>
 
 namespace cobalt {
     namespace core {
+        /**
+         * @brief Class to represent RGBA colors. The components are floats between 0 and 1.
+         */
         class Color {
             public:
             /**
              * @brief Default color is black.
-             * @return Color
              */
             Color() noexcept;
             /**
@@ -20,7 +27,6 @@ namespace cobalt {
              * @param g Green component.
              * @param b Blue component.
              * @param a Alpha component.
-             * @return Color
              */
             Color(const float r, const float g, const float b, const float a = 1.0f) noexcept;
             /**
@@ -29,50 +35,58 @@ namespace cobalt {
              * @param g Green component.
              * @param b Blue component.
              * @param a Alpha component.
-             * @return Color
              */
             Color(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a = 255) noexcept;
             /**
              * @brief Copy constructor.
              * @param Color to copy.
-             * @return Color
              */
             Color(const Color& other) noexcept;
             /**
              * @brief Move constructor. Just copies the values.
-             * @param Color to move.
-             * @return Color
+             * @param Color Color to move.
              */
             Color(Color&& other) noexcept;
             /**
              * @brief Copy assignment.
-             * @param Color to copy.
-             * @return Color
+             * @param Color Color to copy.
+             * @return Reference to this after copy.
              */
             Color& operator=(const Color& other) noexcept;
             /**
              * @brief Move assignment. Just copies the values.
-             * @param Color to move.
-             * @return Color
+             * @param Color Color to move.
+             * @return Reference to this after move.
              */
             Color& operator=(Color&& other) noexcept;
 
             /**
              * @brief Equality operator.
              * @param other Color to compare.
-             * @return bool
+             * @return True if the colors are the same, false otherwise.
              */
             bool operator==(const Color& other) const noexcept;
             /**
              * @brief Inequality operator.
              * @param other Color to compare.
-             * @return bool
+             * @return True if the colors are different, false otherwise.
              */
             bool operator!=(const Color& other) const noexcept;
 
             /**
+             * @brief Convert the color to a glm::vec4.
+             * @return glm::vec4 representation of the color.
+             */
+            operator glm::vec4() const noexcept;
+            /**
+             * @brief Convert the color to a string.
+             * @return String representation of the color.
+             */
+            operator std::string() const noexcept;
+
+            /**
              * @brief Get a string representation of the color.
-             * @return std::string
+             * @return String representation of the color.
              */
             std::string toString() const noexcept;
 
@@ -82,7 +96,7 @@ namespace cobalt {
              */
             void toUChar(unsigned char* array) const;
 
-            float r, g, b, a;
+            float r, g, b, a;  ///< Red, green, blue and alpha components.
         };
 
         namespace Colors {

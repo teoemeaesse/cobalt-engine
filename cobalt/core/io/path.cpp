@@ -1,5 +1,9 @@
-// Created by tomas on
-// 01-12-2023
+/**
+ * @file path.cpp
+ * @brief A class representing a path to a filesystem object.
+ * @author Tomás Marques
+ * @date 01-12-2023
+ */
 
 #include "core/io/path.h"
 

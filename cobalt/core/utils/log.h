@@ -1,5 +1,9 @@
-// Created by tomas on
-// 29-11-2023
+/**
+ * @file log.h
+ * @brief Logging utilities using spdlog.
+ * @author Tomás Marques
+ * @date 29-11-2023
+ */
 
 #pragma once
 
@@ -9,18 +13,36 @@
 
 namespace cobalt {
     namespace core {
+        /**
+         * @brief Singleton class to manage logging using spdlog (should be thread-safe). Has 3 loggers: core, engine and editor.
+         */
         class Log {
             public:
+            /**
+             * @brief Initializes the loggers.
+             */
             static void init();
 
+            /**
+             * @brief Get the core logger.
+             * @return Shared pointer to the core logger.
+             */
             inline static std::shared_ptr<spdlog::logger>& getCoreLogger() { return coreLogger; }
+            /**
+             * @brief Get the engine logger.
+             * @return Shared pointer to the engine logger.
+             */
             inline static std::shared_ptr<spdlog::logger>& getEngineLogger() { return engineLogger; }
+            /**
+             * @brief Get the editor logger.
+             * @return Shared pointer to the editor logger.
+             */
             inline static std::shared_ptr<spdlog::logger>& getEditorLogger() { return editorLogger; }
 
             private:
-            static std::shared_ptr<spdlog::logger> coreLogger;
-            static std::shared_ptr<spdlog::logger> engineLogger;
-            static std::shared_ptr<spdlog::logger> editorLogger;
+            static std::shared_ptr<spdlog::logger> coreLogger;    ///< Core logger. Should only be used by the core module.
+            static std::shared_ptr<spdlog::logger> engineLogger;  ///< Engine logger. Should only be used by the engine module.
+            static std::shared_ptr<spdlog::logger> editorLogger;  ///< Editor logger. Should only be used by the editor module.
         };
     }  // namespace core
 }  // namespace cobalt

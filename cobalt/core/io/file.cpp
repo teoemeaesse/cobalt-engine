@@ -1,5 +1,9 @@
-// Created by tomas on
-// 07-12-2023
+/**
+ * @file file.cpp
+ * @brief File class to handle file I/O.
+ * @author Tomás Marques
+ * @date 07-12-2023
+ */
 
 #include "core/io/file.h"
 

@@ -1,5 +1,9 @@
-// Created by tomas on
-// 01-03-2024
+/**
+ * @file color.cpp
+ * @brief Color class to represent RGBA colors.
+ * @author Tomás Marques
+ * @date 01-03-2024
+ */
 
 #include "core/utils/color.h"
 
@@ -37,6 +41,10 @@ namespace cobalt {
         bool Color::operator==(const Color& other) const noexcept { return r == other.r && g == other.g && b == other.b && a == other.a; }
 
         bool Color::operator!=(const Color& other) const noexcept { return !(*this == other); }
+
+        Color::operator glm::vec4() const noexcept { return glm::vec4(r, g, b, a); }
+
+        Color::operator std::string() const noexcept { return toString(); }
 
         std::string Color::toString() const noexcept {
             std::stringstream ss;
