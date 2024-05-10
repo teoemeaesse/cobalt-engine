@@ -1,5 +1,10 @@
-// Created by tomas on
-// 14-02-2024
+/**
+ * @file manager.h
+ * @brief An Event manager is responsible for managing events and their associated systems. It allows for the management of events and the hooking of
+ * systems to events.
+ * @author Tomás Marques
+ * @date 14-02-2024
+ */
 
 #pragma once
 
@@ -14,11 +19,10 @@ namespace cobalt {
         class EventManager {
             public:
             /**
-             * @brief Default constructor.
+             * @brief Construct a new EventManager.
              * @param entityRegistry Entity registry.
              * @param resourceRegistry Resource registry.
              * @param systemManager System manager.
-             * @return EventManager instance.
              */
             EventManager(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager) noexcept;
             /**
@@ -27,26 +31,26 @@ namespace cobalt {
             ~EventManager() noexcept = default;
 
             /**
-             * @brief Register an event.
-             * @param name Event name.
-             * @param description Event description.
-             * @return Event instance.
+             * @brief Register an Event.
+             * @param name The event's name.
+             * @param description The event's description.
+             * @return An Event handle.
              */
             const Event& registerEvent(const std::string& name, const std::string& description) noexcept;
             /**
-             * @brief Trigger an event.
-             * @param name Event name.
+             * @brief Trigger an Event.
+             * @param name The event's name.
              */
             void triggerEvent(const std::string& name) noexcept;
             /**
-             * @brief Process the event queue.
+             * @brief Process the Event queue.
              */
             void clearQueue() noexcept;
 
             /**
-             * @brief Hook a system to an event.
-             * @tparam SystemType: System type.
-             * @param eventName Event to hook into.
+             * @brief Hook a system to an Event.
+             * @tparam SystemType The system type.
+             * @param eventName The Event to hook into.
              */
             template <typename SystemType>
             void addHook(const std::string& eventName) noexcept {
@@ -55,10 +59,12 @@ namespace cobalt {
             }
             /**
              * @brief Hook a system to an event.
-             * @tparam Params...: Lambda function parameters.
-             * @tparam Func: Lambda function type.
-             * @param eventName Event to hook into.
-             * @param func Lambda function.
+             * @tparam Params... The lambda function parameters.
+             * @tparam Func The lambda function type.
+             * @param eventName The Event to hook into.
+             * @param func The lambda function.
+             * @see SystemParameter
+             * @see Query, ReadRequest, WriteRequest, Commands
              */
             template <typename... Params, typename Func>
             void addHook(const std::string& eventName, Func func) noexcept {
@@ -68,12 +74,12 @@ namespace cobalt {
             }
 
             private:
-            UMap<std::string, Scope<SystemInterface>> hooks;
-            UMap<std::string, Event> events;
-            Queue<Event> eventQueue;
-            EntityRegistry& entityRegistry;
-            ResourceRegistry& resourceRegistry;
-            SystemManager& systemManager;
+            UMap<std::string, Scope<SystemInterface>> hooks;  ///< All event hooks.
+            UMap<std::string, Event> events;                  ///< All registered events.
+            Queue<Event> eventQueue;                          ///< The event queue.
+            EntityRegistry& entityRegistry;                   ///< The entity registry to operate on.
+            ResourceRegistry& resourceRegistry;               ///< The resource registry to operate on.
+            SystemManager& systemManager;                     ///< The system manager to operate on.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

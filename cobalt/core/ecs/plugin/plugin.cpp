@@ -1,5 +1,9 @@
-// Created by tomas on
-// 10-02-2024
+/**
+ * @file plugin.cpp
+ * @brief A plugin is a group of ECS elements that work together to provide a specific functionality.
+ * @author Tomás Marques
+ * @date 10-02-2024
+ */
 
 #include "core/ecs/plugin/plugin.h"
 

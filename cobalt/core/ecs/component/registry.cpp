@@ -1,5 +1,9 @@
-// Created by tomas on
-// 28-01-2024
+/**
+ * @file registry.cpp
+ * @brief Storage for every type of components in the ECS.
+ * @author Tomás Marques
+ * @date 28-01-2024
+ */
 
 #include "core/ecs/component/registry.h"
 

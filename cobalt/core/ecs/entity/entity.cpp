@@ -1,7 +1,9 @@
-// Created by tomas on
-// 19-01-2024
-
-#include "core/ecs/entity/entity.h"
+/**
+ * @file entity.cpp
+ * @brief Defines the Entity class, which is essentially a handle to a component mask in the ECS.
+ * @author Tomás Marques
+ * @date 19-01-2024
+ */
 
 #include "core/ecs/component/registry.h"
 #include "core/ecs/entity/registry.h"

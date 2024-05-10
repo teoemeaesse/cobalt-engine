@@ -1,5 +1,9 @@
-// Created by tomas on
-// 24-03-2024
+/**
+ * @file manager.cpp
+ * @brief A manager for plugins that can be added to a world.
+ * @author Tomás Marques
+ * @date 24-03-2024
+ */
 
 #include "core/ecs/plugin/manager.h"
 

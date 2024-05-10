@@ -1,5 +1,9 @@
-// Created by tomas on
-// 13-02-2024
+/**
+ * @file parameter.h
+ * @brief A system parameter is any object that can be passed to a System's argument list.
+ * @author Tomás Marques
+ * @date 13-02-2024
+ */
 
 #include "core/ecs/system/parameter.h"
 

@@ -1,5 +1,9 @@
-// Created by tomas on
-// 28-01-2024
+/**
+ * @file registry.h
+ * @brief Storage for every resource in the ECS.
+ * @author Tomás Marques
+ * @date 28-01-2024
+ */
 
 #pragma once
 
@@ -9,16 +13,23 @@
 namespace cobalt {
     namespace core::ecs {
         /**
-         * @brief Resource registry. Responsible for managing ECS resources. Resources are globally unique and accessible by systems.
+         * @brief Stores and manages all the resources in the ECS.
+         * Resources are globally unique and accessible by systems.
          */
         class ResourceRegistry {
             public:
+            /**
+             * @brief Default constructor.
+             */
             ResourceRegistry() noexcept = default;
+            /**
+             * @brief Default destructor.
+             */
             ~ResourceRegistry() noexcept = default;
 
             /**
-             * @brief Add a resource to the registry.
-             * @tparam ResourceType: Resource type.
+             * @brief Adds a resource to the registry.
+             * @tparam ResourceType The resource type.
              */
             template <typename ResourceType>
             void add() noexcept {
@@ -29,10 +40,10 @@ namespace cobalt {
                 resources.emplace(type, Move(CreateScope<ResourceType>()));
             }
             /**
-             * @brief Add a resource to the registry.
-             * @tparam ResourceType: Resource type.
-             * @tparam Args...: Resource constructor arguments.
-             * @param args Resource constructor arguments.
+             * @brief Adds a resource to the registry.
+             * @tparam ResourceType The resource type.
+             * @tparam Args... The resource constructor argument types.
+             * @param args The resource constructor arguments.
              */
             template <typename ResourceType, typename... Args>
             void add(Args&&... args) noexcept {
@@ -44,9 +55,9 @@ namespace cobalt {
             }
 
             /**
-             * @brief Get a resource from the registry.
-             * @tparam ResourceRef: Resource reference.
-             * @return Resource reference.
+             * @brief Gets a resource from the registry.
+             * @tparam ResourceRef The resource type reference.
+             * @return A mutable reference to the resource.
              */
             template <typename ResourceRef>
             ResourceRef get() {
@@ -57,9 +68,9 @@ namespace cobalt {
                 }
             }
             /**
-             * @brief Get a resource from the registry.
-             * @tparam ResourceRef: Resource reference.
-             * @return Resource reference.
+             * @brief Gets a resource from the registry.
+             * @tparam ResourceRef The resource type reference.
+             * @return A const reference to the resource.
              */
             template <typename ResourceRef>
             ResourceRef get() const {
@@ -71,7 +82,7 @@ namespace cobalt {
             }
 
             private:
-            UMap<ResourceProperties::Type, Scope<Resource>> resources;
+            UMap<ResourceProperties::Type, Scope<Resource>> resources;  ///< The resources in the registry.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

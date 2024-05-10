@@ -1,5 +1,9 @@
-// Created by tomas on
-// 14-02-2024
+/**
+ * @file event.cpp
+ * @brief Events in the ECS, used to communicate between systems.
+ * @author Tomás Marques
+ * @date 14-02-2024
+ */
 
 #include "core/ecs/event/event.h"
 
@@ -23,5 +27,7 @@ namespace cobalt {
         }
 
         const std::string& Event::getName() const noexcept { return name; }
+
+        const std::string& Event::getDescription() const noexcept { return description; }
     }  // namespace core::ecs
 }  // namespace cobalt

@@ -1,5 +1,9 @@
-// Created by tomas on
-// 03-02-2024
+/**
+ * @file resource.cpp
+ * @brief A Resource is an ECS element consisting of a piece of structured data that can be shared between systems.
+ * @author Tomás Marques
+ * @date 03-02-2024
+ */
 
 #include "core/ecs/resource/resource.h"
 

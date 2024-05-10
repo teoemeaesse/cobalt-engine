@@ -1,5 +1,9 @@
-// Created by tomas on
-// 28-03-2024
+/**
+ * @file bundle.h
+ * @brief A Bundle is a collection of plugins that can be added to a world.
+ * @author Tomás Marques
+ * @date 28-03-2024
+ */
 
 #pragma once
 
@@ -7,11 +11,13 @@
 
 namespace cobalt {
     namespace core::ecs {
+        /**
+         * @brief Implement this class to create a bundle of plugins that can be added to a world.
+         */
         class Bundle {
             public:
             /**
              * @brief Default constructor.
-             * @return Bundle
              */
             Bundle() noexcept = default;
             /**

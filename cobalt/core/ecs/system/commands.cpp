@@ -1,5 +1,9 @@
-// Created by tomas on
-// 13-02-2024
+/**
+ * @file commands.cpp
+ * @brief A command the user to modify the World from inside a System.
+ * @author Tomás Marques
+ * @date 13-02-2024
+ */
 
 #include "core/ecs/system/commands.h"
 

@@ -1,5 +1,9 @@
-// Created by tomas on
-// 19-01-2024
+/**
+ * @file registry.h
+ * @brief Storage for every entity in the ECS.
+ * @author Tomás Marques
+ * @date 19-01-2024
+ */
 
 #pragma once
 
@@ -10,7 +14,7 @@ namespace cobalt {
         class ComponentRegistry;
 
         /**
-         * @brief Entity registry. Stores and manages all entities.
+         * @brief Stores all entities and exposes an interface to interact with them.
          */
         class EntityRegistry {
             friend class Entity;
@@ -18,8 +22,7 @@ namespace cobalt {
             public:
             /**
              * @brief Default constructor.
-             * @param componentRegistry Component registry for this instance's entities.
-             * @return EntityRegistry instance.
+             * @param componentRegistry The component registry for this instance's entities.
              */
             EntityRegistry(ComponentRegistry& componentRegistry) noexcept;
             /**
@@ -27,29 +30,27 @@ namespace cobalt {
              */
             ~EntityRegistry() noexcept = default;
             /**
-             * @brief Copy constructor.
-             * @param EntityRegistry EntityRegistry to copy.
-             * @return EntityRegistry instance.
+             * @brief Copy constructor (deleted)
+             * @param other The other EntityRegistry.
              */
-            EntityRegistry(const EntityRegistry&) noexcept = delete;
+            EntityRegistry(const EntityRegistry& other) noexcept = delete;
             /**
-             * @brief Move constructor.
-             * @param EntityRegistry EntityRegistry to move.
-             * @return EntityRegistry instance.
+             * @brief Move constructor (deleted).
+             * @param other The other EntityRegistry.
              */
-            EntityRegistry(EntityRegistry&&) noexcept = delete;
+            EntityRegistry(EntityRegistry&& other) noexcept = delete;
             /**
-             * @brief Copy assignment operator.
-             * @param EntityRegistry EntityRegistry to copy.
-             * @return EntityRegistry instance.
+             * @brief Copy assignment operator (deleted).
+             * @param other The other EntityRegistry.
+             * @return Reference to this.
              */
-            EntityRegistry& operator=(const EntityRegistry&) noexcept = delete;
+            EntityRegistry& operator=(const EntityRegistry& other) noexcept = delete;
             /**
-             * @brief Move assignment operator.
-             * @param EntityRegistry EntityRegistry to move.
-             * @return EntityRegistry instance.
+             * @brief Move assignment operator (deleted).
+             * @param other The other EntityRegistry.
+             * @return Reference to this.
              */
-            EntityRegistry& operator=(EntityRegistry&&) noexcept = delete;
+            EntityRegistry& operator=(EntityRegistry&& other) noexcept = delete;
 
             /**
              * @brief Create a new entity.
@@ -63,19 +64,19 @@ namespace cobalt {
             void remove(const Entity& entity) noexcept;
             /**
              * @brief Destroy an entity.
-             * @param entityID ID of the entity to destroy.
+             * @param entityID The ID of the entity to destroy.
              */
             void remove(const EntityProperties::ID& entityID) noexcept;
 
             /**
              * @brief The number entities in the registry.
-             * @return Number of entities.
+             * @return The number of entities.
              */
             const uint64 getSize() const noexcept;
 
             /**
-             * @brief Get a subset of entities' components.
-             * @tparam ComponentRefs...: Components to select for.
+             * @brief Get a subset of all entities' components.
+             * @tparam ComponentRefs... The components to select.
              * @return A vector of tuples of references to components.
              */
             template <typename... ComponentRefs>
@@ -90,14 +91,14 @@ namespace cobalt {
                 return components;
             }
             /**
-             * @brief Get a subset of entities' components.
-             * @tparam ComponentTypes...: Components to select for.
+             * @brief Get a subset of all entities' components.
+             * @tparam ComponentTypes... The components to select for.
              * @return A vector of tuples of references to components.
              */
             template <typename... ComponentTypes>
-            const Vec<Tuple<Ref<Entity>, ComponentTypes...>> getWithEntity() const noexcept {
+            const Vec<Tuple<const Entity&, ComponentTypes...>> getWithEntity() const noexcept {
                 static_assert((std::is_reference<ComponentTypes>::value && ...), "All component types must be reference types.");
-                Vec<Tuple<Ref<Entity>, ComponentTypes...>> components;
+                Vec<Tuple<const Entity&, ComponentTypes...>> components;
                 for (auto& entity : entities) {
                     if (entity.second.has<RemoveConstRef<ComponentTypes>...>()) {
                         components.push_back(std::tuple_cat(std::make_tuple(std::cref(entity.second)), entity.second.getMany<ComponentTypes...>()));
@@ -107,14 +108,14 @@ namespace cobalt {
             }
 
             private:
-            UMap<EntityProperties::ID, Entity> entities;  // All living entities.
-            Vec<uint64> versions;                         // Entity versions.
-            Queue<EntityProperties::ID> freeIDs;          // Recently-freed IDs.
-            ComponentRegistry& componentRegistry;         // Component registry for this instance's entities.
+            UMap<EntityProperties::ID, Entity> entities;  ///< All living entities.
+            Vec<uint64> versions;                         ///< Entity versions.
+            Queue<EntityProperties::ID> freeIDs;          ///< Recently-freed IDs.
+            ComponentRegistry& componentRegistry;         ///< Component registry for this instance's entities.
 
             /**
              * @brief Check if an entity is alive.
-             * @param id Entity ID.
+             * @param entity The entity to check.
              * @return True if the entity is alive, false otherwise.
              */
             const bool isAlive(const Entity& entity) const noexcept;

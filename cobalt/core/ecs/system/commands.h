@@ -1,5 +1,9 @@
-// Created by tomas on
-// 13-02-2024
+/**
+ * @file commands.h
+ * @brief A command the user to modify the World from inside a System.
+ * @author Tomás Marques
+ * @date 13-02-2024
+ */
 
 #pragma once
 
@@ -8,17 +12,16 @@
 namespace cobalt {
     namespace core::ecs {
         /**
-         * @brief ECS commands. Allows for easy entity creation / destruction and system / resource management from a system.
+         * @brief Commands allow for easy entity creation / destruction and system / resource management from a system.
          */
         class Commands : SystemParameter {
             public:
             /**
-             * @brief Default constructor.
-             * @param entityRegistry Entity registry.
-             * @param resourceRegistry Resource registry.
-             * @param systemManager System manager.
-             * @param eventManager Event manager.
-             * @return Commands instance.
+             * @brief Create a new Commands.
+             * @param entityRegistry The EntityRegistry where the commands will be executed.
+             * @param resourceRegistry The ResourceRegistry where the commands will be executed.
+             * @param systemManager The SystemManager where the commands will be executed.
+             * @param eventManager The EventManager where the commands will be executed.
              */
             Commands(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
                      EventManager& eventManager) noexcept;
@@ -28,15 +31,15 @@ namespace cobalt {
             ~Commands() noexcept = default;
 
             /**
-             * @brief Spawn a new entity.
-             * @return Entity instance.
+             * @brief Spawn a new Entity.
+             * @return An entity handle.
              */
             Entity& spawn() noexcept;
 
             /**
-             * @brief Add a system to the world.
-             * @tparam SystemType: System type.
-             * @param schedule Schedule to add the system to.
+             * @brief Add a System to the world.
+             * @tparam SystemType The system type.
+             * @param schedule The schedule to add the system to.
              */
             template <typename SystemType>
             void addSystem(DefaultSchedules schedule) noexcept {
@@ -44,11 +47,13 @@ namespace cobalt {
                 systemManager.addSystem<SystemType>(schedule);
             }
             /**
-             * @brief Add a system to the world.
-             * @tparam Params...: Lambda function parameters.
-             * @tparam Func: Lambda function type.
-             * @param schedule Schedule to add the system to.
-             * @param func Lambda function.
+             * @brief Add a System to the world.
+             * @tparam Params... The lambda function parameters.
+             * @tparam Func The lambda function type.
+             * @param schedule The schedule to add the system to.
+             * @param func The lambda function.
+             * @see SystemParameter
+             * @see Query, ReadRequest, WriteRequest, Commands
              */
             template <typename... Params, typename Func>
             void addSystem(DefaultSchedules schedule, Func func) noexcept {
@@ -57,9 +62,9 @@ namespace cobalt {
             }
 
             /**
-             * @brief Hook a system to an event.
-             * @tparam SystemType: System type.
-             * @param eventName Event to hook into.
+             * @brief Hook a System to an event.
+             * @tparam SystemType The system type.
+             * @param eventName The event to hook into.
              */
             template <typename SystemType>
             void addHook(const std::string& eventName) noexcept {
@@ -67,11 +72,13 @@ namespace cobalt {
                 eventManager.addHook<SystemType>(eventName);
             }
             /**
-             * @brief Hook a system to an event.
-             * @tparam Params...: Lambda function parameters.
-             * @tparam Func: Lambda function type.
-             * @param eventName Event to hook into.
-             * @param func Lambda function.
+             * @brief Hook a System to an event.
+             * @tparam Params... The lambda function parameters.
+             * @tparam Func The lambda function type.
+             * @param eventName The event to hook into.
+             * @param func The lambda function.
+             * @see SystemParameter
+             * @see Query, ReadRequest, WriteRequest, Commands
              */
             template <typename... Params, typename Func>
             void addHook(const std::string& eventName, Func func) noexcept {

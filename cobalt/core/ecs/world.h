@@ -1,5 +1,9 @@
-// Created by tomas on
-// 18-01-2024
+/**
+ * @file world.h
+ * @brief An ECS world that holds entities, components, resources, systems, events, and plugins. It is responsible for managing the ECS architecture.
+ * @author Tomás Marques
+ * @date 18-01-2024
+ */
 
 #pragma once
 
@@ -9,15 +13,18 @@
 
 namespace cobalt {
     namespace core::ecs {
+        /**
+         * @brief The ECS world is the primary interface with the ECS. It should be used for all ECS operations.
+         */
         class World {
             public:
             /**
-             * @brief Default constructor.
+             * @brief Create a new world.
              * @return World instance.
              */
             World() noexcept;
             /**
-             * @brief Default destructor.
+             * @brief Destroy the world. Releases all resources allocated for the ECS resources.
              */
             ~World() noexcept = default;
 
@@ -29,7 +36,7 @@ namespace cobalt {
 
             /**
              * @brief Register a component.
-             * @tparam ComponentType: Component type.
+             * @tparam ComponentType The component type.
              */
             template <typename ComponentType>
             void registerComponent() noexcept {
@@ -38,7 +45,7 @@ namespace cobalt {
 
             /**
              * @brief Add a system to the world.
-             * @tparam SystemType: System type.
+             * @tparam SystemType The system type.
              * @param schedule Schedule to add the system to.
              */
             template <typename SystemType>
@@ -48,8 +55,8 @@ namespace cobalt {
             }
             /**
              * @brief Add a system to the world.
-             * @tparam Params...: Lambda function parameters.
-             * @tparam Func: Lambda function type.
+             * @tparam Params... Lambda function parameter types.
+             * @tparam Func Lambda function type.
              * @param schedule Schedule to add the system to.
              * @param func Lambda function.
              */
@@ -61,7 +68,7 @@ namespace cobalt {
 
             /**
              * @brief Hook a system to an event.
-             * @tparam SystemType: System type.
+             * @tparam SystemType The system type.
              * @param eventName Event to hook into.
              */
             template <typename SystemType>
@@ -71,9 +78,9 @@ namespace cobalt {
             }
             /**
              * @brief Hook a system to an event.
-             * @tparam Params...: Lambda function parameters.
-             * @tparam Func: Lambda function type.
-             * @param eventName Event to hook into.
+             * @tparam Params... Lambda function parameter types.
+             * @tparam Func Lambda function type.
+             * @param eventName The event to hook into.
              * @param func Lambda function.
              */
             template <typename... Params, typename Func>
@@ -83,19 +90,19 @@ namespace cobalt {
             }
             /**
              * @brief Register an event.
-             * @param name Event name.
-             * @param description Event description.
+             * @param name The event's name.
+             * @param description The event's description.
              */
             void registerEvent(const std::string& name, const std::string& description) noexcept;
             /**
              * @brief Trigger an event.
-             * @param eventName Event to trigger.
+             * @param eventName The event to trigger.
              */
             void triggerEvent(const std::string& eventName) noexcept;
 
             /**
              * @brief Add a unique resource.
-             * @tparam ResourceType: Resource type.
+             * @tparam ResourceType The resource type.
              */
             template <typename ResourceType>
             void addResource() noexcept {
@@ -103,8 +110,8 @@ namespace cobalt {
             }
             /**
              * @brief Add a resource with constructor arguments.
-             * @tparam ResourceType: Resource type.
-             * @tparam Args...: Resource constructor arguments.
+             * @tparam ResourceType The resource type.
+             * @tparam Args... Resource constructor argument types.
              * @param args Resource constructor arguments.
              */
             template <typename ResourceType, typename... Args>
@@ -113,18 +120,18 @@ namespace cobalt {
             }
 
             /**
-             * @brief Get a resource.
-             * @tparam ResourceType: Resource type.
-             * @return ResourceType reference.
+             * @brief Get a mutable resource.
+             * @tparam ResourceType The resource type.
+             * @return ResourceType The requested resource.
              */
             template <typename ResourceType>
             ResourceType& getResource() {
                 return resourceRegistry.get<ResourceType&>();
             }
             /**
-             * @brief Get a resource.
-             * @tparam ResourceType: Resource type.
-             * @return ResourceType reference.
+             * @brief Get a const resource.
+             * @tparam ResourceType Resource type.
+             * @return ResourceType The requested resource.
              */
             template <typename ResourceType>
             const ResourceType& getResource() const {
@@ -133,8 +140,8 @@ namespace cobalt {
 
             /**
              * @brief Find out if a given plugin is registered. The title must match exactly.
-             * @tparam PluginType: Plugin to find.
-             * @return bool
+             * @tparam PluginType The plugin to find.
+             * @return True if the plugin is registered, false otherwise.
              */
             template <typename PluginType>
             bool isPlugin() const noexcept {
@@ -145,13 +152,13 @@ namespace cobalt {
             }
             /**
              * @brief Find out if a given plugin is registered. The title must match exactly.
-             * @param title Plugin title.
-             * @return bool
+             * @param title The plugin's title.
+             * @return True if the plugin is registered, false otherwise.
              */
             bool isPlugin(const std::string& title) const noexcept;
             /**
              * @brief Add a plugin to the world.
-             * @tparam PluginType: Plugin type.
+             * @tparam PluginType The plugin type.
              */
             template <typename PluginType>
             void addPlugin() noexcept {
@@ -163,9 +170,9 @@ namespace cobalt {
             }
             /**
              * @brief Add a plugin to the world.
-             * @tparam PluginType: Plugin type.
-             * @tparam Args...: Plugin constructor arguments.
-             * @param args Plugin constructor arguments.
+             * @tparam PluginType The plugin type.
+             * @tparam Args... The plugin's constructor argument types.
+             * @param args The plugin's constructor arguments.
              */
             template <typename PluginType, typename... Args>
             void addPlugin(Args&&... args) noexcept {
@@ -176,7 +183,8 @@ namespace cobalt {
             }
             /**
              * @brief Add a plugin bundle to the world.
-             * @param bundle Bundle to add.
+             * @tparam BundleType The bundle type.
+             * @param bundle The bundle to add.
              */
             template <typename BundleType>
             void addBundle() noexcept {
@@ -187,8 +195,8 @@ namespace cobalt {
 
             /**
              * @brief Make a query.
-             * @tparam QueryComponents...: The query's components.
-             * @return QueryType instance.
+             * @tparam QueryComponents... The query's component types.
+             * @return The created query.
              */
             template <typename... QueryComponents>
             Query<QueryComponents...> makeQuery() noexcept {
@@ -198,8 +206,8 @@ namespace cobalt {
 
             /**
              * @brief Read a resource.
-             * @tparam ResourceType: Resource type.
-             * @return ReadRequest<ResourceType> instance.
+             * @tparam ResourceType The resource type.
+             * @return ReadRequest<ResourceType> The read request.
              */
             template <typename ResourceType>
             ReadRequest<ResourceType> read() noexcept {
@@ -207,8 +215,8 @@ namespace cobalt {
             }
             /**
              * @brief Write to a resource.
-             * @tparam ResourceType: Resource type.
-             * @return WriteRequest<ResourceType> instance.
+             * @tparam ResourceType The resource type.
+             * @return WriteRequest<ResourceType> The write request.
              */
             template <typename ResourceType>
             WriteRequest<ResourceType> write() noexcept {
@@ -233,12 +241,12 @@ namespace cobalt {
             void shutdown() noexcept;
 
             private:
-            EntityRegistry entityRegistry;
-            ComponentRegistry componentRegistry;
-            ResourceRegistry resourceRegistry;
-            PluginManager pluginManager;
-            SystemManager systemManager;
-            EventManager eventManager;
+            EntityRegistry entityRegistry;        ///< EntityRegistry where all entities are stored.
+            ComponentRegistry componentRegistry;  ///< ComponentRegistry where all components are stored.
+            ResourceRegistry resourceRegistry;    ///< ResourceRegistry where all resources are stored.
+            PluginManager pluginManager;          ///< PluginManager where all plugins are stored.
+            SystemManager systemManager;          ///< SystemManager where all systems are stored.
+            EventManager eventManager;            ///< EventManager where all events are stored.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

@@ -1,5 +1,9 @@
-// Created by tomas on
-// 03-02-2024
+/**
+ * @file request.h
+ * @brief A request is a SystemParameter that allows systems to access resources in a read-only or read-write manner.
+ * @author Tomás Marques
+ * @date 03-02-2024
+ */
 
 #pragma once
 
@@ -11,19 +15,18 @@ namespace cobalt {
         class SystemManager;
 
         /**
-         * @brief Resource request. Facilitates read-only access to resources.
-         * @tparam ResourceType: Resource type.
+         * @brief A ReadRequest provides read-only access to a resource.
+         * @tparam ResourceType The Resource type to read.
          */
         template <typename ResourceType>
         class ReadRequest : SystemParameter {
             public:
             /**
-             * @brief Constructor.
-             * @param entityRegistry Entity registry. Unused.
-             * @param resourceRegistry Resource registry.
-             * @param systemManager System manager. Unused.
-             * @param eventManager Event manager. Unused.
-             * @return Read request instance.
+             * @brief Creates a new ReadRequest.
+             * @param entityRegistry The EntityRegistry that the request will run on. Unused.
+             * @param resourceRegistry The ResourceRegistry that the request will run on.
+             * @param systemManager The SystemManager that the request will run on. Unused.
+             * @param eventManager The EventManager that the request will run on. Unused.
              */
             ReadRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager, EventManager& eventManager)
                 : SystemParameter(entityRegistry, resourceRegistry, systemManager, eventManager),
@@ -31,7 +34,7 @@ namespace cobalt {
                 Resource::validate<ResourceType>();
             }
             /**
-             * @brief Destroys the request.
+             * @brief Default destructor.
              */
             ~ReadRequest() noexcept = default;
 
@@ -47,23 +50,22 @@ namespace cobalt {
             const ResourceType* operator->() const { return &resource; }
 
             private:
-            const ResourceType& resource;
+            const ResourceType& resource;  ///< The requested resource.
         };
 
         /**
-         * @brief Resource request. Facilitates read-write access to resources.
-         * @tparam ResourceType: Resource type.
+         * @brief A WriteRequest provides read-write access to a resource.
+         * @tparam ResourceType The Resource type to write.
          */
         template <typename ResourceType>
         class WriteRequest : SystemParameter {
             public:
             /**
-             * @brief Constructor.
-             * @param entityRegistry Entity registry. Unused.
-             * @param resourceRegistry Resource registry.
-             * @param systemManager System manager. Unused.
-             * @param eventManager Event manager. Unused.
-             * @return Write request instance.
+             * @brief Creates a new WriteRequest.
+             * @param entityRegistry The EntityRegistry that the request will run on. Unused.
+             * @param resourceRegistry The ResourceRegistry that the request will run on.
+             * @param systemManager The SystemManager that the request will run on. Unused.
+             * @param eventManager The EventManager that the request will run on. Unused.
              */
             explicit WriteRequest(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
                                   EventManager& eventManager)
@@ -71,7 +73,7 @@ namespace cobalt {
                 Resource::validate<ResourceType>();
             }
             /**
-             * @brief Destroys the request.
+             * @brief Default destructor.
              */
             ~WriteRequest() noexcept = default;
 
@@ -87,7 +89,7 @@ namespace cobalt {
             ResourceType* operator->() { return &resource; }
 
             private:
-            ResourceType& resource;
+            ResourceType& resource;  ///< The requested resource.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

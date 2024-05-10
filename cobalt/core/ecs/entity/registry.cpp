@@ -1,5 +1,9 @@
-// Created by tomas on
-// 19-01-2024
+/**
+ * @file registry.cpp
+ * @brief Storage for every entity in the ECS.
+ * @author Tomás Marques
+ * @date 19-01-2024
+ */
 
 #include "core/ecs/entity/registry.h"
 

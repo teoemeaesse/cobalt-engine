@@ -1,5 +1,10 @@
-// Created by tomas on
-// 14-02-2024
+/**
+ * @file manager.cpp
+ * @brief An Event manager is responsible for managing events and their associated systems. It allows for the management of events and the hooking of
+ * systems to events.
+ * @author Tomás Marques
+ * @date 14-02-2024
+ */
 
 #include "core/ecs/event/manager.h"
 

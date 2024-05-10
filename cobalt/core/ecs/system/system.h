@@ -1,5 +1,9 @@
-// Created by tomas on
-// 31-01-2024
+/**
+ * @file system.h
+ * @brief A system is a function that runs logic on entities with specific components.
+ * @author Tomás Marques
+ * @date 31-01-2024
+ */
 
 #pragma once
 
@@ -11,12 +15,12 @@ namespace cobalt {
         class EventManager;
 
         /**
-         * @brief Interface for all systems. Used to store systems in a vector via type erasure.
+         * @brief Type-erased interface for all System's.
          */
         class SystemInterface {
             public:
             /**
-             * @brief Default virtual destructor.
+             * @brief Default destructor.
              */
             virtual ~SystemInterface() noexcept = default;
 
@@ -33,8 +37,11 @@ namespace cobalt {
         };
 
         /**
-         * @brief System class. Used to run logic on entities with specific components.
-         * @tparam Params...: System parameters. Can be queries or resources.
+         * @brief A system consists of a function used to run logic on entities with specific components which can accept SystemParameter's as
+         * arguments.
+         * @tparam Params... The system parameters.
+         * @see SystemParameter
+         * @see Query, ReadRequest, WriteRequest, Commands
          */
         template <typename... Params>
         class System : public SystemInterface {
@@ -45,18 +52,17 @@ namespace cobalt {
 
             public:
             /**
-             * @brief Creates a new system.
-             * @param entityRegistry The entity registry that the system will run on.
-             * @param resourceRegistry The resource registry that the system will run on.
-             * @param systemManager The system manager that the system will run on.
-             * @param eventManager The event manager that the system will run on.
-             * @return A new system.
+             * @brief Creates a new System.
+             * @param entityRegistry The EntityRegistry that the system will run on.
+             * @param resourceRegistry The ResourceRegistry that the system will run on.
+             * @param systemManager The SystemManager that owns this system.
+             * @param eventManager The EventManager that the system will run on.
              */
             explicit System(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
                             EventManager& eventManager) noexcept
                 : entityRegistry(entityRegistry), resourceRegistry(resourceRegistry), systemManager(systemManager), eventManager(eventManager) {}
             /**
-             * @brief Destroys the system.
+             * @brief Default destructor.
              */
             virtual ~System() noexcept = default;
 
@@ -68,18 +74,22 @@ namespace cobalt {
             /**
              * @brief Runs the system on the given system parameters. Overload this function to implement custom logic.
              * @param params The system parameters to run on.
+             * @see SystemParameter
+             * @see Query, ReadRequest, WriteRequest, Commands
              */
             virtual void run(Params... params) = 0;
 
             private:
-            EntityRegistry& entityRegistry;
-            ResourceRegistry& resourceRegistry;
-            SystemManager& systemManager;
-            EventManager& eventManager;
+            EntityRegistry& entityRegistry;      ///< The EntityRegistry that the system will run on.
+            ResourceRegistry& resourceRegistry;  ///< The ResourceRegistry that the system will run on.
+            SystemManager& systemManager;        ///< The SystemManager that owns this system.
+            EventManager& eventManager;          ///< The EventManager that the system will run on.
 
             /**
-             * @brief Template magic.
-             * @tparam ...Is: Indices.
+             * @brief Automagically populates the system parameters.
+             * @tparam Is... The indices of the system parameters.
+             * @see SystemParameter
+             * @see Query, ReadRequest, WriteRequest, Commands
              */
             template <size_t... Is>
             void populateParams(std::index_sequence<Is...>) {
@@ -88,23 +98,24 @@ namespace cobalt {
         };
 
         /**
-         * @brief Lambda system class. Used to run logic on entities with specific components using a lambda function.
-         * @tparam Func: The lambda function type.
-         * @tparam Params...: System parameters. Can be queries or resources.
+         * @brief The LambdaSystem is a system that runs a lambda function on entities with specific components.
+         * @tparam Func The lambda function type.
+         * @tparam Params... The system parameters.
+         * @see SystemParameter
+         * @see Query, ReadRequest, WriteRequest, Commands
          */
         template <typename Func, typename... Params>
         class LambdaSystem : public System<Params...> {
             public:
-            Func func;
+            Func func;  ///< The lambda function to run.
 
             /**
-             * @brief Creates a new lambda system.
+             * @brief Creates a new System.
              * @param func The lambda function to run.
-             * @param entityRegistry The entity registry that the system will run on.
-             * @param resourceRegistry The resource registry that the system will run on.
-             * @param systemManager The system manager that the system will run on.
-             * @param eventManager The event manager that the system will run on.
-             * @return A new lambda system.
+             * @param entityRegistry The EntityRegistry that the system will run on.
+             * @param resourceRegistry The ResourceRegistry that the system will run on.
+             * @param systemManager The SystemManager that owns this system.
+             * @param eventManager The EventManager that the system will run on.
              */
             LambdaSystem(Func func, EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
                          EventManager& eventManager)
@@ -113,6 +124,8 @@ namespace cobalt {
             /**
              * @brief Runs the lambda system on the given system parameters.
              * @param params The system parameters to run on.
+             * @see SystemParameter
+             * @see Query, ReadRequest, WriteRequest, Commands
              */
             void run(Params... params) override { func(std::forward<Params>(params)...); }
         };

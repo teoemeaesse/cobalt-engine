@@ -51,7 +51,7 @@ void test_query() {
     e3.add<Position>(11, 12);
     e3.add<Velocity>(13, 14);
 
-    auto query = world.makeQuery<Ref<Position>, Ref<Velocity>>();
+    auto query = world.makeQuery<const Position&, const Velocity&>();
     uint count = 0;
     for (auto [position, velocity] : query) {
         TEST_ASSERT_EQUAL_INT(position.x, velocity.x - 2);
@@ -60,15 +60,15 @@ void test_query() {
     }
     TEST_ASSERT_EQUAL_INT(count, 2);
 
-    auto query2 = world.makeQuery<RefMut<Position>, Ref<Velocity>>();
+    auto query2 = world.makeQuery<Position&, const Velocity&>();
     for (auto [position, velocity] : query2) {
         position.x += velocity.x;
         position.y += velocity.y;
     }
-    auto [x, y] = e1.get<Ref<Position>>();
+    auto [x, y] = e1.get<const Position&>();
     TEST_ASSERT_EQUAL_INT(x, 4);
     TEST_ASSERT_EQUAL_INT(y, 6);
-    auto [x2, y2] = e3.get<Ref<Position>>();
+    auto [x2, y2] = e3.get<const Position&>();
     TEST_ASSERT_EQUAL_INT(x2, 24);
     TEST_ASSERT_EQUAL_INT(y2, 26);
 }
@@ -87,7 +87,7 @@ void test_entity_query() {
     e2.add<Position>(6, 7);
     e3.add<Position>(11, 12);
 
-    auto query = world.makeQuery<Ref<Entity>, Ref<Position>>();
+    auto query = world.makeQuery<const Entity&, const Position&>();
     for (auto [entity, position] : query) {
         switch (entity.getID()) {
             case 0:

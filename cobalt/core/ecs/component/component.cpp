@@ -1,5 +1,9 @@
-// Created by tomas on
-// 18-01-2024
+/**
+ * @file component.cpp
+ * @brief Defines the Component class, which is the base class for all components in the ECS.
+ * @author Tomás Marques
+ * @date 18-01-2024
+ */
 
 #include "core/ecs/component/component.h"
 

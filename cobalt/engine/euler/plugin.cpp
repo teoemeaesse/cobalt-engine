@@ -22,31 +22,31 @@ namespace cobalt {
             /**
              * @brief Euler integration system.
              */
-            world.addSystem<ecs::Query<RefMut<Transform>, Ref<Velocity>>, ecs::ReadRequest<Time>>(ecs::DefaultSchedules::Update,
-                                                                                                  [](auto query, auto time) {
-                                                                                                      const float deltaTime = time->getDeltaTime();
-                                                                                                      for (auto [transform, velocity] : query) {
-                                                                                                          transform.x += velocity.x * deltaTime;
-                                                                                                          transform.y += velocity.y * deltaTime;
-                                                                                                          transform.z += velocity.z * deltaTime;
-                                                                                                      }
-                                                                                                  });
+            world.addSystem<ecs::Query<Transform&, const Velocity&>, ecs::ReadRequest<Time>>(ecs::DefaultSchedules::Update,
+                                                                                             [](auto query, auto time) {
+                                                                                                 const float deltaTime = time->getDeltaTime();
+                                                                                                 for (auto [transform, velocity] : query) {
+                                                                                                     transform.x += velocity.x * deltaTime;
+                                                                                                     transform.y += velocity.y * deltaTime;
+                                                                                                     transform.z += velocity.z * deltaTime;
+                                                                                                 }
+                                                                                             });
             /**
              * @brief Euler integration system.
              */
-            world.addSystem<ecs::Query<RefMut<Velocity>, Ref<Acceleration>>, ecs::ReadRequest<Time>>(ecs::DefaultSchedules::Update,
-                                                                                                     [](auto query, auto time) {
-                                                                                                         const float deltaTime = time->getDeltaTime();
-                                                                                                         for (auto [velocity, acceleration] : query) {
-                                                                                                             velocity.x += acceleration.x * deltaTime;
-                                                                                                             velocity.y += acceleration.y * deltaTime;
-                                                                                                             velocity.z += acceleration.z * deltaTime;
-                                                                                                         }
-                                                                                                     });
+            world.addSystem<ecs::Query<Velocity&, const Acceleration&>, ecs::ReadRequest<Time>>(ecs::DefaultSchedules::Update,
+                                                                                                [](auto query, auto time) {
+                                                                                                    const float deltaTime = time->getDeltaTime();
+                                                                                                    for (auto [velocity, acceleration] : query) {
+                                                                                                        velocity.x += acceleration.x * deltaTime;
+                                                                                                        velocity.y += acceleration.y * deltaTime;
+                                                                                                        velocity.z += acceleration.z * deltaTime;
+                                                                                                    }
+                                                                                                });
             /**
              * @brief Euler integration system.
              */
-            world.addSystem<ecs::Query<RefMut<Transform>, Ref<AngularVelocity>>, ecs::ReadRequest<Time>>(
+            world.addSystem<ecs::Query<Transform&, const AngularVelocity&>, ecs::ReadRequest<Time>>(
                 ecs::DefaultSchedules::Update, [](auto query, auto time) {
                     const float deltaTime = time->getDeltaTime();
                     for (auto [transform, angularVelocity] : query) {
@@ -58,7 +58,7 @@ namespace cobalt {
             /**
              * @brief Euler integration system.
              */
-            world.addSystem<ecs::Query<RefMut<AngularVelocity>, Ref<AngularAcceleration>>, ecs::ReadRequest<Time>>(
+            world.addSystem<ecs::Query<AngularVelocity&, const AngularAcceleration&>, ecs::ReadRequest<Time>>(
                 ecs::DefaultSchedules::Update, [](auto query, auto time) {
                     const float deltaTime = time->getDeltaTime();
                     for (auto [angularVelocity, angularAcceleration] : query) {

@@ -1,5 +1,9 @@
-// Created by tomas on
-// 18-01-2024
+/**
+ * @file entity.h
+ * @brief Defines the Entity class, which is essentially a handle to a component mask in the ECS.
+ * @author Tomás Marques
+ * @date 18-01-2024
+ */
 
 #pragma once
 
@@ -18,42 +22,44 @@ namespace cobalt {
             public:
             /**
              * @brief Default constructor. Users should never call this.
-             * @param id Entity ID. Should be unique.
-             * @param version Entity version. Should be unique.
-             * @param entityRegistry Entity registry.
-             * @param componentRegistry Component registry.
-             * @return Entity instance.
+             * @param id The entity's ID. Should be unique.
+             * @param version The entity's version.
+             * @param entityRegistry The entity's registry.
+             * @param componentRegistry The component registry for this entity.
              */
             Entity(const EntityProperties::ID id, const EntityProperties::Version version, EntityRegistry& entityRegistry,
                    ComponentRegistry& componentRegistry) noexcept;
             /**
+             * @brief Default destructor.
+             */
+            ~Entity() = default;
+            /**
              * @brief Copy constructor.
-             * @return Entity instance.
+             * @param other The entity to copy.
              */
             Entity(const Entity& other) noexcept = delete;
             /**
              * @brief Move constructor.
-             * @return Entity instance.
+             * @param other The entity to move.
              */
             Entity(Entity&& other) noexcept;
+
             /**
              * @brief Copy assignment operator.
+             * @param other The entity to copy.
              * @return Reference to this.
              */
             Entity& operator=(const Entity& other) noexcept = delete;
             /**
              * @brief Move assignment operator.
+             * @param other The entity to move.
              * @return Reference to this.
              */
             Entity& operator=(Entity&& other) noexcept = delete;
-            /**
-             * @brief Default destructor.
-             */
-            ~Entity() = default;
 
             /**
              * @brief Add a component to the entity.
-             * @tparam ComponentType: Component type.
+             * @tparam ComponentType The component type.
              */
             template <typename ComponentType>
             void add() noexcept {
@@ -62,9 +68,9 @@ namespace cobalt {
 
             /**
              * @brief Add a component to the entity.
-             * @tparam ComponentType: Component type.
-             * @tparam Args: Component constructor arguments.
-             * @param args Component constructor arguments.
+             * @tparam ComponentType The component type.
+             * @tparam Args The component's constructor argument types.
+             * @param args The component's constructor arguments.
              */
             template <typename ComponentType, typename... Args>
             void add(Args&&... args) noexcept {
@@ -73,7 +79,7 @@ namespace cobalt {
 
             /**
              * @brief Remove a set of components from the entity.
-             * @tparam ComponentTypes...: Component types.
+             * @tparam ComponentTypes... The component types.
              */
             template <typename... ComponentTypes>
             void remove() noexcept {
@@ -82,8 +88,7 @@ namespace cobalt {
 
             /**
              * @brief Check if the entity has a set of components.
-             * @tparam ComponentTypes...: Component types.
-             * @param entityID The entity ID.
+             * @tparam ComponentTypes... The component types.
              * @return True if the entity has the components, false otherwise.
              */
             template <typename... ComponentTypes>
@@ -93,8 +98,8 @@ namespace cobalt {
 
             /**
              * @brief Get a set of components from the entity.
-             * @tparam ComponentRefs...: Component types.
-             * @return A tuple of references to the components.
+             * @tparam ComponentRefs... The component types.
+             * @return The references to the components.
              */
             template <typename... ComponentRefs>
             Tuple<ComponentRefs...> getMany() const {
@@ -103,18 +108,8 @@ namespace cobalt {
             }
             /**
              * @brief Get a component from the entity.
-             * @tparam ComponentRef: Component reference.
-             * @return A reference to the component.
-             */
-            template <typename ComponentRef>
-            ComponentRef get() const {
-                static_assert(std::is_reference<ComponentRef>::value, "Component type must be a reference type.");
-                return componentRegistry.get<ComponentRef>(id);
-            }
-            /**
-             * @brief Get a component from the entity.
-             * @tparam ComponentRef: Component reference.
-             * @return A reference to the component.
+             * @tparam ComponentRef The component reference.
+             * @return A mutable reference to the component.
              */
             template <typename ComponentRef>
             ComponentRef get() {
@@ -122,42 +117,52 @@ namespace cobalt {
                               "cobalt::core::ecs::ComponentRegistry threw: Component type must be a reference type.");
                 return componentRegistry.get<ComponentRef>(id);
             }
+            /**
+             * @brief Get a component from the entity.
+             * @tparam ComponentRef The component type reference.
+             * @return A const reference to the component.
+             */
+            template <typename ComponentRef>
+            ComponentRef get() const {
+                static_assert(std::is_reference<ComponentRef>::value, "Component type must be a reference type.");
+                return componentRegistry.get<ComponentRef>(id);
+            }
 
             /**
-             * @brief Kill the entity. This will remove all its components and invalidate it.
+             * @brief Kill the entity. This will remove all of its components and invalidate it.
              */
             void kill() const noexcept;
 
             /**
-             * @brief Check if the entity is alive: living entities have a positive ID and the latest version.
+             * @brief Check if the entity is alive.
              * @return True if the entity is alive, false otherwise.
              */
             const bool isAlive() const noexcept;
 
             /**
              * @brief Equality operator.
-             * @param other Other entity.
+             * @param other The other entity.
              * @return True if the entities are equal, false otherwise.
              */
             bool operator==(const Entity& other) const;
 
             /**
-             * @brief Get the entity's ID.
-             * @return Entity ID.
+             * @brief Get this entity's ID.
+             * @return This entity's ID.
              */
             const EntityProperties::ID getID() const;
 
             /**
-             * @brief Get the entity's version.
-             * @return Entity version.
+             * @brief Get this entity's version.
+             * @return This entity's version.
              */
             const EntityProperties::Version getVersion() const;
 
             private:
-            const EntityProperties::ID id;
-            EntityProperties::Version version;
-            EntityRegistry& entityRegistry;
-            ComponentRegistry& componentRegistry;
+            const EntityProperties::ID id;         ///< This entity's ID.
+            EntityProperties::Version version;     ///< This entity's version.
+            EntityRegistry& entityRegistry;        ///< This registry this entity belongs to.
+            ComponentRegistry& componentRegistry;  ///< The component registry for this entity.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

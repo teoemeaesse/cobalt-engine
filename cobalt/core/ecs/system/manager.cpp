@@ -1,5 +1,9 @@
-// Created by tomas on
-// 13-02-2024
+/**
+ * @file manager.cpp
+ * @brief A manager for System's allowing for easy System creation and execution.
+ * @author Tomás Marques
+ * @date 13-02-2024
+ */
 
 #include "core/ecs/system/manager.h"
 

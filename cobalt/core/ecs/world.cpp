@@ -1,5 +1,9 @@
-// Created by tomas on
-// 18-01-2024
+/**
+ * @file world.cpp
+ * @brief An ECS world that holds entities, components, resources, systems, events, and plugins. It is responsible for managing the ECS architecture.
+ * @author Tomás Marques
+ * @date 18-01-2024
+ */
 
 #include "core/ecs/world.h"
 

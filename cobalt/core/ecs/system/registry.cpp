@@ -1,5 +1,9 @@
-// Created by tomas on
-// 13-02-2024
+/**
+ * @file registry.h
+ * @brief Storage for every system in the ECS.
+ * @author Tomás Marques
+ * @date 13-02-2024
+ */
 
 #include "core/ecs/system/registry.h"
 

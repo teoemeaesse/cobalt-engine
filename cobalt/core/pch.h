@@ -203,18 +203,7 @@ namespace cobalt {
     //  */
     // template <typename T>
     // struct IsConst : std::integral_constant<bool, std::is_const<T>::value || std::is_const<typename std::remove_reference<T>::type>::value> {};
-    /**
-     * @brief Const reference type wrapper.
-     * @tparam T Type of the object.
-     */
-    template <typename T>
-    using Ref = const T&;
-    /**
-     * @brief Mutable reference type wrapper.
-     * @tparam T Type of the object.
-     */
-    template <typename T>
-    using RefMut = T&;
+
     /**
      * @brief Wrapper for std::move.
      * @tparam T Type of the object.

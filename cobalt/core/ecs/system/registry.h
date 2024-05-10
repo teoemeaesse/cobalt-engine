@@ -1,5 +1,9 @@
-// Created by tomas on
-// 13-02-2024
+/**
+ * @file registry.h
+ * @brief Storage for every system in the ECS.
+ * @author Tomás Marques
+ * @date 13-02-2024
+ */
 
 #pragma once
 
@@ -14,19 +18,18 @@ namespace cobalt {
         class SystemRegistry {
             public:
             /**
-             * @brief Default constructor.
-             * @param entityRegistry Entity registry.
-             * @param resourceRegistry Resource registry.
-             * @param systemManager System manager.
-             * @param eventManager Event manager.
-             * @return SystemRegistry instance.
+             * @brief Creates a new SystemRegistry.
+             * @param entityRegistry The EntityRegistry that the systems will run on.
+             * @param resourceRegistry The ResourceRegistry that the systems will run on.
+             * @param systemManager The SystemManager that owns this registry.
+             * @param eventManager The EventManager that the systems will run on.
              */
             SystemRegistry(EntityRegistry& entityRegistry, ResourceRegistry& resourceRegistry, SystemManager& systemManager,
                            EventManager& eventManager) noexcept;
 
             /**
-             * @brief Add a system to the registry.
-             * @tparam SystemType: System type.
+             * @brief Adds a System (lambda function) to the registry.
+             * @tparam SystemType The system type.
              */
             template <typename SystemType>
             void addSystem() noexcept {
@@ -34,10 +37,12 @@ namespace cobalt {
                 systems.push_back(Move(CreateScope<SystemType>(entityRegistry, resourceRegistry, systemManager, eventManager)));
             }
             /**
-             * @brief Add a system to the registry.
-             * @tparam Params...: Lambda function parameters.
-             * @tparam Func: Lambda function type.
-             * @param func Lambda function.
+             * @brief Adds a System (lambda function) to the registry.
+             * @tparam Params... The lambda function parameters.
+             * @tparam Func The lambda function type.
+             * @param func The lambda function.
+             * @see SystemParameter
+             * @see Query, ReadRequest, WriteRequest, Commands
              */
             template <typename... Params, typename Func>
             void addSystem(Func func) noexcept {
@@ -47,16 +52,16 @@ namespace cobalt {
             }
 
             /**
-             * @brief Run all systems in the registry.
+             * @brief Runs all the systems in the registry.
              */
             void run() noexcept;
 
             private:
-            Vec<Scope<SystemInterface>> systems;
-            EntityRegistry& entityRegistry;
-            ResourceRegistry& resourceRegistry;
-            SystemManager& systemManager;
-            EventManager& eventManager;
+            Vec<Scope<SystemInterface>> systems;  ///< The stored systems.
+            EntityRegistry& entityRegistry;       ///< The EntityRegistry that the systems will run on.
+            ResourceRegistry& resourceRegistry;   ///< The ResourceRegistry that the systems will run on.
+            SystemManager& systemManager;         ///< The SystemManager that owns this registry.
+            EventManager& eventManager;           ///< The EventManager that the systems will run on.
         };
     }  // namespace core::ecs
 }  // namespace cobalt
