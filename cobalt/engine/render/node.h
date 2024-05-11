@@ -8,9 +8,7 @@
 namespace cobalt {
     namespace engine {
         /**
-         * @brief A render node is a node in a graph that connects
-         * source render targets to output render targets
-         * using a single renderer.
+         * @brief A render node is a node in a graph that connects source render targets to output render targets using a single renderer.
          */
         class RenderNode {
             public:
@@ -18,7 +16,6 @@ namespace cobalt {
              * @brief Create a render node with a renderer.
              * @param renderer The renderer to use for rendering.
              * @param targets The targets to render to.
-             * @return The render node.
              */
             template <typename... Targets>
             RenderNode(Renderer& renderer, Targets&&... targets) : renderer(renderer) {

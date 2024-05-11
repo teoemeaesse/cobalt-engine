@@ -13,7 +13,6 @@ namespace cobalt {
             public:
             /**
              * @brief Create a renderer.
-             * @return The renderer.
              */
             Renderer() noexcept;
             /**

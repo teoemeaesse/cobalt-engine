@@ -16,38 +16,34 @@ namespace cobalt {
              * @param fbo Frame buffer object to render to.
              * @param camera The ID for the camera to render with.
              * @param name The name of the render target.
-             * @param cameraUBOBinding The binding point for the camera UBO.
-             * @return The render target.
              */
-            RenderTarget(const core::gl::FBO& fbo, const CameraID camera, const std::string& name, const uint cameraUBOBinding);
+            RenderTarget(const core::gl::FBO& fbo, const CameraID camera, const std::string& name);
             /**
-             * @brief Destroy the render target.
+             * @brief Default destructor.
              */
             ~RenderTarget() = default;
             /**
              * @brief Copy constructor.
              * @param other The other render target.
-             * @return The render target.
              */
-            RenderTarget(const RenderTarget&);
+            RenderTarget(const RenderTarget& other);
             /**
              * @brief Move constructor.
              * @param other The other render target.
-             * @return The render target.
              */
-            RenderTarget(RenderTarget&&) noexcept;
+            RenderTarget(RenderTarget&& other) noexcept;
             /**
              * @brief Copy assignment.
              * @param other The other render target.
              * @return The render target.
              */
-            RenderTarget& operator=(const RenderTarget&) = delete;
+            RenderTarget& operator=(const RenderTarget& other) = delete;
             /**
              * @brief Move assignment.
              * @param other The other render target.
              * @return The render target.
              */
-            RenderTarget& operator=(RenderTarget&&) = delete;
+            RenderTarget& operator=(RenderTarget&& other) = delete;
 
             /**
              * @brief Bind the render target.

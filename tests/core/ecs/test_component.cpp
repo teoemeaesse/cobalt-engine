@@ -97,14 +97,14 @@ void test_component_registry_get() {
     EntityRegistry entityRegistry(componentRegistry);
     auto& entity = entityRegistry.add();
     entity.add<Position>(0, 0);
-    auto& position = entity.get<RefMut<Position>>();
+    auto& position = entity.get<Position&>();
     position.x = 1;
     position.y = 2;
-    auto& updatedPosition = entity.get<Ref<Position>>();
+    auto& updatedPosition = entity.get<const Position&>();
     TEST_ASSERT_EQUAL_INT(1, updatedPosition.x);
     TEST_ASSERT_EQUAL_INT(2, updatedPosition.y);
     try {
-        auto [errPosition, errVelocity] = entity.getMany<Ref<Position>, Ref<Velocity>>();
+        auto [errPosition, errVelocity] = entity.getMany<const Position&, const Velocity&>();
         TEST_FAIL_MESSAGE("Entity should not have Velocity component");
     } catch (const ComponentNotFoundException<Velocity, ComponentRegistry>& e) {
         TEST_ASSERT_EQUAL_STRING("cobalt::core::ecs::ComponentRegistry threw: Component not found for entity (0) with component: Velocity", e.what());

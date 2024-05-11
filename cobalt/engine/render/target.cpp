@@ -18,23 +18,23 @@ namespace cobalt {
             glm::vec3 padding;
         };
 
-        RenderTarget::RenderTarget(const gl::FBO& fbo, const CameraID camera, const std::string& name, const uint cameraUBOBinding)
-            : fbo(fbo), camera(camera), name(name), ubo(gl::Usage::StaticDraw, sizeof(CameraUBO), cameraUBOBinding) {
+        RenderTarget::RenderTarget(const gl::FBO& fbo, const CameraID camera, const std::string& name)
+            : fbo(fbo), camera(camera), name(name), ubo(gl::Usage::StaticDraw, sizeof(CameraUBO)) {
             if (name == "view" || name == "model" || name == "projection") {
                 throw ecs::PluginException<Renderer3DPlugin, RenderTarget>("Cannot use reserved name for render target");
             }
         }
 
         RenderTarget::RenderTarget(const RenderTarget& other)
-            : fbo(other.fbo), camera(other.camera), name(other.name), ubo(gl::Usage::StaticDraw, sizeof(CameraUBO), 0) {}
+            : fbo(other.fbo), camera(other.camera), name(other.name), ubo(gl::Usage::StaticDraw, sizeof(CameraUBO)) {}
 
         RenderTarget::RenderTarget(RenderTarget&& other) noexcept
-            : fbo(Move(other.fbo)), camera(Move(other.camera)), name(Move(other.name)), ubo(gl::Usage::StaticDraw, sizeof(CameraUBO), 0) {}
+            : fbo(Move(other.fbo)), camera(Move(other.camera)), name(Move(other.name)), ubo(gl::Usage::StaticDraw, sizeof(CameraUBO)) {}
 
         void RenderTarget::bind() const { fbo.bind(); }
 
         void RenderTarget::sendCameraUBO(const gl::Shader& shader, const CameraManager& cameraManager) const {
-            ubo.bindToShader(shader, "Camera");
+            ubo.bindToShader(shader, "Camera", 0);
             const Camera& camera = cameraManager.getController(this->camera).getCamera();
             CameraUBO cameraUBO = {camera.getViewMatrix(), camera.getProjectionMatrix(), camera.getPosition(),
                                    (int)fbo.getWidth(),    (int)fbo.getHeight(),         glm::vec3(0.0)};

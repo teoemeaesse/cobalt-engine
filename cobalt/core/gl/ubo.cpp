@@ -9,7 +9,7 @@
 
 namespace cobalt {
     namespace core::gl {
-        UBO::UBO(const gl::Usage usage, const size_t size, const uint bindingPoint) : usage(usage), size(size), bindingPoint(bindingPoint) {
+        UBO::UBO(const gl::Usage usage, const size_t size) : usage(usage), size(size) {
             glGenBuffers(1, &buffer);
             glBindBuffer(GL_UNIFORM_BUFFER, buffer);
             glBufferData(GL_UNIFORM_BUFFER, size, nullptr, (GLenum)usage);
@@ -19,10 +19,10 @@ namespace cobalt {
 
         void UBO::bind() const { glBindBuffer(GL_UNIFORM_BUFFER, buffer); }
 
-        void UBO::bindToShader(const Shader& shader, const std::string& name) const {
+        void UBO::bindToShader(const Shader& shader, const std::string& name, const uint binding) const {
             glBindBuffer(GL_UNIFORM_BUFFER, buffer);
-            glUniformBlockBinding(shader.getGLHandle(), shader.getUBIndex(name), bindingPoint);
-            glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, buffer);
+            glUniformBlockBinding(shader.getGLHandle(), shader.getUBIndex(name), binding);
+            glBindBufferBase(GL_UNIFORM_BUFFER, binding, buffer);
         }
 
         void UBO::unbind() const { glBindBuffer(GL_UNIFORM_BUFFER, 0); }

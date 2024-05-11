@@ -20,10 +20,8 @@ namespace cobalt {
              * @brief Creates a UBO.
              * @param usage GL_STATIC_DRAW, GL_DYNAMIC_DRAW, GL_STREAM_DRAW.
              * @param size The size of the buffer in bytes.
-             * @param bindingPoint Specifies the index of the binding point to which the buffer object is bound. This is used to reference the UBO
-             * within shader programs.
              */
-            UBO(const gl::Usage usage, const size_t size, const uint bindingPoint);
+            UBO(const gl::Usage usage, const size_t size);
             /**
              * @brief Destroys the UBO and releases any resources allocated by OpenGL.
              */
@@ -37,8 +35,9 @@ namespace cobalt {
              * @brief Use the UBO in a shader.
              * @param shader The shader to bind to.
              * @param name The name of the uniform block.
+             * @param binding The binding point of the uniform block. This must match the binding in the shader.
              */
-            void bindToShader(const Shader& shader, const std::string& name) const;
+            void bindToShader(const Shader& shader, const std::string& name, const uint binding) const;
             /**
              * @brief Unbinds the UBO from the current context.
              */
@@ -58,10 +57,9 @@ namespace cobalt {
             void load(const void* data, const size_t size, const size_t offset) const;
 
             private:
-            gl::Handle buffer;        ///< The OpenGL buffer handle.
-            const gl::Usage usage;    ///< The usage of the buffer.
-            const size_t size;        ///< The size of the buffer in bytes.
-            const uint bindingPoint;  ///< The binding point of the buffer.
+            gl::Handle buffer;      ///< The OpenGL buffer handle.
+            const gl::Usage usage;  ///< The usage of the buffer.
+            const size_t size;      ///< The size of the buffer in bytes.
         };
     }  // namespace core::gl
 }  // namespace cobalt
