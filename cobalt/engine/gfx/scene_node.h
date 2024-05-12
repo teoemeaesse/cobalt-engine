@@ -28,9 +28,9 @@ namespace cobalt {
 
             /**
              * @brief Render the scene.
-             * @param cameraManager The camera manager.
+             * @param camera The camera.
              */
-            void render(const CameraManager& cameraManager) override;
+            void render(const Camera& camera) override;
             /**
              * @brief Called upon window resize.
              * @param width The new width of the render graph.

@@ -25,9 +25,8 @@ namespace cobalt {
 
             /**
              * @brief Initializes the render graph.
-             * @param manager The camera manager to use.
              */
-            void init(CameraManager& manager);
+            void init();
 
             /**
              * @brief Called upon window resize.

@@ -27,11 +27,11 @@ namespace cobalt {
                        {{core::gl::TextureEncodings::RGBA::Bits8}, {core::gl::TextureEncodings::Depth::Bits24}}),
               scene(scene) {}
 
-        void DefaultGraph::init(CameraManager& manager) {
+        void DefaultGraph::init() {
             core::gfx::Material& filter = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makeFromShader("filterMaterial", "filter"));
-            Scope<SceneNode> sceneNode = CreateScope<SceneNode>(scene, renderer, RenderTarget(sceneFBO, scene.getCameraID(), "scene"));
-            Scope<FilterNode> filterNode = CreateScope<FilterNode>(renderer, RenderTarget(defaultFBO, output, "output"), filter);
-            filterNode->addSource(RenderTarget(sceneFBO, scene.getCameraID(), "scene"));
+            Scope<SceneNode> sceneNode = CreateScope<SceneNode>(scene, renderer, RenderTarget(sceneFBO, "scene"));
+            Scope<FilterNode> filterNode = CreateScope<FilterNode>(renderer, RenderTarget(defaultFBO, "output"), filter);
+            filterNode->addSource(RenderTarget(sceneFBO, "scene"));
 
             addNode(Move(sceneNode));
             addNode(Move(filterNode));

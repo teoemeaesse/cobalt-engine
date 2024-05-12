@@ -13,7 +13,7 @@ namespace cobalt {
 
         RenderNode::RenderNode(RenderNode&& other) noexcept : renderer(other.renderer), sources(Move(other.sources)), targets(Move(other.targets)) {}
 
-        void RenderNode::renderMesh(Mesh& mesh, const CameraManager& cameraManager) {
+        void RenderNode::renderMesh(Mesh& mesh) {
             if (targets.size() == 0) {
                 CB_CORE_WARN("Render node has no targets");
             }
@@ -22,18 +22,18 @@ namespace cobalt {
             }
             renderer.bindMaterial(mesh.getMaterial());
             for (uint i = 0; i < targets.size(); i++) {
-                renderer.renderMesh(mesh, targets[i], cameraManager);
+                renderer.renderMesh(mesh, targets[i], cameraManager.getController(targets[i].getCameraID()).getCamera());
             }
             renderer.clearTextureUnits();
         }
 
-        void RenderNode::renderSkybox(Skybox& skybox, const CameraManager& cameraManager) {
+        void RenderNode::renderSkybox(Skybox& skybox) {
             if (targets.size() == 0) {
                 CB_CORE_WARN("Render node has no targets");
             }
             renderer.bindTexture("skybox", skybox.getTexture());
             for (uint i = 0; i < targets.size(); i++) {
-                renderer.renderSkybox(skybox, targets[i], cameraManager);
+                renderer.renderSkybox(skybox, targets[i], cameraManager.getController(targets[i].getCameraID()).getCamera());
             }
             renderer.clearTextureUnits();
         }

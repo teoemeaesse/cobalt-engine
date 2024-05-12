@@ -24,17 +24,17 @@ namespace cobalt {
              * @brief Render a mesh.
              * @param mesh The mesh to render.
              * @param target The render target to render to.
-             * @param cameraManager The camera manager.
+             * @param camera The camera.
              */
-            void renderMesh(Mesh& mesh, RenderTarget& target, const CameraManager& cameraManager) const;
+            void renderMesh(Mesh& mesh, RenderTarget& target, const Camera& camera) const;
 
             /**
              * @brief Render a skybox.
              * @param skybox The skybox to render.
              * @param target The render target to render to.
-             * @param cameraManager The camera manager.
+             * @param camera The camera.
              */
-            void renderSkybox(Skybox& skybox, RenderTarget& target, const CameraManager& cameraManager) const;
+            void renderSkybox(Skybox& skybox, RenderTarget& target, const Camera& camera) const;
 
             /**
              * @brief Get the bound texture unit of a given named texture.
@@ -73,6 +73,7 @@ namespace cobalt {
             private:
             UMap<std::string, uint> textureUnits;  // Map of bound textures.
             uint currentUnit;                      // Current texture unit.
+            core::gl::UBO cameraUBO;               // Camera UBO.
         };
     }  // namespace engine
 }  // namespace cobalt

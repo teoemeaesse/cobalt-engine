@@ -40,6 +40,10 @@ namespace cobalt {
 
         const glm::vec3 Camera::getPosition() const { return position; }
 
+        const Camera::UBO Camera::getUBO(const int targetWidth, const int targetHeight) const {
+            return {getViewMatrix(), getProjectionMatrix(), getPosition(), targetWidth, targetHeight, glm::vec3(0.0)};
+        }
+
         PerspectiveCamera::PerspectiveCamera(glm::vec3 position, glm::vec2 direction, const float fov, const float near, const float far,
                                              const float aspectRatio)
             : Camera(position, direction, near, far), fov(fov), aspectRatio(aspectRatio) {}

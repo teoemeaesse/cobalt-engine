@@ -38,5 +38,37 @@ namespace cobalt {
                 throw core::ecs::PluginException<CameraPlugin, CameraManager>("Camera with name " + name + " does not exist");
             }
         }
+
+        Camera& CameraManager::getCamera(const CameraID id) {
+            try {
+                return cameras.at(id).getCamera();
+            } catch (const std::out_of_range& e) {
+                throw core::ecs::PluginException<CameraPlugin, CameraManager>("Camera with id " + std::to_string(id) + " does not exist");
+            }
+        }
+
+        const Camera& CameraManager::getCamera(const CameraID id) const {
+            try {
+                return cameras.at(id).getCamera();
+            } catch (const std::out_of_range& e) {
+                throw core::ecs::PluginException<CameraPlugin, CameraManager>("Camera with id " + std::to_string(id) + " does not exist");
+            }
+        }
+
+        Camera& CameraManager::getCamera(const std::string& name) {
+            try {
+                return cameras.at(cameraNames.at(name)).getCamera();
+            } catch (const std::out_of_range& e) {
+                throw core::ecs::PluginException<CameraPlugin, CameraManager>("Camera with name " + name + " does not exist");
+            }
+        }
+
+        const Camera& CameraManager::getCamera(const std::string& name) const {
+            try {
+                return cameras.at(cameraNames.at(name)).getCamera();
+            } catch (const std::out_of_range& e) {
+                throw core::ecs::PluginException<CameraPlugin, CameraManager>("Camera with name " + name + " does not exist");
+            }
+        }
     }  // namespace engine
 }  // namespace cobalt

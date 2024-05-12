@@ -9,13 +9,13 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
-        void SceneNode::render(const CameraManager& cameraManager) {
+        void SceneNode::render(const Camera& camera) {
             if (scene.getSkybox().has_value()) {
-                RenderNode::renderSkybox(scene.getSkybox().value(), cameraManager);
+                RenderNode::renderSkybox(scene.getSkybox().value(), camera);
             }
             auto& meshes = scene.getMeshes();
             for (uint i = 0; i < meshes.size(); i++) {
-                RenderNode::renderMesh(meshes[i], cameraManager);
+                RenderNode::renderMesh(meshes[i], camera);
             }
         }
 

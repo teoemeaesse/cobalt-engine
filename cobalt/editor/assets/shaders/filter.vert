@@ -16,7 +16,7 @@ struct CameraStruct {
     int u_targetHeight;
     vec3 padding;
 };
-layout (std140, binding = 0) uniform Camera {  
+layout (std140) uniform Camera {  
     CameraStruct u_camera;
 };
 

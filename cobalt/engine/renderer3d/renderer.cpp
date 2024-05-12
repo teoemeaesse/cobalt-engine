@@ -11,20 +11,22 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
-        Renderer::Renderer() noexcept : textureUnits(1), currentUnit(0) {}
+        Renderer::Renderer() noexcept : textureUnits(1), currentUnit(0), cameraUBO(gl::Usage::DynamicDraw, sizeof(Camera::UBO)) {}
 
-        void Renderer::renderMesh(Mesh& mesh, RenderTarget& target, const CameraManager& cameraManager) const {
+        void Renderer::renderMesh(Mesh& mesh, RenderTarget& target, const Camera& camera) const {
             mesh.bind();
             target.bind();
             gl::Shader& shader = mesh.getMaterial().getShader();
             try {
-                target.sendCameraUBO(shader, cameraManager);
                 shader.setUniformVec3("lightPosition", glm::vec3(0.0, 5.0, 0.0));
                 shader.setUniformVec3("lightColor", glm::vec3(10000.0, 5000.0, 5000.0));
                 const glm::mat4& model = mesh.getModelMatrix();
                 shader.setUniformMat4("u_model", model);
                 shader.setUniformMat3("u_normal_matrix", glm::transpose(glm::inverse(glm::mat3(model))));
                 sendUniforms(shader);
+                Camera::UBO data = camera.getUBO(target.getFBO().getWidth(), target.getFBO().getHeight());
+                cameraUBO.bindToShader(shader, "Camera", 0);
+                cameraUBO.load(&data, sizeof(Camera::UBO), 0);
             } catch (const CoreException<Renderer>& e) {
                 CB_CORE_WARN(e.what());
             }
@@ -32,13 +34,15 @@ namespace cobalt {
             mesh.render();
         }
 
-        void Renderer::renderSkybox(Skybox& skybox, RenderTarget& target, const CameraManager& cameraManager) const {
+        void Renderer::renderSkybox(Skybox& skybox, RenderTarget& target, const Camera& camera) const {
             skybox.bind();
             target.bind();
             gl::Shader& shader = skybox.getShader();
             try {
                 sendUniforms(shader);
-                target.sendCameraUBO(shader, cameraManager);
+                Camera::UBO data = camera.getUBO(target.getFBO().getWidth(), target.getFBO().getHeight());
+                cameraUBO.bindToShader(shader, "Camera", 0);
+                cameraUBO.load(&data, sizeof(Camera::UBO), 0);
             } catch (const CoreException<Renderer>& e) {
                 CB_CORE_WARN(e.what());
             }

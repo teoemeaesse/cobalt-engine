@@ -7,7 +7,7 @@
 
 namespace cobalt {
     namespace engine {
-        RenderPlugin::RenderPlugin() noexcept : core::ecs::Plugin(TITLE, "General rendering API", Renderer3DPlugin{}) {}
+        RenderPlugin::RenderPlugin() noexcept : core::ecs::Plugin(TITLE, "General rendering API", Renderer3DPlugin{}, CameraPlugin{}) {}
 
         void RenderPlugin::onPlug(core::ecs::World& world) const noexcept {}
     }  // namespace engine

@@ -40,29 +40,54 @@ namespace cobalt {
             }
 
             /**
-             * @brief Get the camera with the given ID.
+             * @brief Get the camera controller with the given ID.
              * @param id ID of the camera.
              * @return The camera's controller.
              */
             CameraController& getController(const CameraID id);
             /**
-             * @brief Get the camera with the given ID.
+             * @brief Get the camera controller with the given ID.
              * @param id ID of the camera.
              * @return The camera's controller.
              */
             const CameraController& getController(const CameraID id) const;
             /**
-             * @brief Get the camera with the given name.
+             * @brief Get the camera controller with the given name.
              * @param name Name of the camera.
              * @return The camera's controller.
              */
             CameraController& getController(const std::string& name);
             /**
-             * @brief Get the camera with the given name.
+             * @brief Get the camera controller with the given name.
              * @param name Name of the camera.
              * @return The camera's controller.
              */
             const CameraController& getController(const std::string& name) const;
+
+            /**
+             * @brief Get the camera with the given ID.
+             * @param id ID of the camera.
+             * @return The camera.
+             */
+            Camera& getCamera(const CameraID id);
+            /**
+             * @brief Get the camera with the given ID.
+             * @param id ID of the camera.
+             * @return The camera.
+             */
+            const Camera& getCamera(const CameraID id) const;
+            /**
+             * @brief Get the camera with the given name.
+             * @param name Name of the camera.
+             * @return The camera.
+             */
+            Camera& getCamera(const std::string& name);
+            /**
+             * @brief Get the camera with the given name.
+             * @param name Name of the camera.
+             * @return The camera.
+             */
+            const Camera& getCamera(const std::string& name) const;
 
             private:
             UMap<std::string, CameraID> cameraNames;

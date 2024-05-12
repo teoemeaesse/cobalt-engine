@@ -12,6 +12,15 @@ namespace cobalt {
          */
         class Camera {
             public:
+            struct UBO {
+                glm::mat4 view;
+                glm::mat4 projection;
+                glm::vec3 position;
+                int targetWidth;
+                int targetHeight;
+                glm::vec3 padding;
+            };
+
             /**
              * @brief Destroys the camera.
              */
@@ -57,6 +66,14 @@ namespace cobalt {
              * @return The position of the camera in world space.
              */
             const glm::vec3 getPosition() const;
+
+            /**
+             * @brief Gets the UBO data for the camera.
+             * @param targetWidth The width of the target viewport.
+             * @param targetHeight The height of the target viewport.
+             * @return The UBO data for the camera.
+             */
+            const UBO getUBO(const int targetWidth, const int targetHeight) const;
 
             /**
              * @brief Resizes the camera.

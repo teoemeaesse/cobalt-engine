@@ -14,10 +14,10 @@ namespace cobalt {
             /**
              * @brief Create a render target.
              * @param fbo Frame buffer object to render to.
-             * @param camera The ID for the camera to render with.
              * @param name The name of the render target.
+             * @param camera The camera to render with.
              */
-            RenderTarget(const core::gl::FBO& fbo, const CameraID camera, const std::string& name);
+            RenderTarget(const core::gl::FBO& fbo, const std::string& name, const CameraID camera);
             /**
              * @brief Default destructor.
              */
@@ -51,13 +51,6 @@ namespace cobalt {
             void bind() const;
 
             /**
-             * @brief Send the render target's camera UBO to the shader.
-             * @param shader The shader.
-             * @param cameraManager The camera manager containing the camera.
-             */
-            void sendCameraUBO(const core::gl::Shader& shader, const CameraManager& cameraManager) const;
-
-            /**
              * @brief Get the FBO.
              * @return FBO
              */
@@ -68,17 +61,15 @@ namespace cobalt {
              */
             const std::string& getName() const;
             /**
-             * @brief Get the ID for the camera used to render.
+             * @brief Get the camera to render with.
              * @return CameraID
              */
-            const CameraID& getCameraID() const;
+            const CameraID getCameraID() const { return cameraID; }
 
             private:
-            const core::gl::UBO ubo;   // Uniform buffer object.
             const core::gl::FBO& fbo;  // Frame buffer object.
-            const CameraID camera;     // The camera used to render.
-            const std::string
-                name;  // Name of the render target. This is used to send uniforms for a render node that has a render target as a source.
+            const std::string name;    // Name of the render target.
+            const CameraID cameraID;   // The camera to render with.
         };
     }  // namespace engine
 }  // namespace cobalt
