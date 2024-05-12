@@ -14,13 +14,13 @@ namespace cobalt {
             public:
             /**
              * @brief Create a filter node.
-             * @param renderer The renderer to use.
-             * @param defaultTarget The default target to render to. This is the target
-             *                       that contains the final image.
              * @param filter The material to use for the filter quad.
+             * @param renderer The renderer to use.
+             * @param cameraManager The camera manager to use.
+             * @param defaultTarget The default target to render to. This is the target that contains the final image.
              * @return The filter node.
              */
-            FilterNode(Renderer& renderer, RenderTarget&& defaultTarget, core::gfx::Material& filter);
+            FilterNode(core::gfx::Material& filter, Renderer& renderer, const CameraManager& cameraManager, RenderTarget&& defaultTarget);
             /**
              * @brief Destroy the filter node.
              */
@@ -28,9 +28,8 @@ namespace cobalt {
 
             /**
              * @brief Render the filter to the final image.
-             * @param camera The camera.
              */
-            void render(const Camera& camera) override;
+            void render() override;
             /**
              * @brief Called upon window resize.
              * @param width The new width of the render graph.

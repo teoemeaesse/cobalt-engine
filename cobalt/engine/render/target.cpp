@@ -9,7 +9,7 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
-        RenderTarget::RenderTarget(const gl::FBO& fbo, const std::string& name, const CameraID camera) : fbo(fbo), name(name), cameraID(cameraID) {
+        RenderTarget::RenderTarget(const gl::FBO& fbo, const std::string& name, const CameraID cameraID) : fbo(fbo), name(name), cameraID(cameraID) {
             if (name == "view" || name == "model" || name == "projection") {
                 throw ecs::PluginException<Renderer3DPlugin, RenderTarget>("Cannot use reserved name for render target");
             }

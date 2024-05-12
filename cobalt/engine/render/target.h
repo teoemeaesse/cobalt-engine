@@ -64,7 +64,7 @@ namespace cobalt {
              * @brief Get the camera to render with.
              * @return CameraID
              */
-            const CameraID getCameraID() const { return cameraID; }
+            const CameraID getCameraID() const;
 
             private:
             const core::gl::FBO& fbo;  // Frame buffer object.

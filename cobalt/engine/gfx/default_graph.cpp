@@ -12,15 +12,16 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
-        DefaultGraph::DefaultGraph(Scene& scene, CameraManager& manager, core::gl::FBO& defaultFBO)
+        DefaultGraph::DefaultGraph(Scene& scene, CameraManager& cameraManager, core::gl::FBO& defaultFBO)
             : RenderGraph(),
-              output(manager.addCamera<OrthographicCamera>("output_camera",
-                                                           CameraProperties()
-                                                               .setPosition(glm::vec3(0.0, 0.0, 10.0))
-                                                               .setDirection(glm::vec2(90.0, 90.0))
-                                                               .setOrthoPlanes(-(float)defaultFBO.getWidth() / 2, (float)defaultFBO.getWidth() / 2,
-                                                                               -(float)defaultFBO.getHeight() / 2, (float)defaultFBO.getHeight() / 2)
-                                                               .setClippingPlanes(1.0f, 100.0f))),
+              cameraManager(cameraManager),
+              outputCameraID(cameraManager.addCamera<OrthographicCamera>(
+                  "output_camera", CameraProperties()
+                                       .setPosition(glm::vec3(0.0, 0.0, 10.0))
+                                       .setDirection(glm::vec2(90.0, 90.0))
+                                       .setOrthoPlanes(-(float)defaultFBO.getWidth() / 2, (float)defaultFBO.getWidth() / 2,
+                                                       -(float)defaultFBO.getHeight() / 2, (float)defaultFBO.getHeight() / 2)
+                                       .setClippingPlanes(1.0f, 100.0f))),
               renderer(),
               defaultFBO(defaultFBO),
               sceneFBO(defaultFBO.getWidth(), defaultFBO.getHeight(),
@@ -29,9 +30,10 @@ namespace cobalt {
 
         void DefaultGraph::init() {
             core::gfx::Material& filter = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makeFromShader("filterMaterial", "filter"));
-            Scope<SceneNode> sceneNode = CreateScope<SceneNode>(scene, renderer, RenderTarget(sceneFBO, "scene"));
-            Scope<FilterNode> filterNode = CreateScope<FilterNode>(renderer, RenderTarget(defaultFBO, "output"), filter);
-            filterNode->addSource(RenderTarget(sceneFBO, "scene"));
+            Scope<SceneNode> sceneNode = CreateScope<SceneNode>(scene, renderer, cameraManager, RenderTarget(sceneFBO, "scene", scene.getCameraID()));
+            Scope<FilterNode> filterNode =
+                CreateScope<FilterNode>(filter, renderer, cameraManager, RenderTarget(defaultFBO, "output", outputCameraID));
+            filterNode->addSource(RenderTarget(sceneFBO, "scene", scene.getCameraID()));
 
             addNode(Move(sceneNode));
             addNode(Move(filterNode));

@@ -19,7 +19,8 @@ namespace cobalt {
              * @param targets The targets to render to.
              */
             template <typename... Targets>
-            RenderNode(Renderer& renderer, const CameraManager& cameraManager, Targets&&... targets) : renderer(renderer) {
+            RenderNode(Renderer& renderer, const CameraManager& cameraManager, Targets&&... targets)
+                : renderer(renderer), cameraManager(cameraManager) {
                 ((this->targets.push_back(Move(targets))), ...);
             }
             /**

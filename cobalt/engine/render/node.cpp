@@ -9,9 +9,11 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
-        RenderNode::RenderNode(const RenderNode& other) : renderer(other.renderer), sources(other.sources), targets(other.targets) {}
+        RenderNode::RenderNode(const RenderNode& other)
+            : renderer(other.renderer), cameraManager(other.cameraManager), sources(other.sources), targets(other.targets) {}
 
-        RenderNode::RenderNode(RenderNode&& other) noexcept : renderer(other.renderer), sources(Move(other.sources)), targets(Move(other.targets)) {}
+        RenderNode::RenderNode(RenderNode&& other) noexcept
+            : renderer(other.renderer), cameraManager(Move(other.cameraManager)), sources(Move(other.sources)), targets(Move(other.targets)) {}
 
         void RenderNode::renderMesh(Mesh& mesh) {
             if (targets.size() == 0) {
@@ -22,7 +24,7 @@ namespace cobalt {
             }
             renderer.bindMaterial(mesh.getMaterial());
             for (uint i = 0; i < targets.size(); i++) {
-                renderer.renderMesh(mesh, targets[i], cameraManager.getController(targets[i].getCameraID()).getCamera());
+                renderer.renderMesh(mesh, targets[i], cameraManager.getCamera(targets[i].getCameraID()));
             }
             renderer.clearTextureUnits();
         }
@@ -33,7 +35,7 @@ namespace cobalt {
             }
             renderer.bindTexture("skybox", skybox.getTexture());
             for (uint i = 0; i < targets.size(); i++) {
-                renderer.renderSkybox(skybox, targets[i], cameraManager.getController(targets[i].getCameraID()).getCamera());
+                renderer.renderSkybox(skybox, targets[i], cameraManager.getCamera(targets[i].getCameraID()));
             }
             renderer.clearTextureUnits();
         }

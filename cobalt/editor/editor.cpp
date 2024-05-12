@@ -44,7 +44,7 @@ namespace cobalt {
             createScene();
 
             world.addResource<DefaultGraph>(world.getResource<Scene>(), cameraManager, getWindow().getDefaultFBO());
-            world.getResource<DefaultGraph>().init(world.getResource<engine::CameraManager>());
+            world.getResource<DefaultGraph>().init();
 
             bindInput();
         }
@@ -68,14 +68,10 @@ namespace cobalt {
             cubeXOffset = sin(time) * 25.0f * delta;
             cubeYOffset = cos(time) * 25.0f * delta;
             scene.getMeshes()[4].translate(glm::vec3(cubeXOffset, 0.0f, cubeYOffset));
-            world.getResource<DefaultGraph>().execute(cameraManager);
+            world.getResource<DefaultGraph>().execute();
         }
 
         void Editor::bindInput() {
-            /**
-             * Two try-catch blocks are used to catch both the Keyboard and Mouse peripheral exceptions.
-             * Likely to be useless since the Keyboard and Mouse peripherals are always present in the engine.
-             */
             Scene& scene = world.getResource<Scene>();
             engine::Keyboard& keyboard = getInputManager().getPeripheral<engine::Keyboard>(engine::Keyboard::NAME);
             CameraID* camera = &scene.getCameraID();

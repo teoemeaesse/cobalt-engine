@@ -16,11 +16,14 @@ namespace cobalt {
             /**
              * @brief Create a scene node with a scene.
              * @param scene The scene to render.
+             * @param renderer The renderer to use for rendering.
+             * @param cameraManager The camera manager to use for rendering.
              * @param targets The targets to render to.
              * @return The scene node.
              */
             template <typename... Targets>
-            SceneNode(Scene& scene, Renderer& renderer, Targets&&... targets) : RenderNode(renderer, targets...), scene(scene) {}
+            SceneNode(Scene& scene, Renderer& renderer, const CameraManager& cameraManager, Targets&&... targets)
+                : RenderNode(renderer, cameraManager, targets...), scene(scene) {}
             /**
              * @brief Destroy the scene node.
              */
@@ -28,9 +31,8 @@ namespace cobalt {
 
             /**
              * @brief Render the scene.
-             * @param camera The camera.
              */
-            void render(const Camera& camera) override;
+            void render() override;
             /**
              * @brief Called upon window resize.
              * @param width The new width of the render graph.

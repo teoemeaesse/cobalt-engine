@@ -13,11 +13,11 @@ namespace cobalt {
             /**
              * @brief Creates a default render graph.
              * @param scene The scene to render.
-             * @param manager The camera manager to use.
+             * @param cameraManager The camera manager to use.
              * @param defaultFBO The default FBO to render the final image to.
              * @return A default render graph.
              */
-            DefaultGraph(Scene& scene, CameraManager& manager, core::gl::FBO& defaultFBO);
+            DefaultGraph(Scene& scene, CameraManager& cameraManager, core::gl::FBO& defaultFBO);
             /**
              * @brief Destroys the default render graph.
              */
@@ -36,11 +36,12 @@ namespace cobalt {
             void onResize(const uint width, const uint height) override;
 
             private:
-            const CameraID output;      // The ID for the camera used to render the final image.
-            Renderer renderer;          // The renderer used to render the scene.
-            core::gl::FBO& defaultFBO;  // The default FBO to render the final image to.
-            core::gl::FBO sceneFBO;     // The FBO to render the scene to.
-            Scene& scene;               // The scene to render.
+            const CameraManager& cameraManager;  // The camera manager to use.
+            const CameraID outputCameraID;       // The ID for the camera used to render the final image.
+            Renderer renderer;                   // The renderer used to render the scene.
+            core::gl::FBO& defaultFBO;           // The default FBO to render the final image to.
+            core::gl::FBO sceneFBO;              // The FBO to render the scene to.
+            Scene& scene;                        // The scene to render.
         };
     }  // namespace engine
 }  // namespace cobalt
