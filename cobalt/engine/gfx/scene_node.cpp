@@ -9,6 +9,9 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
+        SceneNode::SceneNode(Scene& scene, Renderer& renderer, const CameraManager& cameraManager)
+            : RenderNode(renderer, cameraManager), scene(scene) {}
+
         void SceneNode::render() {
             if (scene.getSkybox().has_value()) {
                 RenderNode::renderSkybox(scene.getSkybox().value());

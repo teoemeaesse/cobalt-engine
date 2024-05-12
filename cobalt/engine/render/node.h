@@ -16,13 +16,8 @@ namespace cobalt {
              * @brief Create a render node with a renderer.
              * @param renderer The renderer to use for rendering.
              * @param cameraManager The camera manager to use for rendering.
-             * @param targets The targets to render to.
              */
-            template <typename... Targets>
-            RenderNode(Renderer& renderer, const CameraManager& cameraManager, Targets&&... targets)
-                : renderer(renderer), cameraManager(cameraManager) {
-                ((this->targets.push_back(Move(targets))), ...);
-            }
+            RenderNode(Renderer& renderer, const CameraManager& cameraManager);
             /**
              * @brief Destroy the render node.
              */
@@ -53,7 +48,7 @@ namespace cobalt {
             RenderNode& operator=(RenderNode&&) = delete;
 
             /**
-             * @brief Render to the targets, binding the sources to the adequate texture units. Each render node should override this method and call
+             * @brief Render to the outputs, binding the sources to the adequate texture units. Each render node should override this method and call
              * the protected render method.
              */
             virtual void render() = 0;
@@ -71,31 +66,39 @@ namespace cobalt {
             void addSource(RenderTarget&& source);
 
             /**
+             * @brief Add an output to the render node.
+             * @param cameraID The camera to use for rendering to the output.
+             * @param output The output to add.
+             */
+            void addOutput(const CameraID cameraID, RenderTarget&& output);
+
+            /**
              * @brief Get the sources.
              * @return The sources.
              */
             Vec<RenderTarget>& getSources();
             /**
-             * @brief Get the targets.
-             * @return The targets.
+             * @brief Get the outputs.
+             * @return The outputs.
              */
-            Vec<RenderTarget>& getTargets();
+            Vec<RenderTarget>& getOutputs();
 
             protected:
-            Vec<RenderTarget> sources;           // The list of sources.
-            Vec<RenderTarget> targets;           // The list of targets.
-            Renderer& renderer;                  // The renderer to use.
-            const CameraManager& cameraManager;  // The camera manager holding the cameras to use.
+            Vec<RenderTarget> sources;            // The list of sources.
+            Vec<RenderTarget> outputs;            // The list of outputs.
+            UMap<std::string, CameraID> cameras;  // The cameras to use for each output render target.
+            Renderer& renderer;                   // The renderer to use.
+            const CameraManager& cameraManager;   // The camera manager holding the cameras to use.
 
             /**
-             * @brief Render to the targets, binding the sources to the adequate texture units. Each render node should decide how to call this
+             * @brief Render to the outputs, binding the sources to the adequate texture units. Each render node should decide how to call this
              * method.
              * @param mesh The mesh to render.
              */
             void renderMesh(Mesh& mesh);
 
             /**
-             * @brief Render a skybox to the targets. Each render node should decide how to call this method.
+             * @brief Render a skybox to the outputs. Each render node should decide how to call this method.
              * @param skybox The skybox to render.
              */
             void renderSkybox(Skybox& skybox);

@@ -18,12 +18,9 @@ namespace cobalt {
              * @param scene The scene to render.
              * @param renderer The renderer to use for rendering.
              * @param cameraManager The camera manager to use for rendering.
-             * @param targets The targets to render to.
              * @return The scene node.
              */
-            template <typename... Targets>
-            SceneNode(Scene& scene, Renderer& renderer, const CameraManager& cameraManager, Targets&&... targets)
-                : RenderNode(renderer, cameraManager, targets...), scene(scene) {}
+            SceneNode(Scene& scene, Renderer& renderer, const CameraManager& cameraManager);
             /**
              * @brief Destroy the scene node.
              */

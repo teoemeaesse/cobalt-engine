@@ -17,10 +17,12 @@ namespace cobalt {
              * @param filter The material to use for the filter quad.
              * @param renderer The renderer to use.
              * @param cameraManager The camera manager to use.
+             * @param cameraID The camera to render with.
              * @param defaultTarget The default target to render to. This is the target that contains the final image.
              * @return The filter node.
              */
-            FilterNode(core::gfx::Material& filter, Renderer& renderer, const CameraManager& cameraManager, RenderTarget&& defaultTarget);
+            FilterNode(core::gfx::Material& filter, Renderer& renderer, const CameraManager& cameraManager, const CameraID cameraID,
+                       RenderTarget&& defaultTarget);
             /**
              * @brief Destroy the filter node.
              */

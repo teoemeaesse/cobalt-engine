@@ -6,11 +6,14 @@
 namespace cobalt {
     using namespace core;
     namespace engine {
-        FilterNode::FilterNode(gfx::Material& filter, Renderer& renderer, const CameraManager& cameraManager, RenderTarget&& defaultTarget)
-            : RenderNode(renderer, cameraManager, Move(defaultTarget)),
+        FilterNode::FilterNode(gfx::Material& filter, Renderer& renderer, const CameraManager& cameraManager, const CameraID cameraID,
+                               RenderTarget&& defaultTarget)
+            : RenderNode(renderer, cameraManager),
               filter(filter),
               width(defaultTarget.getFBO().getWidth()),
-              height(defaultTarget.getFBO().getHeight()) {}
+              height(defaultTarget.getFBO().getHeight()) {
+            addOutput(cameraID, Move(defaultTarget));
+        }
 
         void FilterNode::render() {
             Mesh filterMesh = MeshFactory::createRectangle(width, height, filter);

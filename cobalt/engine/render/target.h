@@ -15,9 +15,8 @@ namespace cobalt {
              * @brief Create a render target.
              * @param fbo Frame buffer object to render to.
              * @param name The name of the render target.
-             * @param camera The camera to render with.
              */
-            RenderTarget(const core::gl::FBO& fbo, const std::string& name, const CameraID camera);
+            RenderTarget(const core::gl::FBO& fbo, const std::string& name);
             /**
              * @brief Default destructor.
              */
@@ -60,16 +59,10 @@ namespace cobalt {
              * @return std::string
              */
             const std::string& getName() const;
-            /**
-             * @brief Get the camera to render with.
-             * @return CameraID
-             */
-            const CameraID getCameraID() const;
 
             private:
             const core::gl::FBO& fbo;  // Frame buffer object.
             const std::string name;    // Name of the render target.
-            const CameraID cameraID;   // The camera to render with.
         };
     }  // namespace engine
 }  // namespace cobalt
