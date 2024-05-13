@@ -8,8 +8,6 @@
 
 namespace cobalt {
     namespace engine {
-        using CameraID = uint;
-
         class CameraManager;
 
         class CameraPlugin;

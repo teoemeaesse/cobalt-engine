@@ -15,9 +15,8 @@ namespace cobalt {
             /**
              * @brief Create a render node with a renderer.
              * @param renderer The renderer to use for rendering.
-             * @param cameraManager The camera manager to use for rendering.
              */
-            RenderNode(Renderer& renderer, const CameraManager& cameraManager);
+            RenderNode(Renderer& renderer);
             /**
              * @brief Destroy the render node.
              */
@@ -70,7 +69,7 @@ namespace cobalt {
              * @param cameraID The camera to use for rendering to the output.
              * @param output The output to add.
              */
-            void addOutput(const CameraID cameraID, RenderTarget&& output);
+            void addOutput(const CameraID& cameraID, RenderTarget&& output);
 
             /**
              * @brief Get the sources.
@@ -88,7 +87,6 @@ namespace cobalt {
             Vec<RenderTarget> outputs;            // The list of outputs.
             UMap<std::string, CameraID> cameras;  // The cameras to use for each output render target.
             Renderer& renderer;                   // The renderer to use.
-            const CameraManager& cameraManager;   // The camera manager holding the cameras to use.
 
             /**
              * @brief Render to the outputs, binding the sources to the adequate texture units. Each render node should decide how to call this

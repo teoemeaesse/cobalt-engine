@@ -36,12 +36,11 @@ namespace cobalt {
             void onResize(const uint width, const uint height) override;
 
             private:
-            const CameraManager& cameraManager;  // The camera manager to use.
-            const CameraID outputCameraID;       // The ID for the camera used to render the final image.
-            Renderer renderer;                   // The renderer used to render the scene.
-            core::gl::FBO& defaultFBO;           // The default FBO to render the final image to.
-            core::gl::FBO sceneFBO;              // The FBO to render the scene to.
-            Scene& scene;                        // The scene to render.
+            CameraID outputCameraID;    // The ID for the camera used to render the final image.
+            Renderer renderer;          // The renderer used to render the scene.
+            core::gl::FBO& defaultFBO;  // The default FBO to render the final image to.
+            core::gl::FBO sceneFBO;     // The FBO to render the scene to.
+            Scene& scene;               // The scene to render.
         };
     }  // namespace engine
 }  // namespace cobalt

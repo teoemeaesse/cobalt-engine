@@ -33,7 +33,7 @@ namespace cobalt {
                                                               const uint width = window->getDefaultFBO().getWidth();
                                                               const uint height = window->getDefaultFBO().getHeight();
                                                               graph->onResize(width, height);
-                                                              manager->getController(scene->getCameraID()).resize((float)width / (float)height);
+                                                              scene->getCameraID().getController().resize((float)width / (float)height);
                                                           });
 
             CB_TEXTURE_LIBRARY.loadTextures(io::Path("cobalt/editor/assets/textures", true));
@@ -52,8 +52,7 @@ namespace cobalt {
         void Editor::addPlugins() { world.addBundle<engine::ecs::BaseBundle>(); }
 
         void Editor::fixedTimeStep() {
-            CameraManager& manager = world.getResource<CameraManager>();
-            manager.getController(world.getResource<Scene>().getCameraID()).update();
+            world.getResource<Scene>().getCameraID().getController().update();
             getWindow().setTitle("Cobalt Editor - " + std::to_string(getFramerate()) + " FPS");
         }
 

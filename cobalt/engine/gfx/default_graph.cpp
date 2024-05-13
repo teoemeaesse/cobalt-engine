@@ -14,7 +14,6 @@ namespace cobalt {
     namespace engine {
         DefaultGraph::DefaultGraph(Scene& scene, CameraManager& cameraManager, core::gl::FBO& defaultFBO)
             : RenderGraph(),
-              cameraManager(cameraManager),
               outputCameraID(cameraManager.addCamera<OrthographicCamera>(
                   "output_camera", CameraProperties()
                                        .setPosition(glm::vec3(0.0, 0.0, 10.0))
@@ -30,9 +29,8 @@ namespace cobalt {
 
         void DefaultGraph::init() {
             core::gfx::Material& filter = CB_MATERIAL_LIBRARY.getMaterial(CB_MATERIAL_LIBRARY.makeFromShader("filterMaterial", "filter"));
-            Scope<SceneNode> sceneNode = CreateScope<SceneNode>(scene, renderer, cameraManager);
-            Scope<FilterNode> filterNode =
-                CreateScope<FilterNode>(filter, renderer, cameraManager, outputCameraID, RenderTarget(defaultFBO, "output"));
+            Scope<SceneNode> sceneNode = CreateScope<SceneNode>(scene, renderer);
+            Scope<FilterNode> filterNode = CreateScope<FilterNode>(filter, renderer, outputCameraID, RenderTarget(defaultFBO, "output"));
 
             sceneNode->addOutput(scene.getCameraID(), RenderTarget(sceneFBO, "scene"));
             filterNode->addSource(RenderTarget(sceneFBO, "scene"));

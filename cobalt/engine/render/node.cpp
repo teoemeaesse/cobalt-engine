@@ -9,13 +9,11 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
-        RenderNode::RenderNode(Renderer& renderer, const CameraManager& cameraManager) : renderer(renderer), cameraManager(cameraManager) {}
+        RenderNode::RenderNode(Renderer& renderer) : renderer(renderer) {}
 
-        RenderNode::RenderNode(const RenderNode& other)
-            : renderer(other.renderer), cameraManager(other.cameraManager), sources(other.sources), outputs(other.outputs) {}
+        RenderNode::RenderNode(const RenderNode& other) : renderer(other.renderer), sources(other.sources), outputs(other.outputs) {}
 
-        RenderNode::RenderNode(RenderNode&& other) noexcept
-            : renderer(other.renderer), cameraManager(Move(other.cameraManager)), sources(Move(other.sources)), outputs(Move(other.outputs)) {}
+        RenderNode::RenderNode(RenderNode&& other) noexcept : renderer(other.renderer), sources(Move(other.sources)), outputs(Move(other.outputs)) {}
 
         void RenderNode::renderMesh(Mesh& mesh) {
             if (outputs.size() == 0) {
@@ -26,7 +24,7 @@ namespace cobalt {
             }
             renderer.bindMaterial(mesh.getMaterial());
             for (uint i = 0; i < outputs.size(); i++) {
-                renderer.renderMesh(mesh, outputs[i], cameraManager.getCamera(cameras.at(outputs[i].getName())));
+                renderer.renderMesh(mesh, outputs[i], cameras.at(outputs[i].getName()).getCamera());
             }
             renderer.clearTextureUnits();
         }
@@ -37,15 +35,15 @@ namespace cobalt {
             }
             renderer.bindTexture("skybox", skybox.getTexture());
             for (uint i = 0; i < outputs.size(); i++) {
-                renderer.renderSkybox(skybox, outputs[i], cameraManager.getCamera(cameras.at(outputs[i].getName())));
+                renderer.renderSkybox(skybox, outputs[i], cameras.at(outputs[i].getName()).getCamera());
             }
             renderer.clearTextureUnits();
         }
 
         void RenderNode::addSource(RenderTarget&& source) { sources.push_back(Move(source)); }
 
-        void RenderNode::addOutput(const CameraID cameraID, RenderTarget&& output) {
-            cameras[output.getName()] = cameraID;
+        void RenderNode::addOutput(const CameraID& cameraID, RenderTarget&& output) {
+            cameras.emplace(output.getName(), cameraID);
             outputs.push_back(Move(output));
         }
 
