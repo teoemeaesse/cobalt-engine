@@ -7,9 +7,8 @@
 
 #pragma once
 
-#include "core/ecs/plugin/plugin.h"
 #include "core/ecs/world.h"
-#include "engine/materialpbr/material.h"
+#include "engine/material_pbr/library.h"
 
 namespace cobalt {
     namespace engine {
@@ -31,5 +30,11 @@ namespace cobalt {
              */
             void onPlug(core::ecs::World& world) const noexcept override;
         };
+
+        /**
+         * @brief Returns the global material library.
+         * @return The material library.
+         */
+        MaterialLibrary& getMaterialLibrary() noexcept;
     }  // namespace engine
 }  // namespace cobalt

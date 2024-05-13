@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "engine/materialpbr/material.h"
+#include "engine/material_pbr/material.h"
 #include "engine/render/target.h"
 
 namespace cobalt {

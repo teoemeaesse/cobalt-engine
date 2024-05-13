@@ -5,11 +5,70 @@
 
 #include "engine/internal/shader_library.h"
 #include "engine/internal/texture_library.h"
-#include "engine/materialpbr/material.h"
+#include "engine/material_pbr/material.h"
 
 namespace cobalt {
     namespace engine {
-        using MaterialID = uint;
+        class MaterialID {
+            friend class MaterialLibrary;
+
+            public:
+            /**
+             * @brief Create a material ID with the given handle and name.
+             * @param handle The handle of the material.
+             * @param name The name of the material.
+             * @param owner The material library that owns the material.
+             */
+            MaterialID(const uint handle, const std::string& name, MaterialLibrary& owner) noexcept;
+            /**
+             * @brief Default destructor.
+             */
+            ~MaterialID() noexcept = default;
+            /**
+             * @brief Default copy constructor.
+             */
+            MaterialID(const MaterialID& other) noexcept;
+            /**
+             * @brief Default move constructor.
+             */
+            MaterialID(MaterialID&& other) noexcept;
+            /**
+             * @brief Default copy assignment operator.
+             */
+            MaterialID& operator=(const MaterialID& other) noexcept;
+            /**
+             * @brief Default move assignment operator.
+             */
+            MaterialID& operator=(MaterialID&& other) noexcept;
+
+            /**
+             * @brief Check if two material IDs are equal.
+             * @param other The other material ID.
+             * @return True if the handles are equal, false otherwise.
+             */
+            bool operator==(const MaterialID& other) const;
+
+            /**
+             * @brief Get the handle of the material.
+             * @return The handle of the material.
+             */
+            const uint getHandle() const;
+            /**
+             * @brief Get the name of the material.
+             * @return The name of the material.
+             */
+            const std::string& getName() const;
+            /**
+             * @brief Get the material.
+             * @return The material.
+             */
+            MaterialPBR& getMaterial();
+
+            private:
+            uint handle;
+            std::string name;
+            MaterialLibrary& owner;
+        };
 
         class MaterialLibrary {
             public:
@@ -27,12 +86,11 @@ namespace cobalt {
             };
 
             /**
-             * @brief Creates an empty material library.
-             * @return The material library.
+             * @brief Default constructor.
              */
-            MaterialLibrary();
+            MaterialLibrary() = default;
             /**
-             * @brief Destroys the material library and all materials it contains.
+             * @brief Default destructor.
              */
             ~MaterialLibrary() = default;
 
@@ -111,23 +169,8 @@ namespace cobalt {
                 const std::string& name, const std::string& shader,
                 const UMap<std::string, const core::gl::Texture2D&>& textures = UMap<std::string, const core::gl::Texture2D&>());
 
-            /**
-             * @brief Initializes the singleton instance of the material library. This loads the default materials, so it needs to be called after
-             * the texture and shader libraries have been initialized!
-             */
-            static void init();
-            /**
-             * @brief Returns the singleton instance of the material library.
-             * @return The material library.
-             */
-            static MaterialLibrary& getMaterialLibrary();
-
             private:
             Deque<MaterialEntry> materials;  // The materials in the library.
-
-            static Scope<MaterialLibrary> instance;  // The singleton instance of the material library.
         };
     }  // namespace engine
 }  // namespace cobalt
-
-#define CB_MATERIAL_LIBRARY ::cobalt::engine::MaterialLibrary::getMaterialLibrary()

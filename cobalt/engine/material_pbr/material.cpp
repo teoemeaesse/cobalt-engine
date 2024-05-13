@@ -1,7 +1,7 @@
 // Created by tomas on
 // 06-12-2023
 
-#include "engine/materialpbr/material.h"
+#include "engine/material_pbr/material.h"
 
 namespace cobalt {
     using namespace core;

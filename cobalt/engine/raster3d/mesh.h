@@ -5,7 +5,7 @@
 
 #include "core/gl/ibo.h"
 #include "core/gl/vao.h"
-#include "engine/materialpbr/material.h"
+#include "engine/material_pbr/material.h"
 
 namespace cobalt {
     namespace engine {

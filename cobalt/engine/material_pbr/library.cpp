@@ -1,14 +1,10 @@
 // Created by tomas on
 // 24-12-2023
 
-#include "engine/internal/material_library.h"
-
-#include "material_library.h"
+#include "engine/material_pbr/library.h"
 
 namespace cobalt {
     namespace engine {
-        Scope<MaterialLibrary> MaterialLibrary::instance;
-
         MaterialLibrary::MaterialLibrary() {}
 
         const MaterialID MaterialLibrary::getMaterialID(const std::string& name) {
@@ -86,9 +82,5 @@ namespace cobalt {
             materials.emplace_back(name, MaterialFactory::createMaterial(CB_SHADER_LIBRARY.getShader(shader), textureMap));
             return materials.size() - 1;
         }
-
-        void MaterialLibrary::init() { instance = CreateScope<MaterialLibrary>(); }
-
-        MaterialLibrary& MaterialLibrary::getMaterialLibrary() { return *instance; }
     }  // namespace engine
 }  // namespace cobalt
