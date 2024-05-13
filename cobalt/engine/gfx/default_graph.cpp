@@ -6,7 +6,7 @@
 #include "engine/gfx/filter_node.h"
 #include "engine/gfx/scene_node.h"
 #include "engine/internal/shader_library.h"
-#include "engine/material_pbr/plugin.h"
+#include "engine/material/plugin.h"
 
 namespace cobalt {
     using namespace core;
@@ -28,7 +28,7 @@ namespace cobalt {
               scene(scene) {}
 
         void DefaultGraph::init() {
-            MaterialPBR& filter = getMaterialLibrary().getMaterial(getMaterialLibrary().makeFromShader("filterMaterial", "filter"));
+            Material& filter = getMaterialLibrary().getMaterial(getMaterialLibrary().makeFromShader("filterMaterial", "filter"));
             Scope<SceneNode> sceneNode = CreateScope<SceneNode>(scene, renderer);
             Scope<FilterNode> filterNode = CreateScope<FilterNode>(filter, renderer, outputCameraID, RenderTarget(defaultFBO, "output"));
 

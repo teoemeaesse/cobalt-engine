@@ -1,6 +1,6 @@
 /**
  * @file plugin.h
- * @brief A plugin for loading PBR materials.
+ * @brief A plugin for loading materials.
  * @author Tomás Marques
  * @date 13-05-2024
  */
@@ -8,21 +8,21 @@
 #pragma once
 
 #include "core/ecs/world.h"
-#include "engine/material_pbr/library.h"
+#include "engine/material/library.h"
 
 namespace cobalt {
     namespace engine {
         /**
-         * @brief A plugin for loading PBR materials.
+         * @brief A plugin for loading materials.
          */
-        class MaterialPBRPlugin : public core::ecs::Plugin {
+        class MaterialPlugin : public core::ecs::Plugin {
             public:
-            static inline constexpr const char* TITLE = "Material PBR";
+            static inline constexpr const char* TITLE = "Material";
 
             /**
              * @brief Create the plugin.
              */
-            MaterialPBRPlugin() noexcept;
+            MaterialPlugin() noexcept;
 
             /**
              * @brief Initializes the plugin.

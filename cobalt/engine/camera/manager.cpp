@@ -20,8 +20,8 @@ namespace cobalt {
         }
 
         CameraID& CameraID::operator=(CameraID&& other) noexcept {
-            handle = other.handle;
-            name = std::move(other.name);
+            handle = Move(other.handle);
+            name = Move(other.name);
             return *this;
         }
 

@@ -8,7 +8,7 @@
 
 namespace cobalt {
     namespace engine {
-        ScenePlugin::ScenePlugin() noexcept : core::ecs::Plugin(TITLE, "Adds a scene graph to the world.", CameraPlugin{}) {}
+        ScenePlugin::ScenePlugin() noexcept : core::ecs::Plugin(TITLE, "Provides scene graph functionality.", CameraPlugin{}) {}
 
         void ScenePlugin::onPlug(core::ecs::World& world) const noexcept { world.addResource<Scene>(world); }
     }  // namespace engine

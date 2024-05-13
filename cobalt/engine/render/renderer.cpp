@@ -36,7 +36,7 @@ namespace cobalt {
             return currentUnit - 1;
         }
 
-        void Renderer::bindMaterial(const gfx::MaterialPBR& material) {
+        void Renderer::bindMaterial(const Material& material) {
             if (currentUnit + material.getTextures().size() > gl::Context::queryMaxFragTextureUnits()) {
                 throw core::ecs::PluginException<RenderPlugin, Renderer>("Maximum number of texture units exceeded");
             }

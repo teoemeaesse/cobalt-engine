@@ -5,7 +5,7 @@
 
 #include "core/gl/ibo.h"
 #include "core/gl/vao.h"
-#include "engine/material_pbr/material.h"
+#include "engine/material/material.h"
 
 namespace cobalt {
     namespace engine {
@@ -74,7 +74,7 @@ namespace cobalt {
              * @brief Get the mesh material.
              * @return The material.
              */
-            MaterialPBR& getMaterial();
+            Material& getMaterial();
             /**
              * @brief Get the mesh primitive type.
              * @return The primitive type.
@@ -90,13 +90,12 @@ namespace cobalt {
              * @param primitives Primitive type.
              * @return The mesh.
              */
-            Mesh(core::gl::VAO&& vao, core::gl::IBO&& ibo, MaterialPBR& material,
-                 const core::gl::Primitive& primitive = core::gl::Primitive::Triangles);
+            Mesh(core::gl::VAO&& vao, core::gl::IBO&& ibo, Material& material, const core::gl::Primitive& primitive = core::gl::Primitive::Triangles);
 
             core::gl::VAO vao;              // Vertex array object.
             core::gl::IBO ibo;              // Index buffer object.
             core::gl::Primitive primitive;  // Primitive type.
-            MaterialPBR& material;          // Material.
+            Material& material;             // Material.
             glm::vec3 worldTranslate;       // World position.
             glm::vec3 worldRotate;          // World rotation (degrees).
             glm::vec3 worldScale;           // World scale.
@@ -111,7 +110,7 @@ namespace cobalt {
              * @param material The material.
              * @return The rectangle mesh.
              */
-            static Mesh createRectangle(const uint width, const uint height, MaterialPBR& material);
+            static Mesh createRectangle(const uint width, const uint height, Material& material);
 
             /**
              * @brief Create a circle-shaped mesh.
@@ -119,7 +118,7 @@ namespace cobalt {
              * @param material The material.
              * @return The circle mesh.
              */
-            static Mesh createSphere(const uint radius, MaterialPBR& material);
+            static Mesh createSphere(const uint radius, Material& material);
 
             /**
              * @brief Create a cube-shaped mesh.
@@ -127,7 +126,7 @@ namespace cobalt {
              * @param material The material.
              * @return The cube mesh.
              */
-            static Mesh createCube(const uint side, MaterialPBR& material);
+            static Mesh createCube(const uint side, Material& material);
 
             /**
              * @brief Create a grid-shaped mesh.
@@ -135,7 +134,7 @@ namespace cobalt {
              * @param material The material.
              * @return The grid mesh.
              */
-            static Mesh createGrid(const uint side, MaterialPBR& material);
+            static Mesh createGrid(const uint side, Material& material);
         };
     }  // namespace engine
 }  // namespace cobalt

@@ -20,7 +20,7 @@ namespace cobalt {
              * @param defaultTarget The default target to render to. This is the target that contains the final image.
              * @return The filter node.
              */
-            FilterNode(MaterialPBR& filter, Raster3D& renderer, const CameraID& cameraID, RenderTarget&& defaultTarget);
+            FilterNode(Material& filter, Raster3D& renderer, const CameraID& cameraID, RenderTarget&& defaultTarget);
             /**
              * @brief Destroy the filter node.
              */
@@ -38,8 +38,8 @@ namespace cobalt {
             void onResize(const float width, const float height) override;
 
             private:
-            MaterialPBR& filter;  // The material to use for the filter quad.
-            uint width, height;   // The width and height of the filter quad.
+            Material& filter;    // The material to use for the filter quad.
+            uint width, height;  // The width and height of the filter quad.
         };
     }  // namespace engine
 }  // namespace cobalt

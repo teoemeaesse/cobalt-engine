@@ -7,6 +7,7 @@
 #include "engine/camera/plugin.h"
 #include "engine/input/plugin.h"
 #include "engine/keyboard/plugin.h"
+#include "engine/material/plugin.h"
 #include "engine/mouse/plugin.h"
 #include "engine/scene/plugin.h"
 #include "engine/time/plugin.h"
@@ -27,6 +28,7 @@ namespace cobalt {
                 world.addPlugin<TimePlugin>();
                 world.addPlugin<CameraPlugin>();
                 world.addPlugin<ScenePlugin>();
+                world.addPlugin<MaterialPlugin>();
             }
         };
     }  // namespace engine::ecs

@@ -29,7 +29,6 @@ int main(int argc, char** argv) {
     cobalt::core::gl::Context::init();
     cobalt::engine::TextureLibrary::init();
     cobalt::engine::ShaderLibrary::init();
-    cobalt::engine::MaterialLibrary::init();
 
     // Create the application.
     auto app = cobalt::engine::createApplication();

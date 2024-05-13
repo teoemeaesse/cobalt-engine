@@ -4,6 +4,7 @@
 #pragma once
 
 #include "editor/persistency/cobalt_configuration.h"
+#include "engine/bundle/base.h"
 
 namespace cobalt {
     namespace editor {

@@ -4,7 +4,6 @@
 #include "editor/editor.h"
 
 #include "editor/input/bindings.h"
-#include "engine/bundle/base.h"
 #include "engine/input/exception.h"
 #include "engine/window/plugin.h"
 
@@ -113,11 +112,11 @@ namespace cobalt {
             const gl::Texture2D& steelNormalTexture = CB_TEXTURE_LIBRARY.getTexture<gl::Texture2D>(steelNormal);
             const gl::Texture2D& steelMraoTexture = CB_TEXTURE_LIBRARY.getTexture<gl::Texture2D>(steelMrao);
 
-            MaterialPBR& woodMaterial = getMaterialLibrary().getMaterial(getMaterialLibrary().makePBR("wood", woodAlbedo, woodNormal, woodMrao));
-            MaterialPBR& steelMaterial = getMaterialLibrary().getMaterial(getMaterialLibrary().makePBR("steel", steelAlbedo, steelNormal, steelMrao));
-            MaterialPBR& whiteRough = getMaterialLibrary().getMaterial(getMaterialLibrary().makePBR("white", Colors::White, 0.0f, 1.0f, 1.0f));
-            MaterialPBR& whiteSmooth = getMaterialLibrary().getMaterial(getMaterialLibrary().makePBR("white", Colors::White, 0.0f, 0.0f, 1.0f));
-            MaterialPBR& orangeMedium = getMaterialLibrary().getMaterial(getMaterialLibrary().makePBR("orange", Colors::Orange, 0.0f, 0.5f, 1.0f));
+            Material& woodMaterial = getMaterialLibrary().getMaterial(getMaterialLibrary().makePBR("wood", woodAlbedo, woodNormal, woodMrao));
+            Material& steelMaterial = getMaterialLibrary().getMaterial(getMaterialLibrary().makePBR("steel", steelAlbedo, steelNormal, steelMrao));
+            Material& whiteRough = getMaterialLibrary().getMaterial(getMaterialLibrary().makePBR("white", Colors::White, 0.0f, 1.0f, 1.0f));
+            Material& whiteSmooth = getMaterialLibrary().getMaterial(getMaterialLibrary().makePBR("white", Colors::White, 0.0f, 0.0f, 1.0f));
+            Material& orangeMedium = getMaterialLibrary().getMaterial(getMaterialLibrary().makePBR("orange", Colors::Orange, 0.0f, 0.5f, 1.0f));
             Mesh rotatingCube = MeshFactory::createCube(5, woodMaterial);
             Mesh ground = MeshFactory::createRectangle(100, 100, woodMaterial);
             Mesh sphere = MeshFactory::createSphere(5, woodMaterial);
@@ -145,7 +144,7 @@ namespace cobalt {
             const gl::Texture2D& gridTexture =
                 CB_TEXTURE_LIBRARY.getTexture<gl::Texture2D>(CB_TEXTURE_LIBRARY.makeTexture("grid", color, gl::TextureEncodings::RGBA::Bits8));
             UMap<std::string, const core::gl::Texture2D&> gridTextures = {{"settings", gridTexture}};
-            MaterialPBR& gridMaterial = getMaterialLibrary().getMaterial(getMaterialLibrary().makeFromShader("grid", "grid", gridTextures));
+            Material& gridMaterial = getMaterialLibrary().getMaterial(getMaterialLibrary().makeFromShader("grid", "grid", gridTextures));
             Mesh grid = MeshFactory::createGrid(10000, gridMaterial);
             scene.addMesh(Move(grid));
         }
