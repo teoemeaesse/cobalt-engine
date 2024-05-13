@@ -230,6 +230,12 @@ namespace cobalt {
              */
             Shader buildComputeShader() const;
 
+            /**
+             * @brief Gets the default shader. This just returns a green color.
+             * @return The default shader.
+             */
+            static Shader& getDefaultShader();
+
             private:
             UMap<ShaderStep, std::string> sources;  ///< The shader sources.
         };

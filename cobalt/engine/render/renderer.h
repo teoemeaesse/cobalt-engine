@@ -53,7 +53,7 @@ namespace cobalt {
              * Throws an exception if there are no more available texture units.
              * @param material The material to bind.
              */
-            void bindMaterial(const core::gfx::MaterialPBR& material);
+            void bindMaterial(const MaterialPBR& material);
 
             /**
              * @brief Unbind all texture units.

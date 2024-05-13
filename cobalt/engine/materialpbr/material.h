@@ -8,13 +8,13 @@
 #include "core/gl/texture.h"
 
 namespace cobalt {
-    namespace core::gfx {
+    namespace engine {
         class MaterialPBR : public core::ecs::Component {
             friend class MaterialFactory;
 
             public:
             /**
-             * @brief Destroys the material.
+             * @brief Default destructor.
              */
             virtual ~MaterialPBR() noexcept = default;
             /**
@@ -28,30 +28,18 @@ namespace cobalt {
              * @param other The other material.
              * @return The moved material.
              */
-            MaterialPBR(MaterialPBR&& other) noexcept = delete;
-            /**
-             * @brief Copy assignment operator.
-             * @param other The other material.
-             * @return The copied material.
-             */
-            MaterialPBR& operator=(const MaterialPBR& other) noexcept = delete;
-            /**
-             * @brief Move assignment operator.
-             * @param other The other material.
-             * @return The moved material.
-             */
-            MaterialPBR& operator=(MaterialPBR&& other) noexcept = delete;
+            MaterialPBR(MaterialPBR&& other) noexcept;
 
             /**
              * @brief Get the shader for this material.
              * @return The shader.
              */
-            gl::Shader& getShader() noexcept;
+            core::gl::Shader& getShader() noexcept;
             /**
              * @brief Get an immutable reference to the textures.
              * @return The textures.
              */
-            const UMap<std::string, const gl::Texture&>& getTextures() const noexcept;
+            const UMap<std::string, const core::gl::Texture&>& getTextures() const noexcept;
 
             private:
             /**
@@ -59,15 +47,11 @@ namespace cobalt {
              * @param shader The shader program.
              * @param textures The textures.
              */
-            MaterialPBR(gl::Shader& shader, const UMap<std::string, const gl::Texture&>& textures) noexcept;
-            /**
-             * @brief Creates a new material.
-             */
-            MaterialPBR() noexcept;
+            MaterialPBR(core::gl::Shader& shader, const UMap<std::string, const core::gl::Texture&>& textures) noexcept;
 
             protected:
-            gl::Shader& shader;                                    // Shader program.
-            const UMap<std::string, const gl::Texture&> textures;  // Textures.
+            core::gl::Shader& shader;                              // Shader program.
+            UMap<std::string, const core::gl::Texture&> textures;  // Textures.
         };
 
         class MaterialFactory {
@@ -80,8 +64,8 @@ namespace cobalt {
              * @param mrao The mrao texture.
              * @return The material.
              */
-            static MaterialPBR createMaterialPBR(gl::Shader& shader, const gl::Texture& albedo, const gl::Texture& normal,
-                                                 const gl::Texture& mrao) noexcept;
+            static MaterialPBR createMaterialPBR(core::gl::Shader& shader, const core::gl::Texture& albedo, const core::gl::Texture& normal,
+                                                 const core::gl::Texture& mrao) noexcept;
 
             /**
              * @brief Create a new unlit material.
@@ -89,7 +73,7 @@ namespace cobalt {
              * @param color The color texture.
              * @return The material.
              */
-            static MaterialPBR createMaterialUnlit(gl::Shader& shader, const gl::Texture& color) noexcept;
+            static MaterialPBR createMaterialUnlit(core::gl::Shader& shader, const core::gl::Texture& color) noexcept;
 
             /**
              * @brief Create a new material from the given shader.
@@ -97,7 +81,7 @@ namespace cobalt {
              * @param textures The uniform textures of the material.
              * @return The material.
              */
-            static MaterialPBR createMaterial(gl::Shader& shader, const UMap<std::string, const gl::Texture&>& textures) noexcept;
+            static MaterialPBR createMaterial(core::gl::Shader& shader, const UMap<std::string, const core::gl::Texture&>& textures) noexcept;
         };
-    }  // namespace core::gfx
+    }  // namespace engine
 }  // namespace cobalt

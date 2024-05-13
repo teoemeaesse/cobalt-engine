@@ -15,7 +15,7 @@ namespace cobalt {
             public:
             struct MaterialEntry {
                 std::string name;
-                core::gfx::MaterialPBR material;
+                MaterialPBR material;
 
                 /**
                  * @brief Creates a new material entry.
@@ -23,7 +23,7 @@ namespace cobalt {
                  * @param material The material.
                  * @return The material entry.
                  */
-                MaterialEntry(const std::string& name, const core::gfx::MaterialPBR& material) : name(name), material(material) {}
+                MaterialEntry(const std::string& name, const MaterialPBR& material) : name(name), material(material) {}
             };
 
             /**
@@ -49,7 +49,7 @@ namespace cobalt {
              * @param id The ID of the material.
              * @return The material.
              */
-            core::gfx::MaterialPBR& getMaterial(const MaterialID id);
+            MaterialPBR& getMaterial(const MaterialID id);
 
             /**
              * @brief Creates a new PBR material.

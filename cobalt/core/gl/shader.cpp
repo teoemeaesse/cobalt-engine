@@ -192,5 +192,27 @@ namespace cobalt {
 
             return Shader(program);
         }
+
+        Shader& ShaderBuilder::getDefaultShader() {
+            const std::string vertexShaderSource =
+                "#version 410 core\n"
+                "void main() {\n"
+                "    gl_Position = vec4(0.0, 0.0, 0.0, 1.0);\n"
+                "}\n";
+
+            const std::string fragmentShaderSource =
+                "#version 410 core\n"
+                "out vec4 color;\n"
+                "void main() {\n"
+                "    color = vec4(0.0, 1.0, 0.0, 1.0);\n"
+                "}\n";
+
+            static Shader defaultShader = ShaderBuilder()
+                                              .addShaderStep(ShaderStep::Vertex, vertexShaderSource)
+                                              .addShaderStep(ShaderStep::Fragment, fragmentShaderSource)
+                                              .buildRenderShader();
+
+            return defaultShader;
+        }
     }  // namespace core::gl
 }  // namespace cobalt

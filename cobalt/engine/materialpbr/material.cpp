@@ -4,13 +4,15 @@
 #include "engine/materialpbr/material.h"
 
 namespace cobalt {
-    namespace core::gfx {
+    using namespace core;
+
+    namespace engine {
         MaterialPBR::MaterialPBR(gl::Shader& shader, const UMap<std::string, const gl::Texture&>& textures) noexcept
             : shader(shader), textures(textures) {}
 
-        MaterialPBR::MaterialPBR() noexcept {}
-
         MaterialPBR::MaterialPBR(const MaterialPBR& other) noexcept : shader(other.shader), textures(other.textures) {}
+
+        MaterialPBR::MaterialPBR(MaterialPBR&& other) noexcept : shader(other.shader), textures(std::move(other.textures)) {}
 
         gl::Shader& MaterialPBR::getShader() noexcept { return shader; }
 
@@ -34,5 +36,5 @@ namespace cobalt {
         MaterialPBR MaterialFactory::createMaterial(gl::Shader& shader, const UMap<std::string, const gl::Texture&>& textures) noexcept {
             return MaterialPBR(shader, textures);
         }
-    }  // namespace core::gfx
+    }  // namespace engine
 }  // namespace cobalt

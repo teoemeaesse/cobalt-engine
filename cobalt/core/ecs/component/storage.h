@@ -59,7 +59,6 @@ namespace cobalt {
             friend class ComponentStorageInterface;
 
             static_assert(std::is_base_of<Component, ComponentType>::value, "ComponentType must be a component.");
-            static_assert(std::is_default_constructible<ComponentType>::value, "ComponentType must be default constructible.");
             static_assert(std::is_copy_constructible<ComponentType>::value, "ComponentType must be copy constructible.");
 
             public:
@@ -97,7 +96,7 @@ namespace cobalt {
                 const uint64 index = entityToIndex[entityID];
                 entityToIndex.erase(entityID);
                 if (index != components.size() - 1) {
-                    components[index] = components.back();
+                    components.insert(components.begin() + index, components.back());
                 }
                 components.pop_back();
             }
@@ -107,14 +106,14 @@ namespace cobalt {
              * @param entity The entity to which the component belongs.
              * @return A mutable reference to the component.
              */
-            Component& get(const EntityProperties::ID& entityID) override { return components[entityToIndex.at(entityID)]; }
+            Component& get(const EntityProperties::ID& entityID) override { return components.at(entityToIndex.at(entityID)); }
 
             /**
              * @brief Gets a component from the storage.
              * @param entity The entity to which the component belongs.
              * @return A const reference to the component.
              */
-            const Component& get(const EntityProperties::ID& entityID) const override { return components[entityToIndex.at(entityID)]; }
+            const Component& get(const EntityProperties::ID& entityID) const override { return components.at(entityToIndex.at(entityID)); }
 
             private:
             UMap<EntityProperties::ID, uint64> entityToIndex;  ///< Maps entity IDs to component indices.

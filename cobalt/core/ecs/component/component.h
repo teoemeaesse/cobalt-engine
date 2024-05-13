@@ -28,8 +28,8 @@ namespace cobalt {
             template <typename... ComponentTypes>
             static constexpr bool validate() {
                 static_assert((std::is_base_of<Component, ComponentTypes>::value && ...), "All ComponentTypes must be components.");
-                static_assert((std::is_default_constructible<ComponentTypes>::value && ...), "All ComponentTypes must be default constructible.");
-                static_assert((std::is_copy_constructible<ComponentTypes>::value && ...), "All ComponentTypes must be copy constructible.");
+                static_assert(((std::is_copy_constructible<ComponentTypes>::value || std::is_move_constructible<ComponentTypes>::value) && ...),
+                              "All ComponentTypes must be copy constructible.");
                 return true;
             }
 
