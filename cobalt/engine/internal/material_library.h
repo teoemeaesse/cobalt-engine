@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "core/gfx/material.h"
 #include "engine/internal/shader_library.h"
 #include "engine/internal/texture_library.h"
+#include "engine/materialpbr/material.h"
 
 namespace cobalt {
     namespace engine {
@@ -15,7 +15,7 @@ namespace cobalt {
             public:
             struct MaterialEntry {
                 std::string name;
-                core::gfx::Material material;
+                core::gfx::MaterialPBR material;
 
                 /**
                  * @brief Creates a new material entry.
@@ -23,7 +23,7 @@ namespace cobalt {
                  * @param material The material.
                  * @return The material entry.
                  */
-                MaterialEntry(const std::string& name, const core::gfx::Material& material) : name(name), material(material) {}
+                MaterialEntry(const std::string& name, const core::gfx::MaterialPBR& material) : name(name), material(material) {}
             };
 
             /**
@@ -49,7 +49,7 @@ namespace cobalt {
              * @param id The ID of the material.
              * @return The material.
              */
-            core::gfx::Material& getMaterial(const MaterialID id);
+            core::gfx::MaterialPBR& getMaterial(const MaterialID id);
 
             /**
              * @brief Creates a new PBR material.

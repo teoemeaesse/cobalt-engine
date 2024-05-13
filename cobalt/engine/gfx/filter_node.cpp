@@ -6,7 +6,7 @@
 namespace cobalt {
     using namespace core;
     namespace engine {
-        FilterNode::FilterNode(gfx::Material& filter, Raster3D& renderer, const CameraID& cameraID, RenderTarget&& defaultTarget)
+        FilterNode::FilterNode(gfx::MaterialPBR& filter, Raster3D& renderer, const CameraID& cameraID, RenderTarget&& defaultTarget)
             : RenderNode(renderer), filter(filter), width(defaultTarget.getFBO().getWidth()), height(defaultTarget.getFBO().getHeight()) {
             addOutput(cameraID, Move(defaultTarget));
         }

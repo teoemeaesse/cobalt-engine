@@ -3,43 +3,44 @@
 
 #pragma once
 
+#include "core/ecs/component/component.h"
 #include "core/gl/shader.h"
 #include "core/gl/texture.h"
 
 namespace cobalt {
     namespace core::gfx {
-        class Material {
+        class MaterialPBR : public core::ecs::Component {
             friend class MaterialFactory;
 
             public:
             /**
              * @brief Destroys the material.
              */
-            virtual ~Material() noexcept = default;
+            virtual ~MaterialPBR() noexcept = default;
             /**
              * @brief Copy constructor.
              * @param other The other material.
              * @return The copied material.
              */
-            Material(const Material& other) noexcept;
+            MaterialPBR(const MaterialPBR& other) noexcept;
             /**
              * @brief Move constructor.
              * @param other The other material.
              * @return The moved material.
              */
-            Material(Material&& other) noexcept = delete;
+            MaterialPBR(MaterialPBR&& other) noexcept = delete;
             /**
              * @brief Copy assignment operator.
              * @param other The other material.
              * @return The copied material.
              */
-            Material& operator=(const Material& other) noexcept = delete;
+            MaterialPBR& operator=(const MaterialPBR& other) noexcept = delete;
             /**
              * @brief Move assignment operator.
              * @param other The other material.
              * @return The moved material.
              */
-            Material& operator=(Material&& other) noexcept = delete;
+            MaterialPBR& operator=(MaterialPBR&& other) noexcept = delete;
 
             /**
              * @brief Get the shader for this material.
@@ -57,9 +58,12 @@ namespace cobalt {
              * @brief Creates a new material.
              * @param shader The shader program.
              * @param textures The textures.
-             * @return The material.
              */
-            Material(gl::Shader& shader, const UMap<std::string, const gl::Texture&>& textures) noexcept;
+            MaterialPBR(gl::Shader& shader, const UMap<std::string, const gl::Texture&>& textures) noexcept;
+            /**
+             * @brief Creates a new material.
+             */
+            MaterialPBR() noexcept;
 
             protected:
             gl::Shader& shader;                                    // Shader program.
@@ -76,8 +80,8 @@ namespace cobalt {
              * @param mrao The mrao texture.
              * @return The material.
              */
-            static Material createMaterialPBR(gl::Shader& shader, const gl::Texture& albedo, const gl::Texture& normal,
-                                              const gl::Texture& mrao) noexcept;
+            static MaterialPBR createMaterialPBR(gl::Shader& shader, const gl::Texture& albedo, const gl::Texture& normal,
+                                                 const gl::Texture& mrao) noexcept;
 
             /**
              * @brief Create a new unlit material.
@@ -85,7 +89,7 @@ namespace cobalt {
              * @param color The color texture.
              * @return The material.
              */
-            static Material createMaterialUnlit(gl::Shader& shader, const gl::Texture& color) noexcept;
+            static MaterialPBR createMaterialUnlit(gl::Shader& shader, const gl::Texture& color) noexcept;
 
             /**
              * @brief Create a new material from the given shader.
@@ -93,7 +97,7 @@ namespace cobalt {
              * @param textures The uniform textures of the material.
              * @return The material.
              */
-            static Material createMaterial(gl::Shader& shader, const UMap<std::string, const gl::Texture&>& textures) noexcept;
+            static MaterialPBR createMaterial(gl::Shader& shader, const UMap<std::string, const gl::Texture&>& textures) noexcept;
         };
     }  // namespace core::gfx
 }  // namespace cobalt

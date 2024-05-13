@@ -20,7 +20,7 @@ namespace cobalt {
             return 0;
         }
 
-        core::gfx::Material& MaterialLibrary::getMaterial(const MaterialID id) {
+        core::gfx::MaterialPBR& MaterialLibrary::getMaterial(const MaterialID id) {
             if (id >= materials.size() || id < 0) {
                 CB_WARN("Material ID {0} out of bounds, returning default material", id);
                 return materials[0].material;

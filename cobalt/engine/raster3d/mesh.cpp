@@ -7,7 +7,7 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
-        Mesh::Mesh(gl::VAO&& vao, gl::IBO&& ibo, gfx::Material& material, const gl::Primitive& primitive)
+        Mesh::Mesh(gl::VAO&& vao, gl::IBO&& ibo, gfx::MaterialPBR& material, const gl::Primitive& primitive)
             : vao(Move(vao)), ibo(Move(ibo)), material(material), primitive(primitive), worldTranslate(0.0f), worldRotate(0.0f), worldScale(1.0f) {}
 
         Mesh::Mesh(Mesh&& other) noexcept
@@ -60,11 +60,11 @@ namespace cobalt {
 
         void Mesh::render() const { glDrawElements((GLenum)this->primitive, this->ibo.getCount(), GL_UNSIGNED_INT, nullptr); }
 
-        gfx::Material& Mesh::getMaterial() { return this->material; }
+        gfx::MaterialPBR& Mesh::getMaterial() { return this->material; }
 
         gl::Primitive Mesh::getPrimitive() const { return this->primitive; }
 
-        Mesh MeshFactory::createRectangle(const uint width, const uint height, gfx::Material& material) {
+        Mesh MeshFactory::createRectangle(const uint width, const uint height, gfx::MaterialPBR& material) {
             const float w = width / 2.0f;
             const float h = height / 2.0f;
 
@@ -86,7 +86,7 @@ namespace cobalt {
             return Mesh(gl::VAO(vbo, layout), gl::IBO::fromQuads(gl::Usage::StaticDraw, 1), material);
         }
 
-        Mesh MeshFactory::createSphere(const uint radius, gfx::Material& material) {
+        Mesh MeshFactory::createSphere(const uint radius, gfx::MaterialPBR& material) {
             const uint stacks = 20;
             const uint slices = 20;
 
@@ -142,7 +142,7 @@ namespace cobalt {
             return Mesh(gl::VAO(vbo, layout), gl::IBO(gl::Usage::StaticDraw, indices, 6 * stacks * slices), material);
         }
 
-        Mesh MeshFactory::createCube(const uint size, gfx::Material& material) {
+        Mesh MeshFactory::createCube(const uint size, gfx::MaterialPBR& material) {
             const float s = size / 2.0f;
 
             const float vertices[] = {// Position, texture coordinates, normal.
@@ -175,7 +175,7 @@ namespace cobalt {
             return Mesh(gl::VAO(vbo, layout), gl::IBO::fromQuads(gl::Usage::StaticDraw, 6), material);
         }
 
-        Mesh MeshFactory::createGrid(const uint size, gfx::Material& material) {
+        Mesh MeshFactory::createGrid(const uint size, gfx::MaterialPBR& material) {
             const float s = size / 2.0f;
             const float vertices[] = {
                 // Position, texture coordinates

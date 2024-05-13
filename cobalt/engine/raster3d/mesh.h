@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "core/gfx/material.h"
 #include "core/gl/ibo.h"
 #include "core/gl/vao.h"
+#include "engine/materialpbr/material.h"
 
 namespace cobalt {
     namespace engine {
@@ -74,7 +74,7 @@ namespace cobalt {
              * @brief Get the mesh material.
              * @return The material.
              */
-            core::gfx::Material& getMaterial();
+            core::gfx::MaterialPBR& getMaterial();
             /**
              * @brief Get the mesh primitive type.
              * @return The primitive type.
@@ -90,16 +90,16 @@ namespace cobalt {
              * @param primitives Primitive type.
              * @return The mesh.
              */
-            Mesh(core::gl::VAO&& vao, core::gl::IBO&& ibo, core::gfx::Material& material,
+            Mesh(core::gl::VAO&& vao, core::gl::IBO&& ibo, core::gfx::MaterialPBR& material,
                  const core::gl::Primitive& primitive = core::gl::Primitive::Triangles);
 
-            core::gl::VAO vao;              // Vertex array object.
-            core::gl::IBO ibo;              // Index buffer object.
-            core::gfx::Material& material;  // Material.
-            core::gl::Primitive primitive;  // Primitive type.
-            glm::vec3 worldTranslate;       // World position.
-            glm::vec3 worldRotate;          // World rotation (degrees).
-            glm::vec3 worldScale;           // World scale.
+            core::gl::VAO vao;                 // Vertex array object.
+            core::gl::IBO ibo;                 // Index buffer object.
+            core::gfx::MaterialPBR& material;  // Material.
+            core::gl::Primitive primitive;     // Primitive type.
+            glm::vec3 worldTranslate;          // World position.
+            glm::vec3 worldRotate;             // World rotation (degrees).
+            glm::vec3 worldScale;              // World scale.
         };
 
         class MeshFactory {
@@ -111,7 +111,7 @@ namespace cobalt {
              * @param material The material.
              * @return The rectangle mesh.
              */
-            static Mesh createRectangle(const uint width, const uint height, core::gfx::Material& material);
+            static Mesh createRectangle(const uint width, const uint height, core::gfx::MaterialPBR& material);
 
             /**
              * @brief Create a circle-shaped mesh.
@@ -119,7 +119,7 @@ namespace cobalt {
              * @param material The material.
              * @return The circle mesh.
              */
-            static Mesh createSphere(const uint radius, core::gfx::Material& material);
+            static Mesh createSphere(const uint radius, core::gfx::MaterialPBR& material);
 
             /**
              * @brief Create a cube-shaped mesh.
@@ -127,7 +127,7 @@ namespace cobalt {
              * @param material The material.
              * @return The cube mesh.
              */
-            static Mesh createCube(const uint side, core::gfx::Material& material);
+            static Mesh createCube(const uint side, core::gfx::MaterialPBR& material);
 
             /**
              * @brief Create a grid-shaped mesh.
@@ -135,7 +135,7 @@ namespace cobalt {
              * @param material The material.
              * @return The grid mesh.
              */
-            static Mesh createGrid(const uint side, core::gfx::Material& material);
+            static Mesh createGrid(const uint side, core::gfx::MaterialPBR& material);
         };
     }  // namespace engine
 }  // namespace cobalt

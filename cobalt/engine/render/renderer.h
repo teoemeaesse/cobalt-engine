@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "core/gfx/material.h"
+#include "engine/materialpbr/material.h"
 #include "engine/render/target.h"
 
 namespace cobalt {
@@ -53,7 +53,7 @@ namespace cobalt {
              * Throws an exception if there are no more available texture units.
              * @param material The material to bind.
              */
-            void bindMaterial(const core::gfx::Material& material);
+            void bindMaterial(const core::gfx::MaterialPBR& material);
 
             /**
              * @brief Unbind all texture units.

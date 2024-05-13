@@ -51,7 +51,7 @@
 
 //             private:
 //             const Raster3D renderer;  // The renderer used to render the batches.
-//             const UMap<Material,
+//             const UMap<MaterialPBR,
 //                        Batch> batches;  // The batches.
 //         };
 //     }  // namespace core::gfx
