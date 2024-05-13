@@ -3,7 +3,7 @@
 
 #include "engine/render/target.h"
 
-#include "engine/renderer3d/plugin.h"
+#include "engine/render/plugin.h"
 
 namespace cobalt {
     using namespace core;
@@ -11,7 +11,7 @@ namespace cobalt {
     namespace engine {
         RenderTarget::RenderTarget(const gl::FBO& fbo, const std::string& name) : fbo(fbo), name(name) {
             if (name == "view" || name == "model" || name == "projection") {
-                throw ecs::PluginException<Renderer3DPlugin, RenderTarget>("Cannot use reserved name for render target");
+                throw ecs::PluginException<RenderPlugin, RenderTarget>("Cannot use reserved name for render target");
             }
         }
 

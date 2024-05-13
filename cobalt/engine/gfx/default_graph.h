@@ -37,7 +37,7 @@ namespace cobalt {
 
             private:
             CameraID outputCameraID;    // The ID for the camera used to render the final image.
-            Renderer renderer;          // The renderer used to render the scene.
+            Raster3D renderer;          // The renderer used to render the scene.
             core::gl::FBO& defaultFBO;  // The default FBO to render the final image to.
             core::gl::FBO sceneFBO;     // The FBO to render the scene to.
             Scene& scene;               // The scene to render.

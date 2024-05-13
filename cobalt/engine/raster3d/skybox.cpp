@@ -1,7 +1,7 @@
 // Created by tomas on
 // 18-12-2023
 
-#include "engine/renderer3d/skybox.h"
+#include "engine/raster3d/skybox.h"
 
 namespace cobalt {
     using namespace core;

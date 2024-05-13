@@ -20,7 +20,7 @@ namespace cobalt {
              * @param defaultTarget The default target to render to. This is the target that contains the final image.
              * @return The filter node.
              */
-            FilterNode(core::gfx::Material& filter, Renderer& renderer, const CameraID& cameraID, RenderTarget&& defaultTarget);
+            FilterNode(core::gfx::Material& filter, Raster3D& renderer, const CameraID& cameraID, RenderTarget&& defaultTarget);
             /**
              * @brief Destroy the filter node.
              */

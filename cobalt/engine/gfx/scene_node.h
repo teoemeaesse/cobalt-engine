@@ -19,7 +19,7 @@ namespace cobalt {
              * @param renderer The renderer to use for rendering.
              * @return The scene node.
              */
-            SceneNode(Scene& scene, Renderer& renderer);
+            SceneNode(Scene& scene, Raster3D& renderer);
             /**
              * @brief Destroy the scene node.
              */

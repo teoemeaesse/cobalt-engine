@@ -5,7 +5,7 @@
 
 // #include "core/gfx/batch_mesh.h"
 // #include "core/pch.h"
-// #include "engine/renderer3d/renderer.h"
+// #include "engine/raster3d/renderer.h"
 
 // namespace cobalt {
 //     namespace core::gfx {
@@ -50,7 +50,7 @@
 //             void flush();
 
 //             private:
-//             const Renderer renderer;  // The renderer used to render the batches.
+//             const Raster3D renderer;  // The renderer used to render the batches.
 //             const UMap<Material,
 //                        Batch> batches;  // The batches.
 //         };

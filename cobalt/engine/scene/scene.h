@@ -5,8 +5,8 @@
 
 #include "core/ecs/resource/resource.h"
 #include "engine/camera/plugin.h"
-#include "engine/renderer3d/mesh.h"
-#include "engine/renderer3d/skybox.h"
+#include "engine/raster3d/mesh.h"
+#include "engine/raster3d/skybox.h"
 
 namespace cobalt {
     namespace engine {

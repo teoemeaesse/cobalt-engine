@@ -4,7 +4,7 @@
 #pragma once
 
 #include "core/ecs/plugin/plugin.h"
-#include "engine/render/target.h"
+#include "engine/render/renderer.h"
 
 namespace cobalt {
     namespace engine {

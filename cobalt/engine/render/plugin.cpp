@@ -3,7 +3,7 @@
 
 #include "engine/render/plugin.h"
 
-#include "engine/renderer3d/plugin.h"
+#include "engine/raster3d/plugin.h"
 
 namespace cobalt {
     namespace engine {

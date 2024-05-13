@@ -9,7 +9,7 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
-        RenderNode::RenderNode(Renderer& renderer) : renderer(renderer) {}
+        RenderNode::RenderNode(Raster3D& renderer) : renderer(renderer) {}
 
         RenderNode::RenderNode(const RenderNode& other) : renderer(other.renderer), sources(other.sources), outputs(other.outputs) {}
 

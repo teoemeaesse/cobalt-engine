@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "engine/renderer3d/renderer.h"
+#include "engine/raster3d/renderer.h"
 
 namespace cobalt {
     namespace engine {
@@ -16,7 +16,7 @@ namespace cobalt {
              * @brief Create a render node with a renderer.
              * @param renderer The renderer to use for rendering.
              */
-            RenderNode(Renderer& renderer);
+            RenderNode(Raster3D& renderer);
             /**
              * @brief Destroy the render node.
              */
@@ -86,7 +86,7 @@ namespace cobalt {
             Vec<RenderTarget> sources;            // The list of sources.
             Vec<RenderTarget> outputs;            // The list of outputs.
             UMap<std::string, CameraID> cameras;  // The cameras to use for each output render target.
-            Renderer& renderer;                   // The renderer to use.
+            Raster3D& renderer;                   // The renderer to use.
 
             /**
              * @brief Render to the outputs, binding the sources to the adequate texture units. Each render node should decide how to call this
