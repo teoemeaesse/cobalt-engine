@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "core/gl/fbo.h"
+
 namespace cobalt {
     namespace engine {
         class CameraProperties;
@@ -69,11 +71,10 @@ namespace cobalt {
 
             /**
              * @brief Gets the UBO data for the camera.
-             * @param targetWidth The width of the target viewport.
-             * @param targetHeight The height of the target viewport.
+             * @param target The target FBO.
              * @return The UBO data for the camera.
              */
-            const UBO getUBO(const int targetWidth, const int targetHeight) const;
+            const UBO getUBO(const core::gl::FBO& target) const;
 
             /**
              * @brief Resizes the camera.

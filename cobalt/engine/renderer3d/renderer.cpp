@@ -13,7 +13,7 @@ namespace cobalt {
     namespace engine {
         Renderer::Renderer() noexcept : textureUnits(1), currentUnit(0), cameraUBO(gl::Usage::DynamicDraw, sizeof(Camera::UBO)) {}
 
-        void Renderer::renderMesh(Mesh& mesh, RenderTarget& target, const Camera& camera) const {
+        void Renderer::renderMesh(Mesh& mesh, RenderTarget& target) const {
             mesh.bind();
             target.bind();
             gl::Shader& shader = mesh.getMaterial().getShader();
@@ -24,9 +24,8 @@ namespace cobalt {
                 shader.setUniformMat4("u_model", model);
                 shader.setUniformMat3("u_normal_matrix", glm::transpose(glm::inverse(glm::mat3(model))));
                 sendUniforms(shader);
-                Camera::UBO data = camera.getUBO(target.getFBO().getWidth(), target.getFBO().getHeight());
+                cameraUBO.bind();
                 cameraUBO.bindToShader(shader, "Camera", 0);
-                cameraUBO.load(&data, sizeof(Camera::UBO), 0);
             } catch (const CoreException<Renderer>& e) {
                 CB_CORE_WARN(e.what());
             }
@@ -34,15 +33,14 @@ namespace cobalt {
             mesh.render();
         }
 
-        void Renderer::renderSkybox(Skybox& skybox, RenderTarget& target, const Camera& camera) const {
+        void Renderer::renderSkybox(Skybox& skybox, RenderTarget& target) const {
             skybox.bind();
             target.bind();
             gl::Shader& shader = skybox.getShader();
             try {
                 sendUniforms(shader);
-                Camera::UBO data = camera.getUBO(target.getFBO().getWidth(), target.getFBO().getHeight());
+                cameraUBO.bind();
                 cameraUBO.bindToShader(shader, "Camera", 0);
-                cameraUBO.load(&data, sizeof(Camera::UBO), 0);
             } catch (const CoreException<Renderer>& e) {
                 CB_CORE_WARN(e.what());
             }
@@ -80,16 +78,21 @@ namespace cobalt {
                 textureUnits[texture.first] = currentUnit++;
             }
         }
+        void Renderer::sendUniforms(gl::Shader& shader) const {
+            for (auto it = textureUnits.begin(); it != textureUnits.end(); it++) {
+                shader.setUniformInt("u_" + it->first, it->second);
+            }
+        }
+
+        void Renderer::loadCameraUBO(const Camera::UBO& data) const {
+            cameraUBO.bind();
+            cameraUBO.load(&data, sizeof(Camera::UBO), 0);
+        }
 
         void Renderer::clearTextureUnits() {
             textureUnits.clear();
             currentUnit = 0;
         }
 
-        void Renderer::sendUniforms(gl::Shader& shader) const {
-            for (auto it = textureUnits.begin(); it != textureUnits.end(); it++) {
-                shader.setUniformInt("u_" + it->first, it->second);
-            }
-        }
     }  // namespace engine
 }  // namespace cobalt

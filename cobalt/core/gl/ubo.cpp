@@ -20,7 +20,6 @@ namespace cobalt {
         void UBO::bind() const { glBindBuffer(GL_UNIFORM_BUFFER, buffer); }
 
         void UBO::bindToShader(const Shader& shader, const std::string& name, const uint binding) const {
-            glBindBuffer(GL_UNIFORM_BUFFER, buffer);
             glUniformBlockBinding(shader.getGLHandle(), shader.getUBIndex(name), binding);
             glBindBufferBase(GL_UNIFORM_BUFFER, binding, buffer);
         }

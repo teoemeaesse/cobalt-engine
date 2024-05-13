@@ -24,17 +24,15 @@ namespace cobalt {
              * @brief Render a mesh.
              * @param mesh The mesh to render.
              * @param target The render target to render to.
-             * @param camera The camera.
              */
-            void renderMesh(Mesh& mesh, RenderTarget& target, const Camera& camera) const;
+            void renderMesh(Mesh& mesh, RenderTarget& target) const;
 
             /**
              * @brief Render a skybox.
              * @param skybox The skybox to render.
              * @param target The render target to render to.
-             * @param camera The camera.
              */
-            void renderSkybox(Skybox& skybox, RenderTarget& target, const Camera& camera) const;
+            void renderSkybox(Skybox& skybox, RenderTarget& target) const;
 
             /**
              * @brief Get the bound texture unit of a given named texture.
@@ -64,6 +62,12 @@ namespace cobalt {
              * @param shader The shader to send the uniforms to.
              */
             void sendUniforms(core::gl::Shader& shader) const;
+
+            /**
+             * @brief Load the camera data into the camera UBO.
+             * @param data The camera UBO data.
+             */
+            void loadCameraUBO(const Camera::UBO& data) const;
 
             /**
              * @brief Unbind all texture units.

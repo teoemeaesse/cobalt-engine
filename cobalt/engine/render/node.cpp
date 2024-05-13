@@ -24,7 +24,10 @@ namespace cobalt {
             }
             renderer.bindMaterial(mesh.getMaterial());
             for (uint i = 0; i < outputs.size(); i++) {
-                renderer.renderMesh(mesh, outputs[i], cameras.at(outputs[i].getName()).getCamera());
+                Camera& camera = cameras.at(outputs[i].getName()).getCamera();
+                Camera::UBO data = camera.getUBO(outputs[i].getFBO());
+                renderer.loadCameraUBO(data);
+                renderer.renderMesh(mesh, outputs[i]);
             }
             renderer.clearTextureUnits();
         }
@@ -33,9 +36,15 @@ namespace cobalt {
             if (outputs.size() == 0) {
                 CB_CORE_WARN("Render node has no outputs");
             }
+            for (uint i = 0; i < sources.size(); i++) {
+                uint binding = renderer.bindTexture("source_" + sources[i].getName(), sources[i].getFBO().getColorBuffer().value());
+            }
             renderer.bindTexture("skybox", skybox.getTexture());
             for (uint i = 0; i < outputs.size(); i++) {
-                renderer.renderSkybox(skybox, outputs[i], cameras.at(outputs[i].getName()).getCamera());
+                Camera& camera = cameras.at(outputs[i].getName()).getCamera();
+                Camera::UBO data = camera.getUBO(outputs[i].getFBO());
+                renderer.loadCameraUBO(data);
+                renderer.renderSkybox(skybox, outputs[i]);
             }
             renderer.clearTextureUnits();
         }
