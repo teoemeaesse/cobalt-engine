@@ -11,11 +11,11 @@ namespace cobalt {
     namespace engine {
         MaterialPlugin::MaterialPlugin() noexcept : Plugin(TITLE, "Provides material creation, loading and managing functionality.") {}
 
-        void MaterialPlugin::onPlug(core::ecs::World& world) const noexcept { world.registerComponent<MaterialID>(); }
-
-        MaterialLibrary& getMaterialLibrary() noexcept {
-            static MaterialLibrary library;
-            return library;
+        void MaterialPlugin::onPlug(core::ecs::World& world) const noexcept {
+            world.registerComponent<MaterialID>();
+            world.addResource<MaterialLibrary>();
         }
+
+        MaterialLibrary& getMaterialLibrary(core::ecs::World& world) noexcept { return world.getResource<MaterialLibrary>(); }
     }  // namespace engine
 }  // namespace cobalt

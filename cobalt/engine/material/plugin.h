@@ -33,8 +33,9 @@ namespace cobalt {
 
         /**
          * @brief Returns the global material library.
+         * @param world The world to get the material library from.
          * @return The material library.
          */
-        MaterialLibrary& getMaterialLibrary() noexcept;
+        MaterialLibrary& getMaterialLibrary(core::ecs::World& world) noexcept;
     }  // namespace engine
 }  // namespace cobalt

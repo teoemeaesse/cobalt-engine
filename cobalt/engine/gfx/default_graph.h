@@ -25,8 +25,9 @@ namespace cobalt {
 
             /**
              * @brief Initializes the render graph.
+             * @param world The world to use.
              */
-            void init();
+            void init(core::ecs::World& world);
 
             /**
              * @brief Called upon window resize.

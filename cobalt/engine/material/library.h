@@ -89,7 +89,7 @@ namespace std {
 
 namespace cobalt {
     namespace engine {
-        class MaterialLibrary {
+        class MaterialLibrary : public core::ecs::Resource {
             public:
             /**
              * @brief Default constructor.
