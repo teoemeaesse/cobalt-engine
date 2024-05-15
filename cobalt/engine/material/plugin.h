@@ -8,7 +8,7 @@
 #pragma once
 
 #include "core/ecs/world.h"
-#include "engine/material/library.h"
+#include "engine/material/material_library.h"
 
 namespace cobalt {
     namespace engine {
@@ -37,5 +37,12 @@ namespace cobalt {
          * @return The material library.
          */
         MaterialLibrary& getMaterialLibrary(core::ecs::World& world) noexcept;
+
+        /**
+         * @brief Returns the global texture library.
+         * @param world The world to get the texture library from.
+         * @return The texture library.
+         */
+        TextureLibrary& getTextureLibrary(core::ecs::World& world) noexcept;
     }  // namespace engine
 }  // namespace cobalt

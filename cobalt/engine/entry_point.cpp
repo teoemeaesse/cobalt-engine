@@ -6,6 +6,7 @@
 #include "core/ecs/exception.h"
 #include "core/exception.h"
 #include "engine/input/exception.h"
+#include "engine/material/shader_library.h"
 
 namespace cobalt {
     namespace engine {
@@ -27,7 +28,6 @@ int main(int argc, char** argv) {
     cobalt::core::Platform::checkCompatibility();
     cobalt::core::Platform::log();
     cobalt::core::gl::Context::init();
-    cobalt::engine::TextureLibrary::init();
     cobalt::engine::ShaderLibrary::init();
 
     // Create the application.

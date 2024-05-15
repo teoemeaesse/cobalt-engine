@@ -13,9 +13,12 @@ namespace cobalt {
 
         void MaterialPlugin::onPlug(core::ecs::World& world) const noexcept {
             world.registerComponent<MaterialID>();
-            world.addResource<MaterialLibrary>();
+            world.addResource<TextureLibrary>();
+            world.addResource<MaterialLibrary>(world.getResource<TextureLibrary>());
         }
 
         MaterialLibrary& getMaterialLibrary(core::ecs::World& world) noexcept { return world.getResource<MaterialLibrary>(); }
+
+        TextureLibrary& getTextureLibrary(core::ecs::World& world) noexcept { return world.getResource<TextureLibrary>(); }
     }  // namespace engine
 }  // namespace cobalt

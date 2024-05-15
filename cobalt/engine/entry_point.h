@@ -5,7 +5,6 @@
 
 #include "core/gl/context.h"
 #include "engine/application.h"
-#include "engine/material/library.h"
 
 namespace cobalt {
     namespace engine {

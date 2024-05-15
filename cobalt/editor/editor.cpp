@@ -35,7 +35,7 @@ namespace cobalt {
                                                               scene->getCameraID().getController().resize((float)width / (float)height);
                                                           });
 
-            CB_TEXTURE_LIBRARY.loadTextures(io::Path("cobalt/editor/assets/textures", true));
+            getTextureLibrary(world).loadTextures(io::Path("cobalt/editor/assets/textures", true));
             CB_SHADER_LIBRARY.loadShaders(io::Path("cobalt/editor/assets/shaders", true));
 
             CameraManager& cameraManager = world.getResource<engine::CameraManager>();
@@ -96,21 +96,22 @@ namespace cobalt {
         }
 
         void Editor::createScene() {
+            TextureLibrary& textureLibrary = getTextureLibrary(world);
             Scene& scene = world.getResource<Scene>();
             scene.clear();
-            scene.setSkybox(Skybox::create(CB_TEXTURE_LIBRARY.getTexture<gl::Texture3D>("skybox"), CB_SHADER_LIBRARY.getShader("skybox")));
-            const TextureID woodAlbedo = CB_TEXTURE_LIBRARY.getTextureID("wood-albedo");
-            const TextureID woodNormal = CB_TEXTURE_LIBRARY.getTextureID("wood-normal");
-            const TextureID woodMrao = CB_TEXTURE_LIBRARY.getTextureID("wood-mrao");
-            const TextureID steelAlbedo = CB_TEXTURE_LIBRARY.getTextureID("steel-albedo");
-            const TextureID steelNormal = CB_TEXTURE_LIBRARY.getTextureID("steel-normal");
-            const TextureID steelMrao = CB_TEXTURE_LIBRARY.getTextureID("steel-mrao");
-            const gl::Texture2D& woodAlbedoTexture = CB_TEXTURE_LIBRARY.getTexture<gl::Texture2D>(woodAlbedo);
-            const gl::Texture2D& woodNormalTexture = CB_TEXTURE_LIBRARY.getTexture<gl::Texture2D>(woodNormal);
-            const gl::Texture2D& woodMraoTexture = CB_TEXTURE_LIBRARY.getTexture<gl::Texture2D>(woodMrao);
-            const gl::Texture2D& steelAlbedoTexture = CB_TEXTURE_LIBRARY.getTexture<gl::Texture2D>(steelAlbedo);
-            const gl::Texture2D& steelNormalTexture = CB_TEXTURE_LIBRARY.getTexture<gl::Texture2D>(steelNormal);
-            const gl::Texture2D& steelMraoTexture = CB_TEXTURE_LIBRARY.getTexture<gl::Texture2D>(steelMrao);
+            scene.setSkybox(Skybox::create(textureLibrary.getTexture("skybox").as<gl::Texture3D>(), CB_SHADER_LIBRARY.getShader("skybox")));
+            const TextureID woodAlbedo = textureLibrary.getTextureID("wood-albedo");
+            const TextureID woodNormal = textureLibrary.getTextureID("wood-normal");
+            const TextureID woodMrao = textureLibrary.getTextureID("wood-mrao");
+            const TextureID steelAlbedo = textureLibrary.getTextureID("steel-albedo");
+            const TextureID steelNormal = textureLibrary.getTextureID("steel-normal");
+            const TextureID steelMrao = textureLibrary.getTextureID("steel-mrao");
+            const gl::Texture2D& woodAlbedoTexture = textureLibrary.getTexture(woodAlbedo).as<gl::Texture2D>();
+            const gl::Texture2D& woodNormalTexture = textureLibrary.getTexture(woodNormal).as<gl::Texture2D>();
+            const gl::Texture2D& woodMraoTexture = textureLibrary.getTexture(woodMrao).as<gl::Texture2D>();
+            const gl::Texture2D& steelAlbedoTexture = textureLibrary.getTexture(steelAlbedo).as<gl::Texture2D>();
+            const gl::Texture2D& steelNormalTexture = textureLibrary.getTexture(steelNormal).as<gl::Texture2D>();
+            const gl::Texture2D& steelMraoTexture = textureLibrary.getTexture(steelMrao).as<gl::Texture2D>();
 
             MaterialLibrary& materialLibrary = getMaterialLibrary(world);
             Material& woodMaterial = materialLibrary.getMaterial(materialLibrary.makePBR("wood", woodAlbedo, woodNormal, woodMrao));
@@ -143,7 +144,7 @@ namespace cobalt {
 
             char color[4] = {(char)0, (char)0, (char)250, (char)3};
             const gl::Texture2D& gridTexture =
-                CB_TEXTURE_LIBRARY.getTexture<gl::Texture2D>(CB_TEXTURE_LIBRARY.makeTexture("grid", color, gl::TextureEncodings::RGBA::Bits8));
+                textureLibrary.makeTexture("grid", color, gl::TextureEncodings::RGBA::Bits8).getTexture().as<gl::Texture2D>();
             UMap<std::string, const core::gl::Texture2D&> gridTextures = {{"settings", gridTexture}};
             Material& gridMaterial = materialLibrary.getMaterial(materialLibrary.makeFromShader("grid", "grid", gridTextures));
             Mesh grid = MeshFactory::createGrid(10000, gridMaterial);

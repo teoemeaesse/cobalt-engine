@@ -12,10 +12,11 @@ namespace cobalt {
             Spawn(core::ecs::World& world, engine::Scene* target) : engine::ConcreteInputCommand<engine::Scene>(world, target) {}
             void execute() override {
                 if (getInput().held || !getInput().active) return;
+                engine::TextureLibrary& textureLibrary = engine::getTextureLibrary(getWorld());
                 static int i = 2;
-                const engine::TextureID woodAlbedo = CB_TEXTURE_LIBRARY.getTextureID("wood-albedo");
-                const engine::TextureID woodNormal = CB_TEXTURE_LIBRARY.getTextureID("wood-normal");
-                const engine::TextureID woodMrao = CB_TEXTURE_LIBRARY.getTextureID("wood-mrao");
+                const engine::TextureID woodAlbedo = textureLibrary.getTextureID("wood-albedo");
+                const engine::TextureID woodNormal = textureLibrary.getTextureID("wood-normal");
+                const engine::TextureID woodMrao = textureLibrary.getTextureID("wood-mrao");
                 const engine::MaterialID woodMaterial = engine::getMaterialLibrary(getWorld()).makePBR("wood", woodAlbedo, woodNormal, woodMrao);
                 engine::Material& material = engine::getMaterialLibrary(getWorld()).getMaterial(woodMaterial);
                 engine::Mesh sphere = engine::MeshFactory::createSphere(5.0f, material);

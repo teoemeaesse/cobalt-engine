@@ -27,11 +27,15 @@ namespace cobalt {
 
         bool MaterialID::operator==(const MaterialID& other) const { return handle == other.handle; }
 
+        bool MaterialID::operator!=(const MaterialID& other) const { return handle != other.handle; }
+
         const uint MaterialID::getHandle() const { return handle; }
 
         const std::string& MaterialID::getName() const { return name; }
 
         Material& MaterialID::getMaterial() { return owner.getMaterial(*this); }
+
+        MaterialLibrary::MaterialLibrary(TextureLibrary& textureLibrary) noexcept : textureLibrary(textureLibrary) {}
 
         MaterialID& MaterialLibrary::getMaterialID(const std::string& name) {
             try {
@@ -41,7 +45,7 @@ namespace cobalt {
             }
         }
 
-        Material& MaterialLibrary::getMaterial(const MaterialID id) {
+        Material& MaterialLibrary::getMaterial(const MaterialID& id) {
             try {
                 return materials.at(materialNames.at(id.name));
             } catch (const std::out_of_range& e) {
@@ -50,35 +54,43 @@ namespace cobalt {
             }
         }
 
+        Material& MaterialLibrary::getMaterial(const std::string& name) {
+            try {
+                return materials.at(materialNames.at(name));
+            } catch (const std::out_of_range& e) {
+                throw core::ecs::PluginException<MaterialPlugin, MaterialLibrary>("Material with name " + name + " not found");
+            }
+        }
+
         MaterialID& MaterialLibrary::makePBR(const std::string& name, const TextureID& albedo, const TextureID& normal, const TextureID& mrao) {
             MaterialID id(materials.size(), name, *this);
             materialNames.emplace(name, id);
             materials.erase(id);
-            materials.emplace(
-                id, MaterialFactory::createMaterialPBR(CB_SHADER_LIBRARY.getShader("pbr"), CB_TEXTURE_LIBRARY.getTexture<core::gl::Texture2D>(albedo),
-                                                       CB_TEXTURE_LIBRARY.getTexture<core::gl::Texture2D>(normal),
-                                                       CB_TEXTURE_LIBRARY.getTexture<core::gl::Texture2D>(mrao)));
+            materials.emplace(id, MaterialFactory::createMaterialPBR(CB_SHADER_LIBRARY.getShader("pbr"),
+                                                                     textureLibrary.getTexture(albedo).as<core::gl::Texture2D>(),
+                                                                     textureLibrary.getTexture(normal).as<core::gl::Texture2D>(),
+                                                                     textureLibrary.getTexture(mrao).as<core::gl::Texture2D>()));
             return materialNames.at(name);
         }
 
         MaterialID& MaterialLibrary::makePBR(const std::string& name, const core::Color albedo, const float metallic, const float roughness,
                                              const float ao) {
-            TextureID normalID = CB_TEXTURE_LIBRARY.makeTexture("CB_default-normal", (void*)core::gl::Texture2D::DEFAULT_NORMAL,
-                                                                core::gl::TextureEncodings::RGBA::Bits8);
+            TextureID normalID =
+                textureLibrary.makeTexture("CB_default-normal", (void*)core::gl::Texture2D::DEFAULT_NORMAL, core::gl::TextureEncodings::RGBA::Bits8);
             uchar albedoData[4];
             albedo.toUChar(albedoData);
-            TextureID albedoID = CB_TEXTURE_LIBRARY.makeTexture(albedo.toString(), (void*)&albedoData, core::gl::TextureEncodings::RGBA::Bits8);
+            TextureID albedoID = textureLibrary.makeTexture(albedo.toString(), (void*)&albedoData, core::gl::TextureEncodings::RGBA::Bits8);
             core::Color mrao(metallic, roughness, ao);
             uchar mraoData[4];
             mrao.toUChar(mraoData);
-            TextureID mraoID = CB_TEXTURE_LIBRARY.makeTexture(mrao.toString(), (void*)&mraoData, core::gl::TextureEncodings::RGB::Bits8);
+            TextureID mraoID = textureLibrary.makeTexture(mrao.toString(), (void*)&mraoData, core::gl::TextureEncodings::RGB::Bits8);
             MaterialID id(materials.size(), name, *this);
             materialNames.emplace(name, id);
             materials.erase(id);
             materials.emplace(id, MaterialFactory::createMaterialPBR(CB_SHADER_LIBRARY.getShader("pbr"),
-                                                                     CB_TEXTURE_LIBRARY.getTexture<core::gl::Texture2D>(albedoID),
-                                                                     CB_TEXTURE_LIBRARY.getTexture<core::gl::Texture2D>(normalID),
-                                                                     CB_TEXTURE_LIBRARY.getTexture<core::gl::Texture2D>(mraoID)));
+                                                                     textureLibrary.getTexture(albedoID).as<core::gl::Texture2D>(),
+                                                                     textureLibrary.getTexture(normalID).as<core::gl::Texture2D>(),
+                                                                     textureLibrary.getTexture(mraoID).as<core::gl::Texture2D>()));
             return materialNames.at(name);
         }
 
@@ -87,17 +99,17 @@ namespace cobalt {
             materialNames.emplace(name, id);
             materials.erase(id);
             materials.emplace(id, MaterialFactory::createMaterialUnlit(CB_SHADER_LIBRARY.getShader("unlit"),
-                                                                       CB_TEXTURE_LIBRARY.getTexture<core::gl::Texture2D>(color)));
+                                                                       textureLibrary.getTexture(color).as<core::gl::Texture2D>()));
             return materialNames.at(name);
         }
 
         MaterialID& MaterialLibrary::makeUnlit(const std::string& name, const core::Color color) {
-            TextureID colorID = CB_TEXTURE_LIBRARY.makeTexture(color.toString(), (void*)&color, core::gl::TextureEncodings::RGBA::Bits8);
+            TextureID colorID = textureLibrary.makeTexture(color.toString(), (void*)&color, core::gl::TextureEncodings::RGBA::Bits8);
             MaterialID id(materials.size(), name, *this);
             materialNames.emplace(name, id);
             materials.erase(id);
             materials.emplace(id, MaterialFactory::createMaterialUnlit(CB_SHADER_LIBRARY.getShader("unlit"),
-                                                                       CB_TEXTURE_LIBRARY.getTexture<core::gl::Texture2D>(colorID)));
+                                                                       textureLibrary.getTexture(colorID).as<core::gl::Texture2D>()));
             return materialNames.at(name);
         }
 

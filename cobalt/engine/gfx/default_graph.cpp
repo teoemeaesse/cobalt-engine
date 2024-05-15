@@ -5,7 +5,6 @@
 
 #include "engine/gfx/filter_node.h"
 #include "engine/gfx/scene_node.h"
-#include "engine/internal/shader_library.h"
 #include "engine/material/plugin.h"
 
 namespace cobalt {

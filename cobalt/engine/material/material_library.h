@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "engine/internal/shader_library.h"
-#include "engine/internal/texture_library.h"
 #include "engine/material/material.h"
+#include "engine/material/shader_library.h"
+#include "engine/material/texture_library.h"
 
 namespace cobalt {
     namespace engine {
@@ -50,11 +50,17 @@ namespace cobalt {
             MaterialID& operator=(MaterialID&& other) noexcept;
 
             /**
-             * @brief Check if two material IDs are equal.
+             * @brief Checks if two material IDs are equal.
              * @param other The other material ID.
              * @return True if the handles are equal, false otherwise.
              */
             bool operator==(const MaterialID& other) const;
+            /**
+             * @brief Checks if two material IDs are not equal.
+             * @param other The other material ID.
+             * @return True if the handles are not equal, false otherwise.
+             */
+            bool operator!=(const MaterialID& other) const;
 
             /**
              * @brief Get the handle of the material.
@@ -93,8 +99,9 @@ namespace cobalt {
             public:
             /**
              * @brief Default constructor.
+             * @param textureLibrary The texture library to store the materials' textures.
              */
-            MaterialLibrary() noexcept = default;
+            explicit MaterialLibrary(TextureLibrary& textureLibrary) noexcept;
             /**
              * @brief Default destructor.
              */
@@ -114,7 +121,15 @@ namespace cobalt {
              * @return The material.
              * @throws core::ecs::PluginException<MaterialPlugin, MaterialLibrary> If the material does not exist.
              */
-            Material& getMaterial(const MaterialID id);
+            Material& getMaterial(const MaterialID& id);
+
+            /**
+             * @brief Returns the material with the given name.
+             * @param name The name of the material.
+             * @return The material.
+             * @throws core::ecs::PluginException<MaterialPlugin, MaterialLibrary> If the material does not exist.
+             */
+            Material& getMaterial(const std::string& name);
 
             /**
              * @brief Creates a new PBR material.
@@ -177,6 +192,7 @@ namespace cobalt {
             private:
             UMap<MaterialID, Material> materials;         // The materials in the library.
             UMap<std::string, MaterialID> materialNames;  // The names of the materials.
+            TextureLibrary& textureLibrary;               // The texture library.
         };
     }  // namespace engine
 }  // namespace cobalt
