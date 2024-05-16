@@ -1,7 +1,7 @@
 // Created by tomas on
 // 08-12-2023
 
-#include "engine/raster3d/mesh.h"
+#include "engine/mesh3d/mesh.h"
 
 namespace cobalt {
     using namespace core;
@@ -77,12 +77,9 @@ namespace cobalt {
             vbo.load(vertices, sizeof(float) * 32);
 
             gl::VAOLayout layout;
-            layout.push(gl::Type::Float, 3,
-                        false);  // Position.
-            layout.push(gl::Type::Float, 2,
-                        false);  // Texture coordinates.
-            layout.push(gl::Type::Float, 3,
-                        false);  // Normal.
+            layout.push(gl::Type::Float, 3, false);  // Position.
+            layout.push(gl::Type::Float, 2, false);  // Texture coordinates.
+            layout.push(gl::Type::Float, 3, false);  // Normal.
             return Mesh(gl::VAO(vbo, layout), gl::IBO::fromQuads(gl::Usage::StaticDraw, 1), material);
         }
 
@@ -133,12 +130,9 @@ namespace cobalt {
             vbo.load(vertices, sizeof(float) * 8 * (stacks + 1) * (slices + 1));
 
             gl::VAOLayout layout;
-            layout.push(gl::Type::Float, 3,
-                        false);  // Position.
-            layout.push(gl::Type::Float, 2,
-                        false);  // Texture coordinates.
-            layout.push(gl::Type::Float, 3,
-                        false);  // Normal.
+            layout.push(gl::Type::Float, 3, false);  // Position.
+            layout.push(gl::Type::Float, 2, false);  // Texture coordinates.
+            layout.push(gl::Type::Float, 3, false);  // Normal.
             return Mesh(gl::VAO(vbo, layout), gl::IBO(gl::Usage::StaticDraw, indices, 6 * stacks * slices), material);
         }
 

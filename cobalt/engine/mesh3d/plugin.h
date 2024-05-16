@@ -1,22 +1,24 @@
-// Created by tomas on
-// 16-04-2024
+/**
+ * @file plugin.h
+ * @brief Plugin for loading 3D meshes.
+ * @author Tomás Marques
+ * @date 16-05-2024
+ */
 
 #pragma once
 
 #include "core/ecs/plugin/plugin.h"
-#include "engine/render/renderer.h"
 
 namespace cobalt {
     namespace engine {
-        class RenderPlugin : public core::ecs::Plugin {
+        class Mesh3DPlugin : core::ecs::Plugin {
             public:
-            static inline constexpr const char* TITLE = "Render";
+            static inline constexpr const char* TITLE = "Mesh 3D";
 
             /**
              * @brief Construct the plugin.
-             * @return RenderPlugin
              */
-            RenderPlugin() noexcept;
+            Mesh3DPlugin() noexcept;
 
             /**
              * @brief Initializes the plugin.

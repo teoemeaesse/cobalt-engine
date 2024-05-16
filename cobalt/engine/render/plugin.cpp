@@ -3,11 +3,9 @@
 
 #include "engine/render/plugin.h"
 
-#include "engine/raster3d/plugin.h"
-
 namespace cobalt {
     namespace engine {
-        RenderPlugin::RenderPlugin() noexcept : core::ecs::Plugin(TITLE, "General rendering API", Renderer3DPlugin{}, CameraPlugin{}) {}
+        RenderPlugin::RenderPlugin() noexcept : core::ecs::Plugin(TITLE, "General rendering API.", CameraPlugin{}) {}
 
         void RenderPlugin::onPlug(core::ecs::World& world) const noexcept {}
     }  // namespace engine

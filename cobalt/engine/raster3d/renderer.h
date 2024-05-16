@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "engine/raster3d/mesh.h"
+#include "engine/mesh3d/mesh.h"
 #include "engine/raster3d/skybox.h"
 #include "engine/render/plugin.h"
 
