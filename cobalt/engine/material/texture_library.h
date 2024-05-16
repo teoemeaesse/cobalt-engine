@@ -116,6 +116,7 @@ namespace cobalt {
              * @brief Returns the texture ID of the texture with the given name.
              * @param name The name of the texture.
              * @return The texture ID.
+             * @throws core::ecs::PluginException<TexturePlugin, TextureLibrary> If the texture does not exist.
              */
             TextureID& getTextureID(const std::string& name);
 

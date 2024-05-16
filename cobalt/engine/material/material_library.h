@@ -100,8 +100,9 @@ namespace cobalt {
             /**
              * @brief Default constructor.
              * @param textureLibrary The texture library to store the materials' textures.
+             * @param shaderLibrary The shader library to store the materials' shaders.
              */
-            explicit MaterialLibrary(TextureLibrary& textureLibrary) noexcept;
+            MaterialLibrary(TextureLibrary& textureLibrary, ShaderLibrary& shaderLibrary) noexcept;
             /**
              * @brief Default destructor.
              */
@@ -193,6 +194,7 @@ namespace cobalt {
             UMap<MaterialID, Material> materials;         // The materials in the library.
             UMap<std::string, MaterialID> materialNames;  // The names of the materials.
             TextureLibrary& textureLibrary;               // The texture library.
+            ShaderLibrary& shaderLibrary;                 // The shader library.
         };
     }  // namespace engine
 }  // namespace cobalt

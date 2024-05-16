@@ -28,7 +28,6 @@ int main(int argc, char** argv) {
     cobalt::core::Platform::checkCompatibility();
     cobalt::core::Platform::log();
     cobalt::core::gl::Context::init();
-    cobalt::engine::ShaderLibrary::init();
 
     // Create the application.
     auto app = cobalt::engine::createApplication();

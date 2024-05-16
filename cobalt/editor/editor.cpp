@@ -36,7 +36,7 @@ namespace cobalt {
                                                           });
 
             getTextureLibrary(world).loadTextures(io::Path("cobalt/editor/assets/textures", true));
-            CB_SHADER_LIBRARY.loadShaders(io::Path("cobalt/editor/assets/shaders", true));
+            getShaderLibrary(world).loadShaders(io::Path("cobalt/editor/assets/shaders", true));
 
             CameraManager& cameraManager = world.getResource<engine::CameraManager>();
 
@@ -99,7 +99,7 @@ namespace cobalt {
             TextureLibrary& textureLibrary = getTextureLibrary(world);
             Scene& scene = world.getResource<Scene>();
             scene.clear();
-            scene.setSkybox(Skybox::create(textureLibrary.getTexture("skybox").as<gl::Texture3D>(), CB_SHADER_LIBRARY.getShader("skybox")));
+            scene.setSkybox(Skybox::create(textureLibrary.getTexture("skybox").as<gl::Texture3D>(), getShaderLibrary(world).getShader("skybox")));
             const TextureID woodAlbedo = textureLibrary.getTextureID("wood-albedo");
             const TextureID woodNormal = textureLibrary.getTextureID("wood-normal");
             const TextureID woodMrao = textureLibrary.getTextureID("wood-mrao");

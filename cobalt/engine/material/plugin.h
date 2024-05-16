@@ -37,12 +37,17 @@ namespace cobalt {
          * @return The material library.
          */
         MaterialLibrary& getMaterialLibrary(core::ecs::World& world) noexcept;
-
         /**
          * @brief Returns the global texture library.
          * @param world The world to get the texture library from.
          * @return The texture library.
          */
         TextureLibrary& getTextureLibrary(core::ecs::World& world) noexcept;
+        /**
+         * @brief Returns the global shader library.
+         * @param world The world to get the shader library from.
+         * @return The shader library.
+         */
+        ShaderLibrary& getShaderLibrary(core::ecs::World& world) noexcept;
     }  // namespace engine
 }  // namespace cobalt

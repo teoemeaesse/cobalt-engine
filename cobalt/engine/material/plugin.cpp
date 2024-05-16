@@ -14,11 +14,14 @@ namespace cobalt {
         void MaterialPlugin::onPlug(core::ecs::World& world) const noexcept {
             world.registerComponent<MaterialID>();
             world.addResource<TextureLibrary>();
-            world.addResource<MaterialLibrary>(world.getResource<TextureLibrary>());
+            world.addResource<ShaderLibrary>();
+            world.addResource<MaterialLibrary>(world.getResource<TextureLibrary>(), world.getResource<ShaderLibrary>());
         }
 
         MaterialLibrary& getMaterialLibrary(core::ecs::World& world) noexcept { return world.getResource<MaterialLibrary>(); }
 
         TextureLibrary& getTextureLibrary(core::ecs::World& world) noexcept { return world.getResource<TextureLibrary>(); }
+
+        ShaderLibrary& getShaderLibrary(core::ecs::World& world) noexcept { return world.getResource<ShaderLibrary>(); }
     }  // namespace engine
 }  // namespace cobalt

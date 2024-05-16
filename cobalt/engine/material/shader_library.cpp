@@ -3,9 +3,22 @@
 
 #include "engine/material/shader_library.h"
 
+#include "core/ecs/exception.h"
+#include "engine/material/plugin.h"
+
 namespace cobalt {
     namespace engine {
-        Scope<ShaderLibrary> ShaderLibrary::instance;
+        ShaderID::ShaderID(const uint handle, const std::string& name, ShaderLibrary& owner) noexcept : handle(handle), name(name), owner(owner) {}
+
+        bool ShaderID::operator==(const ShaderID& other) const noexcept { return handle == other.handle; }
+
+        bool ShaderID::operator!=(const ShaderID& other) const noexcept { return handle != other.handle; }
+
+        const uint ShaderID::getHandle() const noexcept { return handle; }
+
+        const std::string& ShaderID::getName() const noexcept { return name; }
+
+        core::gl::Shader& ShaderID::getShader() noexcept { return owner.getShader(*this); }
 
         static core::gl::Shader parseRenderShader(nlohmann::json& shaderJson, const core::io::Path& shadersDirectory, const std::string& shaderName) {
             CB_INFO("Loading render shader: {}", shaderName);
@@ -52,30 +65,41 @@ namespace cobalt {
             for (auto it = shadersJson.begin(); it != shadersJson.end(); ++it) {
                 std::string shaderName = it.key();
                 nlohmann::json shaderJson = it.value();
+                ShaderID id(shaders.size(), shaderName, *this);
+                shaderNames.emplace(shaderName, id);
+                shaders.erase(id);
                 if (shaderJson["type"].get<std::string>() == "render") {
-                    shaders.emplace_back(shaderName, Move(parseRenderShader(shaderJson, shadersDirectory, shaderName)));
+                    shaders.emplace(id, parseRenderShader(shaderJson, shadersDirectory, shaderName));
                 } else if (shaderJson["type"].get<std::string>() == "compute") {
-                    shaders.emplace_back(shaderName, Move(parseComputeShader(shaderJson, shadersDirectory, shaderName)));
+                    shaders.emplace(id, Move(parseComputeShader(shaderJson, shadersDirectory, shaderName)));
                 }
             }
         }
 
-        const ShaderID ShaderLibrary::getShaderID(const std::string& name) {
-            for (uint64 i = 0; i < shaders.size(); i++) {
-                if (shaders[i].name == name) {
-                    return i + 1;
-                }
+        ShaderID& ShaderLibrary::getShaderID(const std::string& name) {
+            try {
+                return shaderNames.at(name);
+            } catch (const std::out_of_range& e) {
+                throw core::ecs::PluginException<MaterialPlugin, ShaderLibrary>("Shader with name " + name + " not found");
             }
-            CB_WARN("Shader ID {0} not found, returning default shader", name);
-            return 0;
         }
 
-        core::gl::Shader& ShaderLibrary::getShader(const ShaderID id) { return shaders[id - 1].shader; }
+        core::gl::Shader& ShaderLibrary::getShader(ShaderID& id) {
+            try {
+                return shaders.at(id);
+            } catch (const std::out_of_range& e) {
+                throw core::ecs::PluginException<MaterialPlugin, ShaderLibrary>("Shader with ID " + std::string(id) + " not found");
+            }
+        }
 
-        core::gl::Shader& ShaderLibrary::getShader(const std::string& name) { return getShader(getShaderID(name)); }
+        core::gl::Shader& ShaderLibrary::getShader(const std::string& name) {
+            try {
+                return getShader(shaderNames.at(name));
+            } catch (const std::out_of_range& e) {
+                throw core::ecs::PluginException<MaterialPlugin, ShaderLibrary>("Shader with name " + name + " not found");
+            }
+        }
 
-        void ShaderLibrary::init() { instance = CreateScope<ShaderLibrary>(); }
-
-        ShaderLibrary& ShaderLibrary::getShaderLibrary() { return *instance; }
+        ShaderID::operator std::string() const { return std::to_string(handle) + ": " + name; }
     }  // namespace engine
 }  // namespace cobalt

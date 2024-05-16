@@ -35,7 +35,8 @@ namespace cobalt {
 
         Material& MaterialID::getMaterial() { return owner.getMaterial(*this); }
 
-        MaterialLibrary::MaterialLibrary(TextureLibrary& textureLibrary) noexcept : textureLibrary(textureLibrary) {}
+        MaterialLibrary::MaterialLibrary(TextureLibrary& textureLibrary, ShaderLibrary& shaderLibrary) noexcept
+            : textureLibrary(textureLibrary), shaderLibrary(shaderLibrary) {}
 
         MaterialID& MaterialLibrary::getMaterialID(const std::string& name) {
             try {
@@ -66,10 +67,10 @@ namespace cobalt {
             MaterialID id(materials.size(), name, *this);
             materialNames.emplace(name, id);
             materials.erase(id);
-            materials.emplace(id, MaterialFactory::createMaterialPBR(CB_SHADER_LIBRARY.getShader("pbr"),
-                                                                     textureLibrary.getTexture(albedo).as<core::gl::Texture2D>(),
-                                                                     textureLibrary.getTexture(normal).as<core::gl::Texture2D>(),
-                                                                     textureLibrary.getTexture(mrao).as<core::gl::Texture2D>()));
+            materials.emplace(
+                id, MaterialFactory::createMaterialPBR(shaderLibrary.getShader("pbr"), textureLibrary.getTexture(albedo).as<core::gl::Texture2D>(),
+                                                       textureLibrary.getTexture(normal).as<core::gl::Texture2D>(),
+                                                       textureLibrary.getTexture(mrao).as<core::gl::Texture2D>()));
             return materialNames.at(name);
         }
 
@@ -87,10 +88,10 @@ namespace cobalt {
             MaterialID id(materials.size(), name, *this);
             materialNames.emplace(name, id);
             materials.erase(id);
-            materials.emplace(id, MaterialFactory::createMaterialPBR(CB_SHADER_LIBRARY.getShader("pbr"),
-                                                                     textureLibrary.getTexture(albedoID).as<core::gl::Texture2D>(),
-                                                                     textureLibrary.getTexture(normalID).as<core::gl::Texture2D>(),
-                                                                     textureLibrary.getTexture(mraoID).as<core::gl::Texture2D>()));
+            materials.emplace(
+                id, MaterialFactory::createMaterialPBR(shaderLibrary.getShader("pbr"), textureLibrary.getTexture(albedoID).as<core::gl::Texture2D>(),
+                                                       textureLibrary.getTexture(normalID).as<core::gl::Texture2D>(),
+                                                       textureLibrary.getTexture(mraoID).as<core::gl::Texture2D>()));
             return materialNames.at(name);
         }
 
@@ -98,7 +99,7 @@ namespace cobalt {
             MaterialID id(materials.size(), name, *this);
             materialNames.emplace(name, id);
             materials.erase(id);
-            materials.emplace(id, MaterialFactory::createMaterialUnlit(CB_SHADER_LIBRARY.getShader("unlit"),
+            materials.emplace(id, MaterialFactory::createMaterialUnlit(shaderLibrary.getShader("unlit"),
                                                                        textureLibrary.getTexture(color).as<core::gl::Texture2D>()));
             return materialNames.at(name);
         }
@@ -108,7 +109,7 @@ namespace cobalt {
             MaterialID id(materials.size(), name, *this);
             materialNames.emplace(name, id);
             materials.erase(id);
-            materials.emplace(id, MaterialFactory::createMaterialUnlit(CB_SHADER_LIBRARY.getShader("unlit"),
+            materials.emplace(id, MaterialFactory::createMaterialUnlit(shaderLibrary.getShader("unlit"),
                                                                        textureLibrary.getTexture(colorID).as<core::gl::Texture2D>()));
             return materialNames.at(name);
         }
@@ -122,7 +123,7 @@ namespace cobalt {
             MaterialID id(materials.size(), name, *this);
             materialNames.emplace(name, id);
             materials.erase(id);
-            materials.emplace(id, MaterialFactory::createMaterial(CB_SHADER_LIBRARY.getShader(shader), textureMap));
+            materials.emplace(id, MaterialFactory::createMaterial(shaderLibrary.getShader(shader), textureMap));
             return materialNames.at(name);
         }
 
@@ -135,7 +136,7 @@ namespace cobalt {
             MaterialID id(materials.size(), name, *this);
             materialNames.emplace(name, id);
             materials.erase(id);
-            materials.emplace(id, MaterialFactory::createMaterial(CB_SHADER_LIBRARY.getShader(shader), textureMap));
+            materials.emplace(id, MaterialFactory::createMaterial(shaderLibrary.getShader(shader), textureMap));
             return materialNames.at(name);
         }
     }  // namespace engine
