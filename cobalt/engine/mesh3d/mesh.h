@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "core/ecs/component/component.h"
 #include "core/gl/ibo.h"
 #include "core/gl/vao.h"
 #include "engine/material/material.h"
