@@ -116,6 +116,7 @@ namespace cobalt {
              * @brief Loads all shaders from the given directory. This directory should contain a file called "shaders.json" which contains a list of
              * internal shader names and their corresponding vertex/fragment/geometry or compute shader source files.
              * @param shadersDirectory The directory containing the shader files.
+             * @throws core::ecs::PluginException<MaterialPlugin, ShaderLibrary> If the shaders.json file does not exist.
              */
             void loadShaders(const core::io::Path& shadersDirectory);
 

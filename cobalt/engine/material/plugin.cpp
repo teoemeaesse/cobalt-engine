@@ -9,7 +9,8 @@
 
 namespace cobalt {
     namespace engine {
-        MaterialPlugin::MaterialPlugin() noexcept : Plugin(TITLE, "Provides material creation, loading and managing functionality.") {}
+        MaterialPlugin::MaterialPlugin() noexcept
+            : Plugin(TITLE, "Provides material, shader and texture creation, loading and managing functionality.") {}
 
         void MaterialPlugin::onPlug(core::ecs::World& world) const noexcept {
             world.registerComponent<MaterialID>();

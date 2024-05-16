@@ -74,6 +74,8 @@ namespace cobalt {
                     shaders.emplace(id, parseRenderShader(shaderJson, shadersDirectory, shaderName));
                 } else if (shaderJson["type"].get<std::string>() == "compute") {
                     shaders.emplace(id, Move(parseComputeShader(shaderJson, shadersDirectory, shaderName)));
+                } else {
+                    throw core::ecs::PluginException<MaterialPlugin, ShaderLibrary>("Unknown shader type: " + shaderJson["type"].get<std::string>());
                 }
             }
         }
