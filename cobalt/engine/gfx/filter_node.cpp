@@ -3,6 +3,8 @@
 
 #include "engine/gfx/filter_node.h"
 
+#include "engine/mesh3d/plugin.h"
+
 namespace cobalt {
     using namespace core;
     namespace engine {
@@ -12,7 +14,7 @@ namespace cobalt {
         }
 
         void FilterNode::render() {
-            Mesh filterMesh = MeshFactory::createRectangle(width, height, filter);
+            Mesh filterMesh = Mesh3DPlugin::createRectangle(width, height, filter);
             RenderNode::renderMesh(filterMesh);
         }
 

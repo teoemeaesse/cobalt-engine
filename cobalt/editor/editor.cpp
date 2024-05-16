@@ -38,7 +38,7 @@ namespace cobalt {
             getTextureLibrary(world).loadTextures(io::Path("cobalt/editor/assets/textures", true));
             getShaderLibrary(world).loadShaders(io::Path("cobalt/editor/assets/shaders", true));
 
-            CameraManager& cameraManager = world.getResource<engine::CameraManager>();
+            CameraManager& cameraManager = world.getResource<CameraManager>();
 
             createScene();
 
@@ -48,7 +48,7 @@ namespace cobalt {
             bindInput();
         }
 
-        void Editor::addPlugins() { world.addBundle<engine::ecs::BaseBundle>(); }
+        void Editor::addPlugins() { world.addBundle<BaseBundle>(); }
 
         void Editor::fixedTimeStep() {
             world.getResource<Scene>().getCameraID().getController().update();
@@ -57,7 +57,7 @@ namespace cobalt {
 
         void Editor::variableTimeStep(const float delta) {
             auto& scene = world.getResource<Scene>();
-            auto& cameraManager = world.getResource<engine::CameraManager>();
+            auto& cameraManager = world.getResource<CameraManager>();
             scene.getMeshes()[0].rotate(glm::vec3(30.0f * delta, 5.0f * delta, 20.0f * delta));
             static float cubeXOffset = 0.0f;
             static float cubeYOffset = 0.0f;
@@ -71,23 +71,23 @@ namespace cobalt {
 
         void Editor::bindInput() {
             Scene& scene = world.getResource<Scene>();
-            engine::Keyboard& keyboard = getInputManager().getPeripheral<engine::Keyboard>(engine::Keyboard::NAME);
+            Keyboard& keyboard = getInputManager().getPeripheral<Keyboard>(Keyboard::NAME);
             CameraID* camera = &scene.getCameraID();
-            keyboard.bind(engine::KeyboardInputID::ESCAPE, CreateScope<Quit>(world, this));
-            keyboard.bind(engine::KeyboardInputID::F9, CreateScope<Windowed>(world, this));
-            keyboard.bind(engine::KeyboardInputID::F10, CreateScope<Borderless>(world, this));
-            keyboard.bind(engine::KeyboardInputID::F11, CreateScope<Fullscreen>(world, this));
-            keyboard.bind(engine::KeyboardInputID::W, CreateScope<PanIn>(world, camera));
-            keyboard.bind(engine::KeyboardInputID::A, CreateScope<PanLeft>(world, camera));
-            keyboard.bind(engine::KeyboardInputID::S, CreateScope<PanOut>(world, camera));
-            keyboard.bind(engine::KeyboardInputID::D, CreateScope<PanRight>(world, camera));
-            keyboard.bind(engine::KeyboardInputID::SPACE, CreateScope<PanUp>(world, camera));
-            keyboard.bind(engine::KeyboardInputID::LCTRL, CreateScope<PanDown>(world, camera));
-            keyboard.bind(engine::KeyboardInputID::UP, CreateScope<PanUp>(world, camera));
-            keyboard.bind(engine::KeyboardInputID::LEFT, CreateScope<PanLeft>(world, camera));
-            keyboard.bind(engine::KeyboardInputID::DOWN, CreateScope<PanDown>(world, camera));
-            keyboard.bind(engine::KeyboardInputID::RIGHT, CreateScope<PanRight>(world, camera));
-            keyboard.bind(engine::KeyboardInputID::P, CreateScope<Spawn>(world, &scene));
+            keyboard.bind(KeyboardInputID::ESCAPE, CreateScope<Quit>(world, this));
+            keyboard.bind(KeyboardInputID::F9, CreateScope<Windowed>(world, this));
+            keyboard.bind(KeyboardInputID::F10, CreateScope<Borderless>(world, this));
+            keyboard.bind(KeyboardInputID::F11, CreateScope<Fullscreen>(world, this));
+            keyboard.bind(KeyboardInputID::W, CreateScope<PanIn>(world, camera));
+            keyboard.bind(KeyboardInputID::A, CreateScope<PanLeft>(world, camera));
+            keyboard.bind(KeyboardInputID::S, CreateScope<PanOut>(world, camera));
+            keyboard.bind(KeyboardInputID::D, CreateScope<PanRight>(world, camera));
+            keyboard.bind(KeyboardInputID::SPACE, CreateScope<PanUp>(world, camera));
+            keyboard.bind(KeyboardInputID::LCTRL, CreateScope<PanDown>(world, camera));
+            keyboard.bind(KeyboardInputID::UP, CreateScope<PanUp>(world, camera));
+            keyboard.bind(KeyboardInputID::LEFT, CreateScope<PanLeft>(world, camera));
+            keyboard.bind(KeyboardInputID::DOWN, CreateScope<PanDown>(world, camera));
+            keyboard.bind(KeyboardInputID::RIGHT, CreateScope<PanRight>(world, camera));
+            keyboard.bind(KeyboardInputID::P, CreateScope<Spawn>(world, &scene));
 
             Mouse& mouse = getInputManager().getPeripheral<Mouse>(Mouse::NAME);
             mouse.bind(MouseInputID::RIGHT_X, CreateScope<RotateX>(world, camera));
@@ -119,12 +119,12 @@ namespace cobalt {
             Material& whiteRough = materialLibrary.getMaterial(materialLibrary.makePBR("white", Colors::White, 0.0f, 1.0f, 1.0f));
             Material& whiteSmooth = materialLibrary.getMaterial(materialLibrary.makePBR("white", Colors::White, 0.0f, 0.0f, 1.0f));
             Material& orangeMedium = materialLibrary.getMaterial(materialLibrary.makePBR("orange", Colors::Orange, 0.0f, 0.5f, 1.0f));
-            Mesh rotatingCube = MeshFactory::createCube(5, woodMaterial);
-            Mesh ground = MeshFactory::createRectangle(100, 100, woodMaterial);
-            Mesh sphere = MeshFactory::createSphere(5, woodMaterial);
-            Mesh cube0 = MeshFactory::createCube(10, whiteRough);
-            Mesh cube1 = MeshFactory::createCube(10, whiteSmooth);
-            Mesh cube2 = MeshFactory::createCube(10, orangeMedium);
+            Mesh rotatingCube = Mesh3DPlugin::createCube(5, woodMaterial);
+            Mesh ground = Mesh3DPlugin::createRectangle(100, 100, woodMaterial);
+            Mesh sphere = Mesh3DPlugin::createSphere(5, woodMaterial);
+            Mesh cube0 = Mesh3DPlugin::createCube(10, whiteRough);
+            Mesh cube1 = Mesh3DPlugin::createCube(10, whiteSmooth);
+            Mesh cube2 = Mesh3DPlugin::createCube(10, orangeMedium);
             ground.translate(glm::vec3(0.0f, 0.0f, 0.0f));
             ground.rotate(glm::vec3(90.0f, 0.0f, 0.0f));
             rotatingCube.translate(glm::vec3(-10.0f, 10.0f, 0.0f));
@@ -147,7 +147,7 @@ namespace cobalt {
                 textureLibrary.makeTexture("grid", color, gl::TextureEncodings::RGBA::Bits8).getTexture().as<gl::Texture2D>();
             UMap<std::string, const core::gl::Texture2D&> gridTextures = {{"settings", gridTexture}};
             Material& gridMaterial = materialLibrary.getMaterial(materialLibrary.makeFromShader("grid", "grid", gridTextures));
-            Mesh grid = MeshFactory::createGrid(10000, gridMaterial);
+            Mesh grid = Mesh3DPlugin::createGrid(10000, gridMaterial);
             scene.addMesh(Move(grid));
         }
     }  // namespace editor
