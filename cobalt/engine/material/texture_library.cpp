@@ -18,6 +18,8 @@ namespace cobalt {
 
         core::gl::Texture& TextureID::getTexture() noexcept { return owner.getTexture(*this); }
 
+        TextureID::operator std::string() const noexcept { return std::to_string(handle) + ": " + name; }
+
         void TextureLibrary::loadTextures(const core::io::Path& texturesDirectory) {
             core::io::Path texturesJsonPath = texturesDirectory;
             texturesJsonPath += "textures.json";
@@ -65,7 +67,7 @@ namespace cobalt {
             try {
                 return *textures.at(id);
             } catch (const std::out_of_range& e) {
-                throw core::ecs::PluginException<MaterialPlugin, TextureLibrary>("Texture with ID " + std::to_string(id.getHandle()) + " not found");
+                throw core::ecs::PluginException<MaterialPlugin, TextureLibrary>("Texture ID " + std::string(id) + " not found");
             }
         }
 

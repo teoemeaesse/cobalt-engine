@@ -77,6 +77,12 @@ namespace cobalt {
              */
             core::gl::Texture& getTexture() noexcept;
 
+            /**
+             * @brief Converts the texture ID to a human-readable string.
+             * @return The string representation.
+             */
+            operator std::string() const noexcept;
+
             private:
             uint handle;
             std::string name;

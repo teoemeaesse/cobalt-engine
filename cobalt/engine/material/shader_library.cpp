@@ -20,6 +20,8 @@ namespace cobalt {
 
         core::gl::Shader& ShaderID::getShader() noexcept { return owner.getShader(*this); }
 
+        ShaderID::operator std::string() const noexcept { return std::to_string(handle) + ": " + name; }
+
         static core::gl::Shader parseRenderShader(nlohmann::json& shaderJson, const core::io::Path& shadersDirectory, const std::string& shaderName) {
             CB_INFO("Loading render shader: {}", shaderName);
             core::gl::ShaderBuilder builder;
@@ -88,7 +90,7 @@ namespace cobalt {
             try {
                 return shaders.at(id);
             } catch (const std::out_of_range& e) {
-                throw core::ecs::PluginException<MaterialPlugin, ShaderLibrary>("Shader with ID " + std::string(id) + " not found");
+                throw core::ecs::PluginException<MaterialPlugin, ShaderLibrary>("Shader ID " + std::string(id) + " not found");
             }
         }
 
@@ -99,7 +101,5 @@ namespace cobalt {
                 throw core::ecs::PluginException<MaterialPlugin, ShaderLibrary>("Shader with name " + name + " not found");
             }
         }
-
-        ShaderID::operator std::string() const { return std::to_string(handle) + ": " + name; }
     }  // namespace engine
 }  // namespace cobalt

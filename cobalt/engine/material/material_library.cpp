@@ -35,6 +35,8 @@ namespace cobalt {
 
         Material& MaterialID::getMaterial() { return owner.getMaterial(*this); }
 
+        MaterialID::operator std::string() const noexcept { return std::to_string(handle) + ": " + name; }
+
         MaterialLibrary::MaterialLibrary(TextureLibrary& textureLibrary, ShaderLibrary& shaderLibrary) noexcept
             : textureLibrary(textureLibrary), shaderLibrary(shaderLibrary) {}
 
@@ -50,8 +52,7 @@ namespace cobalt {
             try {
                 return materials.at(materialNames.at(id.name));
             } catch (const std::out_of_range& e) {
-                throw core::ecs::PluginException<MaterialPlugin, MaterialLibrary>("Material with handle " + std::to_string(id.getHandle()) +
-                                                                                  " not found");
+                throw core::ecs::PluginException<MaterialPlugin, MaterialLibrary>("Material ID " + std::string(id) + " not found");
             }
         }
 

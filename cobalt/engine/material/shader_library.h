@@ -81,7 +81,7 @@ namespace cobalt {
              * @brief Converts the shader ID to a human-readable string.
              * @return The string representation.
              */
-            operator std::string() const;
+            operator std::string() const noexcept;
 
             private:
             uint handle;

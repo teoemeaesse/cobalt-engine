@@ -78,6 +78,12 @@ namespace cobalt {
              */
             Material& getMaterial();
 
+            /**
+             * @brief Converts the material ID to a human-readable string.
+             * @return The string representation.
+             */
+            operator std::string() const noexcept;
+
             private:
             uint handle;
             std::string name;
