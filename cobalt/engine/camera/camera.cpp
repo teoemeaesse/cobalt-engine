@@ -3,10 +3,18 @@
 
 #include "engine/camera/camera.h"
 
-#include "core/pch.h"
-
 namespace cobalt {
     namespace engine {
+        Camera::Serial::Serial() noexcept : view(0), projection(0), position(0), targetWidth(0), targetHeight(0), _(0) {}
+
+        Camera::Serial::Serial(const Camera& camera, const core::gl::FBO& target) noexcept
+            : view(camera.getViewMatrix()),
+              projection(camera.getProjectionMatrix()),
+              position(camera.getPosition()),
+              targetWidth(target.getWidth()),
+              targetHeight(target.getHeight()),
+              _(glm::vec3(0.0f)) {}
+
         Camera::Camera(const glm::vec3 position, const glm::vec2 direction, const float near, const float far)
             : position(position), direction(direction), near(near), far(far) {}
 
@@ -40,9 +48,7 @@ namespace cobalt {
 
         const glm::vec3 Camera::getPosition() const { return position; }
 
-        const Camera::UBO Camera::getUBO(const core::gl::FBO& target) const {
-            return {getViewMatrix(), getProjectionMatrix(), getPosition(), (int)target.getWidth(), (int)target.getHeight(), glm::vec3(0.0)};
-        }
+        Camera::UBO::UBO(const core::gl::Usage usage) : core::gl::UBO(usage, sizeof(Serial)) {}
 
         PerspectiveCamera::PerspectiveCamera(glm::vec3 position, glm::vec2 direction, const float fov, const float near, const float far,
                                              const float aspectRatio)

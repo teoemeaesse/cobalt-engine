@@ -89,17 +89,18 @@ namespace cobalt {
             Raster3D& renderer;                   // The renderer to use.
 
             /**
-             * @brief Render to the outputs, binding the sources to the adequate texture units. Each render node should decide how to call this
+             * @brief Render to the outputs, binding the sources to the respective texture units. Each render node should decide how to call this
              * method.
+             * @param mesh The mesh to render.
+             * @param pointLighting A UBO containing every point light in the scene.
+             */
+            void renderMesh(Mesh& mesh, core::gl::UBO& pointLighting);
+            /**
+             * @brief Render to the outputs, binding the sources to the respective texture units. Each render node should decide how to call this
+             * method. Uses no lighting.
              * @param mesh The mesh to render.
              */
             void renderMesh(Mesh& mesh);
-
-            /**
-             * @brief Render a skybox to the outputs. Each render node should decide how to call this method.
-             * @param skybox The skybox to render.
-             */
-            void renderSkybox(Skybox& skybox);
         };
     }  // namespace engine
 }  // namespace cobalt

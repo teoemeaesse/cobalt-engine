@@ -35,6 +35,7 @@ namespace cobalt {
                 world.addPlugin<RenderPlugin>();
                 world.addPlugin<Renderer3DPlugin>();
                 world.addPlugin<Mesh3DPlugin>();
+                world.addPlugin<LightingPlugin>();
             }
         };
     }  // namespace engine

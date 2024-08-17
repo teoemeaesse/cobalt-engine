@@ -4,7 +4,6 @@
 #pragma once
 
 #include "engine/mesh3d/mesh.h"
-#include "engine/raster3d/skybox.h"
 #include "engine/render/plugin.h"
 
 namespace cobalt {
@@ -21,33 +20,17 @@ namespace cobalt {
             ~Raster3D() noexcept = default;
 
             /**
-             * @brief Render to a target.
-             * @param target The target to render to.
-             */
-            void render(RenderTarget& target) const override;
-
-            /**
-             * @brief Render a mesh.
+             * @brief Immediately renders a mesh to a target.
              * @param mesh The mesh to render.
-             * @param target The render target to render to.
+             * @param pointLighting The point lights to illuminate the scene with.
              */
-            void renderMesh(Mesh& mesh, RenderTarget& target) const;
+            void render(Mesh& mesh, core::gl::UBO& pointLighting) const override;
 
             /**
-             * @brief Render a skybox.
-             * @param skybox The skybox to render.
-             * @param target The render target to render to.
+             * @brief Immediately renders a mesh to a target, no lighting.
+             * @param mesh The mesh to render.
              */
-            void renderSkybox(Skybox& skybox, RenderTarget& target) const;
-
-            /**
-             * @brief Load the camera data into the camera UBO.
-             * @param data The camera UBO data.
-             */
-            void loadCameraUBO(const Camera::UBO& data) const;
-
-            private:
-            core::gl::UBO cameraUBO;  // Camera UBO.
+            void render(Mesh& mesh) const override;
         };
     }  // namespace engine
 }  // namespace cobalt

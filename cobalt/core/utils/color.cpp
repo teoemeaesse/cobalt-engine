@@ -42,6 +42,8 @@ namespace cobalt {
 
         bool Color::operator!=(const Color& other) const noexcept { return !(*this == other); }
 
+        Color::operator glm::vec3() const noexcept { return glm::vec3(r, g, b); }
+
         Color::operator glm::vec4() const noexcept { return glm::vec4(r, g, b, a); }
 
         Color::operator std::string() const noexcept { return toString(); }

@@ -59,6 +59,13 @@ namespace cobalt {
              * @return The grid mesh.
              */
             static Mesh createGrid(const uint side, Material& material);
+
+            /**
+             * @brief Create a skybox mesh.
+             * @param material The skybox material.
+             * @return The skybox mesh.
+             */
+            static Mesh createSkybox(Material& material);
         };
     }  // namespace engine
 }  // namespace cobalt

@@ -32,11 +32,11 @@ namespace cobalt {
             this->skybox.reset();
         }
 
-        void Scene::setSkybox(Skybox&& skybox) { this->skybox.emplace(Move(skybox)); }
+        void Scene::setSkybox(Mesh&& skybox) { this->skybox.emplace(Move(skybox)); }
 
         Vec<Mesh>& Scene::getMeshes() { return meshes; }
 
-        Opt<Skybox>& Scene::getSkybox() { return skybox; }
+        Opt<Mesh>& Scene::getSkybox() { return skybox; }
 
         CameraID& Scene::getCameraID() { return camera; }
     }  // namespace engine

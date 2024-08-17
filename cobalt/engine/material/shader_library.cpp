@@ -84,7 +84,7 @@ namespace cobalt {
             try {
                 return shaderNames.at(name);
             } catch (const std::out_of_range& e) {
-                throw core::ecs::PluginException<MaterialPlugin, ShaderLibrary>("Shader with name " + name + " not found");
+                throw core::ecs::PluginException<MaterialPlugin, ShaderLibrary>("Shader with name \"" + name + "\" not found");
             }
         }
 
@@ -100,7 +100,7 @@ namespace cobalt {
             try {
                 return getShader(shaderNames.at(name));
             } catch (const std::out_of_range& e) {
-                throw core::ecs::PluginException<MaterialPlugin, ShaderLibrary>("Shader with name " + name + " not found");
+                throw core::ecs::PluginException<MaterialPlugin, ShaderLibrary>("Shader with name \"" + name + "\" not found");
             }
         }
     }  // namespace engine

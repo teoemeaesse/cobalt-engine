@@ -12,16 +12,18 @@
 namespace cobalt {
     namespace core::gl {
         /**
-         * @brief A Uniform Buffer Object (UBO). Used to store uniform data that is shared between multiple shaders.
+         * @brief A Uniform Buffer Object (UBO) is used to store uniform data that is shared between multiple shaders.
+         * This class should be used to interface with UBO's. To create a custom UBO, see ConcreteUBO.
+         * @see ConcreteUBO
          */
         class UBO {
             public:
             /**
              * @brief Creates a UBO.
-             * @param usage GL_STATIC_DRAW, GL_DYNAMIC_DRAW, GL_STREAM_DRAW.
-             * @param size The size of the buffer in bytes.
+             * @param usage One of cobalt::core::gl::StaticDraw, cobalt::core::gl::DynamicDraw, cobalt::core::gl::StreamDraw.
+             * @param capacity The maximum size of the buffer (in bytes).
              */
-            UBO(const gl::Usage usage, const size_t size);
+            UBO(const gl::Usage usage, const size_t capacity);
             /**
              * @brief Destroys the UBO and releases any resources allocated by OpenGL.
              */
@@ -38,28 +40,72 @@ namespace cobalt {
              * @param binding The binding point of the uniform block. This must match the binding in the shader.
              */
             void bindToShader(const Shader& shader, const std::string& name, const uint binding) const;
-            /**
-             * @brief Unbinds the UBO from the current context.
-             */
-            void unbind() const;
-            /**
-             * @brief Sets the data of the entire buffer. Bind before calling.
-             * @param data The data to load.
-             * @param size The size of the data in bytes.
-             */
-            void load(const void* data, const size_t size) const;
-            /**
-             * @brief Sets the data of a specific uniform or uniform block. Bind before calling.
-             * @param data The data to load.
-             * @param size The size of the data in bytes.
-             * @param offset The offset in bytes from the start of the buffer.
-             */
-            void load(const void* data, const size_t size, const size_t offset) const;
 
-            private:
+            /**
+             * @brief Copies an element into the end of the buffer.
+             * @tparam T The element type.
+             * @param element The element to push.
+             * @throws
+             */
+            template <typename T>
+            void push(const T& element) {
+                size += sizeof(T);
+                if (size > capacity) {
+                    // TODO: throw
+                }
+                glBufferSubData(GL_UNIFORM_BUFFER, size, sizeof(T), &element);
+            }
+            /**
+             * @brief Copies an element into the end of the buffer.
+             * @tparam T The element type.
+             * @param element The element to push.
+             * @throws
+             */
+            template <typename T>
+            void push(const T* element) {
+                size += sizeof(T);
+                if (size > capacity) {
+                    // TODO: throw
+                }
+                glBufferSubData(GL_UNIFORM_BUFFER, size, sizeof(T), element);
+            }
+            /**
+             * @brief Copies an implicitly-constructed element into the end of the buffer.
+             * @tparam ...Args The types of the arguments to pass to the constructor.
+             * @tparam T The element type.
+             * @param args The arguments to pass to the constructor.
+             */
+            template <typename... Args, typename T>
+            void push(Args... args) {
+                T element(std::forward<Args>(args)...);
+                size += sizeof(T);
+                if (size > capacity) {
+                    // TODO: throw
+                }
+                glBufferSubData(GL_UNIFORM_BUFFER, size, sizeof(T), &element);
+            }
+
+            /**
+             * @brief Resets the buffer's data, maintaining its capacity.
+             */
+            virtual void clear();
+
+            /**
+             * @brief Resizes the buffer. This will overwrite any data in the buffer.
+             * @param newCapacity The new maximum size of the buffer (in bytes).
+             */
+            virtual void resize(const size_t newCapacity);
+
+            /**
+             * @brief Adds any final metadata to the buffer before usage.
+             */
+            virtual void send();
+
+            protected:
             gl::Handle buffer;      ///< The OpenGL buffer handle.
             const gl::Usage usage;  ///< The usage of the buffer.
-            const size_t size;      ///< The size of the buffer in bytes.
+            size_t capacity;        ///< The maximum size of the buffer (in bytes).
+            size_t size;            ///< The current size of the buffer (in bytes).
         };
     }  // namespace core::gl
 }  // namespace cobalt

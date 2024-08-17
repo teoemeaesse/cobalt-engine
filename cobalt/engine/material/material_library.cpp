@@ -140,5 +140,25 @@ namespace cobalt {
             materials.emplace(id, MaterialFactory::createMaterial(shaderLibrary.getShader(shader), textureMap));
             return materialNames.at(name);
         }
+
+        MaterialID& MaterialLibrary::makeFromShader(const std::string& name, const ShaderID& shader, const core::gl::Texture& texture) {
+            UMap<std::string, const core::gl::Texture&> textureMap;
+            textureMap.emplace(name, texture);
+            MaterialID id(materials.size(), name, *this);
+            materialNames.emplace(name, id);
+            materials.erase(id);
+            materials.emplace(id, MaterialFactory::createMaterial(shaderLibrary.getShader(shader), textureMap));
+            return materialNames.at(name);
+        }
+
+        MaterialID& MaterialLibrary::makeFromShader(const std::string& name, const std::string& shader, const core::gl::Texture& texture) {
+            UMap<std::string, const core::gl::Texture&> textureMap;
+            textureMap.emplace(name, texture);
+            MaterialID id(materials.size(), name, *this);
+            materialNames.emplace(name, id);
+            materials.erase(id);
+            materials.emplace(id, MaterialFactory::createMaterial(shaderLibrary.getShader(shader), textureMap));
+            return materialNames.at(name);
+        }
     }  // namespace engine
 }  // namespace cobalt

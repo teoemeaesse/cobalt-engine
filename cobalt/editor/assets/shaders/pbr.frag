@@ -6,14 +6,16 @@ uniform sampler2D u_albedo;
 uniform sampler2D u_normal;
 uniform sampler2D u_mrao;
 
-uniform vec3 lightPosition;
-uniform vec3 lightColor;
+const vec3 lightPosition = vec3(0.0, 0.0, 0.0);
+uniform vec3 lightColor = vec3(0.0, 1.0, 0.0);
 
 in vec3 v_world_position;
 in vec2 v_tex_coords;
 in vec3 v_normal;
 
 const float PI = 3.14159265359;
+
+const int MAX_LIGHTS = 32;
 
 struct CameraStruct {
     mat4 u_view;
@@ -33,12 +35,13 @@ struct LightStruct {
     vec3 u_light_color;
     float padding;
 };
-layout (std140) uniform Light {  
-    LightStruct u_light;
+layout (std140) uniform PointLighting {  
+    LightStruct u_lights[MAX_LIGHTS];
+    float u_count;
 };
 
 /** 
-             * @brief Get normal from normal map.
+ * @brief Get normal from normal map.
  * https://learnopengl.com/#!PBR/Lighting
  */
 vec3 getNormalFromMap() {
@@ -58,7 +61,7 @@ vec3 getNormalFromMap() {
 }
 
 /** 
-             * @brief Trowbridge-Reitz GGX Normal Distribution Function.
+ * @brief Trowbridge-Reitz GGX Normal Distribution Function.
  * https://learnopengl.com/#!PBR/Lighting
  * @param n normal.
  * @param h half vector.
@@ -75,7 +78,7 @@ float normalDist(vec3 n, vec3 h, float a) {
 }
 
 /** 
-             * @brief Smith's method using the Schlick-Beckmann.
+ * @brief Smith's method using the Schlick-Beckmann.
  * approximation of the Geometric Shadowing Function.
  * https://learnopengl.com/#!PBR/Lighting
  * @param n normal.
@@ -102,7 +105,7 @@ float geometrySmith(vec3 N, vec3 V, vec3 L, float a) {
 }
 
 /** 
-             * @brief Fresnel-Schlick approximation.
+ * @brief Fresnel-Schlick approximation.
  * https://learnopengl.com/#!PBR/Lighting
  * @param cosTheta cosine of the angle between the normal and the view vector.
  * @param f0 base reflectivity.

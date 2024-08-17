@@ -15,36 +15,36 @@ namespace cobalt {
 
         RenderNode::RenderNode(RenderNode&& other) noexcept : renderer(other.renderer), sources(Move(other.sources)), outputs(Move(other.outputs)) {}
 
-        void RenderNode::renderMesh(Mesh& mesh) {
+        void RenderNode::renderMesh(Mesh& mesh, gl::UBO& pointLighting) {
             if (outputs.size() == 0) {
                 CB_CORE_WARN("Render node has no outputs");
+                return;
             }
             for (uint i = 0; i < sources.size(); i++) {
-                uint binding = renderer.bindTexture("source_" + sources[i].getName(), sources[i].getFBO().getColorBuffer().value());
+                renderer.bindTexture("source_" + sources[i].getName(), sources[i].getFBO().getColorBuffer().value());
             }
             renderer.bindMaterial(mesh.getMaterial());
             for (uint i = 0; i < outputs.size(); i++) {
                 Camera& camera = cameras.at(outputs[i].getName()).getCamera();
-                Camera::UBO data = camera.getUBO(outputs[i].getFBO());
-                renderer.loadCameraUBO(data);
-                renderer.renderMesh(mesh, outputs[i]);
+                renderer.start(camera, outputs[i]);
+                renderer.render(mesh, pointLighting);
             }
             renderer.clearTextureUnits();
         }
 
-        void RenderNode::renderSkybox(Skybox& skybox) {
+        void RenderNode::renderMesh(Mesh& mesh) {
             if (outputs.size() == 0) {
                 CB_CORE_WARN("Render node has no outputs");
+                return;
             }
             for (uint i = 0; i < sources.size(); i++) {
-                uint binding = renderer.bindTexture("source_" + sources[i].getName(), sources[i].getFBO().getColorBuffer().value());
+                renderer.bindTexture("source_" + sources[i].getName(), sources[i].getFBO().getColorBuffer().value());
             }
-            renderer.bindTexture("skybox", skybox.getTexture());
+            renderer.bindMaterial(mesh.getMaterial());
             for (uint i = 0; i < outputs.size(); i++) {
                 Camera& camera = cameras.at(outputs[i].getName()).getCamera();
-                Camera::UBO data = camera.getUBO(outputs[i].getFBO());
-                renderer.loadCameraUBO(data);
-                renderer.renderSkybox(skybox, outputs[i]);
+                renderer.start(camera, outputs[i]);
+                renderer.render(mesh);
             }
             renderer.clearTextureUnits();
         }

@@ -4,6 +4,7 @@
 #include "engine/raster3d/plugin.h"
 
 #include "engine/mesh3d/plugin.h"
+#include "engine/render/plugin.h"
 
 namespace cobalt {
     namespace engine {

@@ -99,13 +99,14 @@ namespace cobalt {
             TextureLibrary& textureLibrary = getTextureLibrary(world);
             Scene& scene = world.getResource<Scene>();
             scene.clear();
-            scene.setSkybox(Skybox::create(textureLibrary.getTexture("skybox").as<gl::Texture3D>(), getShaderLibrary(world).getShader("skybox")));
+            const TextureID skybox = textureLibrary.getTextureID("skybox");
             const TextureID woodAlbedo = textureLibrary.getTextureID("wood-albedo");
             const TextureID woodNormal = textureLibrary.getTextureID("wood-normal");
             const TextureID woodMrao = textureLibrary.getTextureID("wood-mrao");
             const TextureID steelAlbedo = textureLibrary.getTextureID("steel-albedo");
             const TextureID steelNormal = textureLibrary.getTextureID("steel-normal");
             const TextureID steelMrao = textureLibrary.getTextureID("steel-mrao");
+            const gl::Texture3D& skyboxTexture = textureLibrary.getTexture(skybox).as<gl::Texture3D>();
             const gl::Texture2D& woodAlbedoTexture = textureLibrary.getTexture(woodAlbedo).as<gl::Texture2D>();
             const gl::Texture2D& woodNormalTexture = textureLibrary.getTexture(woodNormal).as<gl::Texture2D>();
             const gl::Texture2D& woodMraoTexture = textureLibrary.getTexture(woodMrao).as<gl::Texture2D>();
@@ -114,6 +115,8 @@ namespace cobalt {
             const gl::Texture2D& steelMraoTexture = textureLibrary.getTexture(steelMrao).as<gl::Texture2D>();
 
             MaterialLibrary& materialLibrary = getMaterialLibrary(world);
+            Material& skyboxMaterial = materialLibrary.getMaterial(materialLibrary.makeFromShader("skybox", "skybox", skyboxTexture));
+            scene.setSkybox(Mesh3DPlugin::createSkybox(skyboxMaterial));
             Material& woodMaterial = materialLibrary.getMaterial(materialLibrary.makePBR("wood", woodAlbedo, woodNormal, woodMrao));
             Material& steelMaterial = materialLibrary.getMaterial(materialLibrary.makePBR("steel", steelAlbedo, steelNormal, steelMrao));
             Material& whiteRough = materialLibrary.getMaterial(materialLibrary.makePBR("white", Colors::White, 0.0f, 1.0f, 1.0f));

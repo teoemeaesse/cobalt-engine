@@ -195,6 +195,22 @@ namespace cobalt {
             MaterialID& makeFromShader(
                 const std::string& name, const std::string& shader,
                 const UMap<std::string, const core::gl::Texture2D&>& textures = UMap<std::string, const core::gl::Texture2D&>());
+            /**
+             * @brief Creates a new material from the given shader.
+             * @param name The name of the material.
+             * @param shader The shader program.
+             * @param textures The texture for the material.
+             * @return The material. TODO: Variadic template for different material types.
+             */
+            MaterialID& makeFromShader(const std::string& name, const ShaderID& shader, const core::gl::Texture& texture);
+            /**
+             * @brief Creates a new material from the given shader.
+             * @param name The name of the material.
+             * @param shader The name of the shader program.
+             * @param textures The texture for the material.
+             * @return The material. TODO: Variadic template for different material types.
+             */
+            MaterialID& makeFromShader(const std::string& name, const std::string& shader, const core::gl::Texture& texture);
 
             private:
             UMap<MaterialID, Material> materials;         // The materials in the library.

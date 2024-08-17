@@ -12,12 +12,22 @@ namespace cobalt {
         SceneNode::SceneNode(Scene& scene, Raster3D& renderer) : RenderNode(renderer), scene(scene) {}
 
         void SceneNode::render() {
-            if (scene.getSkybox().has_value()) {
-                RenderNode::renderSkybox(scene.getSkybox().value());
+            gl::Context::disableDepthWriting();
+            auto& skybox = scene.getSkybox();
+            if (skybox.has_value()) {
+                RenderNode::renderMesh(skybox.value());
             }
+            gl::Context::enableDepthWriting();
             auto& meshes = scene.getMeshes();
+
+            // shader.setUniformVec3("lightPosition", glm::vec3(0.0, 5.0, 0.0));
+            // shader.setUniformVec3("lightColor", glm::vec3(10000.0, 5000.0, 10000.0));
+            // TODO: set up lighting via scene graph. this is just a placeholder
+            PointLight plight(10000, Colors::Red);
+            PointLight::UBO<1> plightUBO(core::gl::Usage::StaticDraw);
+            plightUBO.push<PointLight>(plight);
             for (uint i = 0; i < meshes.size(); i++) {
-                RenderNode::renderMesh(meshes[i]);
+                RenderNode::renderMesh(meshes[i], plightUBO);
             }
         }
 

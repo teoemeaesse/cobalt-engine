@@ -1,5 +1,5 @@
 /**
- * @file plugin.h
+ * @file plugin.cpp
  * @brief Plugin for loading 3D meshes.
  * @author Tomás Marques
  * @date 16-05-2024
@@ -137,6 +137,26 @@ namespace cobalt {
             layout.push(gl::Type::Float, 3, false);  // Position.
             layout.push(gl::Type::Float, 2, false);  // Texture coordinates.
             return Mesh(gl::VAO(vbo, layout), gl::IBO::fromQuads(gl::Usage::StaticDraw, 1), material);
+        }
+
+        Mesh Mesh3DPlugin::createSkybox(Material& material) {
+            const float vertices[24] = {
+                -1.0f, -1.0f, 1.0f,   // 0
+                1.0f,  -1.0f, 1.0f,   // 1
+                1.0f,  1.0f,  1.0f,   // 2
+                -1.0f, 1.0f,  1.0f,   // 3
+                -1.0f, -1.0f, -1.0f,  // 4
+                1.0f,  -1.0f, -1.0f,  // 5
+                1.0f,  1.0f,  -1.0f,  // 6
+                -1.0f, 1.0f,  -1.0f   // 7
+            };
+            gl::VBO vbo(gl::Usage::StaticDraw);
+            vbo.bind();
+            vbo.load(vertices, sizeof(float) * 24);
+
+            gl::VAOLayout layout;
+            layout.push(gl::Type::Float, 3, false);  // Position.
+            return Mesh(gl::VAO(vbo, layout), gl::IBO::fromCube(gl::Usage::StaticDraw), material);
         }
     }  // namespace engine
 }  // namespace cobalt

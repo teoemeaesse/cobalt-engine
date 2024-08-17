@@ -74,6 +74,11 @@ namespace cobalt {
             bool operator!=(const Color& other) const noexcept;
 
             /**
+             * @brief Convert the color to a glm::vec3.
+             * @return glm::vec3 representation of the color.
+             */
+            operator glm::vec3() const noexcept;
+            /**
              * @brief Convert the color to a glm::vec4.
              * @return glm::vec4 representation of the color.
              */

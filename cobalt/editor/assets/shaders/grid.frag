@@ -19,6 +19,18 @@ layout (std140) uniform Camera {
     CameraStruct u_camera;
 };
 
+const int MAX_LIGHTS = 32;
+struct LightStruct {
+    vec3 u_light_position;
+    float u_light_intensity;
+    vec3 u_light_color;
+    float padding;
+};
+layout (std140) uniform PointLighting {  
+    LightStruct u_lights[MAX_LIGHTS];
+    float u_count;
+};
+
 const float LINE_WIDTH = 1.0 / 32.0; // This will control the thickness of the lines
 const float AA_WIDTH = LINE_WIDTH * 0.5; // Width for anti-aliasing effect
 

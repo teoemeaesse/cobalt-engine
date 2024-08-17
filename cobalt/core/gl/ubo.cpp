@@ -9,10 +9,10 @@
 
 namespace cobalt {
     namespace core::gl {
-        UBO::UBO(const gl::Usage usage, const size_t size) : usage(usage), size(size) {
+        UBO::UBO(const gl::Usage usage, const size_t capacity) : usage(usage), capacity(capacity) {
             glGenBuffers(1, &buffer);
             glBindBuffer(GL_UNIFORM_BUFFER, buffer);
-            glBufferData(GL_UNIFORM_BUFFER, size, nullptr, (GLenum)usage);
+            glBufferData(GL_UNIFORM_BUFFER, capacity, nullptr, (GLenum)usage);
         }
 
         UBO::~UBO() { glDeleteBuffers(1, &buffer); }
@@ -24,10 +24,15 @@ namespace cobalt {
             glBindBufferBase(GL_UNIFORM_BUFFER, binding, buffer);
         }
 
-        void UBO::unbind() const { glBindBuffer(GL_UNIFORM_BUFFER, 0); }
+        void UBO::clear() {
+            glBufferData(GL_UNIFORM_BUFFER, capacity, nullptr, (GLenum)usage);
+            size = 0;
+        }
 
-        void UBO::load(const void* data, const size_t size) const { glBufferData(GL_UNIFORM_BUFFER, size, data, (GLenum)usage); }
+        void UBO::resize(const size_t newCapacity) { glBufferData(GL_UNIFORM_BUFFER, newCapacity, nullptr, (GLenum)usage); }
 
-        void UBO::load(const void* data, const size_t size, const size_t offset) const { glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data); }
+        void UBO::send() {
+            // EMPTY - concrete implementations should extend this method.
+        }
     }  // namespace core::gl
 }  // namespace cobalt

@@ -3,7 +3,9 @@
 
 #pragma once
 
+#include "core/ecs/resource/resource.h"
 #include "core/gl/fbo.h"
+#include "core/gl/ubo.h"
 
 namespace cobalt {
     namespace engine {
@@ -14,13 +16,27 @@ namespace cobalt {
          */
         class Camera {
             public:
-            struct UBO {
-                glm::mat4 view;
-                glm::mat4 projection;
-                glm::vec3 position;
-                int targetWidth;
-                int targetHeight;
-                glm::vec3 padding;
+            /**
+             * @brief Serialized representation of a camera for use in a Buffer.
+             */
+            struct Serial {
+                glm::mat4 view;        ///< The view matrix of the camera.
+                glm::mat4 projection;  ///< The projection matrix of the camera.
+                glm::vec3 position;    ///< The position of the camera in world space.
+                int targetWidth;       ///< The width of the target FBO.
+                int targetHeight;      ///< The height of the target FBO.
+                glm::vec3 _;           ///< Memory padding.
+
+                /**
+                 * @brief Creates an empty Serial representation of a camera.
+                 */
+                Serial() noexcept;
+                /**
+                 * @brief Creates a new Serial representation of a camera.
+                 * @param camera The camera to serialize.
+                 * @param target The target FBO.
+                 */
+                Serial(const Camera& camera, const core::gl::FBO& target) noexcept;
             };
 
             /**
@@ -70,13 +86,6 @@ namespace cobalt {
             const glm::vec3 getPosition() const;
 
             /**
-             * @brief Gets the UBO data for the camera.
-             * @param target The target FBO.
-             * @return The UBO data for the camera.
-             */
-            const UBO getUBO(const core::gl::FBO& target) const;
-
-            /**
              * @brief Resizes the camera.
              * @param left The left plane of the viewport.
              * @param right The right plane of the viewport.
@@ -119,6 +128,18 @@ namespace cobalt {
              * @param amount The amount to pan by.
              */
             virtual void panVertical(const float amount) = 0;
+
+            /**
+             * @brief A UBO specialization for Camera's.
+             */
+            class UBO : public core::gl::UBO, public core::ecs::Resource {
+                public:
+                /**
+                 * @brief Creates a new UBO for Camera's.
+                 * @param usage The usage of the buffer.
+                 */
+                explicit UBO(const core::gl::Usage usage);
+            };
 
             protected:
             glm::vec3 position;   // The position of the camera in world space.

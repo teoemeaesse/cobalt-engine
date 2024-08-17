@@ -14,7 +14,14 @@ namespace cobalt {
     using namespace core;
 
     namespace engine {
-        Renderer::Renderer() noexcept : textureUnits(1), currentUnit(0) {}
+        Renderer::Renderer() noexcept : textureUnits(1), currentUnit(0), cameraUBO(gl::Usage::StaticDraw) {}
+
+        void Renderer::start(const Camera& camera, RenderTarget& target) {
+            cameraUBO.bind();
+            cameraUBO.push(Camera::Serial(camera, target.getFBO()));
+            cameraUBO.send();
+            target.bind();
+        }
 
         uint Renderer::getTextureUnit(const std::string& name) const {
             CB_CORE_WARN("Texture unit: " + name);
@@ -49,12 +56,6 @@ namespace cobalt {
         void Renderer::clearTextureUnits() {
             textureUnits.clear();
             currentUnit = 0;
-        }
-
-        void Renderer::sendUniforms(gl::Shader& shader) const {
-            for (auto it = textureUnits.begin(); it != textureUnits.end(); it++) {
-                shader.setUniformInt("u_" + it->first, it->second);
-            }
         }
     }  // namespace engine
 }  // namespace cobalt

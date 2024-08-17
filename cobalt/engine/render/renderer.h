@@ -8,6 +8,7 @@
 #pragma once
 
 #include "engine/material/material.h"
+#include "engine/mesh3d/mesh.h"
 #include "engine/render/target.h"
 
 namespace cobalt {
@@ -27,10 +28,24 @@ namespace cobalt {
             virtual ~Renderer() noexcept = default;
 
             /**
-             * @brief Render to a target.
+             * @brief Start rendering to a target.
+             * @param camera The camera to render render with.
              * @param target The target to render to.
              */
-            virtual void render(RenderTarget& target) const = 0;
+            virtual void start(const Camera& camera, RenderTarget& target);
+
+            /**
+             * @brief Render to a target.
+             * @param mesh The mesh to render.
+             * @param pointLighting The point lights to illuminate the scene with.
+             */
+            virtual void render(Mesh& mesh, core::gl::UBO& pointLighting) const = 0;
+
+            /**
+             * @brief Render to a target, no lighting.
+             * @param mesh The mesh to render.
+             */
+            virtual void render(Mesh& mesh) const = 0;
 
             /**
              * @brief Get the bound texture unit of a given named texture.
@@ -60,15 +75,10 @@ namespace cobalt {
              */
             void clearTextureUnits();
 
-            /**
-             * @brief Send all the bound textures to the shader.
-             * @param shader The shader to send the uniforms to.
-             */
-            void sendUniforms(core::gl::Shader& shader) const;
-
-            private:
+            protected:
             UMap<std::string, uint> textureUnits;  ///< Map of bound textures.
             uint currentUnit;                      ///< Current texture unit.
+            Camera::UBO cameraUBO;                 ///< The camera UBO.
         };
     }  // namespace engine
 }  // namespace cobalt
