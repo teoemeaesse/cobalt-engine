@@ -19,7 +19,7 @@ namespace cobalt {
          * component.
          */
         class PointLight : public core::ecs::Component {
-            private:
+            public:
             /**
              * @brief Serialized representation of a point light for use in a Buffer.
              */
@@ -38,7 +38,6 @@ namespace cobalt {
                 Serial(const PointLight& light, const glm::vec3& position) noexcept;
             };
 
-            public:
             /**
              * @brief Creates a new point light.
              * @param intensity The intensity of the light.
@@ -69,8 +68,9 @@ namespace cobalt {
                 explicit UBO(const core::gl::Usage usage) : core::gl::UBO(usage, length * sizeof(Serial) + sizeof(float)) {}
 
                 virtual void send() override {
-                    float count = size / sizeof(Serial);
+                    float count = (capacity - sizeof(float)) / sizeof(Serial);
                     glBufferSubData(GL_UNIFORM_BUFFER, size, sizeof(float), &count);
+                    size += sizeof(float);
                 }
             };
 

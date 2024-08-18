@@ -25,7 +25,6 @@ namespace cobalt {
                     shader.setUniformInt("u_" + it->first, it->second);
                 }
                 cameraUBO.bindToShader(shader, "Camera", 0);
-                pointLighting.send();
                 pointLighting.bindToShader(shader, "PointLighting", 1);
             } catch (const CoreException<Raster3D>& e) {
                 CB_CORE_WARN(e.what());

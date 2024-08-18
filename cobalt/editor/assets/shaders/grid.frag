@@ -29,6 +29,7 @@ struct LightStruct {
 layout (std140) uniform PointLighting {  
     LightStruct u_lights[MAX_LIGHTS];
     float u_count;
+    vec3 padding;
 };
 
 const float LINE_WIDTH = 1.0 / 32.0; // This will control the thickness of the lines

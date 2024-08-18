@@ -6,9 +6,6 @@ uniform sampler2D u_albedo;
 uniform sampler2D u_normal;
 uniform sampler2D u_mrao;
 
-const vec3 lightPosition = vec3(0.0, 0.0, 0.0);
-uniform vec3 lightColor = vec3(0.0, 1.0, 0.0);
-
 in vec3 v_world_position;
 in vec2 v_tex_coords;
 in vec3 v_normal;
@@ -23,21 +20,22 @@ struct CameraStruct {
     vec3 u_cameraPosition;
     int u_targetWidth;
     int u_targetHeight;
-    vec2 padding;
+    vec3 padding;
 };
 layout (std140) uniform Camera {  
     CameraStruct u_camera;
 };
 
 struct LightStruct {
-    vec3 u_light_position;
-    float u_light_intensity;
-    vec3 u_light_color;
+    vec3 u_lightPosition;
+    float u_lightIntensity;
+    vec3 u_lightColor;
     float padding;
 };
 layout (std140) uniform PointLighting {  
     LightStruct u_lights[MAX_LIGHTS];
-    float u_count;
+    float u_lightCount;
+    vec3 padding;
 };
 
 /** 
@@ -130,29 +128,34 @@ void main() {
 
     // reflectance equation
     vec3 lo = vec3(0.0);
-    for(int i = 0; i < 2; i++) {
-        // calculate per-light radiance
-        vec3 l = normalize(lightPosition - v_world_position);
-        vec3 h = normalize(v + l);
-        float distance    = length(lightPosition - v_world_position);
-        float attenuation = 1.0 / (distance * distance);
-        vec3 radiance     = lightColor * attenuation;
-        
-        // cook-torrance brdf
-        float ndf = normalDist(n, h, roughness);
-        float g   = geometrySmith(n, v, l, roughness);
-        vec3 f    = fresnelSchlick(max(dot(h, v), 0.0), f0);
-        
-        vec3 ks = f;
-        vec3 kd = vec3(1.0) - ks;
-        kd *= 1.0 - metallic;
-        
-        vec3 specular = ndf * g * f / (4.0 * max(dot(n, v), 0.0) * max(dot(n, l), 0.0) + 0.0001);
+    int lightCount = min(int(u_lightCount) + 1, MAX_LIGHTS);
+    for(int j = 0; j < lightCount; j++) {
+        for(int i = 0; i < 2; i++) {
+            vec3 lightPosition = u_lights[j].u_lightPosition;
 
-        // add to outgoing radiance lo
-        float ndl = max(dot(n, l), 0.0);
-        lo += (kd * albedo / PI + specular) * radiance * ndl;
-    }   
+            // calculate per-light radiance
+            vec3 l = normalize(lightPosition - v_world_position);
+            vec3 h = normalize(v + l);
+            float distance    = length(lightPosition - v_world_position);
+            float attenuation = 1.0 / (distance * distance);
+            vec3 radiance     = u_lights[j].u_lightColor * attenuation * 10000;
+            
+            // cook-torrance brdf
+            float ndf = normalDist(n, h, roughness);
+            float g   = geometrySmith(n, v, l, roughness);
+            vec3 f    = fresnelSchlick(max(dot(h, v), 0.0), f0);
+            
+            vec3 ks = f;
+            vec3 kd = vec3(1.0) - ks;
+            kd *= 1.0 - metallic;
+            
+            vec3 specular = ndf * g * f / (4.0 * max(dot(n, v), 0.0) * max(dot(n, l), 0.0) + 0.0001);
+
+            // add to outgoing radiance lo
+            float ndl = max(dot(n, l), 0.0);
+            lo += (kd * albedo / PI + specular) * radiance * ndl;
+        }
+    }
   
     vec3 ambient = vec3(0.1) * albedo * ao;
     color = vec4(ambient + lo, 1.0);

@@ -17,7 +17,7 @@ struct CameraStruct {
     vec3 u_cameraPosition;
     int u_targetWidth;
     int u_targetHeight;
-    vec2 padding;
+    vec3 padding;
 };
 layout (std140) uniform Camera {  
     CameraStruct u_camera;
