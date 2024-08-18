@@ -54,24 +54,22 @@ namespace cobalt {
              *      layout (std140) uniform Light {
              *          LightStruct u_lights[MAX_LIGHTS];
              *          float u_count;
+             *          vec3 padding;
              *      };
-             * You should only push the point lights.
-             * @tparam length The maximum number of point lights in the buffer.
+             * You should only push in point lights.
              */
-            template <uint length>
             class UBO : public core::gl::UBO, public core::ecs::Resource {
                 public:
                 /**
                  * @brief Creates a new UBO for point lights.
                  * @param usage The usage of the buffer.
                  */
-                explicit UBO(const core::gl::Usage usage) : core::gl::UBO(usage, length * sizeof(Serial) + sizeof(float)) {}
+                explicit UBO(const core::gl::Usage usage);
 
-                virtual void send() override {
-                    float count = (capacity - sizeof(float)) / sizeof(Serial);
-                    glBufferSubData(GL_UNIFORM_BUFFER, size, sizeof(float), &count);
-                    size += sizeof(float);
-                }
+                /**
+                 * @brief Sends the point light count to the buffer.
+                 */
+                virtual void send() override;
             };
 
             private:

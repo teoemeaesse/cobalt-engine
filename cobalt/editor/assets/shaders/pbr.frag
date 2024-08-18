@@ -128,8 +128,7 @@ void main() {
 
     // reflectance equation
     vec3 lo = vec3(0.0);
-    int lightCount = min(int(u_lightCount) + 1, MAX_LIGHTS);
-    for(int j = 0; j < lightCount; j++) {
+    for(int j = 0; j < u_lightCount; j++) {
         for(int i = 0; i < 2; i++) {
             vec3 lightPosition = u_lights[j].u_lightPosition;
 
@@ -138,7 +137,7 @@ void main() {
             vec3 h = normalize(v + l);
             float distance    = length(lightPosition - v_world_position);
             float attenuation = 1.0 / (distance * distance);
-            vec3 radiance     = u_lights[j].u_lightColor * attenuation * 10000;
+            vec3 radiance     = u_lights[j].u_lightColor * attenuation * u_lights[j].u_lightIntensity;
             
             // cook-torrance brdf
             float ndf = normalDist(n, h, roughness);

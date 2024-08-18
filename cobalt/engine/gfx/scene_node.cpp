@@ -20,19 +20,26 @@ namespace cobalt {
             gl::Context::enableDepthWriting();
             auto& meshes = scene.getMeshes();
 
-            // shader.setUniformVec3("lightPosition", glm::vec3(0.0, 5.0, 0.0));
-            // shader.setUniformVec3("lightColor", glm::vec3(10000.0, 5000.0, 10000.0));
             // TODO: set up lighting via scene graph. this is just a placeholder
-            PointLight plight(10000, Colors::Red);
-            PointLight::UBO<1> plightUBO(core::gl::Usage::StaticDraw);
+            PointLight plight1(10000, Colors::Yellow);
+            PointLight plight2(10000, Colors::Blue);
+            PointLight plight3(10000, Colors::Red);
+            PointLight::UBO plightUBO(core::gl::Usage::StaticDraw);
             plightUBO.bind();
-            plightUBO.emplace<PointLight::Serial>(plight, glm::vec3(0.0, 0.0, 0.0));
+            plightUBO.emplace<PointLight::Serial>(plight1, glm::vec3(0.0, 0.0, 0.0));
+            plightUBO.emplace<PointLight::Serial>(plight2, glm::vec3(0.0, 50.0, 0.0));
+            plightUBO.emplace<PointLight::Serial>(plight3, glm::vec3(50.0, 0.0, 0.0));
+            plightUBO.emplace<PointLight::Serial>(plight1, glm::vec3(100.0, 0.0, 0.0));
+            plightUBO.emplace<PointLight::Serial>(plight2, glm::vec3(0.0, 0.0, 100.0));
+            plightUBO.emplace<PointLight::Serial>(plight3, glm::vec3(0.0, 100.0, 100.0));
+            plightUBO.emplace<PointLight::Serial>(plight1, glm::vec3(100.0, 100.0, 0.0));
+            plightUBO.emplace<PointLight::Serial>(plight2, glm::vec3(50.0, 0.0, 100.0));
+            plightUBO.emplace<PointLight::Serial>(plight3, glm::vec3(100.0, 100.0, 100.0));
+            plightUBO.emplace<PointLight::Serial>(plight3, glm::vec3(100.0, -50.0, 100.0));
             plightUBO.send();
             for (uint i = 0; i < meshes.size(); i++) {
                 RenderNode::renderMesh(meshes[i], plightUBO);
             }
-            core::gl::Context::checkGLErrors();
-            core::gl::Context::clearGLErrors();
         }
 
         void SceneNode::onResize(const float width, const float height) {
