@@ -18,7 +18,8 @@ namespace cobalt {
 
         void Renderer::start(const Camera& camera, RenderTarget& target) {
             cameraUBO.bind();
-            cameraUBO.push(Camera::Serial(camera, target.getFBO()));
+            cameraUBO.clear();
+            cameraUBO.emplace<Camera::Serial>(camera, target.getFBO());
             cameraUBO.send();
             target.bind();
         }

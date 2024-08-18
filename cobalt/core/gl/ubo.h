@@ -48,41 +48,27 @@ namespace cobalt {
              * @throws
              */
             template <typename T>
-            void push(const T& element) {
-                size += sizeof(T);
-                if (size > capacity) {
-                    // TODO: throw
-                }
-                glBufferSubData(GL_UNIFORM_BUFFER, size, sizeof(T), &element);
-            }
-            /**
-             * @brief Copies an element into the end of the buffer.
-             * @tparam T The element type.
-             * @param element The element to push.
-             * @throws
-             */
-            template <typename T>
             void push(const T* element) {
-                size += sizeof(T);
-                if (size > capacity) {
+                if (size + sizeof(T) > capacity) {
                     // TODO: throw
                 }
-                glBufferSubData(GL_UNIFORM_BUFFER, size, sizeof(T), element);
+                glBufferSubData(GL_UNIFORM_BUFFER, size, sizeof(T), (void*)element);
+                size += sizeof(T);
             }
             /**
-             * @brief Copies an implicitly-constructed element into the end of the buffer.
-             * @tparam ...Args The types of the arguments to pass to the constructor.
+             * @brief Constructs an element into the end of the buffer.
              * @tparam T The element type.
+             * @tparam ...Args The types of the arguments to pass to the constructor.
              * @param args The arguments to pass to the constructor.
              */
-            template <typename... Args, typename T>
-            void push(Args... args) {
+            template <typename T, typename... Args>
+            void emplace(Args&&... args) {
                 T element(std::forward<Args>(args)...);
-                size += sizeof(T);
-                if (size > capacity) {
+                if (size + sizeof(T) > capacity) {
                     // TODO: throw
                 }
-                glBufferSubData(GL_UNIFORM_BUFFER, size, sizeof(T), &element);
+                glBufferSubData(GL_UNIFORM_BUFFER, size, sizeof(T), (void*)&element);
+                size += sizeof(T);
             }
 
             /**

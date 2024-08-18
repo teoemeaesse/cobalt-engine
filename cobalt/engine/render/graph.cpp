@@ -20,6 +20,7 @@ namespace cobalt {
                     nodes[i]->getOutputs()[j].getFBO().clear();
                 }
             }
+
             for (uint i = 0; i < nodes.size(); i++) {
                 nodes[i]->render();
             }

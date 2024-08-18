@@ -9,7 +9,7 @@
 
 namespace cobalt {
     namespace core::gl {
-        UBO::UBO(const gl::Usage usage, const size_t capacity) : usage(usage), capacity(capacity) {
+        UBO::UBO(const gl::Usage usage, const size_t capacity) : usage(usage), capacity(capacity), size(0) {
             glGenBuffers(1, &buffer);
             glBindBuffer(GL_UNIFORM_BUFFER, buffer);
             glBufferData(GL_UNIFORM_BUFFER, capacity, nullptr, (GLenum)usage);
