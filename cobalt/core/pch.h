@@ -175,6 +175,12 @@ namespace cobalt {
     template <unsigned int N>
     using Mask = std::bitset<N>;
     /**
+     * @brief Wrapper for std::function.
+     * @tparam T Type of the function.
+     */
+    template <typename T>
+    using Func = std::function<T>;
+    /**
      * @brief Alias for an unsigned char.
      */
     using uchar = unsigned char;
