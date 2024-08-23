@@ -31,8 +31,9 @@ namespace cobalt {
 
             /**
              * @brief Executes the render graph.
+             * @param world The world to execute on.
              */
-            void execute();
+            void execute(const core::ecs::World& world);
 
             protected:
             Vec<Scope<RenderNode>> nodes;  // All the nodes in the graph, in topological order.

@@ -66,7 +66,7 @@ namespace cobalt {
             cubeXOffset = sin(time) * 25.0f * delta;
             cubeYOffset = cos(time) * 25.0f * delta;
             scene.getMeshes()[4].translate(glm::vec3(cubeXOffset, 0.0f, cubeYOffset));
-            world.getResource<DefaultGraph>().execute();
+            world.getResource<DefaultGraph>().execute(world);
         }
 
         void Editor::bindInput() {

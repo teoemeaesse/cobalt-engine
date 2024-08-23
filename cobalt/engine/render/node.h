@@ -49,8 +49,9 @@ namespace cobalt {
             /**
              * @brief Render to the outputs, binding the sources to the adequate texture units. Each render node should override this method and call
              * the protected render method.
+             * @param world The world to render.
              */
-            virtual void render() = 0;
+            virtual void render(const core::ecs::World& world) = 0;
             /**
              * @brief Called when the window is resized.
              * @param width The new width.

@@ -27,8 +27,9 @@ namespace cobalt {
 
             /**
              * @brief Render the scene.
+             * @param world The world to render.
              */
-            void render() override;
+            void render(const core::ecs::World& world) override;
             /**
              * @brief Called upon window resize.
              * @param width The new width of the render graph.

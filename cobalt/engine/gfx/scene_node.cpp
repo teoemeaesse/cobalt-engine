@@ -11,7 +11,7 @@ namespace cobalt {
     namespace engine {
         SceneNode::SceneNode(Scene& scene, Raster3D& renderer) : RenderNode(renderer), scene(scene) {}
 
-        void SceneNode::render() {
+        void SceneNode::render(const core::ecs::World& world) {
             gl::Context::disableDepthWriting();
             auto& skybox = scene.getSkybox();
             if (skybox.has_value()) {

@@ -13,7 +13,7 @@ namespace cobalt {
             addOutput(cameraID, Move(defaultTarget));
         }
 
-        void FilterNode::render() {
+        void FilterNode::render(const core::ecs::World& world) {
             Mesh filterMesh = Mesh3DPlugin::createRectangle(width, height, filter);
             RenderNode::renderMesh(filterMesh);
         }

@@ -14,7 +14,7 @@ namespace cobalt {
             return nodes.size() - 1;
         }
 
-        void RenderGraph::execute() {
+        void RenderGraph::execute(const core::ecs::World& world) {
             for (uint i = 0; i < nodes.size(); i++) {
                 for (uint j = 0; j < nodes[i]->getOutputs().size(); j++) {
                     nodes[i]->getOutputs()[j].getFBO().clear();
@@ -22,7 +22,7 @@ namespace cobalt {
             }
 
             for (uint i = 0; i < nodes.size(); i++) {
-                nodes[i]->render();
+                nodes[i]->render(world);
             }
         }
     }  // namespace engine
