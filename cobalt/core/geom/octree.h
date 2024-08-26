@@ -22,9 +22,19 @@ namespace cobalt {
             /**
              * @brief Create an octree node.
              * @param bounds The bounds of the node.
-             * @param getBounds The function to get the bounds of the data.
+             * @param getElementBounds The function to get an element's bounding box.
              */
-            OctreeNode(const AABB3& bounds) : bounds(bounds) {}
+            OctreeNode(const AABB3& bounds, Func<AABB3(const T&)> getElementBounds) noexcept : bounds(bounds), getElementBounds(getElementBounds) {}
+
+            ~OctreeNode() noexcept = default;
+
+            OctreeNode(const OctreeNode&) = delete;
+
+            OctreeNode& operator=(const OctreeNode&) = delete;
+
+            OctreeNode(OctreeNode&&) = delete;
+
+            OctreeNode& operator=(OctreeNode&&) = delete;
 
             /**
              * @brief Copy an element into the tree.
@@ -33,7 +43,7 @@ namespace cobalt {
             void insert(const T& element) {
                 static_assert(std::is_copy_constructible<T>::value, "T must be copy constructible.");
                 const AABB3& bounds = getElementBounds(element);
-                if (!this->bounds.intersects(bounds)) return;  // Element not in this boundary
+                if (!this->bounds.intersects(bounds)) return;
                 if (isLeaf()) {
                     data.push_back(element);
                     if (shouldSplit()) {
@@ -45,12 +55,6 @@ namespace cobalt {
                     child->insert(element);
                 }
             }
-
-            /**
-             * @brief Get an element's bounds.
-             * @return The element's bounds.
-             */
-            static const AABB3& getElementBounds(const T&);
 
             /**
              * @brief Check if the node is a leaf in the octree.
@@ -69,6 +73,11 @@ namespace cobalt {
             Vec<T> data;                  // The data stored in the node.
             AABB3 bounds;                 // The bounds of the node.
 
+            Func<AABB3(const T&)> getElementBounds;  // The function to get an element's bounding box.
+
+            /**
+             * @brief Split the node into 8 children and recursively distribute the data.
+             */
             void split() {
                 glm::vec3 min = bounds.getMin();
                 glm::vec3 max = bounds.getMax();
