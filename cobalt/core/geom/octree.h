@@ -60,7 +60,7 @@ namespace cobalt {
              * @brief Check if the node is a leaf in the octree.
              * @return Whether the node is a leaf.
              */
-            bool isLeaf() const { return children.empty(); }
+            bool isLeaf() const noexcept { return children.empty(); }
 
             /**
              * @brief Check if this node should subdivide any further.
