@@ -181,6 +181,13 @@ namespace cobalt {
     template <typename T>
     using Func = std::function<T>;
     /**
+     * @brief Wrapper for std::pair.
+     * @tparam T Type of the first element.
+     * @tparam S Type of the second element.
+     */
+    template <typename T, typename S>
+    using Pair = std::pair<T, S>;
+    /**
      * @brief Alias for an unsigned char.
      */
     using uchar = unsigned char;
