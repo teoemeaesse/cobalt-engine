@@ -63,6 +63,84 @@ namespace cobalt {
                     bounds = left->bounds + right->bounds;
                 }
 
+                /**
+                 * @brief Queries the BVH for elements that intersect a given range. If a range is not provided, the function returns all elements in
+                 * the BVH.
+                 * @param found The vector to store the found elements in.
+                 * @param range The range to query. If not provided, the function returns all elements in the BVH.
+                 */
+                void query(Vector<ElementType*>& found, Opt<const AABB&> range = None) const {
+                    if (range.has_value() && !boundingBox.intersects(range.value())) return;
+
+                    if (leftChild && rightChild) {
+                        leftChild->query(range, found);
+                        rightChild->query(range, found);
+                    } else {
+                        for (auto& obj : objects) {
+                            if (range.intersects(getBoundingBox(*obj))) {
+                                found.push_back(obj);
+                            }
+                        }
+                    }
+                }
+                /**
+                 * @brief Queries the BVH for elements that contain a given point. If a point is not provided, the function returns all elements in
+                 * the BVH.
+                 * @param found The vector to store the found elements in.
+                 * @param point The point to query. If not provided, the function returns all elements in the BVH.
+                 */
+                void query(Vector<ElementType*>& found, Opt<const glm::vec3&> point = None) const {
+                    if (point.has_value() && !boundingBox.contains(point.value())) return;
+
+                    if (leftChild && rightChild) {
+                        leftChild->query(point, found);
+                        rightChild->query(point, found);
+                    } else {
+                        for (auto& obj : objects) {
+                            if (getBoundingBox(*obj).contains(point)) {
+                                found.push_back(obj);
+                            }
+                        }
+                    }
+                }
+
+                /**
+                 * @brief Applies a function to all the elements in the BVH. If a range is provided, the function is only applied to the elements that
+                 * intersect that range.
+                 * @param func The function to apply.
+                 * @param range The range to apply the function to.
+                 */
+                void apply(const Func<void(ElementType&)>& func, Opt<const AABB&> range = None) const {
+                    if (range.has_value() && !boundingBox.intersects(range.value())) return;
+
+                    if (leftChild && rightChild) {
+                        leftChild->apply(func);
+                        rightChild->apply(func);
+                    } else {
+                        for (auto& obj : objects) {
+                            func(*obj);
+                        }
+                    }
+                }
+                /**
+                 * @brief Applies a function to all the elements in the BVH. If a point is provided, the function is only applied to the elements that
+                 * contain that point.
+                 * @param func The function to apply.
+                 * @param point The point to apply the function to.
+                 */
+                void apply(const Func<void(ElementType&)>& func, Opt<const glm::vec3&> point = None) const {
+                    if (point.has_value() && !boundingBox.contains(point.value())) return;
+
+                    if (leftChild && rightChild) {
+                        leftChild->apply(func);
+                        rightChild->apply(func);
+                    } else {
+                        for (auto& obj : objects) {
+                            func(*obj);
+                        }
+                    }
+                }
+
                 private:
                 AABB bounds;                    ///< The bounding volume of the node. Encompasses all the elements in the node's subtree.
                 Scope<BVHNode> left;            ///< The left child node.
