@@ -19,16 +19,44 @@ namespace cobalt {
         template <typename T>
         class Octree {
             public:
+            /**
+             * @brief A configuration for the octree parameters.
+             */
+            struct Configuration {
+                const uint maxDepth;                    // The maximum depth of the octree. 0 means no depth limit.
+                const uint maxElements;                 // The maximum number of elements in a node. This must be at least 1.
+                Func<AABB(const T&)> getElementBounds;  // The function to get an element's bounding box.
+
+                /**
+                 * @brief Create an octree configuration.
+                 * @param getElementBounds The function to get an element's bounding box.
+                 * @param maxDepth The maximum depth of the octree. 0 means no depth limit.
+                 * @param maxElements The maximum number of elements in a node. This must be at least 1.
+                 * @see Octree
+                 * @see OctreeNode
+                 */
+                Configuration(Func<AABB(const T&)> getElementBounds, const uint maxDepth = 0, const uint maxElements = 8) noexcept
+                    : getElementBounds(getElementBounds), maxDepth(maxDepth), maxElements(maxElements) {}
+            };
+
+            /**
+             * @brief Create an octree.
+             * @param bounds The maximum bounds of the octree.
+             * @param config The configuration of the octree.
+             * @see Configuration
+             */
+            Octree(const AABB& bounds, const Configuration& config) noexcept : root(bounds, config) {}
+
             private:
             class OctreeNode {
                 public:
                 /**
                  * @brief Create an octree node.
                  * @param bounds The bounds of the node.
-                 * @param getElementBounds The function to get an element's bounding box.
+                 * @param config The configuration of the octree.
+                 * @param depth The depth of the node.
                  */
-                OctreeNode(const AABB3& bounds, Func<AABB3(const T&)> getElementBounds) noexcept
-                    : bounds(bounds), getElementBounds(getElementBounds) {}
+                OctreeNode(const AABB& bounds, const Configuration& config, const uint depth = 0) noexcept : bounds(bounds), depth(depth) {}
 
                 ~OctreeNode() noexcept = default;
 
@@ -46,11 +74,11 @@ namespace cobalt {
                  */
                 void insert(const T& element) {
                     static_assert(std::is_copy_constructible<T>::value, "T must be copy constructible.");
-                    const AABB3& bounds = getElementBounds(element);
+                    const AABB& bounds = config.getElementBounds(element);
                     if (!this->bounds.intersects(bounds)) return;
                     if (isLeaf()) {
                         data.push_back(element);
-                        if (shouldSplit()) {
+                        if (data.size() > config.maxElements && (config.maxDepth == 0 || depth < config.maxDepth)) {
                             split();
                         }
                         return;
@@ -66,18 +94,12 @@ namespace cobalt {
                  */
                 bool isLeaf() const noexcept { return children.empty(); }
 
-                /**
-                 * @brief Check if this node should subdivide any further.
-                 * @return Whether the node should subdivide.
-                 */
-                virtual bool shouldSplit() const = 0;
-
                 private:
-                Vec<OctreeNode<T>> children;  // The children of the node.
+                Vec<OctreeNode> children;     // The children of the node.
                 Vec<T> data;                  // The data stored in the node.
-                AABB3 bounds;                 // The bounds of the node.
-
-                Func<AABB3(const T&)> getElementBounds;  // The function to get an element's bounding box.
+                AABB bounds;                  // The bounds of the node.
+                const uint depth;             // The depth of the node.
+                const Configuration& config;  // The configuration of the octree.
 
                 /**
                  * @brief Split the node into 8 children and recursively distribute the data.
@@ -87,14 +109,14 @@ namespace cobalt {
                     glm::vec3 max = bounds.getMax();
                     glm::vec3 mid = {(min.x + max.x) / 2, (min.y + max.y) / 2, (min.z + max.z) / 2};
 
-                    children.emplace_back({min.x, min.y, min.z}, {mid.x, mid.y, mid.z});
-                    children.emplace_back({min.x, min.y, mid.z}, {mid.x, mid.y, max.z});
-                    children.emplace_back({min.x, mid.y, min.z}, {mid.x, max.y, mid.z});
-                    children.emplace_back({min.x, mid.y, mid.z}, {mid.x, max.y, max.z});
-                    children.emplace_back({mid.x, min.y, min.z}, {max.x, mid.y, mid.z});
-                    children.emplace_back({mid.x, min.y, mid.z}, {max.x, mid.y, max.z});
-                    children.emplace_back({mid.x, mid.y, min.z}, {max.x, max.y, mid.z});
-                    children.emplace_back({mid.x, mid.y, mid.z}, {max.x, max.y, max.z});
+                    children.emplace_back({{min.x, min.y, min.z}, {mid.x, mid.y, mid.z}}, depth + 1);
+                    children.emplace_back({{min.x, min.y, mid.z}, {mid.x, mid.y, max.z}}, depth + 1);
+                    children.emplace_back({{min.x, mid.y, min.z}, {mid.x, max.y, mid.z}}, depth + 1);
+                    children.emplace_back({{min.x, mid.y, mid.z}, {mid.x, max.y, max.z}}, depth + 1);
+                    children.emplace_back({{mid.x, min.y, min.z}, {max.x, mid.y, mid.z}}, depth + 1);
+                    children.emplace_back({{mid.x, min.y, mid.z}, {max.x, mid.y, max.z}}, depth + 1);
+                    children.emplace_back({{mid.x, mid.y, min.z}, {max.x, max.y, mid.z}}, depth + 1);
+                    children.emplace_back({{mid.x, mid.y, mid.z}, {max.x, max.y, max.z}}, depth + 1);
 
                     for (const auto& element : data) {
                         for (auto& child : children) {
@@ -105,7 +127,7 @@ namespace cobalt {
                 }
             };
 
-            OctreeNode root;  // The root node of the octree.
+            OctreeNode root;  // The root node of the octree.s
         };  // namespace core::geom
     }  // namespace core::geom
 }  // namespace cobalt

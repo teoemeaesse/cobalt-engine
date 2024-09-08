@@ -55,7 +55,7 @@ namespace cobalt {
              * @param other The other box.
              * @return The resulting box.
              */
-            AABB AABB::combine(const AABB& other) const noexcept;
+            AABB combine(const AABB& other) const noexcept;
 
             /**
              * @brief Expands this box to include another box.
