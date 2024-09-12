@@ -31,7 +31,7 @@ namespace cobalt {
             AABB(const glm::vec3& min, const glm::vec3& max) noexcept;
 
             /**
-             * @brief Checks if this box intersects with another.
+             * @brief Checks if this box intersects with another. Two boxes intersect if they overlap in any way, or touch each other.
              * @param other The other box.
              * @return Whether the boxes intersect.
              */
