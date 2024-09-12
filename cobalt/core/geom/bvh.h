@@ -55,7 +55,7 @@ namespace cobalt {
                     }
 
                     // Internal node
-                    Pair<Vector<ElementType*>, Vector<ElementType*>> split = splitStrategy.split(elements);
+                    Pair<Vec<ElementType*>, Vec<ElementType*>> split = splitStrategy.split(elements);
                     left = CreateScope<BVHNode>();
                     left->build(Move(split.first), splitStrategy);
                     right = CreateScope<BVHNode>();
@@ -69,7 +69,7 @@ namespace cobalt {
                  * @param found The vector to store the found elements in.
                  * @param range The range to query. If not provided, the function returns all elements in the BVH.
                  */
-                void query(Vector<ElementType*>& found, Opt<const AABB&> range = None) const {
+                void query(Vec<ElementType*>& found, Opt<const AABB&> range = None) const {
                     if (range.has_value() && !boundingBox.intersects(range.value())) return;
 
                     if (leftChild && rightChild) {
@@ -104,48 +104,11 @@ namespace cobalt {
                     }
                 }
 
-                /**
-                 * @brief Applies a function to all the elements in the BVH. If a range is provided, the function is only applied to the elements that
-                 * intersect that range.
-                 * @param func The function to apply.
-                 * @param range The range to apply the function to.
-                 */
-                void apply(const Func<void(ElementType&)>& func, Opt<const AABB&> range = None) const {
-                    if (range.has_value() && !boundingBox.intersects(range.value())) return;
-
-                    if (leftChild && rightChild) {
-                        leftChild->apply(func);
-                        rightChild->apply(func);
-                    } else {
-                        for (auto& obj : objects) {
-                            func(*obj);
-                        }
-                    }
-                }
-                /**
-                 * @brief Applies a function to all the elements in the BVH. If a point is provided, the function is only applied to the elements that
-                 * contain that point.
-                 * @param func The function to apply.
-                 * @param point The point to apply the function to.
-                 */
-                void apply(const Func<void(ElementType&)>& func, Opt<const glm::vec3&> point = None) const {
-                    if (point.has_value() && !boundingBox.contains(point.value())) return;
-
-                    if (leftChild && rightChild) {
-                        leftChild->apply(func);
-                        rightChild->apply(func);
-                    } else {
-                        for (auto& obj : objects) {
-                            func(*obj);
-                        }
-                    }
-                }
-
                 private:
-                AABB bounds;                    ///< The bounding volume of the node. Encompasses all the elements in the node's subtree.
-                Scope<BVHNode> left;            ///< The left child node.
-                Scope<BVHNode> right;           ///< The right child node.
-                Vector<ElementType*> elements;  ///< The elements in the node. Only present in leaf nodes.
+                AABB bounds;                 ///< The bounding volume of the node. Encompasses all the elements in the node's subtree.
+                Scope<BVHNode> left;         ///< The left child node.
+                Scope<BVHNode> right;        ///< The right child node.
+                Vec<ElementType*> elements;  ///< The elements in the node. Only present in leaf nodes.
             };
 
             const uint maxLeafSize;

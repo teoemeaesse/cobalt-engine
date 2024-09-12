@@ -28,7 +28,7 @@ namespace cobalt {
                 Func<AABB(const T&)> getElementBounds;  // The function to get an element's bounding box.
 
                 /**
-                 * @brief Create an octree configuration.
+                 * @brief Creates an octree configuration.
                  * @param getElementBounds The function to get an element's bounding box.
                  * @param maxDepth The maximum depth of the octree. 0 means no depth limit.
                  * @param maxElements The maximum number of elements in a node. This must be at least 1.
@@ -40,18 +40,43 @@ namespace cobalt {
             };
 
             /**
-             * @brief Create an octree.
+             * @brief Creates an octree.
              * @param bounds The maximum bounds of the octree.
              * @param config The configuration of the octree.
              * @see Configuration
              */
             Octree(const AABB& bounds, const Configuration& config) noexcept : root(bounds, config) {}
+            /**
+             * @brief Destroys the octree.
+             */
+            ~Octree() noexcept = default;
+
+            /**
+             * @brief Queries the octree for elements that intersect a given range. If a range is not provided, the function returns all elements in
+             * the octree.
+             * @param found The vector to store the found elements in.
+             * @param range The range to query. If not provided, the function returns all elements in the octree.
+             */
+            void query(Vec<T*>& found, Opt<const AABB&> range = None) const { root.query(found, range); }
+            /**
+             * @brief Queries the octree for elements that intersect a given point. If a point is not provided, the function returns all elements in
+             * the octree.
+             * @param found The vector to store the found elements in.
+             * @param point The point to query. If not provided, the function returns all elements in the octree.
+             */
+            void query(Vec<T*>& found, const glm::vec3& point) const { root.query(found, point); }
+
+            /**
+             * @brief Copy-inserts an element into the tree.
+             * @param element The element to insert. Must be copy-constructible.
+             */
+            void insert(const T& element) { root.insert(element); }
 
             private:
             class OctreeNode {
                 public:
                 /**
-                 * @brief Create an octree node.
+                 * @brief Creates an octree node.
                  * @param bounds The bounds of the node.
                  * @param config The configuration of the octree.
                  * @param depth The depth of the node.
@@ -69,8 +94,45 @@ namespace cobalt {
                 OctreeNode& operator=(OctreeNode&&) = delete;
 
                 /**
-                 * @brief Copy an element into the tree.
-                 * @param element The element to copy. Must be copy-constructible.
+                 * @brief Queries the octree for elements that intersect a given range. If a range is not provided, the function returns all elements
+                 * in the octree.
+                 * @param found The vector to store the found elements in.
+                 * @param range The range to query. If not provided, the function returns all elements in the octree.
+                 */
+                void query(Vec<T*>& found, Opt<const AABB&> range = None) const {
+                    if (range.has_value() && !bounds.intersects(range.value())) return;
+                    if (isLeaf()) {
+                        for (const auto& element : data) {
+                            found.push_back(&element);
+                        }
+                        return;
+                    }
+                    for (const auto& child : children) {
+                        child->query(found, range);
+                    }
+                }
+                /**
+                 * @brief Queries the octree for elements that intersect a given point. If a point is not provided, the function returns all elements
+                 * in the octree.
+                 * @param found The vector to store the found elements in.
+                 * @param point The point to query. If not provided, the function returns all elements in the octree.
+                 */
+                void query(Vec<T*>& found, const glm::vec3& point) const {
+                    if (!bounds.contains(point)) return;
+                    if (isLeaf()) {
+                        for (const auto& element : data) {
+                            found.push_back(&element);
+                        }
+                        return;
+                    }
+                    for (const auto& child : children) {
+                        child->query(found, point);
+                    }
+                }
+
+                /**
+                 * @brief Copy-inserts an element into the tree.
+                 * @param element The element to insert. Must be copy-constructible.
                  */
                 void insert(const T& element) {
                     static_assert(std::is_copy_constructible<T>::value, "T must be copy constructible.");
@@ -89,7 +151,7 @@ namespace cobalt {
                 }
 
                 /**
-                 * @brief Check if the node is a leaf in the octree.
+                 * @brief Checks if the node is a leaf in the octree.
                  * @return Whether the node is a leaf.
                  */
                 bool isLeaf() const noexcept { return children.empty(); }
@@ -102,7 +164,7 @@ namespace cobalt {
                 const Configuration& config;  // The configuration of the octree.
 
                 /**
-                 * @brief Split the node into 8 children and recursively distribute the data.
+                 * @brief Splits the node into 8 children and recursively distribute the data.
                  */
                 void split() {
                     glm::vec3 min = bounds.getMin();
