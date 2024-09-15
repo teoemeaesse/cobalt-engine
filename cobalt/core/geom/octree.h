@@ -14,9 +14,9 @@ namespace cobalt {
         /**
          * @brief An Octree divides 3D space into 8 octants, each of which can be further divided into 8 octants, and so on. Useful for collision
          * detection and spatial partitioning in general.
-         * @tparam T The type of the data stored in the Octree.
+         * @tparam ElementType The type of the data stored in the Octree.
          */
-        template <typename T>
+        template <typename ElementType>
         class Octree {
             public:
             class Debug;
@@ -25,9 +25,9 @@ namespace cobalt {
              * @brief A configuration for the octree parameters.
              */
             struct Configuration {
-                const uint maxDepth;                    // The maximum depth of the octree. 0 means no depth limit.
-                const uint maxElements;                 // The maximum number of elements in a node. This must be at least 1.
-                Func<AABB(const T&)> getElementBounds;  // The function to get an element's bounding box.
+                const uint maxDepth;                              // The maximum depth of the octree. 0 means no depth limit.
+                const uint maxElements;                           // The maximum number of elements in a node. This must be at least 1.
+                Func<AABB(const ElementType&)> getElementBounds;  // The function to get an element's bounding box.
 
                 /**
                  * @brief Creates an octree configuration.
@@ -37,7 +37,7 @@ namespace cobalt {
                  * @see Octree
                  * @see OctreeNode
                  */
-                Configuration(Func<AABB(const T&)> getElementBounds, const uint maxDepth = 0, const uint maxElements = 8) noexcept
+                Configuration(Func<AABB(const ElementType&)> getElementBounds, const uint maxDepth = 0, const uint maxElements = 8) noexcept
                     : getElementBounds(getElementBounds), maxDepth(maxDepth), maxElements(maxElements) {}
             };
 
@@ -59,24 +59,24 @@ namespace cobalt {
              * @param found The vector to store the found elements in.
              * @param range The range to query. If not provided, the function returns all elements in the octree.
              */
-            void query(Vec<Wrap<T>>& found, Opt<AABB> range = None) { root.query(found, range); }
+            void query(Vec<Wrap<ElementType>>& found, Opt<AABB> range = None) { root.query(found, range); }
             /**
              * @brief Queries the octree for elements that intersect a given point. If a point is not provided, the function returns all elements in
              * the octree.
              * @param found The vector to store the found elements in.
              * @param point The point to query. If not provided, the function returns all elements in the octree.
              */
-            void query(Vec<Wrap<T>>& found, const glm::vec3& point) { root.query(found, point); }
+            void query(Vec<Wrap<ElementType>>& found, const glm::vec3& point) { root.query(found, point); }
 
             /**
              * @brief Copy-inserts an element into the tree. The bounds for this element MUST NOT BE VOID.
              * @param element The element to insert. Must be copy-constructible.
              */
-            void insert(const T& element) { root.insert(element); }
+            void insert(const ElementType& element) { root.insert(element); }
 
             private:
             class OctreeNode {
-                friend class Octree<T>::Debug;
+                friend class Octree<ElementType>::Debug;
 
                 public:
                 /**
@@ -99,7 +99,7 @@ namespace cobalt {
                  * @param found The vector to store the found elements in.
                  * @param range The range to query. If not provided, the function returns all elements in the octree.
                  */
-                void query(Vec<Wrap<T>>& found, Opt<AABB> range = None) {
+                void query(Vec<Wrap<ElementType>>& found, Opt<AABB> range = None) {
                     if (range.has_value() && !range.value().intersects(bounds)) {
                         return;
                     }
@@ -121,7 +121,7 @@ namespace cobalt {
                  * @param found The vector to store the found elements in.
                  * @param point The point to query. If not provided, the function returns all elements in the octree.
                  */
-                void query(Vec<Wrap<T>>& found, const glm::vec3& point) {
+                void query(Vec<Wrap<ElementType>>& found, const glm::vec3& point) {
                     if (!bounds.contains(point)) {
                         return;
                     }
@@ -142,12 +142,12 @@ namespace cobalt {
                  * @brief Copy-inserts an element into the tree. The bounds for this element MUST NOT BE VOID.
                  * @param element The element to insert. Must be copy-constructible.
                  */
-                void insert(ConstWrap<T> element) {
-                    static_assert(std::is_copy_constructible<T>::value, "T must be copy constructible.");
+                void insert(ConstWrap<ElementType> element) {
+                    static_assert(std::is_copy_constructible<ElementType>::value, "ElementType must be copy constructible.");
                     const AABB& elementBounds = config.getElementBounds(element);
                     if (!this->bounds.intersects(elementBounds)) return;
                     if (isLeaf()) {
-                        data.push_back(CreateConstWrap<T>(element));
+                        data.push_back(CreateConstWrap<ElementType>(element));
                         if (data.size() > config.maxElements && (config.maxDepth == 0 || depth < config.maxDepth)) {
                             split();
                         }
@@ -155,7 +155,7 @@ namespace cobalt {
                     }
                     for (auto& child : children) {
                         if (child.bounds.contains(elementBounds)) {
-                            child.insert(CreateConstWrap<T>(element));
+                            child.insert(CreateConstWrap<ElementType>(element));
                             return;
                         }
                     }
@@ -170,7 +170,7 @@ namespace cobalt {
 
                 private:
                 Vec<OctreeNode> children;     // The children of the node.
-                Vec<T> data;                  // The data stored in the node.
+                Vec<ElementType> data;        // The data stored in the node.
                 AABB bounds;                  // The bounds of the node.
                 const uint depth;             // The depth of the node.
                 const Configuration& config;  // The configuration of the octree.
@@ -192,7 +192,7 @@ namespace cobalt {
                     children.emplace_back((AABB){{mid.x, mid.y, min.z}, {max.x, max.y, mid.z}}, config, depth + 1);
                     children.emplace_back((AABB){{mid.x, mid.y, mid.z}, {max.x, max.y, max.z}}, config, depth + 1);
                     // Temporarily store the current data and clear the node's data
-                    Vec<T> tempData = Move(data);
+                    Vec<ElementType> tempData = Move(data);
                     data.clear();
 
                     // Distribute existing elements to appropriate children or keep them in the current node
@@ -201,7 +201,7 @@ namespace cobalt {
                         bool inserted = false;
                         for (auto& child : children) {
                             if (child.bounds.contains(elementBounds)) {
-                                child.insert(CreateConstWrap<T>(element));
+                                child.insert(CreateConstWrap<ElementType>(element));
                                 inserted = true;
                                 break;  // Element fits entirely within one child
                             }
@@ -218,8 +218,8 @@ namespace cobalt {
 
             public:
             /**
-             * @brief A dummy class to allow access to private members of the Octree.
-             * @tparam T The type of the data stored in the Octree.
+             * @brief A dummy class for debugging the octree. Never use this in production code.
+             * @tparam ElementType The type of the data stored in the Octree.
              * @warning This is to be used for testing, never in production code.
              */
             class Debug {
@@ -229,14 +229,14 @@ namespace cobalt {
                  * @param octree The octree.
                  * @return The root node.
                  */
-                static const OctreeNode& getRoot(Octree<T>& octree) { return octree.root; }
+                static const OctreeNode& getRoot(Octree<ElementType>& octree) { return octree.root; }
 
                 /**
                  * @brief Gets the data of a node.
                  * @param node The node.
                  * @return The data.
                  */
-                static const Vec<T>& getData(const OctreeNode& node) { return node.data; }
+                static const Vec<ElementType>& getData(const OctreeNode& node) { return node.data; }
 
                 /**
                  * @brief Gets the children of a node.
