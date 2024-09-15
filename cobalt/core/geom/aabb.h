@@ -45,6 +45,13 @@ namespace cobalt {
             bool contains(const glm::vec3& point) const noexcept;
 
             /**
+             * @brief Checks if this box contains another box.
+             * @param other The other box.
+             * @return Whether the box contains the other box.
+             */
+            bool contains(const AABB& other) const noexcept;
+
+            /**
              * @brief Expands this box to include another box.
              * @param other The other box.
              */

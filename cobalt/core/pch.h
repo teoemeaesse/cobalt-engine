@@ -99,6 +99,12 @@ namespace cobalt {
     template <typename T>
     using Wrap = std::reference_wrapper<T>;
     /**
+     * @brief Const reference wrapper for reference management.
+     * @tparam T Type of the object managed by the reference wrapper.
+     */
+    template <typename T>
+    using ConstWrap = std::reference_wrapper<const T>;
+    /**
      * @brief Creates a new reference wrapper.
      * @tparam T Type of the object managed by the reference wrapper.
      * @param ref Reference to wrap.
@@ -107,6 +113,16 @@ namespace cobalt {
     template <typename T>
     constexpr Wrap<T> CreateWrap(T& ref) {
         return std::ref(ref);
+    }
+    /**
+     * @brief Creates a new const reference wrapper.
+     * @tparam T Type of the object managed by the reference wrapper.
+     * @param ref Reference to wrap.
+     * @return The new const reference wrapper.
+     */
+    template <typename T>
+    constexpr ConstWrap<T> CreateConstWrap(const T& ref) {
+        return std::cref(ref);
     }
     /**
      * @brief Wrapper for std::unordered_map.

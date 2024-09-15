@@ -19,6 +19,8 @@ namespace cobalt {
         template <typename T>
         class Octree {
             public:
+            class Debug;
+
             /**
              * @brief A configuration for the octree parameters.
              */
@@ -57,23 +59,25 @@ namespace cobalt {
              * @param found The vector to store the found elements in.
              * @param range The range to query. If not provided, the function returns all elements in the octree.
              */
-            void query(Vec<T*>& found, Opt<const AABB&> range = None) const { root.query(found, range); }
+            void query(Vec<Wrap<T>>& found, Opt<AABB> range = None) { root.query(found, range); }
             /**
              * @brief Queries the octree for elements that intersect a given point. If a point is not provided, the function returns all elements in
              * the octree.
              * @param found The vector to store the found elements in.
              * @param point The point to query. If not provided, the function returns all elements in the octree.
              */
-            void query(Vec<T*>& found, const glm::vec3& point) const { root.query(found, point); }
+            void query(Vec<Wrap<T>>& found, const glm::vec3& point) { root.query(found, point); }
 
             /**
-             * @brief Copy-inserts an element into the tree.
+             * @brief Copy-inserts an element into the tree. The bounds for this element MUST NOT BE VOID.
              * @param element The element to insert. Must be copy-constructible.
              */
             void insert(const T& element) { root.insert(element); }
 
             private:
             class OctreeNode {
+                friend class Octree<T>::Debug;
+
                 public:
                 /**
                  * @brief Creates an octree node.
@@ -81,17 +85,13 @@ namespace cobalt {
                  * @param config The configuration of the octree.
                  * @param depth The depth of the node.
                  */
-                OctreeNode(const AABB& bounds, const Configuration& config, const uint depth = 0) noexcept : bounds(bounds), depth(depth) {}
-
+                OctreeNode(const AABB& bounds, const Configuration& config, const uint depth = 0) noexcept
+                    : bounds(bounds), config(config), depth(depth) {}
                 ~OctreeNode() noexcept = default;
-
                 OctreeNode(const OctreeNode&) = delete;
-
                 OctreeNode& operator=(const OctreeNode&) = delete;
-
-                OctreeNode(OctreeNode&&) = delete;
-
-                OctreeNode& operator=(OctreeNode&&) = delete;
+                OctreeNode(OctreeNode&&) = default;
+                OctreeNode& operator=(OctreeNode&&) = default;
 
                 /**
                  * @brief Queries the octree for elements that intersect a given range. If a range is not provided, the function returns all elements
@@ -99,16 +99,20 @@ namespace cobalt {
                  * @param found The vector to store the found elements in.
                  * @param range The range to query. If not provided, the function returns all elements in the octree.
                  */
-                void query(Vec<T*>& found, Opt<const AABB&> range = None) const {
-                    if (range.has_value() && !bounds.intersects(range.value())) return;
-                    if (isLeaf()) {
-                        for (const auto& element : data) {
-                            found.push_back(&element);
-                        }
+                void query(Vec<Wrap<T>>& found, Opt<AABB> range = None) {
+                    if (range.has_value() && !range.value().intersects(bounds)) {
                         return;
                     }
-                    for (const auto& child : children) {
-                        child->query(found, range);
+                    for (auto& element : data) {
+                        const AABB& elementBounds = config.getElementBounds(element);
+                        if (!range.has_value() || range.value().contains(elementBounds)) {
+                            found.push_back(element);
+                        }
+                    }
+                    if (!isLeaf()) {
+                        for (auto& child : children) {
+                            child.query(found, range);
+                        }
                     }
                 }
                 /**
@@ -117,37 +121,45 @@ namespace cobalt {
                  * @param found The vector to store the found elements in.
                  * @param point The point to query. If not provided, the function returns all elements in the octree.
                  */
-                void query(Vec<T*>& found, const glm::vec3& point) const {
-                    if (!bounds.contains(point)) return;
-                    if (isLeaf()) {
-                        for (const auto& element : data) {
-                            found.push_back(&element);
-                        }
+                void query(Vec<Wrap<T>>& found, const glm::vec3& point) {
+                    if (!bounds.contains(point)) {
                         return;
                     }
-                    for (const auto& child : children) {
-                        child->query(found, point);
+                    for (auto& element : data) {
+                        const AABB& elementBounds = config.getElementBounds(element);
+                        if (elementBounds.contains(point)) {
+                            found.push_back(element);
+                        }
+                    }
+                    if (!isLeaf()) {
+                        for (auto& child : children) {
+                            child.query(found, point);
+                        }
                     }
                 }
 
                 /**
-                 * @brief Copy-inserts an element into the tree.
+                 * @brief Copy-inserts an element into the tree. The bounds for this element MUST NOT BE VOID.
                  * @param element The element to insert. Must be copy-constructible.
                  */
-                void insert(const T& element) {
+                void insert(ConstWrap<T> element) {
                     static_assert(std::is_copy_constructible<T>::value, "T must be copy constructible.");
-                    const AABB& bounds = config.getElementBounds(element);
-                    if (!this->bounds.intersects(bounds)) return;
+                    const AABB& elementBounds = config.getElementBounds(element);
+                    if (!this->bounds.intersects(elementBounds)) return;
                     if (isLeaf()) {
-                        data.push_back(element);
+                        data.push_back(CreateConstWrap<T>(element));
                         if (data.size() > config.maxElements && (config.maxDepth == 0 || depth < config.maxDepth)) {
                             split();
                         }
                         return;
                     }
                     for (auto& child : children) {
-                        child->insert(element);
+                        if (child.bounds.contains(elementBounds)) {
+                            child.insert(CreateConstWrap<T>(element));
+                            return;
+                        }
                     }
+                    data.push_back(element);
                 }
 
                 /**
@@ -171,25 +183,75 @@ namespace cobalt {
                     glm::vec3 max = bounds.getMax();
                     glm::vec3 mid = {(min.x + max.x) / 2, (min.y + max.y) / 2, (min.z + max.z) / 2};
 
-                    children.emplace_back({{min.x, min.y, min.z}, {mid.x, mid.y, mid.z}}, depth + 1);
-                    children.emplace_back({{min.x, min.y, mid.z}, {mid.x, mid.y, max.z}}, depth + 1);
-                    children.emplace_back({{min.x, mid.y, min.z}, {mid.x, max.y, mid.z}}, depth + 1);
-                    children.emplace_back({{min.x, mid.y, mid.z}, {mid.x, max.y, max.z}}, depth + 1);
-                    children.emplace_back({{mid.x, min.y, min.z}, {max.x, mid.y, mid.z}}, depth + 1);
-                    children.emplace_back({{mid.x, min.y, mid.z}, {max.x, mid.y, max.z}}, depth + 1);
-                    children.emplace_back({{mid.x, mid.y, min.z}, {max.x, max.y, mid.z}}, depth + 1);
-                    children.emplace_back({{mid.x, mid.y, mid.z}, {max.x, max.y, max.z}}, depth + 1);
+                    children.emplace_back((AABB){{min.x, min.y, min.z}, {mid.x, mid.y, mid.z}}, config, depth + 1);
+                    children.emplace_back((AABB){{min.x, min.y, mid.z}, {mid.x, mid.y, max.z}}, config, depth + 1);
+                    children.emplace_back((AABB){{min.x, mid.y, min.z}, {mid.x, max.y, mid.z}}, config, depth + 1);
+                    children.emplace_back((AABB){{min.x, mid.y, mid.z}, {mid.x, max.y, max.z}}, config, depth + 1);
+                    children.emplace_back((AABB){{mid.x, min.y, min.z}, {max.x, mid.y, mid.z}}, config, depth + 1);
+                    children.emplace_back((AABB){{mid.x, min.y, mid.z}, {max.x, mid.y, max.z}}, config, depth + 1);
+                    children.emplace_back((AABB){{mid.x, mid.y, min.z}, {max.x, max.y, mid.z}}, config, depth + 1);
+                    children.emplace_back((AABB){{mid.x, mid.y, mid.z}, {max.x, max.y, max.z}}, config, depth + 1);
+                    // Temporarily store the current data and clear the node's data
+                    Vec<T> tempData = Move(data);
+                    data.clear();
 
-                    for (const auto& element : data) {
+                    // Distribute existing elements to appropriate children or keep them in the current node
+                    for (const auto& element : tempData) {
+                        const AABB& elementBounds = config.getElementBounds(element);
+                        bool inserted = false;
                         for (auto& child : children) {
-                            child->insert(element);
+                            if (child.bounds.contains(elementBounds)) {
+                                child.insert(CreateConstWrap<T>(element));
+                                inserted = true;
+                                break;  // Element fits entirely within one child
+                            }
+                        }
+                        if (!inserted) {
+                            // Element does not fit entirely within any child, so keep it in this node
+                            data.push_back(element);
                         }
                     }
-                    data.clear();
                 }
             };
 
             OctreeNode root;  // The root node of the octree.s
+
+            public:
+            /**
+             * @brief A dummy class to allow access to private members of the Octree.
+             * @tparam T The type of the data stored in the Octree.
+             * @warning This is to be used for testing, never in production code.
+             */
+            class Debug {
+                public:
+                /**
+                 * @brief Gets the root node of the octree.
+                 * @param octree The octree.
+                 * @return The root node.
+                 */
+                static const OctreeNode& getRoot(Octree<T>& octree) { return octree.root; }
+
+                /**
+                 * @brief Gets the data of a node.
+                 * @param node The node.
+                 * @return The data.
+                 */
+                static const Vec<T>& getData(const OctreeNode& node) { return node.data; }
+
+                /**
+                 * @brief Gets the children of a node.
+                 * @param node The node.
+                 * @return The children.
+                 */
+                static const Vec<OctreeNode>& getChildren(const OctreeNode& node) { return node.children; }
+
+                /**
+                 * @brief Gets the bounds of a node.
+                 * @param node The node.
+                 * @return The bounds.
+                 */
+                static const AABB& getBounds(const OctreeNode& node) { return node.bounds; }
+            };
         };  // namespace core::geom
     }  // namespace core::geom
 }  // namespace cobalt

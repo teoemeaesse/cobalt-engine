@@ -23,6 +23,11 @@ namespace cobalt {
             return point.x >= min.x && point.x <= max.x && point.y >= min.y && point.y <= max.y && point.z >= min.z && point.z <= max.z;
         }
 
+        bool AABB::contains(const AABB& other) const noexcept {
+            return min.x <= other.min.x && max.x >= other.max.x && min.y <= other.min.y && max.y >= other.max.y && min.z <= other.min.z &&
+                   max.z >= other.max.z;
+        }
+
         void AABB::expand(const AABB& other) noexcept {
             min = glm::min(min, other.min);
             max = glm::max(max, other.max);
