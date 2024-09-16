@@ -75,6 +75,9 @@ namespace cobalt {
             void insert(const ElementType& element) { root.insert(element); }
 
             private:
+            /**
+             * @brief A node in the octree. The root node is the starting point of the octree, and all other nodes are its children.
+             */
             class OctreeNode {
                 friend class Octree<ElementType>::Debug;
 
