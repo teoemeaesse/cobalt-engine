@@ -30,13 +30,12 @@ for arg in "$@"; do
     esac
 done
 
-echo -e "${GREEN}Creating documentation directories...${NC}"
-mkdir -p docs
+echo -e "${GREEN}Creating build directory...${NC}"
 mkdir -p build
 cd build || (echo -e "${RED}Failed to enter build directory. Exiting...${NC}" && exit 1)
 
 echo -e "${GREEN}Configuring CMake...${NC}"
-cmake .. || (echo -e "${RED}CMake configuration failed. Exiting...${NC}" && exit 1)
+cmake .. -DDOXYGEN_CONFIG_FILE=../doxygen/Doxyfile || (echo -e "${RED}CMake configuration failed. Exiting...${NC}" && exit 1)
 
 echo -e "${GREEN}Building documentation with Doxygen...${NC}"
 cmake --build . --target doc_doxygen
@@ -45,7 +44,7 @@ cd ..
 
 if [ "$OPEN" -eq 1 ]; then
     echo -e "${GREEN}Opening the generated documentation in the default browser...${NC}"
-    open docs/html/index.html
+    open doxygen/docs/html/index.html
 fi
 
-echo -e "${GREEN}Documentation build script completed.${NC}"
+echo -e "${GREEN}Documentation build script completed.${NC}"´
