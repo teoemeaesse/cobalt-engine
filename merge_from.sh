@@ -10,7 +10,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 UPDATE_BRANCH=$1
-BRANCHES=("main" "dev" "docs")
+BRANCHES=("main" "dev")
 
 echo -e "${GREEN}Fetching the latest updates from the origin...${NC}"
 git fetch origin
