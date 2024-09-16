@@ -36,7 +36,7 @@ mkdir -p build
 cd build || (echo -e "${RED}Failed to enter build directory. Exiting...${NC}" && exit 1)
 
 echo -e "${GREEN}Configuring CMake...${NC}"
-+cmake .. || (echo -e "${RED}CMake configuration failed. Exiting...${NC}" && exit 1)
+cmake .. || (echo -e "${RED}CMake configuration failed. Exiting...${NC}" && exit 1)
 
 echo -e "${GREEN}Building documentation with Doxygen...${NC}"
 cmake --build . --target doc_doxygen
