@@ -44,7 +44,7 @@ cd ..
 
 if [ "$OPEN" -eq 1 ]; then
     echo -e "${GREEN}Opening the generated documentation in the default browser...${NC}"
-    open doxygen/docs/html/index.html
+    open docs/html/index.html
 fi
 
 echo -e "${GREEN}Documentation build script completed.${NC}"´
