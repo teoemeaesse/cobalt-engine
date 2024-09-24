@@ -8,6 +8,7 @@
 #pragma once
 
 #include "core/geom/aabb.h"
+#include "core/geom/axis.h"
 
 namespace cobalt {
     namespace core::geom {
@@ -25,7 +26,7 @@ namespace cobalt {
              * @param elements The array of elements to split.
              * @return A pair containing the two sets of elements.
              */
-            virtual Pair<Vector<ElementType*>, Vector<ElementType*>> split(Vector<ElementType*> elements) const = 0;
+            virtual Pair<Vec<ElementType>, Vec<ElementType>> split(Vec<ElementType> elements) const = 0;
 
             /**
              * @brief Gets the bounding volume for a specific element.
@@ -47,27 +48,31 @@ namespace cobalt {
              * @return A pair containing the two sets of elements.
              * @note You should extend this class and implement the getElementBounds method before instantiating it.
              */
-            Pair<Vector<ElementType*>, Vector<ElementType*>> split(Vector<ElementType*> elements) const override {
+            Pair<Vec<ElementType>, Vec<ElementType>> split(Vec<ElementType> elements) const override {
                 if (elements.empty()) {
-                    return {Vector<ElementType*>(), Vector<ElementType*>()};
+                    return {Vec<ElementType>(), Vec<ElementType>()};
                 }
 
                 AABB combinedBounds;
-                for (ElementType* element : elements) {
-                    combinedBounds += getElementBounds(*element);
+                for (auto element : elements) {
+                    combinedBounds += this->getElementBounds(element);
                 }
 
                 glm::vec3 size = combinedBounds.getSize();
                 Axis axis = size.x > size.y ? (size.x > size.z ? Axis::X : Axis::Z) : (size.y > size.z ? Axis::Y : Axis::Z);
 
-                std::sort(elements.begin(), elements.end(), AABB::CompareAxis(axis));
+                sortByAxis(elements, axis);
 
                 size_t half = elements.size() / 2;
-                return {Vector<ElementType*>(elements.begin(), elements.begin() + half),
-                        Vector<ElementType*>(elements.begin() + half, elements.end())};
+                return {Vec<ElementType>(elements.begin(), elements.begin() + half), Vec<ElementType>(elements.begin() + half, elements.end())};
             }
 
-            const AABB& getElementBounds(const ElementType& element) const noexcept = 0;
+            void sortByAxis(Vec<ElementType>& elements, Axis axis) const {
+                std::sort(elements.begin(), elements.end(), [this, axis](const ElementType& a, const ElementType& b) {
+                    return this->getElementBounds(a).getCenter()[static_cast<size_t>(axis)] <
+                           this->getElementBounds(b).getCenter()[static_cast<size_t>(axis)];
+                });
+            }
         };
     }  // namespace core::geom
 }  // namespace cobalt

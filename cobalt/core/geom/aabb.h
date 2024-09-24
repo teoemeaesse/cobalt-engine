@@ -106,27 +106,6 @@ namespace cobalt {
              */
             const glm::vec3 getCenter() const noexcept;
 
-            /**
-             * @brief Enum class for specifying an axis in 3D space.
-             */
-            enum class Axis {
-                X,  ///< The x axis.
-                Y,  ///< The y axis.
-                Z   ///< The z axis.
-            };
-
-            /**
-             * @brief Compares two boxes by their center's x coordinate. Used for sorting.
-             */
-            class CompareAxis {
-                public:
-                CompareAxis(const Axis axis) noexcept;
-                bool operator()(const AABB& a, const AABB& b) const noexcept;
-
-                private:
-                const Axis axis;  // The axis to compare.
-            };
-
             private:
             glm::vec3 min;  // The minimum point of the box.
             glm::vec3 max;  // The maximum point of the box.

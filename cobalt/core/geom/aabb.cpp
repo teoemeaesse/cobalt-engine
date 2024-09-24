@@ -54,11 +54,5 @@ namespace cobalt {
         const glm::vec3 AABB::getSize() const noexcept { return max - min; }
 
         const glm::vec3 AABB::getCenter() const noexcept { return (min + max) / 2.0f; }
-
-        AABB::CompareAxis::CompareAxis(Axis axis) noexcept : axis(axis) {}
-
-        bool AABB::CompareAxis::operator()(const AABB& a, const AABB& b) const noexcept {
-            return a.getCenter()[(int)axis] < b.getCenter()[(int)axis];
-        }
     }  // namespace core::geom
 }  // namespace cobalt

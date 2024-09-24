@@ -19,10 +19,8 @@ namespace cobalt {
         template <typename ElementType>
         class Octree {
             public:
-            class Debug;
-
             /**
-             * @brief A configuration for the octree parameters.
+             * @brief A configuration for the Octree parameters.
              */
             struct Configuration {
                 const uint maxDepth;                              // The maximum depth of the octree. 0 means no depth limit.
@@ -30,12 +28,10 @@ namespace cobalt {
                 Func<AABB(const ElementType&)> getElementBounds;  // The function to get an element's bounding box.
 
                 /**
-                 * @brief Creates an octree configuration.
+                 * @brief Creates an Octree configuration.
                  * @param getElementBounds The function to get an element's bounding box.
-                 * @param maxDepth The maximum depth of the octree. 0 means no depth limit.
+                 * @param maxDepth The maximum depth of the Octree. 0 means no depth limit.
                  * @param maxElements The maximum number of elements in a node. This must be at least 1.
-                 * @see Octree
-                 * @see OctreeNode
                  */
                 Configuration(Func<AABB(const ElementType&)> getElementBounds, const uint maxDepth = 0, const uint maxElements = 8) noexcept
                     : getElementBounds(getElementBounds), maxDepth(maxDepth), maxElements(maxElements) {}
@@ -73,6 +69,8 @@ namespace cobalt {
              * @param element The element to insert. Must be copy-constructible.
              */
             void insert(const ElementType& element) { root.insert(element); }
+
+            class Debug;
 
             private:
             /**
@@ -194,11 +192,9 @@ namespace cobalt {
                     children.emplace_back((AABB){{mid.x, min.y, mid.z}, {max.x, mid.y, max.z}}, config, depth + 1);
                     children.emplace_back((AABB){{mid.x, mid.y, min.z}, {max.x, max.y, mid.z}}, config, depth + 1);
                     children.emplace_back((AABB){{mid.x, mid.y, mid.z}, {max.x, max.y, max.z}}, config, depth + 1);
-                    // Temporarily store the current data and clear the node's data
                     Vec<ElementType> tempData = Move(data);
                     data.clear();
 
-                    // Distribute existing elements to appropriate children or keep them in the current node
                     for (const auto& element : tempData) {
                         const AABB& elementBounds = config.getElementBounds(element);
                         bool inserted = false;
@@ -206,18 +202,17 @@ namespace cobalt {
                             if (child.bounds.contains(elementBounds)) {
                                 child.insert(CreateConstWrap<ElementType>(element));
                                 inserted = true;
-                                break;  // Element fits entirely within one child
+                                break;
                             }
                         }
                         if (!inserted) {
-                            // Element does not fit entirely within any child, so keep it in this node
                             data.push_back(element);
                         }
                     }
                 }
             };
 
-            OctreeNode root;  // The root node of the octree.s
+            OctreeNode root;  ///< The root node of the octree.s
 
             public:
             /**
