@@ -1,10 +1,9 @@
-//
-// Created
-// by
-// tomas
-// on
-// 19-11-2023.
-//
+/**
+ * @file test_pool.h
+ * @brief Test the memory pool implementation.
+ * @author Tomás Marques
+ * @date 19-11-2023
+ */
 
 #include "core/memory/pool.h"
 #include "unity/unity.h"

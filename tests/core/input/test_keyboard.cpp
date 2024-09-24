@@ -1,10 +1,9 @@
-//
-// Created
-// by
-// tomas
-// on
-// 26-12-2023.
-//
+/**
+ * @file test_keyboard.h
+ * @brief Test the keyboard input implementation.
+ * @author Tomás Marques
+ * @date 26-12-2023
+ */
 
 #include "unity/unity.h"
 

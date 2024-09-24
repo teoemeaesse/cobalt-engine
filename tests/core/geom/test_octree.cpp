@@ -1,4 +1,9 @@
-// Created by tomas on 11-09-2024.
+/**
+ * @file test_octree.h
+ * @brief Test the Octree implementation.
+ * @author Tomás Marques
+ * @date 11-09-2024
+ */
 
 #include "core/geom/octree.h"
 #include "unity/unity.h"

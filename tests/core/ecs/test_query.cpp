@@ -1,5 +1,9 @@
-// Created by tomas on
-// 28-01-2024.
+/**
+ * @file test_query.h
+ * @brief Test the ECS query implementation.
+ * @author Tomás Marques
+ * @date 28-01-2024
+ */
 
 #include "core/ecs/world.h"
 #include "unity/unity.h"

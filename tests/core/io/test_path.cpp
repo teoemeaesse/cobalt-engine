@@ -1,10 +1,9 @@
-//
-// Created
-// by
-// tomas
-// on
-// 19-11-2023.
-//
+/**
+ * @file test_path.h
+ * @brief Test the system path implementation.
+ * @author Tomás Marques
+ * @date 19-11-2023
+ */
 
 #include "core/io/path.h"
 #include "unity/unity.h"

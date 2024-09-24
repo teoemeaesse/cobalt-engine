@@ -1,10 +1,9 @@
-//
-// Created
-// by
-// tomas
-// on
-// 19-11-2023.
-//
+/**
+ * @file test_arena.h
+ * @brief Test the memory arena implementation.
+ * @author Tomás Marques
+ * @date 19-11-2023
+ */
 
 #include "core/memory/arena.h"
 #include "unity/unity.h"

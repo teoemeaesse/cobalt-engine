@@ -1,5 +1,9 @@
-// Created by tomas on
-// 07-02-2024.
+/**
+ * @file test_world.h
+ * @brief Test the ECS world implementation.
+ * @author Tomás Marques
+ * @date 07-02-2024
+ */
 
 #include "core/ecs/world.h"
 #include "unity/unity.h"

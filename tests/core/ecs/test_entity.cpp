@@ -1,5 +1,9 @@
-// Created by tomas on
-// 28-01-2024.
+/**
+ * @file test_entity.h
+ * @brief Test the ECS entity implementation.
+ * @author Tomás Marques
+ * @date 28-01-2024
+ */
 
 #include "core/ecs/component/registry.h"
 #include "core/ecs/entity/registry.h"

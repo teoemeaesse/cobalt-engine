@@ -1,5 +1,9 @@
-// Created by tomas on
-// 12-09-2024.
+/**
+ * @file test_aabb.h
+ * @brief Test the AABB implementation.
+ * @author Tomás Marques
+ * @date 12-09-2024
+ */
 
 #include "core/geom/aabb.h"
 #include "unity/unity.h"
