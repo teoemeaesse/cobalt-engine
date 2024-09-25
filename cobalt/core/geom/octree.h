@@ -19,46 +19,97 @@ namespace cobalt {
         template <typename ElementType>
         class Octree {
             public:
-            /**
-             * @brief A configuration for the Octree parameters.
-             */
-            struct Configuration {
-                const uint maxDepth;                              // The maximum depth of the octree. 0 means no depth limit.
-                const uint maxElements;                           // The maximum number of elements in a node. This must be at least 1.
-                Func<AABB(const ElementType&)> getElementBounds;  // The function to get an element's bounding box.
+            friend class Builder;
+            friend class Debug;
+            class Debug;
+            struct Configuration;
+
+            class Builder {
+                public:
+                /**
+                 * @brief Default constructor.
+                 */
+                Builder() = default;
+                /**
+                 * @brief Default destructor.
+                 */
+                ~Builder() = default;
+                /**
+                 * @brief Deleted copy constructor.
+                 * @param other The other instance.
+                 */
+                Builder(const Builder&) = delete;
+                /**
+                 * @brief Deleted copy assignment operator.
+                 * @param other The other instance.
+                 */
+                Builder& operator=(const Builder&) = delete;
 
                 /**
-                 * @brief Creates an Octree configuration.
-                 * @param getElementBounds The function to get an element's bounding box.
-                 * @param maxDepth The maximum depth of the Octree. 0 means no depth limit.
-                 * @param maxElements The maximum number of elements in a node. This must be at least 1.
+                 * @brief Sets the maximum depth of the octree. 0 means no depth limit.
+                 * @param maxDepth The maximum depth.
+                 * @return This builder.
                  */
-                Configuration(Func<AABB(const ElementType&)> getElementBounds, const uint maxDepth = 0, const uint maxElements = 8) noexcept
-                    : getElementBounds(getElementBounds), maxDepth(maxDepth), maxElements(maxElements) {}
+                Builder& withMaxDepth(uint maxDepth) {
+                    this->maxDepth = maxDepth;
+                    return *this;
+                }
+                /**
+                 * @brief Sets the maximum number of elements in a node. This must be at least 1.
+                 * @param maxElements The maximum number of elements.
+                 * @return This builder.
+                 */
+                Builder& withMaxElements(uint maxElements) {
+                    this->maxElements = maxElements;
+                    return *this;
+                }
+                /**
+                 * @brief Sets the function to get an element's bounding box.
+                 * @param getElementBounds The function to get an element's bounding box.
+                 * @return This builder.
+                 */
+                Builder& withElementBounds(Func<AABB(const ElementType&)> getElementBounds) {
+                    this->getElementBounds = getElementBounds;
+                    return *this;
+                }
+                /**
+                 * @brief Sets the maximum bounds of the octree.
+                 * @param bounds The maximum bounds.
+                 * @return This builder.
+                 */
+                Builder& withTreeBounds(const AABB& bounds) {
+                    this->bounds = bounds;
+                    return *this;
+                }
+
+                /**
+                 * @brief Builds the octree.
+                 * @return The octree.
+                 */
+                Octree<ElementType> build() { return Octree<ElementType>(bounds, {maxDepth, maxElements, getElementBounds}); }
+
+                private:
+                uint maxDepth;                                    // The maximum depth of the octree. 0 means no depth limit.
+                uint maxElements;                                 // The maximum number of elements in a node. This must be at least 1.
+                Func<AABB(const ElementType&)> getElementBounds;  // The function to get an element's bounding box.
+                AABB bounds;                                      // The maximum bounds of the octree.
             };
 
-            /**
-             * @brief Creates an octree.
-             * @param bounds The maximum bounds of the octree.
-             * @param config The configuration of the octree.
-             * @see Configuration
-             */
-            Octree(const AABB& bounds, const Configuration& config) noexcept : root(bounds, config) {}
             /**
              * @brief Destroys the octree.
              */
             ~Octree() noexcept = default;
 
             /**
-             * @brief Queries the octree for elements that intersect a given range. If a range is not provided, the function returns all elements in
-             * the octree.
+             * @brief Queries the octree for elements that intersect a given range. If a range is not provided, the function returns all elements
+             * in the octree.
              * @param found The vector to store the found elements in.
              * @param range The range to query. If not provided, the function returns all elements in the octree.
              */
             void query(Vec<Wrap<ElementType>>& found, Opt<AABB> range = None) { root.query(found, range); }
             /**
-             * @brief Queries the octree for elements that intersect a given point. If a point is not provided, the function returns all elements in
-             * the octree.
+             * @brief Queries the octree for elements that intersect a given point. If a point is not provided, the function returns all elements
+             * in the octree.
              * @param found The vector to store the found elements in.
              * @param point The point to query. If not provided, the function returns all elements in the octree.
              */
@@ -70,9 +121,15 @@ namespace cobalt {
              */
             void insert(const ElementType& element) { root.insert(element); }
 
-            class Debug;
-
             private:
+            /**
+             * @brief Creates an octree.
+             * @param bounds The maximum bounds of the octree.
+             * @param config The configuration of the octree.
+             * @see Configuration
+             */
+            Octree(const AABB& bounds, Configuration&& config) noexcept : config(Move(config)), root(bounds, this->config) {}
+
             /**
              * @brief A node in the octree. The root node is the starting point of the octree, and all other nodes are its children.
              */
@@ -95,8 +152,8 @@ namespace cobalt {
                 OctreeNode& operator=(OctreeNode&&) = default;
 
                 /**
-                 * @brief Queries the octree for elements that intersect a given range. If a range is not provided, the function returns all elements
-                 * in the octree.
+                 * @brief Queries the octree for elements that intersect a given range. If a range is not provided, the function returns all
+                 * elements in the octree.
                  * @param found The vector to store the found elements in.
                  * @param range The range to query. If not provided, the function returns all elements in the octree.
                  */
@@ -117,8 +174,8 @@ namespace cobalt {
                     }
                 }
                 /**
-                 * @brief Queries the octree for elements that intersect a given point. If a point is not provided, the function returns all elements
-                 * in the octree.
+                 * @brief Queries the octree for elements that intersect a given point. If a point is not provided, the function returns all
+                 * elements in the octree.
                  * @param found The vector to store the found elements in.
                  * @param point The point to query. If not provided, the function returns all elements in the octree.
                  */
@@ -212,10 +269,21 @@ namespace cobalt {
                 }
             };
 
-            OctreeNode root;  ///< The root node of the octree.s
+            Configuration config;  ///< The configuration of the octree.
+            OctreeNode root;       ///< The root node of the octree.s
+
+            public:
+            /**
+             * @brief A configuration for the Octree parameters.
+             */
+            struct Configuration {
+                const uint maxDepth;                              // The maximum depth of the octree. 0 means no depth limit.
+                const uint maxElements;                           // The maximum number of elements in a node. This must be at least 1.
+                Func<AABB(const ElementType&)> getElementBounds;  // The function to get an element's bounding box.
+                AABB bounds;                                      // The maximum bounds of the octree.
+            };
 
 #ifdef TEST_ENVIRONMENT
-            public:
             /**
              * @brief A dummy class for debugging the octree. Never use this in production code.
              * @tparam ElementType The type of the data stored in the Octree.

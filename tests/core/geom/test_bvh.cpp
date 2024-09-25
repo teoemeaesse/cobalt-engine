@@ -31,8 +31,7 @@ void test_create() {
     Vec<TestElement> elements;
 
     // Empty BVH
-    BVH<TestElement>::Configuration config1(CreateScope<TestSplitStrategy>(), 1);
-    BVH<TestElement> emptyBvh(elements, config1);
+    BVH<TestElement> emptyBvh = BVH<TestElement>::Builder().withMaxElements(1).withSplitStrategy<TestSplitStrategy>().build(elements);
     const auto& emptyRoot = BVH<TestElement>::Debug::getRoot(emptyBvh);
     TEST_ASSERT_TRUE(BVH<TestElement>::Debug::isLeaf(emptyRoot));
     TEST_ASSERT_TRUE(BVH<TestElement>::Debug::getData(emptyRoot).size() == 0);
@@ -41,7 +40,7 @@ void test_create() {
     elements.push_back(TestElement(2, glm::vec3(2, 2, 2), glm::vec3(3, 3, 3)));
 
     // BVH with 2 elements, should split
-    BVH<TestElement> bvh(elements, config1);
+    BVH<TestElement> bvh = BVH<TestElement>::Builder().withMaxElements(1).withSplitStrategy<TestSplitStrategy>().build(elements);
 
     const auto& root = BVH<TestElement>::Debug::getRoot(bvh);
     TEST_ASSERT_FALSE(BVH<TestElement>::Debug::isLeaf(root));
@@ -60,8 +59,7 @@ void test_query() {
     elements.push_back(TestElement(4, glm::vec3(6, 6, 6), glm::vec3(7, 7, 7)));
     elements.push_back(TestElement(5, glm::vec3(8, 8, 8), glm::vec3(9, 9, 9)));
 
-    BVH<TestElement>::Configuration config2(CreateScope<TestSplitStrategy>(), 2);
-    BVH<TestElement> bvh(elements, config2);
+    BVH<TestElement> bvh = BVH<TestElement>::Builder().withMaxElements(2).withSplitStrategy<TestSplitStrategy>().build(elements);
 
     // Query AABB
     AABB query(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));

@@ -22,33 +22,10 @@ namespace cobalt {
         template <typename ElementType>
         class BVH {
             public:
-            /**
-             * @brief A configuration for the BVH parameters.
-             */
-            struct Configuration {
-                const uint maxDepth;                              ///< The maximum depth of the BVH. 0 means no depth limit.
-                const uint maxElements;                           ///< The maximum number of elements in a leaf node.
-                Scope<SplitStrategy<ElementType>> splitStrategy;  ///< The strategy to use for spatially splitting the elements.
-
-                /**
-                 * @brief Creates a BVH configuration.
-                 * @param splitStrategy The strategy to use for spatially splitting the elements.
-                 * @param maxElements The maximum number of elements in a leaf node.
-                 * @param maxDepth The maximum depth of the BVH. 0 means no depth limit.
-                 */
-                Configuration(Scope<SplitStrategy<ElementType>>&& splitStrategy, const uint maxElements = 8, const uint maxDepth = 0) noexcept
-                    : splitStrategy(Move(splitStrategy)), maxElements(maxElements), maxDepth(maxDepth) {}
-
-                Configuration(const Configuration&) = delete;
-                Configuration& operator=(const Configuration&) = delete;
-            };
-
-            /**
-             * @brief Creates a BVH from a set of elements and a configuration.
-             * @param data The set of elements to build the BVH from.
-             * @param config The configuration of the BVH.
-             */
-            BVH(const Vec<ElementType>& data, const Configuration& config) noexcept : root(data, config) {}
+            friend class Builder;
+            friend class Debug;
+            class Debug;
+            struct Configuration;
 
             /**
              * @brief Queries the BVH for elements that intersect a given range.
@@ -68,9 +45,79 @@ namespace cobalt {
              */
             void query(Vec<Wrap<ElementType>>& found) noexcept { root.query(found); }
 
-            class Debug;
+            class Builder {
+                public:
+                /**
+                 * @brief Default constructor.
+                 */
+                Builder() = default;
+                /**
+                 * @brief Default destructor.
+                 */
+                ~Builder() = default;
+                /**
+                 * @brief Deleted copy constructor.
+                 * @param other The other instance.
+                 */
+                Builder(const Builder&) = delete;
+                /**
+                 * @brief Deleted copy assignment operator.
+                 * @param other The other instance.
+                 */
+                Builder& operator=(const Builder&) = delete;
+
+                /**
+                 * @brief Sets a maximum depth for the BVH.
+                 * @param maxDepth The maximum depth.
+                 * @return This builder.
+                 */
+                Builder& withMaxDepth(const uint maxDepth) noexcept {
+                    this->maxDepth = maxDepth;
+                    return *this;
+                }
+                /**
+                 * @brief Sets a maximum number of elements for a leaf node.
+                 * @param maxElements The maximum number of elements.
+                 * @return This builder.
+                 */
+                Builder& withMaxElements(const uint maxElements) noexcept {
+                    this->maxElements = maxElements;
+                    return *this;
+                }
+                /**
+                 * @brief Sets a split strategy for the BVH.
+                 * @tparam SplitStrategyType The type of the split strategy.
+                 * @tparam Args The types of the arguments to pass to the split strategy constructor.
+                 * @param args The arguments to pass to the split strategy constructor.
+                 * @return This builder.
+                 */
+                template <typename SplitStrategyType, typename... Args>
+                Builder& withSplitStrategy(Args&&... args) noexcept {
+                    splitStrategy = CreateScope<SplitStrategyType>(Forward<Args>(args)...);
+                    return *this;
+                }
+
+                /**
+                 * @brief Builds the BVH from a set of elements.
+                 * @param data The set of elements to build the BVH from.
+                 * @return The built BVH.
+                 */
+                BVH build(const Vec<ElementType>& data) noexcept { return BVH(data, {maxDepth, maxElements, Move(splitStrategy)}); }
+
+                private:
+                uint maxDepth = 0;                                ///< The maximum depth of the BVH. 0 means no depth limit.
+                uint maxElements = 8;                             ///< The maximum number of elements in a leaf node.
+                Scope<SplitStrategy<ElementType>> splitStrategy;  ///< The strategy to use for spatially splitting the elements.
+            };
 
             private:
+            /**
+             * @brief Creates a BVH from a set of elements and a configuration.
+             * @param data The set of elements to build the BVH from.
+             * @param config The configuration of the BVH.
+             */
+            BVH(const Vec<ElementType>& data, Configuration&& config) noexcept : config(Move(config)), root(data, this->config) {}
+
             /**
              * @brief A node in the BVH tree. Can be either an internal node or a leaf node.
              */
@@ -193,10 +240,17 @@ namespace cobalt {
                 const uint depth;             ///< The depth of the node in the BVH.
             };
 
-            BVHNode root;  ///< The root node of the BVH.
+            Configuration config;  ///< The configuration of the BVH.
+            BVHNode root;          ///< The root node of the BVH.
 
-#ifdef TEST_ENVIRONMENT
             public:
+            struct Configuration {
+                const uint maxDepth;                              ///< The maximum depth of the BVH. 0 means no depth limit.
+                const uint maxElements;                           ///< The maximum number of elements in a leaf node.
+                Scope<SplitStrategy<ElementType>> splitStrategy;  ///< The strategy to use for spatially splitting the elements.
+            };
+#ifdef TEST_ENVIRONMENT
+
             /**
              * @brief A dummy class for debugging the BVH. Never use this in production code.
              * @tparam ElementType The type of the data stored in the BVH.

@@ -26,24 +26,27 @@ AABB getElementBounds(const int& element) {
 
 void test_insert() {
     // Elements with null bounds should not be inserted
-    Octree<int>::Configuration config([](const int& element) { return AABB(); });
-    Octree<int> octree(AABB(), config);
+    Octree<int> octree = Octree<int>::Builder().withElementBounds([](const int& element) { return AABB(); }).withTreeBounds(AABB()).build();
     octree.insert(1);
     Vec<Wrap<int>> found;
     octree.query(found);
     TEST_ASSERT_EQUAL_INT(0, found.size());
 
     // Elements with bounds outside the octree should not be inserted
-    Octree<int>::Configuration config2([](const int& element) { return AABB({1.5f, 1.5f, 1.5f}, {2.0f, 2.0f, 2.0f}); });
-    Octree<int> octree2(AABB({-1.0f, -1.0f, -1.0f}, {1.0f, 1.0f, 1.0f}), config2);
+    Octree<int> octree2 = Octree<int>::Builder()
+                              .withElementBounds([](const int& element) { return AABB({1.5f, 1.5f, 1.5f}, {2.0f, 2.0f, 2.0f}); })
+                              .withTreeBounds(AABB({-1.0f, -1.0f, -1.0f}, {1.0f, 1.0f, 1.0f}))
+                              .build();
     octree2.insert(1);
     Vec<Wrap<int>> found2;
     octree2.query(found2);
     TEST_ASSERT_EQUAL_INT(0, found2.size());
 
     // Elements with bounds inside the octree should be inserted
-    Octree<int>::Configuration config3([](const int& element) { return AABB({1.5f, 1.5f, 1.5f}, {2.0f, 2.0f, 2.0f}); });
-    Octree<int> octree3(AABB({1.0f, 1.0f, 1.0f}, {2.0f, 2.0f, 2.0f}), config3);
+    Octree<int> octree3 = Octree<int>::Builder()
+                              .withElementBounds([](const int& element) { return AABB({1.5f, 1.5f, 1.5f}, {2.0f, 2.0f, 2.0f}); })
+                              .withTreeBounds(AABB({1.0f, 1.0f, 1.0f}, {2.0f, 2.0f, 2.0f}))
+                              .build();
     octree3.insert(1);
     Vec<Wrap<int>> found3;
     octree3.query(found3);
@@ -52,8 +55,12 @@ void test_insert() {
 
 void test_insert_multiple() {
     // Elements with bounds fully inside the octree should be inserted
-    Octree<int>::Configuration config1(getElementBounds, 10, 3);
-    Octree<int> octree1(AABB({1.0f, 1.0f, 1.0f}, {4.0f, 4.0f, 4.0f}), config1);
+    Octree<int> octree1 = Octree<int>::Builder()
+                              .withElementBounds(getElementBounds)
+                              .withMaxDepth(10)
+                              .withMaxElements(3)
+                              .withTreeBounds(AABB({1.0f, 1.0f, 1.0f}, {4.0f, 4.0f, 4.0f}))
+                              .build();
     octree1.insert(2);
     octree1.insert(3);
     octree1.insert(4);
@@ -65,8 +72,12 @@ void test_insert_multiple() {
     TEST_ASSERT_EQUAL_INT(4, found[2].get());
 
     // Elements with bounds partially inside the octree should be inserted
-    Octree<int>::Configuration config2(getElementBounds, 10, 3);
-    Octree<int> octree2(AABB({1.0f, 1.0f, 1.0f}, {3.0f, 3.0f, 3.0f}), config2);
+    Octree<int> octree2 = Octree<int>::Builder()
+                              .withElementBounds(getElementBounds)
+                              .withMaxDepth(10)
+                              .withMaxElements(3)
+                              .withTreeBounds(AABB({1.0f, 1.0f, 1.0f}, {3.0f, 3.0f, 3.0f}))
+                              .build();
     octree2.insert(2);  // Inside
     octree2.insert(3);  // Partially inside
     octree2.insert(5);  // Outside
@@ -79,8 +90,12 @@ void test_insert_multiple() {
 
 void test_query_range() {
     // Test querying within a specific range
-    Octree<int>::Configuration config(getElementBounds, 10, 3);
-    Octree<int> octree(AABB({0.0f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f}), config);
+    Octree<int> octree = Octree<int>::Builder()
+                             .withElementBounds(getElementBounds)
+                             .withMaxDepth(10)
+                             .withMaxElements(3)
+                             .withTreeBounds(AABB({0.0f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f}))
+                             .build();
     for (int i = 0; i < 10; i++) {
         octree.insert(i);
     }
@@ -96,8 +111,12 @@ void test_query_range() {
 
 void test_query_point() {
     // Test querying a specific point
-    Octree<int>::Configuration config(getElementBounds, 10, 3);
-    Octree<int> octree(AABB({0.0f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f}), config);
+    Octree<int> octree = Octree<int>::Builder()
+                             .withElementBounds(getElementBounds)
+                             .withMaxDepth(10)
+                             .withMaxElements(3)
+                             .withTreeBounds(AABB({0.0f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f}))
+                             .build();
     for (int i = 1; i <= 10; i++) {
         octree.insert(i);
     }
@@ -110,8 +129,12 @@ void test_query_point() {
 
 void test_octree_split() {
     // Test the splitting of the octree when maxElements is exceeded
-    Octree<int>::Configuration config(getElementBounds, 10, 2);  // maxElements set to 2
-    Octree<int> octree(AABB({0.0f, 0.0f, 0.0f}, {4.0f, 4.0f, 4.0f}), config);
+    Octree<int> octree = Octree<int>::Builder()
+                             .withElementBounds(getElementBounds)
+                             .withMaxDepth(10)
+                             .withMaxElements(2)
+                             .withTreeBounds(AABB({0.0f, 0.0f, 0.0f}, {4.0f, 4.0f, 4.0f}))
+                             .build();
     octree.insert(1);
     octree.insert(2);
     octree.insert(3);  // This should cause a split
@@ -132,8 +155,12 @@ void test_octree_split() {
 
 void test_out_of_bounds_insertion() {
     // Test inserting elements that are out of bounds
-    Octree<int>::Configuration config(getElementBounds, 10, 3);
-    Octree<int> octree(AABB({0.0f, 0.0f, 0.0f}, {5.0f, 5.0f, 5.0f}), config);
+    Octree<int> octree = Octree<int>::Builder()
+                             .withElementBounds(getElementBounds)
+                             .withMaxDepth(10)
+                             .withMaxElements(3)
+                             .withTreeBounds(AABB({0.0f, 0.0f, 0.0f}, {5.0f, 5.0f, 5.0f}))
+                             .build();
     octree.insert(6);  // Outside the bounds
     Vec<Wrap<int>> found;
     octree.query(found);
@@ -142,8 +169,12 @@ void test_out_of_bounds_insertion() {
 
 void test_insert_duplicate_elements() {
     // Test inserting duplicate elements
-    Octree<int>::Configuration config(getElementBounds, 10, 3);
-    Octree<int> octree(AABB({0.0f, 0.0f, 0.0f}, {5.0f, 5.0f, 5.0f}), config);
+    Octree<int> octree = Octree<int>::Builder()
+                             .withElementBounds(getElementBounds)
+                             .withMaxDepth(10)
+                             .withMaxElements(3)
+                             .withTreeBounds(AABB({0.0f, 0.0f, 0.0f}, {5.0f, 5.0f, 5.0f}))
+                             .build();
     octree.insert(2);
     octree.insert(2);
     Vec<Wrap<int>> found;

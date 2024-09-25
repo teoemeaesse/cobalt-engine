@@ -24,7 +24,7 @@ namespace cobalt {
 
         static core::gl::Shader parseRenderShader(nlohmann::json& shaderJson, const core::io::Path& shadersDirectory, const std::string& shaderName) {
             CB_INFO("Loading render shader: {}", shaderName);
-            core::gl::ShaderBuilder builder;
+            core::gl::Shader::Builder builder;
             std::string vertexName = shaderJson["vertex"].get<std::string>();
             std::string fragmentName = shaderJson["fragment"].get<std::string>();
             core::io::File vertexFile(shadersDirectory + vertexName);
@@ -45,7 +45,7 @@ namespace cobalt {
         static core::gl::Shader parseComputeShader(nlohmann::json& shaderJson, const core::io::Path& shadersDirectory,
                                                    const std::string& shaderName) {
             CB_INFO("Loading compute shader: {}", shaderName);
-            core::gl::ShaderBuilder builder;
+            core::gl::Shader::Builder builder;
             std::string computeName = shaderJson["compute"].get<std::string>();
             core::io::File computeFile(shadersDirectory + computeName);
             CB_INFO("From source: {}", computeName);

@@ -25,7 +25,7 @@ namespace cobalt {
          * @brief A shader program. Can be used to render or, in the case of a compute shader, to create parallel programs on the gpu.
          */
         class Shader {
-            friend class ShaderBuilder;
+            friend class Builder;
 
             public:
             /**
@@ -175,6 +175,38 @@ namespace cobalt {
              */
             void setUniformMat4v(const std::string& name, const GLsizei count, const glm::mat4* value);
 
+            /**
+             * @brief Builds and validates a shader program.
+             */
+            class Builder {
+                public:
+                /**
+                 * @brief Adds a shader step to the shader.
+                 * @param step The type of shader step to add.
+                 * @param source The source code of the shader.
+                 */
+                Builder& addShaderStep(const ShaderStep step, const std::string& source);
+                /**
+                 * @brief Builds a render shader.
+                 * @return The render shader.
+                 */
+                Shader buildRenderShader() const;
+                /**
+                 * @brief Builds a compute shader.
+                 * @return The compute shader.
+                 */
+                Shader buildComputeShader() const;
+
+                /**
+                 * @brief Gets the default shader. This just returns a green color.
+                 * @return The default shader.
+                 */
+                static Shader& getDefaultShader();
+
+                private:
+                UMap<ShaderStep, std::string> sources;  ///< The shader sources.
+            };
+
             private:
             UMap<std::string, GLuint> uniformLocations;  ///< The locations for each uniform.
 
@@ -206,38 +238,6 @@ namespace cobalt {
              * @param shader The shader handle.
              */
             static void link(const gl::Handle shader);
-        };
-
-        /**
-         * @brief A builder for shaders. Can be used to create a render, compute or geometry shader, for example.
-         */
-        class ShaderBuilder {
-            public:
-            /**
-             * @brief Adds a shader step to the shader.
-             * @param step The type of shader step to add.
-             * @param source The source code of the shader.
-             */
-            ShaderBuilder& addShaderStep(const ShaderStep step, const std::string& source);
-            /**
-             * @brief Builds a render shader.
-             * @return The render shader.
-             */
-            Shader buildRenderShader() const;
-            /**
-             * @brief Builds a compute shader.
-             * @return The compute shader.
-             */
-            Shader buildComputeShader() const;
-
-            /**
-             * @brief Gets the default shader. This just returns a green color.
-             * @return The default shader.
-             */
-            static Shader& getDefaultShader();
-
-            private:
-            UMap<ShaderStep, std::string> sources;  ///< The shader sources.
         };
     }  // namespace core::gl
 }  // namespace cobalt

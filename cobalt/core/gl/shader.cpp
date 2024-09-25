@@ -142,12 +142,12 @@ namespace cobalt {
             }
         }
 
-        ShaderBuilder& ShaderBuilder::addShaderStep(const ShaderStep step, const std::string& source) {
+        Shader::Builder& Shader::Builder::addShaderStep(const ShaderStep step, const std::string& source) {
             sources.insert(std::make_pair(step, source));
             return *this;
         }
 
-        Shader ShaderBuilder::buildRenderShader() const {
+        Shader Shader::Builder::buildRenderShader() const {
             gl::Handle vertexShader = 0, fragmentShader = 0, geometryShader = 0;
             gl::Handle program = glCreateProgram();
             try {
@@ -176,7 +176,7 @@ namespace cobalt {
             return Shader(program);
         }
 
-        Shader ShaderBuilder::buildComputeShader() const {
+        Shader Shader::Builder::buildComputeShader() const {
             gl::Handle computeShader = 0;
             gl::Handle program = glCreateProgram();
             try {
@@ -193,7 +193,7 @@ namespace cobalt {
             return Shader(program);
         }
 
-        Shader& ShaderBuilder::getDefaultShader() {
+        Shader& Shader::Builder::getDefaultShader() {
             const std::string vertexShaderSource =
                 "#version 410 core\n"
                 "void main() {\n"
@@ -207,7 +207,7 @@ namespace cobalt {
                 "    color = vec4(0.0, 1.0, 0.0, 1.0);\n"
                 "}\n";
 
-            static Shader defaultShader = ShaderBuilder()
+            static Shader defaultShader = Shader::Builder()
                                               .addShaderStep(ShaderStep::Vertex, vertexShaderSource)
                                               .addShaderStep(ShaderStep::Fragment, fragmentShaderSource)
                                               .buildRenderShader();
