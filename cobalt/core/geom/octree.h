@@ -148,7 +148,7 @@ namespace cobalt {
                     const AABB& elementBounds = config.getElementBounds(element);
                     if (!this->bounds.intersects(elementBounds)) return;
                     if (isLeaf()) {
-                        data.push_back(CreateConstWrap<ElementType>(element));
+                        data.push_back(CreateWrap<ElementType>(element));
                         if (data.size() > config.maxElements && (config.maxDepth == 0 || depth < config.maxDepth)) {
                             split();
                         }
@@ -156,7 +156,7 @@ namespace cobalt {
                     }
                     for (auto& child : children) {
                         if (child.bounds.contains(elementBounds)) {
-                            child.insert(CreateConstWrap<ElementType>(element));
+                            child.insert(CreateWrap<ElementType>(element));
                             return;
                         }
                     }
@@ -200,7 +200,7 @@ namespace cobalt {
                         bool inserted = false;
                         for (auto& child : children) {
                             if (child.bounds.contains(elementBounds)) {
-                                child.insert(CreateConstWrap<ElementType>(element));
+                                child.insert(CreateWrap<ElementType>(element));
                                 inserted = true;
                                 break;
                             }
@@ -214,6 +214,7 @@ namespace cobalt {
 
             OctreeNode root;  ///< The root node of the octree.s
 
+#ifdef TEST_ENVIRONMENT
             public:
             /**
              * @brief A dummy class for debugging the octree. Never use this in production code.
@@ -250,6 +251,7 @@ namespace cobalt {
                  */
                 static const AABB& getBounds(const OctreeNode& node) { return node.bounds; }
             };
+#endif
         };  // namespace core::geom
     }  // namespace core::geom
 }  // namespace cobalt

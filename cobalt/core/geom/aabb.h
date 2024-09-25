@@ -78,6 +78,13 @@ namespace cobalt {
             AABB operator+(const AABB& other) const noexcept;
 
             /**
+             * @brief Checks if two boxes are equal.
+             * @param other The other box.
+             * @return Whether the boxes are equal.
+             */
+            bool operator==(const AABB& other) const noexcept;
+
+            /**
              * @brief Increases the size of the box by the smallest amount possible (FLT_EPSILON).
              */
             void step() noexcept;

@@ -26,9 +26,9 @@ namespace cobalt {
              * @brief A configuration for the BVH parameters.
              */
             struct Configuration {
-                const uint maxDepth;                                    ///< The maximum depth of the BVH. 0 means no depth limit.
-                const uint maxElements;                                 ///< The maximum number of elements in a leaf node.
-                Scope<const SplitStrategy<ElementType>> splitStrategy;  ///< The strategy to use for spatially splitting the elements.
+                const uint maxDepth;                              ///< The maximum depth of the BVH. 0 means no depth limit.
+                const uint maxElements;                           ///< The maximum number of elements in a leaf node.
+                Scope<SplitStrategy<ElementType>> splitStrategy;  ///< The strategy to use for spatially splitting the elements.
 
                 /**
                  * @brief Creates a BVH configuration.
@@ -36,8 +36,11 @@ namespace cobalt {
                  * @param maxElements The maximum number of elements in a leaf node.
                  * @param maxDepth The maximum depth of the BVH. 0 means no depth limit.
                  */
-                Configuration(Scope<const SplitStrategy<ElementType>>&& splitStrategy, const uint maxElements = 8, const uint maxDepth = 0) noexcept
+                Configuration(Scope<SplitStrategy<ElementType>>&& splitStrategy, const uint maxElements = 8, const uint maxDepth = 0) noexcept
                     : splitStrategy(Move(splitStrategy)), maxElements(maxElements), maxDepth(maxDepth) {}
+
+                Configuration(const Configuration&) = delete;
+                Configuration& operator=(const Configuration&) = delete;
             };
 
             /**
@@ -45,7 +48,25 @@ namespace cobalt {
              * @param data The set of elements to build the BVH from.
              * @param config The configuration of the BVH.
              */
-            BVH(const Vec<ElementType>& data, const Configuration& config) noexcept : root(config) { root.build(data); }
+            BVH(const Vec<ElementType>& data, const Configuration& config) noexcept : root(data, config) {}
+
+            /**
+             * @brief Queries the BVH for elements that intersect a given range.
+             * @param found The vector to store the found elements in.
+             * @param range The range to query.
+             */
+            void query(Vec<Wrap<ElementType>>& found, const AABB& range) noexcept { root.query(found, range); }
+            /**
+             * @brief Queries the BVH for elements that contain a given point.
+             * @param found The vector to store the found elements in.
+             * @param point The point to query.
+             */
+            void query(Vec<Wrap<ElementType>>& found, const glm::vec3& point) noexcept { root.query(found, point); }
+            /**
+             * @brief Queries the BVH for all elements.
+             * @param found The vector to store the found elements in.
+             */
+            void query(Vec<Wrap<ElementType>>& found) noexcept { root.query(found); }
 
             class Debug;
 
@@ -57,10 +78,18 @@ namespace cobalt {
                 friend class BVH<ElementType>::Debug;
 
                 public:
-                BVHNode(const Configuration& config) : config(config) {}
+                /**
+                 * @brief Creates a BVH node from a set of elements and a configuration.
+                 * @param data The set of elements to build the BVH from.
+                 * @param config The configuration of the BVH.
+                 */
+                BVHNode(const Vec<ElementType>& data, const Configuration& config, const uint depth = 0) : config(config), depth(depth) {
+                    if (!data.empty()) build(data);
+                }
+
                 /**
                  * @brief Checks if the node is a leaf node.
-                 * @return
+                 * @return True if the node is a leaf node, false otherwise.
                  */
                 bool isLeaf() const noexcept { return !left && !right; }
 
@@ -72,10 +101,10 @@ namespace cobalt {
                  */
                 void build(const Vec<ElementType>& data) {
                     // Leaf node
-                    if (data.size() <= config.maxElements) {
+                    if (data.size() <= config.maxElements || data.size() <= 1 || (config.maxDepth > 0 && depth >= config.maxDepth)) {
                         AABB totalBounds;
                         for (auto& element : data) {
-                            totalBounds += element->getBounds();
+                            totalBounds += config.splitStrategy->getElementBounds(element);
                             this->data.push_back(element);
                         }
                         bounds = totalBounds;
@@ -84,50 +113,74 @@ namespace cobalt {
                     }
 
                     // Internal node
-                    Pair<Vec<ElementType>, Vec<ElementType>> split = config.splitStrategy->split(this->data);
-                    left = CreateScope<BVHNode>(split.first, config);
-                    right = CreateScope<BVHNode>(split.first, config);
-                    bounds = left.bounds + right.bounds;
+                    Pair<Vec<ElementType>, Vec<ElementType>> split = config.splitStrategy->split(data);
+
+                    if (split.first.empty() || split.second.empty()) {
+                        AABB totalBounds;
+                        for (auto& element : data) {
+                            totalBounds += config.splitStrategy->getElementBounds(element);
+                            this->data.push_back(element);
+                        }
+                        bounds = totalBounds;
+                        bounds.step();  // Expand the bounds slightly to avoid floating point errors.
+                        return;
+                    }
+
+                    left = CreateScope<BVHNode>(split.first, config, depth + 1);
+                    right = CreateScope<BVHNode>(split.second, config, depth + 1);
+                    bounds = left->bounds + right->bounds;
                 }
 
                 /**
-                 * @brief Queries the BVH for elements that intersect a given range. If a range is not provided, the function returns all elements in
-                 * the BVH.
+                 * @brief Queries the BVH for elements that intersect a given range.
                  * @param found The vector to store the found elements in.
-                 * @param range The range to query. If not provided, the function returns all elements in the BVH.
+                 * @param range The range to query.
                  */
-                void query(Vec<Wrap<ElementType>>& found, Opt<ConstWrap<AABB>> range = None) const {
-                    if (range.has_value() && !bounds.intersects(range.value())) return;
+                void query(Vec<Wrap<ElementType>>& found, const AABB& range) {
+                    if (!bounds.intersects(range)) return;
 
                     if (isLeaf()) {
                         for (auto& element : data) {
-                            if (range.value().get().intersects(config.splitStrategy->getElementBounds(element))) {
-                                found.push_back(element);
+                            if (range.intersects(config.splitStrategy->getElementBounds(element))) {
+                                found.push_back(CreateWrap<ElementType>(element));
                             }
                         }
                     } else {
-                        left->query(range, found);
-                        right->query(range, found);
+                        left->query(found, range);
+                        right->query(found, range);
                     }
                 }
                 /**
-                 * @brief Queries the BVH for elements that contain a given point. If a point is not provided, the function returns all elements in
-                 * the BVH.
+                 * @brief Queries the BVH for elements that contain a given point.
                  * @param found The vector to store the found elements in.
-                 * @param point The point to query. If not provided, the function returns all elements in the BVH.
+                 * @param point The point to query.
                  */
-                void query(Vec<Wrap<ElementType>>& found, Opt<ConstWrap<glm::vec3>> point = None) const {
-                    if (point.has_value() && !bounds.contains(point.value())) return;
+                void query(Vec<Wrap<ElementType>>& found, const glm::vec3& point) {
+                    if (!bounds.contains(point)) return;
 
                     if (isLeaf()) {
                         for (auto& element : data) {
                             if (config.splitStrategy->getElementBounds(element).contains(point)) {
-                                found.push_back(element);
+                                found.push_back(CreateWrap<ElementType>(element));
                             }
                         }
                     } else {
-                        left->query(point, found);
-                        right->query(point, found);
+                        left->query(found, point);
+                        right->query(found, point);
+                    }
+                }
+                /**
+                 * @brief Queries the BVH for all elements.
+                 * @param found The vector to store the found elements in.
+                 */
+                void query(Vec<Wrap<ElementType>>& found) {
+                    if (isLeaf()) {
+                        for (auto& element : data) {
+                            found.push_back(CreateWrap<ElementType>(element));
+                        }
+                    } else {
+                        left->query(found);
+                        right->query(found);
                     }
                 }
 
@@ -137,10 +190,12 @@ namespace cobalt {
                 Scope<BVHNode> right;         ///< The right child node.
                 Vec<ElementType> data;        ///< The elements in the node. Only present in leaf nodes.
                 const Configuration& config;  ///< The configuration of the BVH.
+                const uint depth;             ///< The depth of the node in the BVH.
             };
 
             BVHNode root;  ///< The root node of the BVH.
 
+#ifdef TEST_ENVIRONMENT
             public:
             /**
              * @brief A dummy class for debugging the BVH. Never use this in production code.
@@ -148,13 +203,50 @@ namespace cobalt {
              * @warning This is to be used for testing, never in production code.
              */
             class Debug {
+                public:
                 /**
                  * @brief Gets the root node of the BVH.
                  * @param bvh The BVH.
                  * @return The root node.
                  */
                 static const BVHNode& getRoot(const BVH<ElementType>& bvh) { return bvh.root; }
+
+                /**
+                 * @brief Gets the left child of a BVH node.
+                 * @param node The node.
+                 * @return The left child.
+                 */
+                static const BVHNode& getLeft(const BVHNode& node) { return *node.left; }
+
+                /**
+                 * @brief Gets the right child of a BVH node.
+                 * @param node The node.
+                 * @return The right child.
+                 */
+                static const BVHNode& getRight(const BVHNode& node) { return *node.right; }
+
+                /**
+                 * @brief Gets the elements in a BVH node.
+                 * @param node The node.
+                 * @return The elements.
+                 */
+                static const Vec<ElementType>& getData(const BVHNode& node) { return node.data; }
+
+                /**
+                 * @brief Gets the bounding volume of a BVH node.
+                 * @param node The node.
+                 * @return The bounding volume.
+                 */
+                static const AABB& getBounds(const BVHNode& node) { return node.bounds; }
+
+                /**
+                 * @brief Checks if a BVH node is a leaf node.
+                 * @param node The node.
+                 * @return True if the node is a leaf node, false otherwise.
+                 */
+                static bool isLeaf(const BVHNode& node) { return node.isLeaf(); }
             };
+#endif
         };
     }  // namespace core::geom
 }  // namespace cobalt

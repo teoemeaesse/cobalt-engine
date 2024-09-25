@@ -42,6 +42,8 @@ namespace cobalt {
 
         AABB AABB::operator+(const AABB& other) const noexcept { return AABB(glm::min(min, other.min), glm::max(max, other.max)); }
 
+        bool AABB::operator==(const AABB& other) const noexcept { return min == other.min && max == other.max; }
+
         void AABB::step() noexcept {
             min -= glm::vec3(FLT_EPSILON);
             max += glm::vec3(FLT_EPSILON);

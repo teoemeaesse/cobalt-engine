@@ -24,6 +24,7 @@
 #include <memory>
 #include <optional>
 #include <queue>
+#include <set>
 #include <sstream>
 #include <stack>
 #include <stdexcept>
@@ -121,7 +122,7 @@ namespace cobalt {
      * @return The new const reference wrapper.
      */
     template <typename T>
-    constexpr ConstWrap<T> CreateConstWrap(const T& ref) {
+    constexpr ConstWrap<T> CreateWrap(const T& ref) {
         return std::cref(ref);
     }
     /**
