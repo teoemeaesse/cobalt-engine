@@ -207,7 +207,7 @@ namespace cobalt {
                     const AABB& elementBounds = config.getElementBounds(element);
                     if (!this->bounds.intersects(elementBounds)) return;
                     if (isLeaf()) {
-                        data.push_back(std::reference_wrapper<ElementType>(element));
+                        data.push_back(std::reference_wrapper<const ElementType>(element));
                         if (data.size() > config.maxElements && (config.maxDepth == 0 || depth < config.maxDepth)) {
                             split();
                         }
@@ -215,7 +215,7 @@ namespace cobalt {
                     }
                     for (auto& child : children) {
                         if (child.bounds.contains(elementBounds)) {
-                            child.insert(std::reference_wrapper<ElementType>(element));
+                            child.insert(std::reference_wrapper<const ElementType>(element));
                             return;
                         }
                     }
@@ -259,7 +259,7 @@ namespace cobalt {
                         bool inserted = false;
                         for (auto& child : children) {
                             if (child.bounds.contains(elementBounds)) {
-                                child.insert(std::reference_wrapper<ElementType>(element));
+                                child.insert(std::reference_wrapper<const ElementType>(element));
                                 inserted = true;
                                 break;
                             }

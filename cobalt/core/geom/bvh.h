@@ -92,7 +92,7 @@ namespace cobalt {
                  */
                 template <typename SplitStrategyType, typename... Args>
                 Builder& withSplitStrategy(Args&&... args) noexcept {
-                    splitStrategy = std::unique_ptr<SplitStrategyType>(Forward<Args>(args)...);
+                    splitStrategy = std::make_unique<SplitStrategyType>(Forward<Args>(args)...);
                     return *this;
                 }
 
@@ -104,7 +104,7 @@ namespace cobalt {
                  */
                 BVH build(const std::vector<ElementType>& data) {
                     if (!splitStrategy) {
-                        throw CoreException<BVH<ElementType>::Builder>("No split strategy set.");
+                        throw CoreException<Builder>("No split strategy set.");
                     }
                     return BVH(data, {maxDepth, maxElements, std::move(splitStrategy)});
                 }
@@ -178,8 +178,8 @@ namespace cobalt {
                         return;
                     }
 
-                    left = std::unique_ptr<BVHNode>(split.first, config, depth + 1);
-                    right = std::unique_ptr<BVHNode>(split.second, config, depth + 1);
+                    left = std::make_unique<BVHNode>(split.first, config, depth + 1);
+                    right = std::make_unique<BVHNode>(split.second, config, depth + 1);
                     bounds = left->bounds + right->bounds;
                 }
 

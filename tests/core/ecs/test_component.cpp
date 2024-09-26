@@ -111,7 +111,8 @@ void test_component_registry_get() {
         auto [errPosition, errVelocity] = entity.getMany<const Position&, const Velocity&>();
         TEST_FAIL_MESSAGE("Entity should not have Velocity component");
     } catch (const ComponentNotFoundException<Velocity, ComponentRegistry>& e) {
-        TEST_ASSERT_EQUAL_STRING("cobalt::core::ecs::ComponentRegistry threw: Component not found for entity (0) with component: Velocity", e.what());
+        TEST_ASSERT_EQUAL_STRING("[cobalt::core::ecs::ComponentRegistry] Error: Component not found for entity (0) with component: Velocity",
+                                 e.what());
     }
 }
 

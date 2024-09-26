@@ -38,7 +38,7 @@ file(GLOB_RECURSE CORE_SOURCES ${SOURCEDIR}/core/*.cpp)
 
 # Create a static library for the core
 add_library(cobalt_core STATIC ${CORE_SOURCES})
-target_precompile_headers(cobalt_core PRIVATE ${SOURCEDIR}/core/pch.h)
+target_precompile_headers(cobalt_core PRIVATE ${SOURCEDIR}/core/core.h)
 target_include_directories(cobalt_core PUBLIC ${SOURCEDIR} ${LIBDIR}/glew/include ${LIBDIR}/glfw/include)
 
 # Add the GLFW and GLEW dependencies
@@ -55,7 +55,7 @@ foreach(TEST_SOURCE ${TEST_SOURCES})
     add_executable(${TEST_NAME} ${TEST_SOURCE})
     set_target_properties(${TEST_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH})
     target_precompile_headers(${TEST_NAME} PRIVATE
-        ${SOURCEDIR}/core/pch.h
+        ${SOURCEDIR}/core/core.h
     )
     if(APPLE)
         target_link_libraries(${TEST_NAME} PRIVATE

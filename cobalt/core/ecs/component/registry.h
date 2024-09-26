@@ -61,7 +61,7 @@ namespace cobalt {
                     if (typeIndices.size() >= CB_ECS_MAX_COMPONENTS) {
                         throw ComponentOverflowException<ComponentType, ComponentRegistry>(CB_ECS_MAX_COMPONENTS);
                     }
-                    store[type] = std::move(std::unique_ptr<ComponentStorage<ComponentType>>());
+                    store[type] = std::move(std::make_unique<ComponentStorage<ComponentType>>());
                     const u_int64_t index = typeIndices.size();
                     typeIndices[type] = index;
                 }
