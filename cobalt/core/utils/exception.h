@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include "core/pch.h"
+#include <stdexcept>
+#include <string>
 
 namespace cobalt {
     namespace core {
@@ -19,8 +20,8 @@ namespace cobalt {
         template <typename T>
         class CoreException : public CoreExceptionInterface {
             public:
-            CoreException(const std::string& message) : CoreExceptionInterface(demangle(typeid(T).name()) + " threw: " + message) {}
-            CoreException(const char* message) : CoreExceptionInterface(demangle(typeid(T).name()) + " threw: " + message) {}
+            CoreException(const std::string& message) : CoreExceptionInterface("[" + demangle(typeid(T).name()) + "] Error: " + message) {}
+            CoreException(const char* message) : CoreExceptionInterface("[" + demangle(typeid(T).name()) + "] Error: " + message) {}
         };
     }  // namespace core
 }  // namespace cobalt

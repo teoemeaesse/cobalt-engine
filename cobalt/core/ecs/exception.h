@@ -7,9 +7,11 @@
 
 #pragma once
 
+#include <numeric>
+
 #include "core/ecs/component/component.h"
 #include "core/ecs/resource/resource.h"
-#include "core/exception.h"
+#include "core/utils/exception.h"
 
 namespace cobalt {
     namespace core::ecs {
@@ -64,7 +66,7 @@ namespace cobalt {
              * @param pluginName The name of the plugin that has missing dependencies.
              * @param missingDependencies The names of the missing dependencies.
              */
-            PluginDependencyNotFoundException(const std::string& pluginName, const Vec<std::string>& missingDependencies)
+            PluginDependencyNotFoundException(const std::string& pluginName, const std::vector<std::string>& missingDependencies)
                 : CoreException<ThrowerType>(
                       "Plugin dependencies not met: " + pluginName + " -> " +
                       std::accumulate(missingDependencies.begin(), missingDependencies.end(), std::string{},
@@ -81,7 +83,7 @@ namespace cobalt {
              * @brief Create a new max components exceeded exception.
              * @param maxComponents The maximum number of components per entity.
              */
-            ComponentOverflowException(const uint64 maxComponents)
+            ComponentOverflowException(const u_int64_t maxComponents)
                 : CoreException<ThrowerType>("Max components exceeded (" + std::to_string(maxComponents) +
                                              ") with component: " + Component::getTypeName<ComponentType>()) {}
         };

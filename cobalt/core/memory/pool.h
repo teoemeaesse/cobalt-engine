@@ -4,7 +4,6 @@
 #pragma once
 
 #include "core/memory/heap.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::memory {

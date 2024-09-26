@@ -9,7 +9,6 @@
 #pragma once
 
 #include "core/geom/strategy/split_strategy.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::geom {
@@ -32,18 +31,18 @@ namespace cobalt {
              * @param found The vector to store the found elements in.
              * @param range The range to query.
              */
-            void query(Vec<Wrap<ElementType>>& found, const AABB& range) noexcept { root.query(found, range); }
+            void query(std::vector<std::reference_wrapper<ElementType>>& found, const AABB& range) noexcept { root.query(found, range); }
             /**
              * @brief Queries the BVH for elements that contain a given point.
              * @param found The vector to store the found elements in.
              * @param point The point to query.
              */
-            void query(Vec<Wrap<ElementType>>& found, const glm::vec3& point) noexcept { root.query(found, point); }
+            void query(std::vector<std::reference_wrapper<ElementType>>& found, const glm::vec3& point) noexcept { root.query(found, point); }
             /**
              * @brief Queries the BVH for all elements.
              * @param found The vector to store the found elements in.
              */
-            void query(Vec<Wrap<ElementType>>& found) noexcept { root.query(found); }
+            void query(std::vector<std::reference_wrapper<ElementType>>& found) noexcept { root.query(found); }
 
             class Builder {
                 public:
@@ -93,7 +92,7 @@ namespace cobalt {
                  */
                 template <typename SplitStrategyType, typename... Args>
                 Builder& withSplitStrategy(Args&&... args) noexcept {
-                    splitStrategy = CreateScope<SplitStrategyType>(Forward<Args>(args)...);
+                    splitStrategy = std::unique_ptr<SplitStrategyType>(Forward<Args>(args)...);
                     return *this;
                 }
 
@@ -101,13 +100,19 @@ namespace cobalt {
                  * @brief Builds the BVH from a set of elements.
                  * @param data The set of elements to build the BVH from.
                  * @return The built BVH.
+                 * @throws CoreException<BVH<ElementType>::Builder> If no split strategy is set.
                  */
-                BVH build(const Vec<ElementType>& data) noexcept { return BVH(data, {maxDepth, maxElements, Move(splitStrategy)}); }
+                BVH build(const std::vector<ElementType>& data) {
+                    if (!splitStrategy) {
+                        throw CoreException<BVH<ElementType>::Builder>("No split strategy set.");
+                    }
+                    return BVH(data, {maxDepth, maxElements, std::move(splitStrategy)});
+                }
 
                 private:
-                uint maxDepth = 0;                                ///< The maximum depth of the BVH. 0 means no depth limit.
-                uint maxElements = 8;                             ///< The maximum number of elements in a leaf node.
-                Scope<SplitStrategy<ElementType>> splitStrategy;  ///< The strategy to use for spatially splitting the elements.
+                uint maxDepth = 0;                                          ///< The maximum depth of the BVH. 0 means no depth limit.
+                uint maxElements = 8;                                       ///< The maximum number of elements in a leaf node.
+                std::unique_ptr<SplitStrategy<ElementType>> splitStrategy;  ///< The strategy to use for spatially splitting the elements.
             };
 
             private:
@@ -116,7 +121,7 @@ namespace cobalt {
              * @param data The set of elements to build the BVH from.
              * @param config The configuration of the BVH.
              */
-            BVH(const Vec<ElementType>& data, Configuration&& config) noexcept : config(Move(config)), root(data, this->config) {}
+            BVH(const std::vector<ElementType>& data, Configuration&& config) noexcept : config(std::move(config)), root(data, this->config) {}
 
             /**
              * @brief A node in the BVH tree. Can be either an internal node or a leaf node.
@@ -130,7 +135,7 @@ namespace cobalt {
                  * @param data The set of elements to build the BVH from.
                  * @param config The configuration of the BVH.
                  */
-                BVHNode(const Vec<ElementType>& data, const Configuration& config, const uint depth = 0) : config(config), depth(depth) {
+                BVHNode(const std::vector<ElementType>& data, const Configuration& config, const uint depth = 0) : config(config), depth(depth) {
                     if (!data.empty()) build(data);
                 }
 
@@ -146,7 +151,7 @@ namespace cobalt {
                  * @param splitStrategy The strategy to use for splitting the elements.
                  * @see SplitStrategy
                  */
-                void build(const Vec<ElementType>& data) {
+                void build(const std::vector<ElementType>& data) {
                     // Leaf node
                     if (data.size() <= config.maxElements || data.size() <= 1 || (config.maxDepth > 0 && depth >= config.maxDepth)) {
                         AABB totalBounds;
@@ -160,7 +165,7 @@ namespace cobalt {
                     }
 
                     // Internal node
-                    Pair<Vec<ElementType>, Vec<ElementType>> split = config.splitStrategy->split(data);
+                    std::pair<std::vector<ElementType>, std::vector<ElementType>> split = config.splitStrategy->split(data);
 
                     if (split.first.empty() || split.second.empty()) {
                         AABB totalBounds;
@@ -173,8 +178,8 @@ namespace cobalt {
                         return;
                     }
 
-                    left = CreateScope<BVHNode>(split.first, config, depth + 1);
-                    right = CreateScope<BVHNode>(split.second, config, depth + 1);
+                    left = std::unique_ptr<BVHNode>(split.first, config, depth + 1);
+                    right = std::unique_ptr<BVHNode>(split.second, config, depth + 1);
                     bounds = left->bounds + right->bounds;
                 }
 
@@ -183,13 +188,13 @@ namespace cobalt {
                  * @param found The vector to store the found elements in.
                  * @param range The range to query.
                  */
-                void query(Vec<Wrap<ElementType>>& found, const AABB& range) {
+                void query(std::vector<std::reference_wrapper<ElementType>>& found, const AABB& range) {
                     if (!bounds.intersects(range)) return;
 
                     if (isLeaf()) {
                         for (auto& element : data) {
                             if (range.intersects(config.splitStrategy->getElementBounds(element))) {
-                                found.push_back(CreateWrap<ElementType>(element));
+                                found.push_back(std::reference_wrapper<ElementType>(element));
                             }
                         }
                     } else {
@@ -202,13 +207,13 @@ namespace cobalt {
                  * @param found The vector to store the found elements in.
                  * @param point The point to query.
                  */
-                void query(Vec<Wrap<ElementType>>& found, const glm::vec3& point) {
+                void query(std::vector<std::reference_wrapper<ElementType>>& found, const glm::vec3& point) {
                     if (!bounds.contains(point)) return;
 
                     if (isLeaf()) {
                         for (auto& element : data) {
                             if (config.splitStrategy->getElementBounds(element).contains(point)) {
-                                found.push_back(CreateWrap<ElementType>(element));
+                                found.push_back(std::reference_wrapper<ElementType>(element));
                             }
                         }
                     } else {
@@ -220,10 +225,10 @@ namespace cobalt {
                  * @brief Queries the BVH for all elements.
                  * @param found The vector to store the found elements in.
                  */
-                void query(Vec<Wrap<ElementType>>& found) {
+                void query(std::vector<std::reference_wrapper<ElementType>>& found) {
                     if (isLeaf()) {
                         for (auto& element : data) {
-                            found.push_back(CreateWrap<ElementType>(element));
+                            found.push_back(std::reference_wrapper<ElementType>(element));
                         }
                     } else {
                         left->query(found);
@@ -232,12 +237,12 @@ namespace cobalt {
                 }
 
                 private:
-                AABB bounds;                  ///< The bounding volume of the node. Encompasses all the elements in the node's subtree.
-                Scope<BVHNode> left;          ///< The left child node.
-                Scope<BVHNode> right;         ///< The right child node.
-                Vec<ElementType> data;        ///< The elements in the node. Only present in leaf nodes.
-                const Configuration& config;  ///< The configuration of the BVH.
-                const uint depth;             ///< The depth of the node in the BVH.
+                AABB bounds;                     ///< The bounding volume of the node. Encompasses all the elements in the node's subtree.
+                std::unique_ptr<BVHNode> left;   ///< The left child node.
+                std::unique_ptr<BVHNode> right;  ///< The right child node.
+                std::vector<ElementType> data;   ///< The elements in the node. Only present in leaf nodes.
+                const Configuration& config;     ///< The configuration of the BVH.
+                const uint depth;                ///< The depth of the node in the BVH.
             };
 
             Configuration config;  ///< The configuration of the BVH.
@@ -245,9 +250,9 @@ namespace cobalt {
 
             public:
             struct Configuration {
-                const uint maxDepth;                              ///< The maximum depth of the BVH. 0 means no depth limit.
-                const uint maxElements;                           ///< The maximum number of elements in a leaf node.
-                Scope<SplitStrategy<ElementType>> splitStrategy;  ///< The strategy to use for spatially splitting the elements.
+                const uint maxDepth;                                        ///< The maximum depth of the BVH. 0 means no depth limit.
+                const uint maxElements;                                     ///< The maximum number of elements in a leaf node.
+                std::unique_ptr<SplitStrategy<ElementType>> splitStrategy;  ///< The strategy to use for spatially splitting the elements.
             };
 #ifdef TEST_ENVIRONMENT
 
@@ -284,7 +289,7 @@ namespace cobalt {
                  * @param node The node.
                  * @return The elements.
                  */
-                static const Vec<ElementType>& getData(const BVHNode& node) { return node.data; }
+                static const std::vector<ElementType>& getData(const BVHNode& node) { return node.data; }
 
                 /**
                  * @brief Gets the bounding volume of a BVH node.

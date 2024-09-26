@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "core/ecs/resource/resource.h"
 #include "engine/input/exception.h"
 #include "engine/input/input_command.h"
 

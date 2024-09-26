@@ -7,12 +7,13 @@
 
 #include "core/gl/fbo.h"
 
-#include "core/exception.h"
 #include "core/gl/context.h"
+#include "core/utils/exception.h"
 
 namespace cobalt {
     namespace core::gl {
-        FBO::FBO(const uint width, const uint height, const Vec<Attachment>& attachments) : width(width), height(height), clearColor(Colors::Black) {
+        FBO::FBO(const uint width, const uint height, const std::vector<Attachment>& attachments)
+            : width(width), height(height), clearColor(Colors::Black) {
             glGenFramebuffers(1, &buffer);
             glBindFramebuffer(GL_FRAMEBUFFER, buffer);
             for (auto& attachment : attachments) {
@@ -71,10 +72,10 @@ namespace cobalt {
               width(other.width),
               height(other.height),
               clearColor(other.clearColor),
-              colors(Move(other.colors)),
-              depth(Move(other.depth)),
-              stencil(Move(other.stencil)),
-              depthStencil(Move(other.depthStencil)) {
+              colors(std::move(other.colors)),
+              depth(std::move(other.depth)),
+              stencil(std::move(other.stencil)),
+              depthStencil(std::move(other.depthStencil)) {
             other.buffer = 0;
         }
 
@@ -86,10 +87,10 @@ namespace cobalt {
             width = other.width;
             height = other.height;
             clearColor = other.clearColor;
-            colors = Move(other.colors);
-            depth = Move(other.depth);
-            stencil = Move(other.stencil);
-            depthStencil = Move(other.depthStencil);
+            colors = std::move(other.colors);
+            depth = std::move(other.depth);
+            stencil = std::move(other.stencil);
+            depthStencil = std::move(other.depthStencil);
             other.buffer = 0;
             return *this;
         }
@@ -135,29 +136,29 @@ namespace cobalt {
 
         void FBO::setClearColor(const Color& color) { clearColor = color; }
 
-        const Opt<Wrap<const Texture2D>> FBO::getColorBuffer(const uint i) const {
+        const std::optional<std::reference_wrapper<const Texture2D>> FBO::getColorBuffer(const uint i) const {
             if (i >= colors.size() || colors.empty()) {
-                return None;
+                return std::nullopt;
             }
             return CreateWrap(colors[i]);
         }
 
-        const Opt<Wrap<const Texture2D>> FBO::getColorBuffer() const { return getColorBuffer(0); }
+        const std::optional<std::reference_wrapper<const Texture2D>> FBO::getColorBuffer() const { return getColorBuffer(0); }
 
-        const Opt<Wrap<const Texture2D>> FBO::getDepthBuffer() const {
+        const std::optional<std::reference_wrapper<const Texture2D>> FBO::getDepthBuffer() const {
             if (!depth.has_value()) {
                 if (!depthStencil.has_value()) {
-                    return None;
+                    return std::nullopt;
                 }
                 return CreateWrap(depthStencil.value());
             }
             return CreateWrap(depth.value());
         }
 
-        const Opt<Wrap<const Texture2D>> FBO::getStencilBuffer() const {
+        const std::optional<std::reference_wrapper<const Texture2D>> FBO::getStencilBuffer() const {
             if (!stencil.has_value()) {
                 if (!depthStencil.has_value()) {
-                    return None;
+                    return std::nullopt;
                 }
                 return CreateWrap(depthStencil.value());
             }

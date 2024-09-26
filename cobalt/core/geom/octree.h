@@ -68,7 +68,7 @@ namespace cobalt {
                  * @param getElementBounds The function to get an element's bounding box.
                  * @return This builder.
                  */
-                Builder& withElementBounds(Func<AABB(const ElementType&)> getElementBounds) {
+                Builder& withElementBounds(std::function<AABB(const ElementType&)> getElementBounds) {
                     this->getElementBounds = getElementBounds;
                     return *this;
                 }
@@ -89,10 +89,10 @@ namespace cobalt {
                 Octree<ElementType> build() { return Octree<ElementType>(bounds, {maxDepth, maxElements, getElementBounds}); }
 
                 private:
-                uint maxDepth;                                    // The maximum depth of the octree. 0 means no depth limit.
-                uint maxElements;                                 // The maximum number of elements in a node. This must be at least 1.
-                Func<AABB(const ElementType&)> getElementBounds;  // The function to get an element's bounding box.
-                AABB bounds;                                      // The maximum bounds of the octree.
+                uint maxDepth;                                             // The maximum depth of the octree. 0 means no depth limit.
+                uint maxElements;                                          // The maximum number of elements in a node. This must be at least 1.
+                std::function<AABB(const ElementType&)> getElementBounds;  // The function to get an element's bounding box.
+                AABB bounds;                                               // The maximum bounds of the octree.
             };
 
             /**
@@ -106,14 +106,16 @@ namespace cobalt {
              * @param found The vector to store the found elements in.
              * @param range The range to query. If not provided, the function returns all elements in the octree.
              */
-            void query(Vec<Wrap<ElementType>>& found, Opt<AABB> range = None) { root.query(found, range); }
+            void query(std::vector<std::reference_wrapper<ElementType>>& found, std::optional<AABB> range = std::nullopt) {
+                root.query(found, range);
+            }
             /**
              * @brief Queries the octree for elements that intersect a given point. If a point is not provided, the function returns all elements
              * in the octree.
              * @param found The vector to store the found elements in.
              * @param point The point to query. If not provided, the function returns all elements in the octree.
              */
-            void query(Vec<Wrap<ElementType>>& found, const glm::vec3& point) { root.query(found, point); }
+            void query(std::vector<std::reference_wrapper<ElementType>>& found, const glm::vec3& point) { root.query(found, point); }
 
             /**
              * @brief Copy-inserts an element into the tree. The bounds for this element MUST NOT BE VOID.
@@ -128,7 +130,7 @@ namespace cobalt {
              * @param config The configuration of the octree.
              * @see Configuration
              */
-            Octree(const AABB& bounds, Configuration&& config) noexcept : config(Move(config)), root(bounds, this->config) {}
+            Octree(const AABB& bounds, Configuration&& config) noexcept : config(std::move(config)), root(bounds, this->config) {}
 
             /**
              * @brief A node in the octree. The root node is the starting point of the octree, and all other nodes are its children.
@@ -157,7 +159,7 @@ namespace cobalt {
                  * @param found The vector to store the found elements in.
                  * @param range The range to query. If not provided, the function returns all elements in the octree.
                  */
-                void query(Vec<Wrap<ElementType>>& found, Opt<AABB> range = None) {
+                void query(std::vector<std::reference_wrapper<ElementType>>& found, std::optional<AABB> range = std::nullopt) {
                     if (range.has_value() && !range.value().intersects(bounds)) {
                         return;
                     }
@@ -179,7 +181,7 @@ namespace cobalt {
                  * @param found The vector to store the found elements in.
                  * @param point The point to query. If not provided, the function returns all elements in the octree.
                  */
-                void query(Vec<Wrap<ElementType>>& found, const glm::vec3& point) {
+                void query(std::vector<std::reference_wrapper<ElementType>>& found, const glm::vec3& point) {
                     if (!bounds.contains(point)) {
                         return;
                     }
@@ -200,12 +202,12 @@ namespace cobalt {
                  * @brief Copy-inserts an element into the tree. The bounds for this element MUST NOT BE VOID.
                  * @param element The element to insert. Must be copy-constructible.
                  */
-                void insert(ConstWrap<ElementType> element) {
+                void insert(std::reference_wrapper<const ElementType> element) {
                     static_assert(std::is_copy_constructible<ElementType>::value, "ElementType must be copy constructible.");
                     const AABB& elementBounds = config.getElementBounds(element);
                     if (!this->bounds.intersects(elementBounds)) return;
                     if (isLeaf()) {
-                        data.push_back(CreateWrap<ElementType>(element));
+                        data.push_back(std::reference_wrapper<ElementType>(element));
                         if (data.size() > config.maxElements && (config.maxDepth == 0 || depth < config.maxDepth)) {
                             split();
                         }
@@ -213,7 +215,7 @@ namespace cobalt {
                     }
                     for (auto& child : children) {
                         if (child.bounds.contains(elementBounds)) {
-                            child.insert(CreateWrap<ElementType>(element));
+                            child.insert(std::reference_wrapper<ElementType>(element));
                             return;
                         }
                     }
@@ -227,11 +229,11 @@ namespace cobalt {
                 bool isLeaf() const noexcept { return children.empty(); }
 
                 private:
-                Vec<OctreeNode> children;     // The children of the node.
-                Vec<ElementType> data;        // The data stored in the node.
-                AABB bounds;                  // The bounds of the node.
-                const uint depth;             // The depth of the node.
-                const Configuration& config;  // The configuration of the octree.
+                std::vector<OctreeNode> children;  // The children of the node.
+                std::vector<ElementType> data;     // The data stored in the node.
+                AABB bounds;                       // The bounds of the node.
+                const uint depth;                  // The depth of the node.
+                const Configuration& config;       // The configuration of the octree.
 
                 /**
                  * @brief Splits the node into 8 children and recursively distribute the data.
@@ -249,7 +251,7 @@ namespace cobalt {
                     children.emplace_back((AABB){{mid.x, min.y, mid.z}, {max.x, mid.y, max.z}}, config, depth + 1);
                     children.emplace_back((AABB){{mid.x, mid.y, min.z}, {max.x, max.y, mid.z}}, config, depth + 1);
                     children.emplace_back((AABB){{mid.x, mid.y, mid.z}, {max.x, max.y, max.z}}, config, depth + 1);
-                    Vec<ElementType> tempData = Move(data);
+                    std::vector<ElementType> tempData = std::move(data);
                     data.clear();
 
                     for (const auto& element : tempData) {
@@ -257,7 +259,7 @@ namespace cobalt {
                         bool inserted = false;
                         for (auto& child : children) {
                             if (child.bounds.contains(elementBounds)) {
-                                child.insert(CreateWrap<ElementType>(element));
+                                child.insert(std::reference_wrapper<ElementType>(element));
                                 inserted = true;
                                 break;
                             }
@@ -277,10 +279,10 @@ namespace cobalt {
              * @brief A configuration for the Octree parameters.
              */
             struct Configuration {
-                const uint maxDepth;                              // The maximum depth of the octree. 0 means no depth limit.
-                const uint maxElements;                           // The maximum number of elements in a node. This must be at least 1.
-                Func<AABB(const ElementType&)> getElementBounds;  // The function to get an element's bounding box.
-                AABB bounds;                                      // The maximum bounds of the octree.
+                const uint maxDepth;                                       // The maximum depth of the octree. 0 means no depth limit.
+                const uint maxElements;                                    // The maximum number of elements in a node. This must be at least 1.
+                std::function<AABB(const ElementType&)> getElementBounds;  // The function to get an element's bounding box.
+                AABB bounds;                                               // The maximum bounds of the octree.
             };
 
 #ifdef TEST_ENVIRONMENT
@@ -303,14 +305,14 @@ namespace cobalt {
                  * @param node The node.
                  * @return The data.
                  */
-                static const Vec<ElementType>& getData(const OctreeNode& node) { return node.data; }
+                static const std::vector<ElementType>& getData(const OctreeNode& node) { return node.data; }
 
                 /**
                  * @brief Gets the children of a node.
                  * @param node The node.
                  * @return The children.
                  */
-                static const Vec<OctreeNode>& getChildren(const OctreeNode& node) { return node.children; }
+                static const std::vector<OctreeNode>& getChildren(const OctreeNode& node) { return node.children; }
 
                 /**
                  * @brief Gets the bounds of a node.

@@ -7,10 +7,7 @@
 
 #pragma once
 
-#include "core/ecs/component/component.h"
-#include "core/ecs/resource/resource.h"
-#include "core/gl/ubo.h"
-#include "core/utils/color.h"
+#include "core/core.h"
 
 namespace cobalt {
     namespace engine {

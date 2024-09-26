@@ -3,8 +3,8 @@
 
 #include "engine/application.h"
 
-#include "core/exception.h"
 #include "core/gl/context.h"
+#include "core/utils/exception.h"
 #include "engine/bundle/base.h"
 
 namespace cobalt {

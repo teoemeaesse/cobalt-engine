@@ -3,7 +3,6 @@
 
 #include "engine/material/shader_library.h"
 
-#include "core/ecs/exception.h"
 #include "engine/material/plugin.h"
 
 namespace cobalt {

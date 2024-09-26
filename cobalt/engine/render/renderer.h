@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "engine/material/material.h"
 #include "engine/mesh3d/mesh.h"
 #include "engine/render/target.h"
 

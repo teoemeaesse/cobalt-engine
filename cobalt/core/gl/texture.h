@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include "core/pch.h"
+#include "core/io/path.h"
+#include "core/utils/color.h"
 
 namespace cobalt {
     namespace core::gl {
@@ -118,7 +119,7 @@ namespace cobalt {
             /**
              * @brief The default normal map. Points upwards from a flat surface.
              */
-            static inline constexpr uchar DEFAULT_NORMAL[] = {
+            static inline constexpr u_char DEFAULT_NORMAL[] = {
                 127,
                 127,
                 255,
@@ -229,7 +230,7 @@ namespace cobalt {
              * @param filter The filter mode of the texture.
              * @param wrap The wrap mode of the texture.
              */
-            Texture3D(const uchar red, const uchar green, const uchar blue, const uchar alpha = 255,
+            Texture3D(const u_char red, const u_char green, const u_char blue, const u_char alpha = 255,
                       const TextureEncoding encoding = TextureEncodings::RGBA::Bits8, const TextureFilter filter = TextureFilters::Linear,
                       const TextureWrap wrap = TextureWraps::Repeat);
             /**

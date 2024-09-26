@@ -102,7 +102,7 @@ namespace cobalt {
              * @return The references to the components.
              */
             template <typename... ComponentRefs>
-            Tuple<ComponentRefs...> getMany() const {
+            std::tuple<ComponentRefs...> getMany() const {
                 static_assert((std::is_reference<ComponentRefs>::value && ...), "All component types must be reference types.");
                 return componentRegistry.getMany<ComponentRefs...>(id);
             }

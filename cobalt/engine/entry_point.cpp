@@ -4,7 +4,6 @@
 #include "engine/entry_point.h"
 
 #include "core/ecs/exception.h"
-#include "core/exception.h"
 #include "engine/input/exception.h"
 #include "engine/material/shader_library.h"
 

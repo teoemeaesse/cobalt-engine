@@ -13,7 +13,7 @@ namespace cobalt {
             : systems() {
             for (auto schedule : {DefaultSchedules::Startup, DefaultSchedules::PreUpdate, DefaultSchedules::Update, DefaultSchedules::PostUpdate,
                                   DefaultSchedules::PreRender, DefaultSchedules::Render, DefaultSchedules::PostRender, DefaultSchedules::Shutdown}) {
-                systems.emplace(schedule, Move(CreateScope<SystemRegistry>(entityRegistry, resourceRegistry, *this, eventManager)));
+                systems.emplace(schedule, std::move(std::make_unique<SystemRegistry>(entityRegistry, resourceRegistry, *this, eventManager)));
             }
         }
 

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "core/pch.h"
+#include "core/gl/gl.h"
 
 namespace cobalt {
     namespace core::geom {

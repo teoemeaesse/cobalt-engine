@@ -5,6 +5,8 @@
  * @date 24-09-2024
  */
 
+#pragma once
+
 namespace cobalt {
     namespace core::geom {
         /**

@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "core/ecs/plugin/bundle.h"
 #include "engine/camera/plugin.h"
 #include "engine/input/plugin.h"
 #include "engine/keyboard/plugin.h"

@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "core/ecs/world.h"
 #include "engine/material/material_library.h"
 
 namespace cobalt {

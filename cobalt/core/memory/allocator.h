@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "core/pch.h"
-
 namespace cobalt {
     namespace core::memory {
         class Allocator {

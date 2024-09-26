@@ -69,10 +69,15 @@ void test_query() {
     TEST_ASSERT_TRUE(result[0].get().id == 1);
 
     // Query point
-    /*Vec<Wrap<TestElement>> result2;
+    Vec<Wrap<TestElement>> result2;
     bvh.query(result2, glm::vec3(0.5, 0.5, 0.5));
     TEST_ASSERT_TRUE(result2.size() == 1);
-    TEST_ASSERT_TRUE(result2[0].get().id == 1);*/
+    TEST_ASSERT_TRUE(result2[0].get().id == 1);
+
+    // Query empty
+    Vec<Wrap<TestElement>> result3;
+    bvh.query(result3);
+    TEST_ASSERT_TRUE(result3.size() == 5);
 }
 
 int main() {

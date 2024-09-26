@@ -51,7 +51,7 @@ namespace cobalt {
             void checkDependencies() const;
 
             private:
-            Vec<Plugin> plugins;
+            std::vector<Plugin> plugins;
         };
     }  // namespace core::ecs
 }  // namespace cobalt

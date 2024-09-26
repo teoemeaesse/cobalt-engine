@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "core/gl/fbo.h"
 #include "engine/input/input_manager.h"
 
 namespace cobalt {

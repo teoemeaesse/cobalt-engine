@@ -10,6 +10,8 @@
 #include "core/ecs/properties.h"
 
 namespace cobalt {
+    static inline const std::string demangle(const char* name) noexcept;
+
     namespace core::ecs {
         /**
          * @brief Base class for all components in the ECS. Provides type validation and identification.

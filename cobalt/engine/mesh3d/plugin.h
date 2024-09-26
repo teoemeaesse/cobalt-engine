@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "core/ecs/plugin/plugin.h"
 #include "engine/mesh3d/mesh.h"
 
 namespace cobalt {

@@ -8,6 +8,7 @@
 #pragma once
 
 #include "core/gl/shader.h"
+#include "core/utils/exception.h"
 
 namespace cobalt {
     namespace core::gl {
@@ -50,7 +51,7 @@ namespace cobalt {
             template <typename T>
             void push(const T* element) {
                 if (size + sizeof(T) > capacity) {
-                    // TODO: throw
+                    throw CoreException<UBO>("Pushing into UBO(" + std::to_string(buffer) + ") would exceed capacity.");
                 }
                 glBufferSubData(GL_UNIFORM_BUFFER, size, sizeof(T), (void*)element);
                 size += sizeof(T);
@@ -65,7 +66,7 @@ namespace cobalt {
             void emplace(Args&&... args) {
                 T element(std::forward<Args>(args)...);
                 if (size + sizeof(T) > capacity) {
-                    // TODO: throw
+                    throw CoreException<UBO>("Emplacing into UBO(" + std::to_string(buffer) + ") would exceed capacity.");
                 }
                 glBufferSubData(GL_UNIFORM_BUFFER, size, sizeof(T), (void*)&element);
                 size += sizeof(T);

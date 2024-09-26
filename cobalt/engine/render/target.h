@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "core/gl/fbo.h"
-#include "core/gl/ubo.h"
 #include "engine/camera/plugin.h"
 
 namespace cobalt {

@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "core/ecs/exception.h"
 #include "engine/camera/camera.h"
 
 namespace cobalt {

@@ -9,6 +9,7 @@
 
 #include "core/geom/aabb.h"
 #include "core/geom/axis.h"
+#include "core/gl/gl.h"
 
 namespace cobalt {
     namespace core::geom {
@@ -26,7 +27,7 @@ namespace cobalt {
              * @param elements The array of elements to split.
              * @return A pair containing the two sets of elements.
              */
-            virtual Pair<Vec<ElementType>, Vec<ElementType>> split(Vec<ElementType> elements) const = 0;
+            virtual std::pair<std::vector<ElementType>, std::vector<ElementType>> split(std::vector<ElementType> elements) const = 0;
 
             /**
              * @brief Gets the bounding volume for a specific element.
@@ -48,9 +49,9 @@ namespace cobalt {
              * @return A pair containing the two sets of elements.
              * @note You should extend this class and implement the getElementBounds method before instantiating it.
              */
-            Pair<Vec<ElementType>, Vec<ElementType>> split(Vec<ElementType> elements) const override {
+            std::pair<std::vector<ElementType>, std::vector<ElementType>> split(std::vector<ElementType> elements) const override {
                 if (elements.empty()) {
-                    return {Vec<ElementType>(), Vec<ElementType>()};
+                    return {std::vector<ElementType>(), std::vector<ElementType>()};
                 }
 
                 AABB combinedBounds;
@@ -64,10 +65,11 @@ namespace cobalt {
                 sortByAxis(elements, axis);
 
                 size_t half = elements.size() / 2;
-                return {Vec<ElementType>(elements.begin(), elements.begin() + half), Vec<ElementType>(elements.begin() + half, elements.end())};
+                return {std::vector<ElementType>(elements.begin(), elements.begin() + half),
+                        std::vector<ElementType>(elements.begin() + half, elements.end())};
             }
 
-            void sortByAxis(Vec<ElementType>& elements, Axis axis) const {
+            void sortByAxis(std::vector<ElementType>& elements, Axis axis) const {
                 std::sort(elements.begin(), elements.end(), [this, axis](const ElementType& a, const ElementType& b) {
                     return this->getElementBounds(a).getCenter()[static_cast<size_t>(axis)] <
                            this->getElementBounds(b).getCenter()[static_cast<size_t>(axis)];

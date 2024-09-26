@@ -3,7 +3,7 @@
 
 #include "engine/internal/configuration.h"
 
-#include "core/pch.h"
+#include "core/core.h"
 
 namespace cobalt {
     namespace engine {

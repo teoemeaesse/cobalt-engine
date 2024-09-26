@@ -3,7 +3,7 @@
 
 #pragma once
 
-// #include "core/pch.h"
+//
 
 // namespace cobalt {
 //     namespace core::gfx {
@@ -14,7 +14,7 @@
 //              * @param vertices The buffer to push the vertices into.
 //              * @param indices The buffer to push the indices into.
 //              */
-//             virtual void pushInto(Vec<char>& vertices, Vec<char>& indices) const;
+//             virtual void pushInto(std::vector<char>& vertices, std::vector<char>& indices) const;
 
 //             private:
 //             glm::vec3 worldTranslate;  // The world translation of the mesh.
@@ -39,7 +39,7 @@
 //              * @param vertices The buffer to push the vertices into.
 //              * @param indices The buffer to push the indices into.
 //              */
-//             void pushInto(Vec<char>& vertices, Vec<char>& indices) const override;
+//             void pushInto(std::vector<char>& vertices, std::vector<char>& indices) const override;
 //         };
 
 //         class BatchSphere : public BatchMesh {
@@ -49,7 +49,7 @@
 //              * @param vertices The buffer to push the vertices into.
 //              * @param indices The buffer to push the indices into.
 //              */
-//             void pushInto(Vec<char>& vertices, Vec<char>& indices) const override;
+//             void pushInto(std::vector<char>& vertices, std::vector<char>& indices) const override;
 //         };
 //     }  // namespace core::gfx
 // }  // namespace cobalt

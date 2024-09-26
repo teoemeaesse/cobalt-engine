@@ -55,7 +55,7 @@ namespace cobalt {
             template <typename SystemType>
             void addHook(const std::string& eventName) noexcept {
                 static_assert(std::is_base_of<SystemInterface, SystemType>::value, "System must be a subclass of SystemInterface.");
-                hooks.emplace(eventName, Move(CreateScope<SystemType>(entityRegistry, resourceRegistry, systemManager, *this)));
+                hooks.emplace(eventName, std::move(std::make_unique<SystemType>(entityRegistry, resourceRegistry, systemManager, *this)));
             }
             /**
              * @brief Hook a system to an event.
@@ -69,17 +69,17 @@ namespace cobalt {
             template <typename... Params, typename Func>
             void addHook(const std::string& eventName, Func func) noexcept {
                 static_assert(std::is_invocable_r<void, Func, Params...>::value, "Func must be invocable with Params");
-                hooks.emplace(eventName,
-                              Move(CreateScope<LambdaSystem<Func, Params...>>(func, entityRegistry, resourceRegistry, systemManager, *this)));
+                hooks.emplace(eventName, std::move(std::make_unique<LambdaSystem<Func, Params...>>(func, entityRegistry, resourceRegistry,
+                                                                                                   systemManager, *this)));
             }
 
             private:
-            UMap<std::string, Scope<SystemInterface>> hooks;  ///< All event hooks.
-            UMap<std::string, Event> events;                  ///< All registered events.
-            Queue<Event> eventQueue;                          ///< The event queue.
-            EntityRegistry& entityRegistry;                   ///< The entity registry to operate on.
-            ResourceRegistry& resourceRegistry;               ///< The resource registry to operate on.
-            SystemManager& systemManager;                     ///< The system manager to operate on.
+            std::unordered_map<std::string, std::unique_ptr<SystemInterface>> hooks;  ///< All event hooks.
+            std::unordered_map<std::string, Event> events;                            ///< All registered events.
+            std::queue<Event> eventQueue;                                             ///< The event queue.
+            EntityRegistry& entityRegistry;                                           ///< The entity registry to operate on.
+            ResourceRegistry& resourceRegistry;                                       ///< The resource registry to operate on.
+            SystemManager& systemManager;                                             ///< The system manager to operate on.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

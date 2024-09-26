@@ -14,7 +14,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "core/gl/texture.h"
 
-#include "core/exception.h"
+#include "core/utils/exception.h"
 #include "stb_image/stb_image.h"
 
 namespace cobalt {
@@ -28,7 +28,7 @@ namespace cobalt {
             height = other.height;
             format = other.format;
             encoding = other.encoding;
-            source = Move(other.source);
+            source = std::move(other.source);
             other.texture = 0;
         }
 
@@ -38,7 +38,7 @@ namespace cobalt {
             height = other.height;
             format = other.format;
             encoding = other.encoding;
-            source = Move(other.source);
+            source = std::move(other.source);
             other.texture = 0;
             return *this;
         }
@@ -120,10 +120,10 @@ namespace cobalt {
             }
         }
 
-        Texture2D::Texture2D(Texture2D&& other) noexcept : Texture(Move(other)) {}
+        Texture2D::Texture2D(Texture2D&& other) noexcept : Texture(std::move(other)) {}
 
         Texture2D& Texture2D::operator=(Texture2D&& other) noexcept {
-            Texture::operator=(Move(other));
+            Texture::operator=(std::move(other));
             return *this;
         }
 
@@ -239,10 +239,10 @@ namespace cobalt {
             }
         }
 
-        Texture3D::Texture3D(Texture3D&& other) noexcept : Texture(Move(other)) {}
+        Texture3D::Texture3D(Texture3D&& other) noexcept : Texture(std::move(other)) {}
 
         Texture3D& Texture3D::operator=(Texture3D&& other) noexcept {
-            Texture::operator=(Move(other));
+            Texture::operator=(std::move(other));
             return *this;
         }
 

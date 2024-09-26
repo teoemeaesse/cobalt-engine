@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "core/ecs/plugin/plugin.h"
 #include "engine/lighting/point_light.h"
 
 namespace cobalt {

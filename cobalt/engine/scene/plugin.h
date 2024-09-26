@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "core/ecs/plugin/plugin.h"
 #include "engine/scene/scene.h"
 
 namespace cobalt {

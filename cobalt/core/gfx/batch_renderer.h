@@ -4,7 +4,7 @@
 #pragma once
 
 // #include "core/gfx/batch_mesh.h"
-// #include "core/pch.h"
+//
 // #include "engine/raster3d/renderer.h"
 
 // namespace cobalt {
@@ -21,8 +21,8 @@
 //             void add(BatchMesh& mesh);
 
 //             private:
-//             Vec<char> vertices;
-//             Vec<char> indices;
+//             std::vector<char> vertices;
+//             std::vector<char> indices;
 //         };
 
 //         class BatchRenderer {
@@ -51,7 +51,7 @@
 
 //             private:
 //             const Raster3D renderer;  // The renderer used to render the batches.
-//             const UMap<Material,
+//             const std::unordered_map<Material,
 //                        Batch> batches;  // The batches.
 //         };
 //     }  // namespace core::gfx

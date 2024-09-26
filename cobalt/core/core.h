@@ -1,8 +1,8 @@
 /**
- * @file pch.h
+ * @file core.h
  * @brief Precompiled main library interfaces for the Cobalt core, providing various utilities such as STL and OpenGL wrappers.
  * @author Tomás Marques
- * @date 22-12-2023
+ * @date 26-09-2024
  */
 
 #pragma once
@@ -35,14 +35,18 @@
 #include <unordered_set>
 #include <vector>
 
-#include "core/gl/gl.h"
+#include "core/ecs/world.h"
+#include "core/geom/bvh.h"
+#include "core/geom/octree.h"
+#include "core/gl/context.h"
+#include "core/gl/fbo.h"
+#include "core/gl/ibo.h"
+#include "core/gl/ubo.h"
+#include "core/gl/vao.h"
 #include "core/io/file.h"
-#include "core/io/path.h"
 #include "core/memory/arena.h"
-#include "core/memory/heap.h"
 #include "core/memory/pool.h"
 #include "core/utils/color.h"
-#include "core/utils/log.h"
 #include "core/utils/platform.h"
 #include "json/json.hpp"
 
@@ -156,7 +160,7 @@ namespace cobalt {
     template <typename... T>
     using Tuple = std::tuple<T...>;
     /**
-     * @brief Wrapper for std::vector.
+     * @brief Wrapper for std::vector<.
      * @tparam T Type of the elements.
      */
     template <typename T>

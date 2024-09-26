@@ -8,7 +8,8 @@
 #pragma once
 
 #include "core/ecs/component/component.h"
-#include "core/geom/octree.h"
+#include "core/ecs/world.h"
+#include "core/geom/bvh.h"
 
 namespace cobalt {
     namespace engine {
@@ -28,6 +29,7 @@ namespace cobalt {
             ~SceneGraph() noexcept = default;
 
             private:
+            core::geom::BVH<core::ecs::Entity> bvh;
         };
     }  // namespace engine
 }  // namespace cobalt

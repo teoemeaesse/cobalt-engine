@@ -93,7 +93,7 @@ namespace cobalt {
                 if (entityToIndex.find(entityID) == entityToIndex.end()) {
                     return;
                 }
-                const uint64 index = entityToIndex[entityID];
+                const u_int64_t index = entityToIndex[entityID];
                 entityToIndex.erase(entityID);
                 if (index != components.size() - 1) {
                     components.insert(components.begin() + index, components.back());
@@ -116,8 +116,8 @@ namespace cobalt {
             const Component& get(const EntityProperties::ID& entityID) const override { return components.at(entityToIndex.at(entityID)); }
 
             private:
-            UMap<EntityProperties::ID, uint64> entityToIndex;  ///< Maps entity IDs to component indices.
-            Vec<ComponentType> components;                     ///< Packed array of components.
+            std::unordered_map<EntityProperties::ID, u_int64_t> entityToIndex;  ///< Maps entity IDs to component indices.
+            std::vector<ComponentType> components;                              ///< Packed array of components.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

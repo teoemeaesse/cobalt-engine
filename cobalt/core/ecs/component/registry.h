@@ -9,6 +9,7 @@
 
 #include "core/ecs/component/storage.h"
 #include "core/ecs/exception.h"
+#include "core/utils/log.h"
 
 #define CB_ECS_MAX_COMPONENTS 64
 
@@ -60,8 +61,8 @@ namespace cobalt {
                     if (typeIndices.size() >= CB_ECS_MAX_COMPONENTS) {
                         throw ComponentOverflowException<ComponentType, ComponentRegistry>(CB_ECS_MAX_COMPONENTS);
                     }
-                    store[type] = Move(CreateScope<ComponentStorage<ComponentType>>());
-                    const uint64 index = typeIndices.size();
+                    store[type] = std::move(std::unique_ptr<ComponentStorage<ComponentType>>());
+                    const u_int64_t index = typeIndices.size();
                     typeIndices[type] = index;
                 }
             }
@@ -132,9 +133,10 @@ namespace cobalt {
             template <typename ComponentRef>
             ComponentRef get(const EntityProperties::ID& entityID) {
                 try {
-                    return dynamic_cast<ComponentRef>(store.at(Component::template getType<RemoveConstRef<ComponentRef>>())->get(entityID));
+                    return dynamic_cast<ComponentRef>(
+                        store.at(Component::template getType<std::remove_const_t<std::remove_reference_t<ComponentRef>>>())->get(entityID));
                 } catch (const std::out_of_range& e) {
-                    throw ComponentNotFoundException<RemoveConstRef<ComponentRef>, ComponentRegistry>(entityID);
+                    throw ComponentNotFoundException<std::remove_const_t<std::remove_reference_t<ComponentRef>>, ComponentRegistry>(entityID);
                 }
             }
             /**
@@ -146,9 +148,10 @@ namespace cobalt {
             template <typename ComponentRef>
             ComponentRef get(const EntityProperties::ID& entityID) const {
                 try {
-                    return dynamic_cast<ComponentRef>(store.at(Component::template getType<RemoveConstRef<ComponentRef>>())->get(entityID));
+                    return dynamic_cast<ComponentRef>(
+                        store.at(Component::template getType<std::remove_const_t<std::remove_reference_t<ComponentRef>>>())->get(entityID));
                 } catch (const std::out_of_range& e) {
-                    throw ComponentNotFoundException<RemoveConstRef<ComponentRef>, ComponentRegistry>(entityID);
+                    throw ComponentNotFoundException<std::remove_const_t<std::remove_reference_t<ComponentRef>>, ComponentRegistry>(entityID);
                 }
             }
 
@@ -159,8 +162,8 @@ namespace cobalt {
              * @return References to the components.
              */
             template <typename... ComponentRefs>
-            Tuple<ComponentRefs...> getMany(const EntityProperties::ID& entityID) const {
-                Component::template validate<RemoveConstRef<ComponentRefs>...>();
+            std::tuple<ComponentRefs...> getMany(const EntityProperties::ID& entityID) const {
+                Component::template validate<std::remove_const_t<std::remove_reference_t<ComponentRefs>>...>();
                 return (std::make_tuple(std::ref(get<ComponentRefs>(entityID))...));
             }
 
@@ -178,10 +181,11 @@ namespace cobalt {
             }
 
             private:
-            UMap<ComponentProperties::Type, Scope<ComponentStorageInterface>> store;  ///< Component store. Maps component types to their storage.
-            UMap<EntityProperties::ID, Mask<CB_ECS_MAX_COMPONENTS>>
-                signatures;                                       ///< Entity signatures. Maps entity IDs to their component signatures.
-            UMap<ComponentProperties::Type, uint64> typeIndices;  ///< Maps component types to indices into their signature mask.
+            std::unordered_map<ComponentProperties::Type, std::unique_ptr<ComponentStorageInterface>>
+                store;  ///< Component store. Maps component types to their storage.
+            std::unordered_map<EntityProperties::ID, std::bitset<CB_ECS_MAX_COMPONENTS>>
+                signatures;  ///< Entity signatures. Maps entity IDs to their component signatures.
+            std::unordered_map<ComponentProperties::Type, u_int64_t> typeIndices;  ///< Maps component types to indices into their signature mask.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

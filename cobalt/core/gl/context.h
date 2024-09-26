@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include "core/pch.h"
-
 namespace cobalt {
     namespace core::gl {
         using GLFWContext = GLFWwindow*;
@@ -124,7 +122,7 @@ namespace cobalt {
              * @brief Gets the current GL render context.
              * @return The current GL render context.
              */
-            static Shared<Context>& getInstance();
+            static std::shared_ptr<Context>& getInstance();
 
             /**
              * @brief Gets the GL context.
@@ -205,7 +203,7 @@ namespace cobalt {
             private:
             GLFWContext context;  ///< The GL context.
 
-            static Shared<Context> instance;  ///< The current GL render context.
+            static std::shared_ptr<Context> instance;  ///< The current GL render context.
         };
     }  // namespace core::gl
 }  // namespace cobalt

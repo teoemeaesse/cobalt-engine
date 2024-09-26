@@ -37,7 +37,7 @@ namespace cobalt {
                 static_assert(std::is_default_constructible<ResourceType>::value, "Resource must be default constructible.");
                 const auto type = Resource::getType<ResourceType>();
                 resources.erase(type);
-                resources.emplace(type, Move(CreateScope<ResourceType>()));
+                resources.emplace(type, std::move(std::make_unique<ResourceType>()));
             }
             /**
              * @brief Adds a resource to the registry.
@@ -51,7 +51,7 @@ namespace cobalt {
                 static_assert(std::is_constructible<ResourceType, Args...>::value, "Resource must be constructible with the given arguments.");
                 const auto type = Resource::getType<ResourceType>();
                 resources.erase(type);
-                resources.emplace(type, Move(CreateScope<ResourceType>(std::forward<Args>(args)...)));
+                resources.emplace(type, std::move(std::make_unique<ResourceType>(std::forward<Args>(args)...)));
             }
 
             /**
@@ -62,9 +62,10 @@ namespace cobalt {
             template <typename ResourceRef>
             ResourceRef get() {
                 try {
-                    return *dynamic_cast<RemoveConstRef<ResourceRef>*>(resources.at(Resource::getType<RemoveConstRef<ResourceRef>>()).get());
+                    return *dynamic_cast<std::remove_const_t<std::remove_reference_t<ResourceRef>>*>(
+                        resources.at(Resource::getType<std::remove_const_t<std::remove_reference_t<ResourceRef>>>()).get());
                 } catch (const std::out_of_range& e) {
-                    throw ResourceNotFoundException<RemoveConstRef<ResourceRef>, ResourceRegistry>();
+                    throw ResourceNotFoundException<std::remove_const_t<std::remove_reference_t<ResourceRef>>, ResourceRegistry>();
                 }
             }
             /**
@@ -75,14 +76,15 @@ namespace cobalt {
             template <typename ResourceRef>
             ResourceRef get() const {
                 try {
-                    return *dynamic_cast<RemoveConstRef<ResourceRef>*>(resources.at(Resource::getType<RemoveConstRef<ResourceRef>>()).get());
+                    return *dynamic_cast<std::remove_const_t<std::remove_reference_t<ResourceRef>>*>(
+                        resources.at(Resource::getType<std::remove_const_t<std::remove_reference_t<ResourceRef>>>()).get());
                 } catch (const std::out_of_range& e) {
-                    throw ResourceNotFoundException<RemoveConstRef<ResourceRef>, ResourceRegistry>();
+                    throw ResourceNotFoundException<std::remove_const_t<std::remove_reference_t<ResourceRef>>, ResourceRegistry>();
                 }
             }
 
             private:
-            UMap<ResourceProperties::Type, Scope<Resource>> resources;  ///< The resources in the registry.
+            std::unordered_map<ResourceProperties::Type, std::unique_ptr<Resource>> resources;  ///< The resources in the registry.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

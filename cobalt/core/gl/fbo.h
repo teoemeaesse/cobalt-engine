@@ -34,7 +34,7 @@ namespace cobalt {
              * @param height The height of the FBO in pixels.
              * @param attachments A vector of Attachment objects specifying the configuration for each attachment.
              */
-            FBO(const uint width, const uint height, const Vec<Attachment>& attachments);
+            FBO(const uint width, const uint height, const std::vector<Attachment>& attachments);
             /**
              * @brief Constructs the default FBO, typically representing the screen.
              */
@@ -90,22 +90,22 @@ namespace cobalt {
              * @param i The index of the color texture to retrieve.
              * @return An optional wrapper around the requested texture, empty if not available.
              */
-            const Opt<Wrap<const Texture2D>> getColorBuffer(uint i) const;
+            const std::optional<std::reference_wrapper<const Texture2D>> getColorBuffer(uint i) const;
             /**
              * @brief Retrieves the first color texture attached to the FBO.
              * @return An optional wrapper around the first texture, empty if not available.
              */
-            const Opt<Wrap<const Texture2D>> getColorBuffer() const;
+            const std::optional<std::reference_wrapper<const Texture2D>> getColorBuffer() const;
             /**
              * @brief Retrieves the depth texture attached to the FBO, which may also include the depth-stencil texture.
              * @return An optional wrapper around the depth texture, empty if not available.
              */
-            const Opt<Wrap<const Texture2D>> getDepthBuffer() const;
+            const std::optional<std::reference_wrapper<const Texture2D>> getDepthBuffer() const;
             /**
              * @brief Retrieves the stencil texture attached to the FBO, which may also include the depth-stencil texture.
              * @return An optional wrapper around the stencil texture, empty if not available.
              */
-            const Opt<Wrap<const Texture2D>> getStencilBuffer() const;
+            const std::optional<std::reference_wrapper<const Texture2D>> getStencilBuffer() const;
 
             /**
              * @brief Gets the width of the FBO.
@@ -119,14 +119,14 @@ namespace cobalt {
             const uint getHeight() const;
 
             protected:
-            gl::Handle buffer;            ///< OpenGL handle to the FBO.
-            Vec<Texture2D> colors;        ///< Textures attached to color buffers of the FBO.
-            Opt<Texture2D> depth;         ///< Optional texture attached to the depth buffer.
-            Opt<Texture2D> stencil;       ///< Optional texture attached to the stencil buffer.
-            Opt<Texture2D> depthStencil;  ///< Optional texture that serves both as depth and stencil buffer.
-            Color clearColor;             ///< Color used to clear the FBO.
-            uint width;                   ///< Width of the FBO.
-            uint height;                  ///< Height of the FBO.
+            gl::Handle buffer;                      ///< OpenGL handle to the FBO.
+            std::vector<Texture2D> colors;          ///< Textures attached to color buffers of the FBO.
+            std::optional<Texture2D> depth;         ///< Optional texture attached to the depth buffer.
+            std::optional<Texture2D> stencil;       ///< Optional texture attached to the stencil buffer.
+            std::optional<Texture2D> depthStencil;  ///< Optional texture that serves both as depth and stencil buffer.
+            Color clearColor;                       ///< Color used to clear the FBO.
+            uint width;                             ///< Width of the FBO.
+            uint height;                            ///< Height of the FBO.
         };
 
     }  // namespace core::gl

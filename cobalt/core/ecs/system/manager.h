@@ -85,7 +85,7 @@ namespace cobalt {
             void shutdown() noexcept;
 
             private:
-            UMap<DefaultSchedules, Scope<SystemRegistry>> systems;  ///< The systems in the manager.
+            std::unordered_map<DefaultSchedules, std::unique_ptr<SystemRegistry>> systems;  ///< The systems in the manager.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

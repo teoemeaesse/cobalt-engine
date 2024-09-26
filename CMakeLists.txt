@@ -64,7 +64,7 @@ set_target_properties(cobalt PROPERTIES RUNTIME_OUTPUT_DIRECTORY
 
 target_include_directories(cobalt PRIVATE ${SOURCEDIR} ${LIBDIR}/glew/include)
 
-target_precompile_headers(cobalt PRIVATE ${SOURCEDIR}/core/pch.h)
+target_precompile_headers(cobalt PRIVATE ${SOURCEDIR}/core/core.h)
 
 if(APPLE)
   target_link_libraries(

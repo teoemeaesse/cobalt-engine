@@ -61,7 +61,7 @@ namespace cobalt {
              * @param plugins A list of plugins to check against.
              * @return A list of missing dependencies. Empty if all the dependencies are met.
              */
-            const Vec<std::string> findMissingDependencies(const Vec<Plugin>& plugins) const noexcept;
+            const std::vector<std::string> findMissingDependencies(const std::vector<Plugin>& plugins) const noexcept;
 
             /**
              * @brief Get the title for this plugin.
@@ -70,9 +70,9 @@ namespace cobalt {
             const std::string& getTitle() const noexcept;
 
             private:
-            const Vec<Plugin> dependencies;  ///< The dependencies of the plugin.
-            std::string title;               ///< The title of the plugin.
-            std::string description;         ///< The description of the plugin.
+            const std::vector<Plugin> dependencies;  ///< The dependencies of the plugin.
+            std::string title;                       ///< The title of the plugin.
+            std::string description;                 ///< The description of the plugin.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

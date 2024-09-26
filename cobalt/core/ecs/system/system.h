@@ -93,7 +93,7 @@ namespace cobalt {
              */
             template <size_t... Is>
             void populateParams(std::index_sequence<Is...>) {
-                run(std::tuple_element_t<Is, Tuple<Params...>>(entityRegistry, resourceRegistry, systemManager, eventManager)...);
+                run(std::tuple_element_t<Is, std::tuple<Params...>>(entityRegistry, resourceRegistry, systemManager, eventManager)...);
             }
         };
 

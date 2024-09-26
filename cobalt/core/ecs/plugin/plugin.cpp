@@ -29,8 +29,8 @@ namespace cobalt {
             CB_CORE_INFO("Plugin: {0}{1}{2}", formattedTitle, padding, description);
         }
 
-        const Vec<std::string> Plugin::findMissingDependencies(const Vec<Plugin>& plugins) const noexcept {
-            Vec<std::string> missingDependencies;
+        const std::vector<std::string> Plugin::findMissingDependencies(const std::vector<Plugin>& plugins) const noexcept {
+            std::vector<std::string> missingDependencies;
             for (const auto& dependency : dependencies) {
                 bool found = false;
                 for (const auto& plugin : plugins) {

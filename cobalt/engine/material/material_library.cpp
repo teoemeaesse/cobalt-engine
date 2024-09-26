@@ -1,7 +1,6 @@
 // Created by tomas on
 // 24-12-2023
 
-#include "core/ecs/exception.h"
 #include "engine/material/plugin.h"
 
 namespace cobalt {

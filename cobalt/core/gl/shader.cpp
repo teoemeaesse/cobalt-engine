@@ -7,7 +7,7 @@
 
 #include "core/gl/shader.h"
 
-#include "core/exception.h"
+#include "core/utils/exception.h"
 
 namespace cobalt {
     namespace core::gl {

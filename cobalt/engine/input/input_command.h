@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "core/ecs/world.h"
+#include "core/core.h"
 
 namespace cobalt {
     namespace engine {

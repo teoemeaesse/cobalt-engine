@@ -3,8 +3,8 @@
 
 #include "engine/raster3d/renderer.h"
 
-#include "core/exception.h"
 #include "core/gl/context.h"
+#include "core/utils/exception.h"
 
 namespace cobalt {
     using namespace core;

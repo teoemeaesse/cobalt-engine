@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "core/gl/texture.h"
 #include "engine/internal/internal_exception.h"
 
 namespace cobalt {

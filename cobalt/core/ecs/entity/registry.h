@@ -72,7 +72,7 @@ namespace cobalt {
              * @brief The number entities in the registry.
              * @return The number of entities.
              */
-            const uint64 getSize() const noexcept;
+            const u_int64_t getSize() const noexcept;
 
             /**
              * @brief Get a subset of all entities' components.
@@ -80,11 +80,11 @@ namespace cobalt {
              * @return A vector of tuples of references to components.
              */
             template <typename... ComponentRefs>
-            const Vec<Tuple<ComponentRefs...>> getMany() const noexcept {
+            const std::vector<std::tuple<ComponentRefs...>> getMany() const noexcept {
                 static_assert((std::is_reference<ComponentRefs>::value && ...), "All component types must be reference types.");
-                Vec<Tuple<ComponentRefs...>> components;
+                std::vector<std::tuple<ComponentRefs...>> components;
                 for (auto& entity : entities) {
-                    if (entity.second.has<RemoveConstRef<ComponentRefs>...>()) {
+                    if (entity.second.has<std::remove_const_t<std::remove_reference_t<ComponentRefs>>...>()) {
                         components.push_back(entity.second.getMany<ComponentRefs...>());
                     }
                 }
@@ -96,11 +96,11 @@ namespace cobalt {
              * @return A vector of tuples of references to components.
              */
             template <typename... ComponentTypes>
-            const Vec<Tuple<const Entity&, ComponentTypes...>> getWithEntity() const noexcept {
+            const std::vector<std::tuple<const Entity&, ComponentTypes...>> getWithEntity() const noexcept {
                 static_assert((std::is_reference<ComponentTypes>::value && ...), "All component types must be reference types.");
-                Vec<Tuple<const Entity&, ComponentTypes...>> components;
+                std::vector<std::tuple<const Entity&, ComponentTypes...>> components;
                 for (auto& entity : entities) {
-                    if (entity.second.has<RemoveConstRef<ComponentTypes>...>()) {
+                    if (entity.second.has<std::remove_const_t<std::remove_reference_t<ComponentTypes>>...>()) {
                         components.push_back(std::tuple_cat(std::make_tuple(std::cref(entity.second)), entity.second.getMany<ComponentTypes...>()));
                     }
                 }
@@ -108,10 +108,10 @@ namespace cobalt {
             }
 
             private:
-            UMap<EntityProperties::ID, Entity> entities;  ///< All living entities.
-            Vec<uint64> versions;                         ///< Entity versions.
-            Queue<EntityProperties::ID> freeIDs;          ///< Recently-freed IDs.
-            ComponentRegistry& componentRegistry;         ///< Component registry for this instance's entities.
+            std::unordered_map<EntityProperties::ID, Entity> entities;  ///< All living entities.
+            std::vector<u_int64_t> versions;                            ///< Entity versions.
+            std::queue<EntityProperties::ID> freeIDs;                   ///< Recently-freed IDs.
+            ComponentRegistry& componentRegistry;                       ///< Component registry for this instance's entities.
 
             /**
              * @brief Check if an entity is alive.

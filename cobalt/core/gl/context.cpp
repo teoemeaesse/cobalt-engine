@@ -7,7 +7,7 @@
 
 #include "core/gl/context.h"
 
-#include "core/exception.h"
+#include "core/utils/exception.h"
 
 namespace cobalt {
     namespace core::gl {
@@ -26,7 +26,7 @@ namespace cobalt {
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
             glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-            instance = CreateShared<Context>();
+            instance = std::make_shared<Context>();
             glfwMakeContextCurrent(instance->getGLContext());
             glewExperimental = GL_TRUE;  // Needed for core profile
             GLenum err = glewInit();
@@ -41,7 +41,7 @@ namespace cobalt {
             if (instance) {
                 throw CoreException<Context>("Render context already initialized");
             }
-            instance = CreateShared<Context>(context);
+            instance = std::make_shared<Context>(context);
             if (!instance->getGLContext()) {
                 throw CoreException<Context>("Failed to create render context");
             }

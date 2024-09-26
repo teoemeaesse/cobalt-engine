@@ -35,7 +35,7 @@ namespace cobalt {
                            EventManager& eventManager) noexcept
                 : SystemParameter(entityRegistry, resourceRegistry, systemManager, eventManager),
                   componentTuples(entityRegistry.getMany<Components...>()) {
-                Component::validate<RemoveConstRef<Components>...>();
+                Component::validate<std::remove_const_t<std::remove_reference_t<Components>>...>();
             }
             /**
              * @brief Default destructor.
@@ -54,10 +54,10 @@ namespace cobalt {
              */
             class Iterator {
                 public:
-                explicit Iterator(Tuple<Components...>* ptr) : ptr(ptr) {}
+                explicit Iterator(std::tuple<Components...>* ptr) : ptr(ptr) {}
 
-                Tuple<Components...>& operator*() const { return *ptr; }
-                Tuple<Components...>* operator->() { return ptr; }
+                std::tuple<Components...>& operator*() const { return *ptr; }
+                std::tuple<Components...>* operator->() { return ptr; }
                 Iterator& operator++() {
                     ptr++;
                     return *this;
@@ -71,13 +71,13 @@ namespace cobalt {
                 friend bool operator!=(const Iterator& a, const Iterator& b) { return a.ptr != b.ptr; }
 
                 private:
-                Tuple<Components...>* ptr;
+                std::tuple<Components...>* ptr;
             };
             Iterator begin() { return Iterator(&componentTuples[0]); }
             Iterator end() { return Iterator(&componentTuples[0] + componentTuples.size()); }
 
             private:
-            Vec<Tuple<Components...>> componentTuples;  ///< The tuples of components for each entity.
+            std::vector<std::tuple<Components...>> componentTuples;  ///< The tuples of components for each entity.
         };
 
         /**
@@ -118,10 +118,10 @@ namespace cobalt {
              */
             class Iterator {
                 public:
-                explicit Iterator(Tuple<const Entity&, Components...>* ptr) : ptr(ptr) {}
+                explicit Iterator(std::tuple<const Entity&, Components...>* ptr) : ptr(ptr) {}
 
-                Tuple<const Entity&, Components...>& operator*() const { return *ptr; }
-                Tuple<const Entity&, Components...>* operator->() { return ptr; }
+                std::tuple<const Entity&, Components...>& operator*() const { return *ptr; }
+                std::tuple<const Entity&, Components...>* operator->() { return ptr; }
                 Iterator& operator++() {
                     ptr++;
                     return *this;
@@ -135,13 +135,13 @@ namespace cobalt {
                 friend bool operator!=(const Iterator& a, const Iterator& b) { return a.ptr != b.ptr; }
 
                 private:
-                Tuple<const Entity&, Components...>* ptr;
+                std::tuple<const Entity&, Components...>* ptr;
             };
             Iterator begin() { return Iterator(&componentTuples[0]); }
             Iterator end() { return Iterator(&componentTuples[0] + componentTuples.size()); }
 
             private:
-            Vec<Tuple<const Entity&, Components...>> componentTuples;  ///< The tuples of components for each entity.
+            std::vector<std::tuple<const Entity&, Components...>> componentTuples;  ///< The tuples of components for each entity.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

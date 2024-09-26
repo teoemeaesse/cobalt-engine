@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "core/ecs/plugin/plugin.h"
 #include "engine/raster3d/renderer.h"
 
 namespace cobalt {

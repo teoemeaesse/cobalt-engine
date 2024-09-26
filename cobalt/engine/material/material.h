@@ -3,8 +3,7 @@
 
 #pragma once
 
-#include "core/gl/shader.h"
-#include "core/gl/texture.h"
+#include "core/core.h"
 
 namespace cobalt {
     namespace engine {

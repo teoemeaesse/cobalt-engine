@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "core/ecs/resource/resource.h"
 #include "engine/camera/plugin.h"
 #include "engine/lighting/plugin.h"
 #include "engine/mesh3d/mesh.h"

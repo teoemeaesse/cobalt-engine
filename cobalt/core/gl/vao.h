@@ -21,7 +21,7 @@ namespace cobalt {
             /**
              * @brief Creates a VAO layout.
              */
-            VAOLayout() : stride(0){};
+            VAOLayout() : stride(0) {};
             /**
              * @brief Destroys the VAO layout.
              */
@@ -58,8 +58,8 @@ namespace cobalt {
                     : count(count), type(type), normalized(normalized), stride(stride) {}
             };
 
-            List<Attribute> attributes;  ///< The list of attributes.
-            size_t stride;               ///< The current stride of the vertex data.
+            std::list<Attribute> attributes;  ///< The list of attributes.
+            size_t stride;                    ///< The current stride of the vertex data.
         };
 
         /**

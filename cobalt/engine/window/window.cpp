@@ -3,8 +3,8 @@
 
 #include "engine/window/window.h"
 
-#include "core/exception.h"
 #include "core/gl/context.h"
+#include "core/utils/exception.h"
 #include "engine/window/plugin.h"
 
 namespace cobalt {

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <stdexcept>
+#include "core/core.h"
 
 namespace cobalt {
     namespace engine {

@@ -34,7 +34,7 @@ namespace cobalt {
             template <typename SystemType>
             void addSystem() noexcept {
                 static_assert(std::is_base_of<SystemInterface, SystemType>::value, "System must be a subclass of SystemInterface.");
-                systems.push_back(Move(CreateScope<SystemType>(entityRegistry, resourceRegistry, systemManager, eventManager)));
+                systems.push_back(std::move(std::make_unique<SystemType>(entityRegistry, resourceRegistry, systemManager, eventManager)));
             }
             /**
              * @brief Adds a System (lambda function) to the registry.
@@ -48,7 +48,7 @@ namespace cobalt {
             void addSystem(Func func) noexcept {
                 static_assert(std::is_invocable_r<void, Func, Params...>::value, "Func must be invocable with Params");
                 systems.push_back(
-                    Move(CreateScope<LambdaSystem<Func, Params...>>(func, entityRegistry, resourceRegistry, systemManager, eventManager)));
+                    std::move(std::make_unique<LambdaSystem<Func, Params...>>(func, entityRegistry, resourceRegistry, systemManager, eventManager)));
             }
 
             /**
@@ -57,11 +57,11 @@ namespace cobalt {
             void run() noexcept;
 
             private:
-            Vec<Scope<SystemInterface>> systems;  ///< The stored systems.
-            EntityRegistry& entityRegistry;       ///< The EntityRegistry that the systems will run on.
-            ResourceRegistry& resourceRegistry;   ///< The ResourceRegistry that the systems will run on.
-            SystemManager& systemManager;         ///< The SystemManager that owns this registry.
-            EventManager& eventManager;           ///< The EventManager that the systems will run on.
+            std::vector<std::unique_ptr<SystemInterface>> systems;  ///< The stored systems.
+            EntityRegistry& entityRegistry;                         ///< The EntityRegistry that the systems will run on.
+            ResourceRegistry& resourceRegistry;                     ///< The ResourceRegistry that the systems will run on.
+            SystemManager& systemManager;                           ///< The SystemManager that owns this registry.
+            EventManager& eventManager;                             ///< The EventManager that the systems will run on.
         };
     }  // namespace core::ecs
 }  // namespace cobalt

@@ -11,7 +11,6 @@
 
 #include "core/ecs/component/registry.h"
 #include "core/ecs/entity/entity.h"
-#include "core/pch.h"
 
 namespace cobalt {
     namespace core::ecs {

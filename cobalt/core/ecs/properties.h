@@ -7,30 +7,28 @@
 
 #pragma once
 
-#include "core/pch.h"
-
 namespace cobalt {
     namespace core::ecs {
         /**
          * @brief Properties of an entity.
          */
         namespace EntityProperties {
-            using ID = uint64;       ///< Entity ID - unique between all entities.
-            using Version = uint64;  ///< Entity version - incremented every time an entity with this ID is destroyed.
+            using ID = u_int64_t;       ///< Entity ID - unique between all entities.
+            using Version = u_int64_t;  ///< Entity version - incremented every time an entity with this ID is destroyed.
         };  // namespace EntityProperties
 
         /**
          * @brief Properties of a component.
          */
         namespace ComponentProperties {
-            using Type = uint64;  ///< Component type - unique between different component types.
+            using Type = u_int64_t;  ///< Component type - unique between different component types.
         };  // namespace ComponentProperties
 
         /**
          * @brief Properties of a resource.
          */
         namespace ResourceProperties {
-            using Type = uint64;  ///< Resource type - unique between different resource types.
+            using Type = u_int64_t;  ///< Resource type - unique between different resource types.
         };  // namespace ResourceProperties
     }  // namespace core::ecs
 }  // namespace cobalt

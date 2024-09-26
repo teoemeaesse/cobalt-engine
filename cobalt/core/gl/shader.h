@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include "core/pch.h"
-
 namespace cobalt {
     namespace core::gl {
         /**
@@ -204,11 +202,11 @@ namespace cobalt {
                 static Shader& getDefaultShader();
 
                 private:
-                UMap<ShaderStep, std::string> sources;  ///< The shader sources.
+                std::unordered_map<ShaderStep, std::string> sources;  ///< The shader sources.
             };
 
             private:
-            UMap<std::string, GLuint> uniformLocations;  ///< The locations for each uniform.
+            std::unordered_map<std::string, GLuint> uniformLocations;  ///< The locations for each uniform.
 
             /**
              * @brief Gets the location of a uniform with the given name.

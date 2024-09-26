@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include "core/ecs/resource/resource.h"
-#include "core/gl/fbo.h"
-#include "core/gl/ubo.h"
+#include "core/core.h"
 
 namespace cobalt {
     namespace engine {
