@@ -133,7 +133,7 @@ namespace cobalt {
              * @param filter The filter mode of the texture.
              * @param wrap The wrap mode of the texture.
              */
-            Texture2D(const Color& color, const TextureEncoding encoding, const TextureFilter filter = TextureFilters::Linear,
+            Texture2D(const utils::Color& color, const TextureEncoding encoding, const TextureFilter filter = TextureFilters::Linear,
                       const TextureWrap wrap = TextureWraps::Repeat);
             /**
              * @brief Creates a 2d texture from the given data.
@@ -240,7 +240,7 @@ namespace cobalt {
              * @param filter The filter mode of the texture.
              * @param wrap The wrap mode of the texture.
              */
-            Texture3D(const Color& color, const TextureEncoding encoding = TextureEncodings::RGBA::Bits8,
+            Texture3D(const utils::Color& color, const TextureEncoding encoding = TextureEncodings::RGBA::Bits8,
                       const TextureFilter filter = TextureFilters::Linear, const TextureWrap wrap = TextureWraps::Repeat);
             /**
              * @brief Creates an empty cubemap with the given width and height for the faces and reserves the memory for it. The format is the

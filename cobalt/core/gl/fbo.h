@@ -83,7 +83,7 @@ namespace cobalt {
              * @brief Sets the clear color for the FBO.
              * @param color The color used to clear the FBO.
              */
-            void setClearColor(const Color& color);
+            void setClearColor(const utils::Color& color);
 
             /**
              * @brief Retrieves a specific color texture attached to the FBO.
@@ -124,7 +124,7 @@ namespace cobalt {
             std::optional<Texture2D> depth;         ///< Optional texture attached to the depth buffer.
             std::optional<Texture2D> stencil;       ///< Optional texture attached to the stencil buffer.
             std::optional<Texture2D> depthStencil;  ///< Optional texture that serves both as depth and stencil buffer.
-            Color clearColor;                       ///< Color used to clear the FBO.
+            utils::Color clearColor;                ///< Color used to clear the FBO.
             uint width;                             ///< Width of the FBO.
             uint height;                            ///< Height of the FBO.
         };

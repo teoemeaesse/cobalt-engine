@@ -43,7 +43,8 @@ namespace cobalt {
             return *this;
         }
 
-        Texture2D::Texture2D(const Color& color, const gl::TextureEncoding encoding, const gl::TextureFilter filter, const gl::TextureWrap wrap)
+        Texture2D::Texture2D(const utils::Color& color, const gl::TextureEncoding encoding, const gl::TextureFilter filter,
+                             const gl::TextureWrap wrap)
             : Texture(encoding) {
             source = "";
             this->width = 1;
@@ -172,7 +173,8 @@ namespace cobalt {
             CB_CORE_INFO("Using filter: {0}, wrap: {1}", gl::getTextureFilterName(filter), gl::getTextureWrapName(wrap));
         }
 
-        Texture3D::Texture3D(const Color& color, const gl::TextureEncoding encoding, const gl::TextureFilter filter, const gl::TextureWrap wrap)
+        Texture3D::Texture3D(const utils::Color& color, const gl::TextureEncoding encoding, const gl::TextureFilter filter,
+                             const gl::TextureWrap wrap)
             : Texture(encoding) {
             source = "";
             this->width = 1;

@@ -119,9 +119,9 @@ namespace cobalt {
             scene.setSkybox(Mesh3DPlugin::createSkybox(skyboxMaterial));
             Material& woodMaterial = materialLibrary.getMaterial(materialLibrary.makePBR("wood", woodAlbedo, woodNormal, woodMrao));
             Material& steelMaterial = materialLibrary.getMaterial(materialLibrary.makePBR("steel", steelAlbedo, steelNormal, steelMrao));
-            Material& whiteRough = materialLibrary.getMaterial(materialLibrary.makePBR("white", Colors::White, 0.0f, 1.0f, 1.0f));
-            Material& whiteSmooth = materialLibrary.getMaterial(materialLibrary.makePBR("white", Colors::White, 0.0f, 0.0f, 1.0f));
-            Material& orangeMedium = materialLibrary.getMaterial(materialLibrary.makePBR("orange", Colors::Orange, 0.0f, 0.5f, 1.0f));
+            Material& whiteRough = materialLibrary.getMaterial(materialLibrary.makePBR("white", utils::Colors::White, 0.0f, 1.0f, 1.0f));
+            Material& whiteSmooth = materialLibrary.getMaterial(materialLibrary.makePBR("white", utils::Colors::White, 0.0f, 0.0f, 1.0f));
+            Material& orangeMedium = materialLibrary.getMaterial(materialLibrary.makePBR("orange", utils::Colors::Orange, 0.0f, 0.5f, 1.0f));
             Mesh rotatingCube = Mesh3DPlugin::createCube(5, woodMaterial);
             Mesh ground = Mesh3DPlugin::createRectangle(100, 100, woodMaterial);
             Mesh sphere = Mesh3DPlugin::createSphere(5, woodMaterial);

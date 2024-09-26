@@ -1,7 +1,7 @@
 /**
  * @file bvh.h
- * @brief A bounding volume hierarchy is a tree structure on a set of geometric objects, most commonly used for collision detection and ray tracing.
- * acceleration.
+ * @brief A bounding volume hierarchy is a spatial partitioning binary tree structure most commonly used for collision detection and ray tracing on a
+ * set of static geometric objects.
  * @author Tomás Marques
  * @date 02-09-2024
  */
@@ -13,9 +13,8 @@
 namespace cobalt {
     namespace core::geom {
         /**
-         * @brief A bounding volume hierarchy is a tree structure on a set of geometric objects, most commonly used for collision detection and ray
-         * tracing. Being a tree, it has a root node, internal nodes and leaf nodes. The root node contains the entire set of objects, and each
-         * internal node contains a bounding volume that encompasses all the objects in its child nodes.
+         * @brief A bounding volume hierarchy. The root node contains the entire set of objects, and each internal node contains a bounding volume
+         * that encompasses all the objects in its child nodes.
          * @tparam ElementType The type of the data stored in the BVH. Must have a bounding volume (even if null).
          */
         template <typename ElementType>
@@ -100,7 +99,7 @@ namespace cobalt {
                  * @brief Builds the BVH from a set of elements.
                  * @param data The set of elements to build the BVH from.
                  * @return The built BVH.
-                 * @throws CoreException<BVH<ElementType>::Builder> If no split strategy is set.
+                 * @throws CoreException<Builder> If no split strategy is set.
                  */
                 BVH build(const std::vector<ElementType>& data) {
                     if (!splitStrategy) {
@@ -116,6 +115,11 @@ namespace cobalt {
             };
 
             private:
+            class BVHNode;
+
+            Configuration config;  ///< The configuration of the BVH.
+            BVHNode root;          ///< The root node of the BVH.
+
             /**
              * @brief Creates a BVH from a set of elements and a configuration.
              * @param data The set of elements to build the BVH from.
@@ -245,15 +249,13 @@ namespace cobalt {
                 const uint depth;                ///< The depth of the node in the BVH.
             };
 
-            Configuration config;  ///< The configuration of the BVH.
-            BVHNode root;          ///< The root node of the BVH.
-
             public:
             struct Configuration {
                 const uint maxDepth;                                        ///< The maximum depth of the BVH. 0 means no depth limit.
                 const uint maxElements;                                     ///< The maximum number of elements in a leaf node.
                 std::unique_ptr<SplitStrategy<ElementType>> splitStrategy;  ///< The strategy to use for spatially splitting the elements.
             };
+
 #ifdef TEST_ENVIRONMENT
 
             /**

@@ -13,7 +13,7 @@
 namespace cobalt {
     namespace core::gl {
         FBO::FBO(const uint width, const uint height, const std::vector<Attachment>& attachments)
-            : width(width), height(height), clearColor(Colors::Black) {
+            : width(width), height(height), clearColor(utils::Colors::Black) {
             glGenFramebuffers(1, &buffer);
             glBindFramebuffer(GL_FRAMEBUFFER, buffer);
             for (auto& attachment : attachments) {
@@ -60,7 +60,7 @@ namespace cobalt {
             }
         }
 
-        FBO::FBO() : buffer(0), clearColor(Colors::Green) {
+        FBO::FBO() : buffer(0), clearColor(utils::Colors::Green) {
             int width, height;
             glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
             this->width = (uint)width;
@@ -134,7 +134,7 @@ namespace cobalt {
             glClear(mask);
         }
 
-        void FBO::setClearColor(const Color& color) { clearColor = color; }
+        void FBO::setClearColor(const utils::Color& color) { clearColor = color; }
 
         const std::optional<std::reference_wrapper<const Texture2D>> FBO::getColorBuffer(const uint i) const {
             if (i >= colors.size() || colors.empty()) {

@@ -121,7 +121,10 @@ namespace cobalt {
              * @brief Copy-inserts an element into the tree. The bounds for this element MUST NOT BE VOID.
              * @param element The element to insert. Must be copy-constructible.
              */
-            void insert(const ElementType& element) { root.insert(element); }
+            void insert(const ElementType& element) {
+                static_assert(std::is_copy_constructible<ElementType>::value, "ElementType must be copy constructible.");
+                root.insert(element);
+            }
 
             private:
             /**

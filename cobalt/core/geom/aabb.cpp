@@ -33,7 +33,17 @@ namespace cobalt {
             max = glm::max(max, other.max);
         }
 
+        void AABB::expand(float amount) noexcept {
+            min -= glm::vec3(amount / 2.0f);
+            max += glm::vec3(amount / 2.0f);
+        }
+
         AABB AABB::combine(const AABB& other) const noexcept { return AABB(glm::min(min, other.min), glm::max(max, other.max)); }
+
+        float AABB::surfaceArea() const noexcept {
+            glm::vec3 size = getSize();
+            return 2.0f * (size.x * size.y + size.x * size.z + size.y * size.z);
+        }
 
         void AABB::operator+=(const AABB& other) noexcept {
             min = glm::min(min, other.min);

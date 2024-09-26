@@ -10,7 +10,7 @@
 #include <sstream>
 
 namespace cobalt {
-    namespace core {
+    namespace core::utils {
         Color::Color() noexcept : r(0.0f), g(0.0f), b(0.0f), a(1.0f) {}
 
         Color::Color(const float r, const float g, const float b, const float a) noexcept : r(r), g(g), b(b), a(a) {}
@@ -61,5 +61,5 @@ namespace cobalt {
             array[2] = static_cast<unsigned char>(b * 255);
             array[3] = static_cast<unsigned char>(a * 255);
         }
-    }  // namespace core
+    }  // namespace core::utils
 }  // namespace cobalt

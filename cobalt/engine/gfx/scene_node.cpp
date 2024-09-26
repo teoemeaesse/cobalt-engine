@@ -21,9 +21,9 @@ namespace cobalt {
             auto& meshes = scene.getMeshes();
 
             // TODO: set up lighting via scene graph. this is just a placeholder
-            PointLight plight1(10000, Colors::Yellow);
-            PointLight plight2(10000, Colors::Blue);
-            PointLight plight3(10000, Colors::Red);
+            PointLight plight1(10000, utils::Colors::Yellow);
+            PointLight plight2(10000, utils::Colors::Blue);
+            PointLight plight3(10000, utils::Colors::Red);
             PointLight::UBO plightUBO(core::gl::Usage::StaticDraw);
             plightUBO.bind();
             plightUBO.emplace<PointLight::Serial>(plight1, glm::vec3(0.0, 0.0, 0.0));

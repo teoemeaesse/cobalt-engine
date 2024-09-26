@@ -56,6 +56,11 @@ namespace cobalt {
              * @param other The other box.
              */
             void expand(const AABB& other) noexcept;
+            /**
+             * @brief Expands this box by a given amount.
+             * @param amount The amount to expand by. The box will expand by half this amount in each direction.
+             */
+            void expand(float amount) noexcept;
 
             /**
              * @brief Combines two boxes into a new box.
@@ -63,6 +68,12 @@ namespace cobalt {
              * @return The resulting box.
              */
             AABB combine(const AABB& other) const noexcept;
+
+            /**
+             * @brief Gets the surface area of the box.
+             * @return The surface area.
+             */
+            float surfaceArea() const noexcept;
 
             /**
              * @brief Expands this box to include another box.

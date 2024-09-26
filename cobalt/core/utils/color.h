@@ -11,7 +11,7 @@
 #include <string>
 
 namespace cobalt {
-    namespace core {
+    namespace core::utils {
         /**
          * @brief Class to represent RGBA colors. The components are floats between 0 and 1.
          */
@@ -116,5 +116,5 @@ namespace cobalt {
             static inline const Color Cyan = Color(0.0f, 1.0f, 1.0f, 1.0f);
             static inline const Color Transparent = Color(0.0f, 0.0f, 0.0f, 0.0f);
         }  // namespace Colors
-    }  // namespace core
+    }  // namespace core::utils
 }  // namespace cobalt
