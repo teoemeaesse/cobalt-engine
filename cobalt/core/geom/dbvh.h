@@ -9,6 +9,9 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
+
+#include "core/geom/aabb.h"
 
 namespace cobalt {
     namespace core::geom {
@@ -31,30 +34,42 @@ namespace cobalt {
              * @return The index of the element in the tree.
              */
             int insert(const ElementType& element, const AABB& aabb) noexcept {
+                if (root == -1) {
+                    root = reserveIndex();
+
+                    if (root == nodes.size()) {
+                        nodes.emplace_back(-1);
+                    } else {
+                        nodes[root] = DBVHNode(-1);
+                    }
+                    nodes[root].data = element;
+                    nodes[root].bounds = aabb;
+                    return root;
+                }
                 int best = bestLeaf(root);
                 int oldParent = nodes[best].parent;
                 int newParent = reserveIndex();
                 if (newParent == nodes.size()) {
                     nodes.emplace_back(oldParent);
                 } else {
-                    nodes.emplace(newParent, oldParent);
+                    nodes[newParent] = DBVHNode(oldParent);
                 }
-                nodes[best].setParent(newParent);
+                nodes[best].parent = newParent;
                 int newRight = reserveIndex();
                 if (newRight == nodes.size()) {
                     nodes.emplace_back(newParent);
                 } else {
-                    nodes.emplace(newRight, newParent);
+                    nodes[newRight] = DBVHNode(newParent);
                 }
-                nodes[newRight].setAABB(aabb);
-                nodes[newParent].setLeft(best);
-                nodes[newParent].setRight(newRight);
-                nodes[newParent].setAABB(aabb.combine(nodes[best].aabb));
+                nodes[newRight].bounds = aabb;
+                nodes[newParent].left = best;
+                nodes[newParent].right = newRight;
+                nodes[newParent].bounds = aabb.combine(nodes[best].bounds);
                 if (oldParent != -1) {
                     if (nodes[oldParent].left == best) {
-                        nodes[oldParent].setLeft(newParent);
+                        nodes[oldParent].left = newParent;
                     } else {
-                        nodes[oldParent].setRight(newParent);
+                        nodes[oldParent].right = newParent;
                     }
                 } else {
                     root = newParent;
@@ -75,6 +90,7 @@ namespace cobalt {
                 int parent = nodes[index].parent;
                 if (parent == -1) {
                     root = -1;
+                    releaseIndex(index);
                     return;
                 }
                 // Normal case
@@ -82,15 +98,15 @@ namespace cobalt {
                 int sibling = (nodes[parent].left == index) ? nodes[parent].right : nodes[parent].left;
                 if (grandParent != -1) {
                     if (nodes[grandParent].left == parent) {
-                        nodes[grandParent].setLeft(sibling);
+                        nodes[grandParent].left = sibling;
                     } else {
-                        nodes[grandParent].setRight(sibling);
+                        nodes[grandParent].right = sibling;
                     }
-                    nodes[sibling].setParent(grandParent);
+                    nodes[sibling].parent = grandParent;
                     fixBounds(grandParent);
                 } else {
                     root = sibling;
-                    nodes[sibling].setParent(-1);
+                    nodes[sibling].parent = -1;
                 }
                 releaseIndex(parent);
                 releaseIndex(index);
@@ -125,14 +141,14 @@ namespace cobalt {
                     int index = stack.top();
                     stack.pop();
                     if (nodes[index].isLeaf()) {
-                        if (range.intersects(nodes[index].aabb)) {
+                        if (range.intersects(nodes[index].bounds)) {
                             found.emplace_back(nodes[index].data);
                         }
                     } else {
-                        if (range.intersects(nodes[nodes[index].left].aabb)) {
+                        if (range.intersects(nodes[nodes[index].left].bounds)) {
                             stack.push(nodes[index].left);
                         }
-                        if (range.intersects(nodes[nodes[index].right].aabb)) {
+                        if (range.intersects(nodes[nodes[index].right].bounds)) {
                             stack.push(nodes[index].right);
                         }
                     }
@@ -154,14 +170,14 @@ namespace cobalt {
                     int index = stack.top();
                     stack.pop();
                     if (nodes[index].isLeaf()) {
-                        if (nodes[index].aabb.contains(point)) {
+                        if (nodes[index].bounds.contains(point)) {
                             found.emplace_back(nodes[index].data);
                         }
                     } else {
-                        if (nodes[nodes[index].left].aabb.contains(point)) {
+                        if (nodes[nodes[index].left].bounds.contains(point)) {
                             stack.push(nodes[index].left);
                         }
-                        if (nodes[nodes[index].right].aabb.contains(point)) {
+                        if (nodes[nodes[index].right].bounds.contains(point)) {
                             stack.push(nodes[index].right);
                         }
                     }
@@ -206,37 +222,13 @@ namespace cobalt {
                  * @brief Constructs a new node with the given parent.
                  * @param parent The index of the parent. If the node is the root, the parent is -1.
                  */
-                DBVHNode(int parent) noexcept : left(0), right(0), parent(parent) {}
+                DBVHNode(int parent) noexcept : left(-1), right(-1), parent(parent) {}
 
                 /**
                  * @brief Checks if the node is a leaf.
                  * @return True if the node is a leaf, false otherwise.
                  */
                 bool isLeaf() const noexcept { return left == -1 && right == -1; }
-
-                /**
-                 * @brief Gets the data stored in the node.
-                 * @return The data stored in the node.
-                 */
-                void setAABB(const AABB& aabb) noexcept { this->aabb = aabb; }
-
-                /**
-                 * @brief Sets the left child of the node.
-                 * @param left The index of the left child.
-                 */
-                void setLeft(int left) noexcept { this->left = left; }
-
-                /**
-                 * @brief Sets the right child of the node.
-                 * @param right The index of the right child.
-                 */
-                void setRight(int right) noexcept { this->right = right; }
-
-                /**
-                 * @brief Sets the parent of the node.
-                 * @param parent The index of the parent.
-                 */
-                void setParent(int parent) noexcept { this->parent = parent; }
 
                 private:
                 ElementType data;  ///< The data stored in the node.
@@ -253,7 +245,7 @@ namespace cobalt {
             void fixBounds(int index) {
                 while (index != -1) {
                     // TODO: Balance the tree
-                    nodes[index].setAABB(nodes[nodes[index].left].aabb.combine(nodes[nodes[index].right].aabb));
+                    nodes[index].bounds = nodes[nodes[index].left].bounds.combine(nodes[nodes[index].right].bounds);
                     index = nodes[index].parent;
                 }
             }
@@ -269,8 +261,8 @@ namespace cobalt {
                     int left = nodes[index].left;
                     int right = nodes[index].right;
 
-                    float areaLeft = nodes[left].aabb.combine(nodes[index].aabb).area();
-                    float areaRight = nodes[right].aabb.combine(nodes[index].aabb).area();
+                    float areaLeft = nodes[left].bounds.combine(nodes[index].bounds).surfaceArea();
+                    float areaRight = nodes[right].bounds.combine(nodes[index].bounds).surfaceArea();
 
                     index = (areaLeft < areaRight) ? left : right;
                 }
@@ -285,8 +277,9 @@ namespace cobalt {
                 if (freeIndices.empty()) {
                     return nodes.size();
                 }
-                int index = freeIndices.front();
-                freeIndices.erase(freeIndices.begin());
+                int index = freeIndices.back();
+                freeIndices.pop_back();
+
                 return index;
             }
 
