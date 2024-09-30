@@ -64,7 +64,7 @@ namespace cobalt {
                 nodes[newRight].bounds = aabb;
                 nodes[newParent].left = best;
                 nodes[newParent].right = newRight;
-                nodes[newParent].bounds = aabb.combine(nodes[best].bounds);
+                // nodes[newParent].bounds = aabb.combine(nodes[best].bounds);
                 if (oldParent != -1) {
                     if (nodes[oldParent].left == best) {
                         nodes[oldParent].left = newParent;
@@ -74,6 +74,9 @@ namespace cobalt {
                 } else {
                     root = newParent;
                 }
+
+                fixBounds(newParent);
+
                 return newRight;
             }
 
@@ -121,9 +124,13 @@ namespace cobalt {
                 if (!isRealIndex(index)) {
                     return;
                 }
+
+                if (!nodes[index].isLeaf()) {
+                    return;
+                }
+
                 remove(index);
                 insert(nodes[index].data, aabb);
-                fixBounds(nodes[index].parent);
             }
 
             /**
@@ -206,8 +213,9 @@ namespace cobalt {
                 }
             }
 
+            public:
+            int root;  ///< The index of the root node.
             private:
-            int root;                      ///< The index of the root node.
             std::vector<DBVHNode> nodes;   ///< The nodes in the tree.
             std::vector<int> freeIndices;  ///< Unused indices in the tree.
 
@@ -231,11 +239,12 @@ namespace cobalt {
                 bool isLeaf() const noexcept { return left == -1 && right == -1; }
 
                 private:
-                ElementType data;  ///< The data stored in the node.
-                AABB bounds;       ///< The bounding volume of the node.
-                int left;          ///< The index of the left child.
-                int right;         ///< The index of the right child.
-                int parent;        ///< The index of the parent.
+                ElementType data;   ///< The data stored in the node.
+                AABB bounds;        ///< The bounding volume of the node.
+                int left;           ///< The index of the left child.
+                int right;          ///< The index of the right child.
+                int parent;         ///< The index of the parent.
+                float surfaceArea;  ///< The surface area of the node's bounds.
             };
 
             /**
@@ -246,6 +255,7 @@ namespace cobalt {
                 while (index != -1) {
                     // TODO: Balance the tree
                     nodes[index].bounds = nodes[nodes[index].left].bounds.combine(nodes[nodes[index].right].bounds);
+                    nodes[index].surfaceArea = nodes[index].bounds.surfaceArea();
                     index = nodes[index].parent;
                 }
             }
@@ -261,8 +271,8 @@ namespace cobalt {
                     int left = nodes[index].left;
                     int right = nodes[index].right;
 
-                    float areaLeft = nodes[left].bounds.combine(nodes[index].bounds).surfaceArea();
-                    float areaRight = nodes[right].bounds.combine(nodes[index].bounds).surfaceArea();
+                    float areaLeft = nodes[left].surfaceArea;
+                    float areaRight = nodes[right].surfaceArea;
 
                     index = (areaLeft < areaRight) ? left : right;
                 }
@@ -306,5 +316,21 @@ namespace cobalt {
                 return false;
             }
         };
+        /*void traversePrintBoundsDFS(int index, int depth) {
+                if (index == -1) {
+                    return;
+                }
+                for (int i = 0; i < depth; i++) {
+                    printf("  ");
+                }
+                printf("Index: %d, Parent: %d, Left: %d, Right: %d\n", index, nodes[index].parent, nodes[index].left, nodes[index].right);
+                for (int i = 0; i < depth; i++) {
+                    printf("  ");
+                }
+                printf("Bounds: ");
+                nodes[index].bounds.print();
+                traversePrintBoundsDFS(nodes[index].left, depth + 1);
+                traversePrintBoundsDFS(nodes[index].right, depth + 1);
+            }*/
     }  // namespace core::geom
 }  // namespace cobalt

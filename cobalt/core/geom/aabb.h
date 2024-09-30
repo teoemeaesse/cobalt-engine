@@ -124,6 +124,11 @@ namespace cobalt {
              */
             const glm::vec3 getCenter() const noexcept;
 
+            /**
+             * @brief Prints the box to the console in a user-friendly format.
+             */
+            void print() const noexcept;
+
             private:
             glm::vec3 min;  // The minimum point of the box.
             glm::vec3 max;  // The maximum point of the box.

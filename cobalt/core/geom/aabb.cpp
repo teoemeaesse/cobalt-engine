@@ -66,5 +66,7 @@ namespace cobalt {
         const glm::vec3 AABB::getSize() const noexcept { return max - min; }
 
         const glm::vec3 AABB::getCenter() const noexcept { return (min + max) / 2.0f; }
+
+        void AABB::print() const noexcept { printf("(%f, %f, %f)->(%f, %f, %f)\n", min.x, min.y, min.z, max.x, max.y, max.z); }
     }  // namespace core::geom
 }  // namespace cobalt
