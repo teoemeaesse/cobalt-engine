@@ -13,7 +13,6 @@ namespace cobalt {
 
             /**
              * @brief Construct the plugin.
-             * @return ScenePlugin
              */
             ScenePlugin() noexcept;
 
@@ -22,6 +21,12 @@ namespace cobalt {
              * @param world World to plug into.
              */
             void onPlug(core::ecs::World& world) const noexcept override;
+
+            /**
+             * @brief Adds a new scene graph to the world.
+             * @return The entity representing the scene graph.
+             */
+            static core::ecs::Entity& addGraph(core::ecs::World& world) noexcept;
         };
     }  // namespace engine
 }  // namespace cobalt

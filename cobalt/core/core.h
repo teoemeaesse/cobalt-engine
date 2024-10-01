@@ -37,6 +37,7 @@
 
 #include "core/ecs/world.h"
 #include "core/geom/bvh.h"
+#include "core/geom/dbvh.h"
 #include "core/geom/octree.h"
 #include "core/gl/context.h"
 #include "core/gl/fbo.h"

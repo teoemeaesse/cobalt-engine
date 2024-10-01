@@ -55,9 +55,9 @@ namespace cobalt {
             CameraID& getCameraID();
 
             private:           // TODO: Add a proper scene graph.
-            Vec<Mesh> meshes;  // All the meshes in the scene.
-            Opt<Mesh> skybox;  // The skybox of the scene.
-            CameraID camera;   // The ID for the camera used to render the scene.
+            Vec<Mesh> meshes;  ///< All the meshes in the scene.
+            Opt<Mesh> skybox;  ///< The skybox of the scene.
+            CameraID camera;   ///< The ID for the camera used to render the scene.
         };
     }  // namespace engine
 }  // namespace cobalt
